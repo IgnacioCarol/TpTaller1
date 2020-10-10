@@ -1,1 +1,4 @@
 .idea/*
+*.png
+*.jp*
+cmake-build-debug
