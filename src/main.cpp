@@ -9,8 +9,13 @@
 //  Copyright © 2020 Daniel Bizari. All rights reserved.
 //
 
+#ifdef __APPLE__
+#include "SDL.h"
+#else
+#include "SDL2/SDL.h"
+#endif
+
 #include <iostream>
-#include <SDL.h>
 
 int main(int argc, const char * argv[]) {
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
