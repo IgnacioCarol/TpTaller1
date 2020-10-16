@@ -9,15 +9,19 @@ typedef enum {INFO, DEBUG, ERROR} log_level;
 
 class Logger {
     public:
-        Logger();
-        void setLogLevel(log_level logLevel);
+        static Logger * getOrCreateLogger();
+        void setLogLevel(std::string logLevel);
         void setPathToFile(std::string pathToFile);
         log_level getLogLevel();
         std::string getPathToFile();
+        virtual ~Logger();
 
     private:
+        static Logger * instance;
         log_level logLevel;
         std::string pathToFile;
+
+        Logger();
 };
 
 

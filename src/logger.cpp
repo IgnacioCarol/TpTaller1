@@ -8,7 +8,16 @@
 
 Logger::Logger() = default;
 
-void Logger::setLogLevel(log_level logLevel) {
+Logger *Logger::getOrCreateLogger() {
+    if (Logger::instance == nullptr) {
+        Logger::instance = new Logger();
+    }
+
+    return Logger::instance;
+}
+
+void Logger::setLogLevel(std::string logLevelInput) {
+    //FIXME parsear a loglevel
     this->logLevel = logLevel;
 }
 
