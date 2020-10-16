@@ -1,4 +1,5 @@
 .idea/*
-*.png
-*.jp*
 cmake-build-debug
+cmake
+CMakeLists.txt
+*.DS_Store
