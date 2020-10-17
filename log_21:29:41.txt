@@ -1,3 +1,0 @@
-2020-10-16 21:29:41.205 [INFO]: Esto es una info
-2020-10-16 21:29:41.205 [DEBUG]: esto es un dato re loco de debug
-2020-10-16 21:29:41.205 [ERROR]: aca se pudrio el chori

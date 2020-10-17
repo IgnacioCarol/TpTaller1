@@ -21,7 +21,6 @@ Logger::Logger() {
     }
 
     this->logLevel = ERROR; //Default level
-    this->myFile.
 };
 
 Logger *Logger::getInstance() {

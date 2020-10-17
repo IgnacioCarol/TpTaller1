@@ -41,5 +41,5 @@ TEST(LoggerTest, errorLevelJustLogsErrorEvents) {
 
 
 
-//    ASSERT_TRUE();
+    ASSERT_TRUE(true);
 }
