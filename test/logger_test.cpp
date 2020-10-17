@@ -13,17 +13,33 @@ class LoggerTest : testing::Test {
 };
 
 TEST(LoggerTest, setLogLevel) {
-    Logger * l = new Logger();
+    Logger * l = Logger::getInstance();
 
-    l->setLogLevel(INFO);
+    l->setLogLevel("INFO");
 
     ASSERT_EQ(INFO, l->getLogLevel());
 }
 
-TEST(LoggerTest, setPathFile) {
-    Logger * l = new Logger();
+TEST(LoggerTest, write) {
+    Logger * l = Logger::getInstance();
 
-    l->setPathToFile("weon.txt");
+    l->setLogLevel("INFO");
+    std::string logMsg = l->info("Que onda perri");
 
-    ASSERT_EQ("weon.txt", l->getPathToFile());
+    ASSERT_TRUE(logMsg.find("[INFO]: Que onda perri\n") != std::string::npos);
+}
+
+TEST(LoggerTest, errorLevelJustLogsErrorEvents) {
+    Logger * l = Logger::getInstance();
+
+    l->setLogLevel("ERROR");
+    l->error("Esto es un error");
+    l->info("Que onda perri");
+    l->debug("Esto es un dato de vital importancia");
+
+    delete l;
+
+
+
+//    ASSERT_TRUE();
 }

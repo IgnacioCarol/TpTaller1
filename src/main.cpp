@@ -16,6 +16,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
+#include "logger.h"
 
 int main(int argc, char * argv[]) {
 //    if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
@@ -48,6 +49,16 @@ int main(int argc, char * argv[]) {
 //    SDL_Quit();
 //    return EXIT_SUCCESS;
 
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+//    testing::InitGoogleTest(&argc, argv);
+//    RUN_ALL_TESTS();
+
+    Logger * logger = Logger::getInstance();
+    logger->setLogLevel("DEBUG");
+    logger->info("Esto es una info");
+    logger->debug("esto es un dato re loco de debug");
+    logger->error("aca se pudrio el chori");
+
+    delete logger;
+
+    return EXIT_SUCCESS;
 }

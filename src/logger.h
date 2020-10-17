@@ -2,26 +2,31 @@
 // Created by Daniel Bizari on 16/10/2020.
 //
 #include <iostream>
+#include <fstream>
+
 #ifndef TPTALLER1_LOGGER_H
 #define TPTALLER1_LOGGER_H
 
-typedef enum {INFO, DEBUG, ERROR} log_level;
+typedef enum {ERROR, INFO, DEBUG} log_level;
 
 class Logger {
     public:
-        static Logger * getOrCreateLogger();
+        static Logger * getInstance();
         void setLogLevel(std::string logLevel);
-        void setPathToFile(std::string pathToFile);
         log_level getLogLevel();
-        std::string getPathToFile();
+        std::string info(std::string  msg);
+        std::string debug(std::string msg);
+        std::string error(std::string msg);
         virtual ~Logger();
 
     private:
         static Logger * instance;
-        log_level logLevel;
-        std::string pathToFile;
+        log_level       logLevel;
+        std::ofstream   myFile;
 
         Logger();
+        std::string getTimestamp();
+        std::string writeMsg(std::string msg, std::string logLevel);
 };
 
 
