@@ -19,9 +19,34 @@
 #define DEFAULT_PLATFORM_COORD_Y 200
 #define DEFAULT_PLATFORM_QTY 5
 
+#define XML_LOG_LEVEL "configuracion.log.level"
+#define XML_WINDOW_WIDTH "configuracion.ventana.ancho"
+#define XML_WINDOW_HEIGHT "configuracion.ventana.alto"
+#define XML_STAGE_LEVELS "configuracion.escenario.niveles"
+#define XML_STAGE_LEVEL_NAME "nivel"
+#define XML_STAGE_LEVEL_NUMBER "numero"
+#define XML_STAGE_LEVEL_BACKGROUND "fondo"
+#define XML_STAGE_LEVEL_COINS "monedas"
+#define XML_STAGE_LEVEL_ENEMIES "enemigos"
+#define XML_STAGE_LEVEL_ENEMY_NAME "enemigo"
+#define XML_STAGE_LEVEL_ENEMY_TYPE "tipo"
+#define XML_STAGE_LEVEL_ENEMY_IMAGE "imagen"
+#define XML_STAGE_LEVEL_ENEMY_QTY "cantidad"
+#define XML_STAGE_LEVEL_PLATFORMS "plataformas"
+#define XML_STAGE_LEVEL_PLATFORM_NAME "plataforma"
+#define XML_STAGE_LEVEL_PLATFORM_TYPE "tipo"
+#define XML_STAGE_LEVEL_PLATFORM_COORDX "coordX"
+#define XML_STAGE_LEVEL_PLATFORM_COORDY "coordY"
+#define XML_STAGE_LEVEL_PLATFORM_QTY "cantidad"
+
 #include <list>
 #include <string>
+#include <iostream>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/xml_parser.hpp>
+
 using namespace std;
+using boost::property_tree::ptree;
 
 struct Enemy {
     int type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
@@ -37,14 +62,6 @@ struct Platform {
 };
 
 struct Level {
-    Level() {
-        Enemy enemy;
-        Platform platform;
-
-        enemies.push_front(enemy);
-        platforms.push_front(platform);
-    }
-
     int number = DEFAULT_STAGE_LEVEL_NUMBER;
     string background = DEFAULT_STAGE_LEVEL_BACKGROUND;
     int coins = DEFAULT_STAGE_LEVEL_COINS;
@@ -53,12 +70,6 @@ struct Level {
 };
 
 struct Stage {
-    Stage() {
-        Level level;
-
-        levels.push_front(level);
-    }
-
     list<Level> levels;
 };
 
@@ -78,13 +89,17 @@ public:
 
     Window getWindow();
     Stage getStage();
-    void setWindow();
-    void setStage();
+    Log getLog();
 
     void load(const std::string &filename);
+    void setDefaults();
 private:
     Window window;
     Stage stage;
+    Log log;
+
+    static void parseEnemies(Level *level, ptree pt);
+    static void parsePlatforms(Level *level, ptree pt);
 };
 
 
