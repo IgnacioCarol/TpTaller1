@@ -5,6 +5,7 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "../src/logger.h"
+#include "../src/loggerException.h"
 
 using testing::Eq;
 
@@ -39,7 +40,23 @@ TEST(LoggerTest, errorLevelJustLogsErrorEvents) {
 
     delete l;
 
-
-
     ASSERT_TRUE(true);
+}
+
+TEST(LoggerTest, inexistentLogLevelThrowsException) {
+    Logger * l = Logger::getInstance();
+    std::string errorMsg = "";
+
+    try {
+        l->setLogLevel("TU_Vieja");
+        FAIL() << "Expected loggerException";
+    } catch (std::exception &ex) {
+        errorMsg = ex.what();
+        ASSERT_EQ("inexistent log level", errorMsg);
+    } catch (...) {
+        FAIL() << "Expected loggerException";
+    }
+
+
+
 }

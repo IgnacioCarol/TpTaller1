@@ -19,8 +19,11 @@
 #include "logger.h"
 
 int main(int argc, char * argv[]) {
+
+#ifdef TEST
     testing::InitGoogleTest(&argc, argv); //TODO agregar macro para correr tests solo en ambientes de test
-    RUN_ALL_TESTS();
+    return RUN_ALL_TESTS();
+#endif
 
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         std::cout << "Error inicializando: " << SDL_GetError() << std::endl;
