@@ -1,6 +1,4 @@
 .idea/*
-*.png
-*.jp*
 cmake-build-debug
 cmake
 CMakeLists.txt

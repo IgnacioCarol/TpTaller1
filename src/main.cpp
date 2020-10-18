@@ -14,8 +14,17 @@
 #include "SDL2/SDL.h"
 #endif
 #include <iostream>
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include "logger.h"
 
-int main(int argc, const char * argv[]) {
+int main(int argc, char * argv[]) {
+
+#ifdef TEST
+    testing::InitGoogleTest(&argc, argv); //TODO agregar macro para correr tests solo en ambientes de test
+    return RUN_ALL_TESTS();
+#endif
+
     if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         std::cout << "Error inicializando: " << SDL_GetError() << std::endl;
     }
@@ -44,6 +53,5 @@ int main(int argc, const char * argv[]) {
 
     SDL_DestroyWindow(window);
     SDL_Quit();
-
     return EXIT_SUCCESS;
 }
