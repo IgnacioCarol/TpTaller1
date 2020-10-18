@@ -8,6 +8,7 @@
 #include <sstream>
 #include <iomanip>
 #include <fstream>
+#include "logger_exception.h"
 
 Logger* Logger::instance = nullptr; //Por alguna razon si no pongo esto explota
 
@@ -17,7 +18,7 @@ Logger::Logger() {
     this->myFile.open(path,std::fstream::in | std::fstream::out | std::fstream::app);
     if(!myFile.is_open()) {
         std::cerr << "Fatal error: unable to create log file" << std::endl;
-        //TODO ver como sumar una excepcion
+        throw logger_exception("unable to create log file");
     }
 
     this->logLevel = ERROR; //Default level
@@ -52,7 +53,7 @@ void Logger::setLogLevel(std::string logLevelInput) {
         this->logLevel = DEBUG;
     } else {
         std::cerr << "wrong log level" << std::endl;
-        //TODO ver como lanzar excepcion
+        throw logger_exception("inexistent log level");
     }
 }
 
@@ -90,7 +91,7 @@ std::string Logger::writeMsg(std::string msg, std::string logLevel) {
         logMsg << getTimestamp() << " [" << logLevel << "]: " << msg << std::endl;
     } else {
         std::cerr << "FATAL error: cannot write in closed file" << std::endl;
-        //TODO ver como lanzar excepcion
+        throw logger_exception("cannot write in closed file");
     }
 
     return logMsg.str();
