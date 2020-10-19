@@ -4,8 +4,8 @@
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../src/logger.h"
-#include "../src/loggerException.h"
+#include "../src/logger/logger.h"
+#include "../src/logger/loggerException.h"
 
 using testing::Eq;
 

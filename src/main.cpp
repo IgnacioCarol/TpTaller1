@@ -16,7 +16,7 @@
 #include <iostream>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "logger.h"
+#include "logger/logger.h"
 
 int main(int argc, char * argv[]) {
 
