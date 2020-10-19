@@ -45,6 +45,8 @@
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 
+#include "../logger.h"
+
 using namespace std;
 using boost::property_tree::ptree;
 

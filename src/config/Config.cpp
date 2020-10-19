@@ -60,10 +60,9 @@ void Config::load(const std::string &filename) {
         }
 
     } catch (exception& ex) {
-        //TODO: Log error
-        cout << "ERROR reading file: " << ex.what();
+        string error_msg = "Error loading XML file config, error: ";
+        Logger::getInstance()->error(error_msg + ex.what());
         this->setDefaults();
-        return;
     }
 }
 
