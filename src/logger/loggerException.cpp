@@ -4,9 +4,9 @@
 
 #include "loggerException.h"
 
-/*const char *loggerException::what() const _NOEXCEPT {
-    return this->msg.c_str();
-}*/
+//const char *loggerException::what() const {
+//    return this->msg.c_str();
+//}
 
 loggerException::loggerException(std::string msg) {
     this->msg = msg;
