@@ -2,3 +2,6 @@
 cmake-build-debug
 cmake
 *.DS_Store
+TpTaller1
+lib/
+^log*
