@@ -10,7 +10,7 @@
 
 class loggerException : public std::exception {
     public:
-//        const char* what() const _NOEXCEPT override;
+        const char* what() const noexcept override;
         explicit loggerException(std::string msg);
 
     private:
