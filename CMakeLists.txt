@@ -47,12 +47,10 @@ else (APPLE)
     include_directories(lib/googletest-master/googlemock/include)
 
     add_executable(TpTaller1
-            test/logger_test.cpp
             src/main.cpp
-            src/logger.cpp
-            src/logger.h
-            src/loggerException.cpp
-            src/loggerException.h)
+            test/logger_test.cpp src/logger/logger.cpp src/logger/logger.h src/logger/loggerException.cpp src/logger/loggerException.h
+            test/config_test.cpp src/config/Config.cpp src/config/Config.h
+            )
     target_link_libraries(TpTaller1 ${SDL2_LIBRARIES}
             gtest
             gtest_main)

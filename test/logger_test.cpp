@@ -43,7 +43,7 @@ TEST(LoggerTest, errorLevelJustLogsErrorEvents) {
     ASSERT_TRUE(true);
 }
 
-TEST(LoggerTest, inexistentLogLevelThrowsException) {
+/*TEST(LoggerTest, inexistentLogLevelThrowsException) {
     Logger * l = Logger::getInstance();
     std::string errorMsg = "";
 
@@ -59,4 +59,4 @@ TEST(LoggerTest, inexistentLogLevelThrowsException) {
 
 
 
-}
+}*/
