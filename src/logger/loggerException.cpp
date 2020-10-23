@@ -4,7 +4,7 @@
 
 #include "loggerException.h"
 
-const char *loggerException::what() const _NOEXCEPT {
+const char *loggerException::what() const noexcept {
     return this->msg.c_str();
 }
 

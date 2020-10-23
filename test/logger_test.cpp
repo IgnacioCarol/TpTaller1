@@ -4,8 +4,8 @@
 
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
-#include "../src/logger.h"
-#include "../src/loggerException.h"
+#include "../src/logger/logger.h"
+#include "../src/logger/loggerException.h"
 
 using testing::Eq;
 
@@ -44,7 +44,7 @@ TEST(LoggerTest, errorLevelJustLogsErrorEvents) {
 }
 
 TEST(LoggerTest, inexistentLogLevelThrowsException) {
-    Logger * l = Logger::getInstance();
+    Logger *l = Logger::getInstance();
     std::string errorMsg = "";
 
     try {
@@ -56,7 +56,4 @@ TEST(LoggerTest, inexistentLogLevelThrowsException) {
     } catch (...) {
         FAIL() << "Expected loggerException";
     }
-
-
-
 }
