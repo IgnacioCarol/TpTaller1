@@ -1,24 +1,15 @@
-//
-// Created by lisandro on 23/10/20.
-//
-
-#include "main.h"
 #include "Game.h"
 #include <SDL2/SDL.h>
 #include <string>
-#include "Mario.h"
-#include "Hongo.h"
-
-Game* game = NULL;
+#include "Game.h"
 
 int main(int argc, char* argv[]){
-    game = new Game();
-
-    if (!game){
+/*if (!game){
         printf("No se pudo crear el juego\n");
         return 1;
-    }
+    }*/
 
+    Game* game = Game::Instance();
 
     if (!game->init("Level 1", 800, 600)){ //Aca inicializo el background
         printf("No se pudo inicializar el juego\n");
@@ -29,10 +20,8 @@ int main(int argc, char* argv[]){
         printf("Error cargando las imagenes\n");
         return 1;
     }
-    Mario* marito = new Mario();
-    Hongo* honguito = new Hongo();
 
-    game->setGameObjects(marito, honguito);
+    game->createGameObjects();
 
     //Main loop flag
     bool quit = false;
@@ -49,7 +38,7 @@ int main(int argc, char* argv[]){
         while(SDL_PollEvent(&e) != 0) {
             if (e.type  == SDL_QUIT ) {
                 printf("Entre a esto para cerrar\n");
-                game->gameOver();
+                Game::Instance()->gameOver();
             }
         }
 

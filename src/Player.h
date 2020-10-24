@@ -1,18 +1,21 @@
-//
-// Created by lisandro on 23/10/20.
-//
-
 #ifndef TPTALLER1_MARIO_H
 #define TPTALLER1_MARIO_H
 
 
 #include <string>
 #include "TextureManager.h"
+#include "GameObject.h"
 
-class Mario {
+//Image related
+#define pWidth 682
+#define pHeight 474
+#define pFrameMultiplier 4
+
+class Player : public GameObject {
 public:
     //Podria tener un estado, asi el draw se delega a ese estado
-    Mario();
+    Player();
+    void init(size_t x, size_t y, size_t width, size_t height, std::string textureID, int currentFrame);
     void jump(int yMove);
     void run(int direction);
 
@@ -20,11 +23,11 @@ public:
 
     void draw(SDL_Renderer* renderer){ //state = running, jumping normal en este caso es dino
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        int xFramePos = (jumping) ? 4 * 682 : currentFrame * 682; //TODO despues ver como no harcodear el size de la imagen
-        textureManager->drawFrame("dino", xPosition, yPosition, 682, 474, xFramePos, 0, renderer, flip);
+        int xFramePos = (jumping) ? pFrameMultiplier * pWidth : _currentFrame * pWidth;
+        textureManager->drawFrame("dino", xPosition, yPosition, _width, _height, xFramePos, 0, renderer, flip);
     }
 
-    void setMarioState(std::string maritoState){ maritoState = maritoState;}
+    void setPlayerState(std::string state){ playerState = state;}
 
     bool isJumping(){return jumping;}
 
@@ -32,15 +35,12 @@ public:
 
 private:
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
-    int xPosition;
-    int yPosition;
-    std::string marioState; //Puede ser running, jumping o normal
-    TextureManager* textureManager = TextureManager::Instance();
+    std::string playerState; //Puede ser running, jumping o normal
+
     bool jumping;
     bool canJump() const;
     int initialJumpingPosition;
     int maxYPosition;
-    int currentFrame = 0;
     int frames[5];
 };
 

@@ -1,15 +1,9 @@
-//
-// Created by lisandro on 23/10/20.
-//
-
 #include <cstdio>
-#include "Mario.h"
+#include "Player.h"
 
-
-Mario::Mario() {
-    xPosition = 0;
-    yPosition = 403; //Por defecto lo creo ahi
-    marioState = "dino"; //dino jumpDino, runDino, asi accedo a la imagen en el map del TextureManager TODO cambiar por clase state
+void Player::init(size_t x, size_t y, size_t width, size_t height, std::string textureID, int currentFrame) {
+    GameObject::init(x, y, width, height, textureID, currentFrame);
+    playerState = "dino"; //dino jumpDino, runDino, asi accedo a la imagen en el map del TextureManager TODO cambiar por clase state
     xDirection = true;
     jumping = false;
     initialJumpingPosition = 403;
@@ -21,8 +15,8 @@ Mario::Mario() {
     frames[4]= 4;
 }
 
-void Mario::run(int direction) {
-    currentFrame = (frames[currentFrame] + 1) % ((sizeof(frames) / sizeof(frames[0])) - 1);
+void Player::run(int direction) {
+    _currentFrame = (frames[_currentFrame] + 1) % ((sizeof(frames) / sizeof(frames[0])) - 1);
     xDirection = direction ? direction > 0 : xDirection;
     //direction puede ser +x o -x  hacemos que valga +- 1 por ahora
     //el y se mantiene igual
@@ -33,19 +27,19 @@ void Mario::run(int direction) {
     if (jumping || (!jumping && yPosition != initialJumpingPosition)){
         this->jump(); //para que avance mientras salto
     }*/
-    marioState = (marioState != "jumpDino" && direction) ? "runDino" : marioState;
+    playerState = (playerState != "jumpDino" && direction) ? "runDino" : playerState;
 }
 
-void Mario::jump(int yMovement) {
+void Player::jump(int yMovement) {
     bool isNotStartingPos = yPosition < initialJumpingPosition;
     if ((jumping = canJump())) {
         yPosition = yPosition + (!isNotStartingPos || yMovement ? - yMovement : + 1);
     } else if (isNotStartingPos) {
         yPosition += 1;
     }
-    marioState = (isNotStartingPos) ? "jumpDino" : "dino";
+    playerState = (isNotStartingPos) ? "jumpDino" : "dino";
 }
 
-bool Mario::canJump() const {
+bool Player::canJump() const {
     return ((jumping && yPosition > maxYPosition) || (!jumping && yPosition == initialJumpingPosition));
 }
