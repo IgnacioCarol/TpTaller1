@@ -10,7 +10,7 @@
 #define DEFAULT_WINDOW_HEIGHT 600
 #define DEFAULT_STAGE_LEVEL_NUMBER 1
 #define DEFAULT_STAGE_LEVEL_BACKGROUND "/home/file21.bmp" //TODO: Change file with the correct one
-#define DEFAULT_STAGE_LEVEL_COINS 30
+#define DEFAULT_STAGE_LEVEL_COINS_QTY 30
 #define DEFAULT_STAGE_LEVEL_COINS_COORD_Y 200
 #define DEFAULT_STAGE_LEVEL_ENEMY_QTY 20
 #define DEFAULT_STAGE_LEVEL_ENEMY_TYPE 1
@@ -69,7 +69,7 @@ struct Platform {
 
 struct Coin {
     int coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
-    int quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
+    int quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
 };
 
 struct Level {

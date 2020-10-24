@@ -38,7 +38,6 @@ TEST(ConfigTest, loadXMLConfig) {
     ASSERT_EQ(300, config.getWindow().width);
 
     ASSERT_EQ(1, config.getStage().levels.size());
-    ASSERT_EQ(10, config.getStage().levels.back().coins);
     ASSERT_EQ("/home/test_file1.bmp", config.getStage().levels.back().background);
     ASSERT_EQ(2, config.getStage().levels.back().number);
 
@@ -51,6 +50,14 @@ TEST(ConfigTest, loadXMLConfig) {
     ASSERT_EQ(5, enemy2.quantity);
     ASSERT_EQ("/home/test_file3.bmp", enemy2.image);
     ASSERT_EQ(2, enemy2.type);
+
+    ASSERT_EQ(2, config.getStage().levels.back().coins.size());
+    Coin coin1 = config.getStage().levels.back().coins.front();
+    Coin coin2 = config.getStage().levels.back().coins.back();
+    ASSERT_EQ(13, coin1.quantity);
+    ASSERT_EQ(10, coin1.coordY);
+    ASSERT_EQ(3, coin2.quantity);
+    ASSERT_EQ(20, coin2.coordY);
 
     ASSERT_EQ(2, config.getStage().levels.back().platforms.size());
     Platform platform1 = config.getStage().levels.back().platforms.front();
@@ -72,7 +79,6 @@ static void assertDefaults(Config config) {
     ASSERT_EQ(DEFAULT_WINDOW_WIDTH, config.getWindow().width);
 
     ASSERT_EQ(1, config.getStage().levels.size());
-    ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS, config.getStage().levels.back().coins);
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_BACKGROUND, config.getStage().levels.back().background);
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_NUMBER, config.getStage().levels.back().number);
 
@@ -88,4 +94,9 @@ static void assertDefaults(Config config) {
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X, platform.coordX);
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y, platform.coordY);
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_QTY, platform.quantity);
+
+    ASSERT_EQ(1, config.getStage().levels.back().enemies.size());
+    Coin coin = config.getStage().levels.back().coins.back();
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_QTY, coin.quantity);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_COORD_Y, platform.coordY);
 }
