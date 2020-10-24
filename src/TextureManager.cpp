@@ -1,100 +1,94 @@
 //
-//  TextureManager.cpp
-//  SDL Game Programming Book
+// Created by lisandro on 23/10/20.
 //
-//  Created by shaun mitchell on 31/12/2012.
-//  Copyright (c) 2012 shaun mitchell. All rights reserved.
-//
+
 #include "TextureManager.h"
-#include "SDL2/SDL_image.h"
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 
-TextureManager* TextureManager::s_pInstance = 0;
+TextureManager* TextureManager::instance = 0;
 
-bool TextureManager::load(std::string fileName, std::string id, SDL_Renderer* pRenderer)
-{
-    SDL_Surface* pTempSurface = IMG_Load(fileName.c_str());
-    
-    if(pTempSurface == 0)
-    {
-		std::cout << IMG_GetError();
+bool TextureManager::load(std::string fileName, std::string ID, SDL_Renderer *imageRenderer) {
+    SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
+    if (!tempSurface){
+        printf("Falle cargando la imagen\n");
         return false;
     }
-    
-    SDL_Texture* pTexture = SDL_CreateTextureFromSurface(pRenderer, pTempSurface);
-    
-    SDL_FreeSurface(pTempSurface);
-    
-    if(pTexture != 0)
-    {
-        m_textureMap[id] = pTexture;
+
+    SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(imageRenderer, tempSurface);
+    SDL_FreeSurface(tempSurface);
+
+    if (imageTexture != 0){
+        printf("Success creating the texture\n");
+        textureMap[ID] = imageTexture;
         return true;
     }
-    
     return false;
 }
 
-void TextureManager::draw(std::string id, int x, int y, int width, int height, SDL_Renderer* pRenderer, SDL_RendererFlip flip, bool useSameSize)
-{
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
+void TextureManager::draw(std::string ID, int x, int y, int width, int height, SDL_Renderer *renderer,
+                          SDL_RendererFlip flip) {
+    //deberia tener un tamanio fijo para la imagen y otro para el backgroun, back 800x600 la imagen
+    SDL_Rect  srcRect; //Aca defino size de la imagen
+    SDL_Rect destRect; //Aca donde va a ir, se mapea para ajustarse el tamanio
+
+    SDL_Texture* texture = textureMap[ID];
+    SDL_QueryTexture(texture, NULL, NULL, &srcRect.w, &srcRect.h);
 
     srcRect.x = 0;
-    srcRect.y = 0;
-
-    if (useSameSize) {
-        srcRect.w = destRect.w = width;
-        srcRect.h = destRect.h = height;
-    } else {
-        srcRect.w = width;
-        destRect.w = width / 4;
-        srcRect.h = height;
-        destRect.h = height / 4;
+    srcRect.y = 0; //Tomo parte superior de la imagen
+    if (width == 1) {
+        destRect.w = srcRect.w / 4;
+        destRect.h = srcRect.h / 4;
     }
-
+    else{
+        srcRect.w = width;
+        srcRect.h = height;
+        destRect.w = srcRect.w / 4;
+        destRect.h = srcRect.h / 4;
+    }
     destRect.x = x;
     destRect.y = y;
 
-    SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, flip);
+    SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, 0, 0, flip);
+
 }
 
-void TextureManager::drawFrame(std::string id, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer *pRenderer, double angle, int alpha, SDL_RendererFlip flip)
-{
+void TextureManager::drawBackground(int width, int height, SDL_Renderer *renderer) {
     SDL_Rect srcRect;
     SDL_Rect destRect;
-    srcRect.x = width * currentFrame;
-    srcRect.y = height * currentRow;
+
+    SDL_Texture* texture = textureMap["BG"];
+    SDL_QueryTexture(texture, NULL, NULL, &srcRect.w, &srcRect.h);
+
+    srcRect.x = 100;  //vas cambiando este vaor siempre
+    destRect.x = destRect.y = srcRect.y = 0;
+
+    destRect.w = srcRect.w = 800;
+    destRect.h = srcRect.h = 600;
+
+    SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
+}
+
+void TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentRow, int currentFrame,
+                               SDL_Renderer *renderer, SDL_RendererFlip flip) {
+    SDL_Rect srcRect;
+    SDL_Rect destRect;
+    /*srcRect.x = width * currentFrame;
+    srcRect.y = height * (currentRow - 1);
     srcRect.w = destRect.w = width;
     srcRect.h = destRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    
-    SDL_SetTextureAlphaMod(m_textureMap[id], alpha);
-    SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, angle, 0, flip);
-}
-
-void TextureManager::drawTile(std::string id, int margin, int spacing, int x, int y, int width, int height, int currentRow, int currentFrame, SDL_Renderer *pRenderer)
-{
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
-    srcRect.x = margin + (spacing + width) * currentFrame;
-    srcRect.y = margin + (spacing + height) * currentRow;
-    srcRect.w = destRect.w = width;
-    srcRect.h = destRect.h = height;
+     */
+    srcRect.x = currentRow;
+    srcRect.y = currentFrame;
+    srcRect.w = width;
+    srcRect.h = height;
     destRect.x = x;
     destRect.y = y;
-    
-    SDL_RenderCopyEx(pRenderer, m_textureMap[id], &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
+    destRect.w = width / 4;
+    destRect.h = height / 4;
+    SDL_RenderCopyEx(renderer, textureMap[ID], &srcRect, &destRect, 0, 0, flip);
+    //Creo que esta se usa para elegir bien la posicion del sprite
 }
-
-
-void TextureManager::clearTextureMap()
-{
-    m_textureMap.clear();
-}
-
-void TextureManager::clearFromTextureMap(std::string id)
-{
-    m_textureMap.erase(id);
-}
-
