@@ -11,7 +11,16 @@
             <nivel>
                 <numero>2</numero>
                 <fondo>/home/test_file1.bmp</fondo>
-                <monedas>10</monedas>
+                <monedas>
+                    <moneda>
+                        <coordY>10</coordY>
+                        <cantidad>13</cantidad>
+                    </moneda>
+                    <moneda>
+                        <coordY>20</coordY>
+                        <cantidad>3</cantidad>
+                    </moneda>
+                </monedas>
                 <enemigos>
                     <enemigo>
                         <tipo>1</tipo>

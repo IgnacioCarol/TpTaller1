@@ -48,13 +48,15 @@ void Config::load(const std::string &filename) {
 
             level.number = level_pt.get<int>(XML_STAGE_LEVEL_NUMBER);
             level.background = level_pt.get<string>(XML_STAGE_LEVEL_BACKGROUND);
-            level.coins = level_pt.get<int>(XML_STAGE_LEVEL_COINS);
 
             level.enemies.clear();
             Config::parseEnemies(&level, level_pt);
 
             level.platforms.clear();
             Config::parsePlatforms(&level, level_pt);
+
+            level.coins.clear();
+            Config::parseCoins(&level, level_pt);
 
             this->stage.levels.push_back(level);
         }
@@ -103,10 +105,29 @@ void Config::parsePlatforms(Level *level, ptree pt) {
     }
 }
 
+void Config::parseCoins(Level *level, ptree pt) {
+    for (const auto &e : pt.get_child(XML_STAGE_LEVEL_COINS)) {
+        Coin coin;
+        string coin_name;
+        ptree coin_pt;
+        tie(coin_name, coin_pt) = e;
+
+        if (coin_name != XML_STAGE_LEVEL_COIN_NAME) {
+            continue;
+        }
+
+        coin.coordY = coin_pt.get<int>(XML_STAGE_LEVEL_COIN_COORDY);
+        coin.quantity = coin_pt.get<int>(XML_STAGE_LEVEL_COIN_QTY);
+        level->coins.push_back(coin);
+    }
+}
+
+
 void Config::setDefaults() {
     Enemy enemy;
     Platform platform;
     Level level;
+    Coin coin;
 
     Window window;
     Stage stage;
@@ -115,11 +136,10 @@ void Config::setDefaults() {
 
     level.enemies.push_back(enemy);
     level.platforms.push_back(platform);
+    level.coins.push_back(coin);
     stage.levels.push_back(level);
 
     this->window = window;
     this->stage = stage;
     this->log = log;
 }
-
-
