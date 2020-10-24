@@ -11,6 +11,7 @@
 #define DEFAULT_STAGE_LEVEL_NUMBER 1
 #define DEFAULT_STAGE_LEVEL_BACKGROUND "/home/file21.bmp" //TODO: Change file with the correct one
 #define DEFAULT_STAGE_LEVEL_COINS 30
+#define DEFAULT_STAGE_LEVEL_COINS_COORD_Y 200
 #define DEFAULT_STAGE_LEVEL_ENEMY_QTY 20
 #define DEFAULT_STAGE_LEVEL_ENEMY_TYPE 1
 #define DEFAULT_STAGE_LEVEL_ENEMY_IMG "/home/file3.bmp" //TODO: Change file with the correct one
@@ -27,6 +28,9 @@
 #define XML_STAGE_LEVEL_NUMBER "numero"
 #define XML_STAGE_LEVEL_BACKGROUND "fondo"
 #define XML_STAGE_LEVEL_COINS "monedas"
+#define XML_STAGE_LEVEL_COIN_NAME "moneda"
+#define XML_STAGE_LEVEL_COIN_COORDY "coordY"
+#define XML_STAGE_LEVEL_COIN_QTY "cantidad"
 #define XML_STAGE_LEVEL_ENEMIES "enemigos"
 #define XML_STAGE_LEVEL_ENEMY_NAME "enemigo"
 #define XML_STAGE_LEVEL_ENEMY_TYPE "tipo"
@@ -63,10 +67,15 @@ struct Platform {
     int quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
 };
 
+struct Coin {
+    int coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
+    int quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
+};
+
 struct Level {
     int number = DEFAULT_STAGE_LEVEL_NUMBER;
     string background = DEFAULT_STAGE_LEVEL_BACKGROUND;
-    int coins = DEFAULT_STAGE_LEVEL_COINS;
+    list<Coin> coins;
     list<Enemy> enemies;
     list<Platform> platforms;
 };
@@ -102,6 +111,7 @@ private:
 
     static void parseEnemies(Level *level, ptree pt);
     static void parsePlatforms(Level *level, ptree pt);
+    static void parseCoins(Level *level, ptree pt);
 };
 
 
