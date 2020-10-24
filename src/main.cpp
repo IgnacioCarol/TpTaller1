@@ -8,13 +8,15 @@
 #include <string>
 #include "Mario.h"
 #include "Hongo.h"
+#include "gtest/gtest.h"
 
 Game* game = NULL;
 
 int main(int argc, char* argv[]){
+
     game = new Game();
 
-    if (!game){
+    if (!game) {
         printf("No se pudo crear el juego\n");
         return 1;
     }
@@ -44,7 +46,7 @@ int main(int argc, char* argv[]){
     int yPosition = 450;
     int maxYPosition = 350;*/
 
-    while(game->isPlaying()){
+    while (game->isPlaying()) {
 
         while(SDL_PollEvent(&e) != 0) {
             if (e.type  == SDL_QUIT ) {
