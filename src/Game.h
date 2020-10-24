@@ -7,7 +7,6 @@
 #include "SDL2/SDL.h"
 #endif
 #include <vector>
-#include "Stage.h"
 #include "GameObject.h"
 #include "Player.h"
 #include "Enemy.h"

@@ -2,8 +2,16 @@
 #include <exception>
 
 #include <iostream>
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include "logger/logger.h"
 
-int main(int argc, char *args[]) {
+int main(int argc, char * argv[]) {
+
+#ifdef TEST
+    testing::InitGoogleTest(&argc, argv); //TODO agregar macro para correr tests solo en ambientes de test
+    return RUN_ALL_TESTS();
+#endif
 
     try {
         Game::Instance()->init();
