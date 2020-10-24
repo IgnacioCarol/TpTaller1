@@ -23,13 +23,17 @@ public:
         return instance;
     }
     bool load(std::string fileName, std::string ID, SDL_Renderer* imageRenderer);
+
     void draw(std::string ID, int x, int y, int width, int height, SDL_Renderer* renderer,
               SDL_RendererFlip flip = SDL_FLIP_NONE);
+
     void drawFrame(std::string ID, int x, int y, int width, int height,
                    int currentRow, int currentFrame, SDL_Renderer* renderer,
                    SDL_RendererFlip flip = SDL_FLIP_NONE);
 
     void drawBackground(int width, int height, SDL_Renderer* renderer);
+
+    void destroy();
 
 private:
     TextureManager() {}

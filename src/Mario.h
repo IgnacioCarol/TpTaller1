@@ -13,7 +13,7 @@ class Mario {
 public:
     //Podria tener un estado, asi el draw se delega a ese estado
     Mario();
-    void jump();
+    void jump(int yMove);
     void run(int direction);
 
     int getXPosition(){return xPosition;}
@@ -37,7 +37,9 @@ private:
     std::string marioState; //Puede ser running, jumping o normal
     TextureManager* textureManager = TextureManager::Instance();
     bool jumping;
+    bool canJump() const;
     int initialJumpingPosition;
+    int maxYPosition;
     int currentFrame = 0;
     int frames[5];
 };

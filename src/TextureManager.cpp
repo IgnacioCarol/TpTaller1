@@ -92,3 +92,10 @@ void TextureManager::drawFrame(std::string ID, int x, int y, int width, int heig
     SDL_RenderCopyEx(renderer, textureMap[ID], &srcRect, &destRect, 0, 0, flip);
     //Creo que esta se usa para elegir bien la posicion del sprite
 }
+
+void TextureManager::destroy(){
+    SDL_DestroyTexture(textureMap["dino"]);
+    SDL_DestroyTexture(textureMap["BG"]);
+    SDL_DestroyTexture(textureMap["dog"]);
+    SDL_DestroyTexture(textureMap["runDog"]);
+}

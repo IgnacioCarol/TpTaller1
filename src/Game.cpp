@@ -51,35 +51,14 @@ void Game::clean() {
     printf("Cleaning game");
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+    textureManager->destroy();
     SDL_Quit();
 }
 
 void Game::handleEvents() {
     const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-    if( currentKeyStates[ SDL_SCANCODE_RIGHT ] )
-    {
-        printf("Entre a correr\n");
-        printf("Posicion de Marito en X: %d \n", mario->getXPosition());
-        mario->run(1);
-    }
-    if(currentKeyStates[ SDL_SCANCODE_LEFT ])
-    {
-        printf("Entre a correr a la izquierda\n");
-        mario->run(-1);
-    }
-    if (currentKeyStates [ SDL_SCANCODE_UP] && !mario->isJumping() && mario->finishJump()) {
-        printf("Entre a saltar\n");
-        mario->jump();
-    }
-    //hasta aca terminaron las acciones, si no aprieto nada hago que baje el culiado
-    /*else if (!mario->finishJump() ){
-        mario->descender();
-    }*/
-
-    else{
-        mario->setMarioState("dino");
-    }
-
+    mario->jump(currentKeyStates [ SDL_SCANCODE_UP]);
+    mario->run(currentKeyStates[ SDL_SCANCODE_RIGHT ] - currentKeyStates[ SDL_SCANCODE_LEFT ]);
 }
 
 bool Game::loadImages() {

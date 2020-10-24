@@ -61,7 +61,6 @@ int main(int argc, char* argv[]){
         SDL_Delay(2);
     }
     printf("Sali del juego");
-
     game->clean();
 
     return 0;
