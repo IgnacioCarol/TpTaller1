@@ -21,6 +21,11 @@
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
 int main(int argc, char * argv[]) {
+
+//#ifdef TEST
+//    testing::InitGoogleTest(&argc, argv); //TODO agregar macro para correr tests solo en ambientes de test
+//    return RUN_ALL_TESTS();
+//#endif
         Game* game = Game::Instance();
 
         if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)){ //Aca inicializo el background

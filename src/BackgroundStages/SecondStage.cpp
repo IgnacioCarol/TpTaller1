@@ -3,7 +3,7 @@
 //
 const static char* PATH = "Sprites/sprites_prueba/world1-2.jpeg";
 #include "SecondStage.h"
-#include "src/Game.h"
+#include "../Game.h"
 
 SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
     setBackground();
