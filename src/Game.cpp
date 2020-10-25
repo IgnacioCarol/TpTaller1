@@ -1,4 +1,5 @@
 #include "Game.h"
+
 #include <unistd.h>
 Game* Game::instance = 0;
 int IMAGE_WIDTH;
@@ -22,7 +23,7 @@ bool Game::init(const char *levelName, int width, int height) {
             printf("Window init success\n");
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
-                camera = { 0, 0, width, height };
+                camera = new Camera(0, 0, width, height);
                 printf("Renderer init success\n");
             }
 
@@ -48,20 +49,9 @@ bool Game::init(const char *levelName, int width, int height) {
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    camera.x = ( player->getXPosition()  + 200) - camera.w;
-    lastValue = camera.x > lastValue ? camera.x : lastValue;
-    if( camera.x < lastValue )
-    {
-        camera.x = lastValue;
-    }
-    if( camera.x > IMAGE_WIDTH - camera.w )
-    {
-        camera.x = IMAGE_WIDTH - camera.w;
-    }
-    textureManager->drawBackgroundWithCamera(800, 600, renderer, &camera);
-    player->draw(renderer, camera.x, 0);
-    //Aca deberia ir la parte de cargar las imagenes y esas cosas
-    //El textureManager deberia tener un puntero al renderer asi le carga las cosas
+    camera->render(player->getXPosition(), IMAGE_WIDTH);
+    textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
+    player->draw(renderer, camera -> getXpos(), 0);
     SDL_RenderPresent(renderer);
 }
 
@@ -103,8 +93,9 @@ bool Game::setBackground(const char *path) {
 
 void Game::createGameObjects() {
     auto* mario = new Player();
-    mario->init(0, 403, "dino", 0, &camera);
+    mario->init(0, 403, "dino", 0, camera->getCamera());
     player = mario;
 
     //TODO inicializar el vector GameObject
 }
+

@@ -15,7 +15,7 @@ add_executable(TpTaller1
         test/logger_test.cpp src/logger/logger.cpp src/logger/logger.h src/logger/loggerException.cpp src/logger/loggerException.h
         test/config_test.cpp src/config/Config.cpp src/config/Config.h src/Game.h src/Game.cpp src/TextureManager.h src/TextureManager.cpp
         src/Player.h src/Player.cpp src/GameObject.cpp src/GameObject.h
-        )
+        src/Camera.cpp src/Camera.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")
