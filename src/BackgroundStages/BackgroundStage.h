@@ -6,6 +6,7 @@
 #define TPTALLER1_BACKGROUNDSTAGE_H
 
 
+#include <src/logger/logger.h>
 #include "src/TextureManager.h"
 
 class BackgroundStage {
@@ -20,7 +21,7 @@ protected:
     char* pathToCurrentImageStage; //Each stage should, and will have one for the constructor
     TextureManager* textureManager;
     SDL_Renderer* renderer;
-
+    Logger* logger = Logger::getInstance();
     virtual bool setBackground();
     int imageWidth;
     const char* BACKGROUND = "BG";

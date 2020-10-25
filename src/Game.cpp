@@ -87,16 +87,6 @@ bool Game::loadImages() {
     return success;
 }
 
-bool Game::setBackground(const char *path) {
-    bool success =  textureManager-> load(path, BACKGROUND, renderer);
-    if (!success) {
-        printf("Image not found at %s\n", path);
-        return false;
-    }
-    SDL_QueryTexture(textureManager->getTextureMap()[BACKGROUND], NULL, NULL, &IMAGE_WIDTH, NULL);
-    return true;
-}
-
 void Game::createGameObjects() {
     auto* mario = new Player();
     mario->init(0, 403, "dino", 0, camera->getCamera());

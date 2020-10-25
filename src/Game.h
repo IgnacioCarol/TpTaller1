@@ -48,7 +48,6 @@ private:
 
     int lastValue;
 
-    bool setBackground(const char *path);
     BackgroundStage* stage;
 };
 

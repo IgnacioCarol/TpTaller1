@@ -3,6 +3,7 @@
 
 
 #include <string>
+#include <src/logger/logger.h>
 #include "TextureManager.h"
 #include "GameObject.h"
 
@@ -45,6 +46,7 @@ private:
     int maxYPosition;
     int frames[5];
     SDL_Rect *cam;
+    Logger* logger = Logger::getInstance();
 };
 
 
