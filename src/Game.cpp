@@ -1,4 +1,6 @@
 #include "Game.h"
+#include "src/BackgroundStages/FirstStage.h"
+#include "src/BackgroundStages/BackgroundStage.h"
 
 #include <unistd.h>
 #include <src/config/Config.h>
@@ -27,7 +29,7 @@ bool Game::init(const char *levelName, int width, int height) {
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
                 camera = new Camera(0, 0, width, height);
-                stage = new Stage();
+                stage = new FirstStage(textureManager, renderer);
                 printf("Renderer init success\n");
             }
 
@@ -53,7 +55,7 @@ bool Game::init(const char *levelName, int width, int height) {
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    camera->render(player->getXPosition(), IMAGE_WIDTH);
+    camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
     SDL_RenderPresent(renderer);
@@ -80,8 +82,7 @@ bool Game::loadImages() {
         printf("No encontre la ruta\n");
         return false;
     }
-    success = setBackground("Sprites/sprites_prueba/backgroundCompleto.png");
-    success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
+    success = textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
     return success;
 }
@@ -93,6 +94,7 @@ bool Game::setBackground(const char *path) {
         return false;
     }
     SDL_QueryTexture(textureManager->getTextureMap()[BACKGROUND], NULL, NULL, &IMAGE_WIDTH, NULL);
+    return true;
 }
 
 void Game::createGameObjects() {
@@ -104,8 +106,10 @@ void Game::createGameObjects() {
 }
 
 void Game::nextStage() {
-    textureManager->clearFromTextureMap(BACKGROUND);
-    setBackground("Sprites/sprites_prueba/world1-2.jpeg");
+    stage = stage->nextStage();
+}
+
+void Game::restartCharacters() {
     player->restartPos(0, 403);
     camera->restartPos();
 }

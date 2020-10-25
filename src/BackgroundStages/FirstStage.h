@@ -12,7 +12,7 @@ class FirstStage: public BackgroundStage {
 
     FirstStage() : BackgroundStage(nullptr, nullptr) {}
 
-    BackgroundStage *nextStage();
+    BackgroundStage *nextStage() override;
 
 public:
     FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer);

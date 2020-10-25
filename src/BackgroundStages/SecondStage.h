@@ -6,13 +6,20 @@
 #define TPTALLER1_SECONDSTAGE_H
 
 
-#include "TextureManager.h"
+#include "src/TextureManager.h"
 #include "BackgroundStage.h"
 
 class SecondStage: public BackgroundStage {
+    SecondStage() : BackgroundStage(nullptr, nullptr) {}
 
 public:
     SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer);
+
+    int getWidth() const override;
+
+    bool setBackground() override;
+
+    BackgroundStage *nextStage() override;
 };
 
 

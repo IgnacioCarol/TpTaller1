@@ -6,13 +6,13 @@
 #define TPTALLER1_BACKGROUNDSTAGE_H
 
 
-#include "TextureManager.h"
+#include "src/TextureManager.h"
 
 class BackgroundStage {
 public:
     explicit BackgroundStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 
-    BackgroundStage* nextStage();
+    virtual BackgroundStage* nextStage();
 
     virtual int getWidth() const;
 

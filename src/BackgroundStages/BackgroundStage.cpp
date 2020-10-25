@@ -8,3 +8,15 @@ BackgroundStage::BackgroundStage(TextureManager *pManager, SDL_Renderer *pRender
     textureManager = pManager;
     renderer = pRenderer;
 }
+
+BackgroundStage *BackgroundStage::nextStage() {
+    return nullptr;
+}
+
+int BackgroundStage::getWidth() const {
+    return 0;
+}
+
+bool BackgroundStage::setBackground() {
+    return false;
+}

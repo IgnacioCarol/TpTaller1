@@ -7,6 +7,7 @@
 #include "TextureManager.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "src/BackgroundStages/BackgroundStage.h"
 
 using namespace std;
 
@@ -30,6 +31,7 @@ public:
     void gameOver(){ playing = false;}
 
     void nextStage();
+    void restartCharacters();
 
 private:
     Game(); //Private constructor to prevent instancing.
@@ -47,7 +49,7 @@ private:
     int lastValue;
 
     bool setBackground(const char *path);
-    Stage* stage;
+    BackgroundStage* stage;
 };
 
 

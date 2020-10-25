@@ -3,13 +3,13 @@
 //
 const static char* PATH = "Sprites/sprites_prueba/world1-2.jpeg";
 #include "SecondStage.h"
-#include "Game.h"
+#include "src/Game.h"
 
 SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
-    this->setBackground();
+    setBackground();
 }
 
-bool BackgroundStage::setBackground() {
+bool SecondStage::setBackground() {
     bool success =  textureManager-> load(PATH, BACKGROUND, renderer);
     if (!success) {
         printf("Image not found at %s\n", PATH);
@@ -19,11 +19,11 @@ bool BackgroundStage::setBackground() {
     return true;
 }
 
-int BackgroundStage::getWidth() const {
+int SecondStage::getWidth() const {
     return imageWidth;
 }
 
-BackgroundStage * BackgroundStage::nextStage() {
+BackgroundStage * SecondStage::nextStage() {
     textureManager->clearFromTextureMap(BACKGROUND);
     Game::Instance()->gameOver();
     return nullptr;
