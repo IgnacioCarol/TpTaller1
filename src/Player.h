@@ -33,6 +33,8 @@ public:
 
     bool finishJump(){ return initialJumpingPosition == yPosition;}
 
+    void restartPos(int i, int i1);
+
 private:
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
     std::string playerState; //Puede ser running, jumping o normal

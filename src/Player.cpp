@@ -42,3 +42,8 @@ bool Player::canJump() const {
 Player::Player() {
     this->init(0, 403, std::string(), 0, NULL);
 }
+
+void Player::restartPos(int x, int y) {
+    xPosition = x;
+    yPosition = y;
+}

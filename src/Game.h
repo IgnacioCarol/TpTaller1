@@ -2,6 +2,7 @@
 #define TPTALLER1_GAME_H
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "Camera.h"
 #include <string>
 #include "TextureManager.h"
 #include "GameObject.h"
@@ -28,10 +29,12 @@ public:
 
     void gameOver(){ playing = false;}
 
+    void nextStage();
+
 private:
     Game(); //Private constructor to prevent instancing.
     static Game* instance; //Here will be the instance stored.
-    SDL_Rect camera;
+    Camera* camera;
     //Elements of the game
     Player* player;
     //std::vector <GameObject*> _gameObjects;
@@ -41,11 +44,10 @@ private:
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
 
-    static char *getAbsolutePath() ;
-
     int lastValue;
 
     bool setBackground(const char *path);
+    Stage* stage;
 };
 
 

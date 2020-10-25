@@ -1,7 +1,10 @@
 #include "Game.h"
 
 #include <unistd.h>
+#include <src/config/Config.h>
+
 Game* Game::instance = 0;
+const static char* BACKGROUND = "BG";
 int IMAGE_WIDTH;
 Game::Game(){
 }
@@ -24,6 +27,7 @@ bool Game::init(const char *levelName, int width, int height) {
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
                 camera = new Camera(0, 0, width, height);
+                stage = new Stage();
                 printf("Renderer init success\n");
             }
 
@@ -83,12 +87,12 @@ bool Game::loadImages() {
 }
 
 bool Game::setBackground(const char *path) {
-    bool success =  textureManager-> load(path, "BG", renderer);
+    bool success =  textureManager-> load(path, BACKGROUND, renderer);
     if (!success) {
         printf("Image not found at %s\n", path);
         return false;
     }
-    SDL_QueryTexture(textureManager->getTextureMap()["BG"], NULL, NULL, &IMAGE_WIDTH, NULL);
+    SDL_QueryTexture(textureManager->getTextureMap()[BACKGROUND], NULL, NULL, &IMAGE_WIDTH, NULL);
 }
 
 void Game::createGameObjects() {
@@ -98,4 +102,13 @@ void Game::createGameObjects() {
 
     //TODO inicializar el vector GameObject
 }
+
+void Game::nextStage() {
+    textureManager->clearFromTextureMap(BACKGROUND);
+    setBackground("Sprites/sprites_prueba/world1-2.jpeg");
+    player->restartPos(0, 403);
+    camera->restartPos();
+}
+
+
 

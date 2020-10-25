@@ -17,7 +17,7 @@ void Camera::render(int playerXPos, int borderLimit) {
     }
     if( camera.x > borderLimit - camera.w )
     {
-        camera.x = borderLimit - camera.w;
+        Game::Instance() -> nextStage();
     }
 }
 
@@ -27,4 +27,9 @@ SDL_Rect *Camera::getCamera() {
 
 int Camera::getXpos() {
     return camera.x;
+}
+
+void Camera::restartPos() {
+    camera = {0, 0, camera.w, camera.h};
+    lastValue = 0;
 }
