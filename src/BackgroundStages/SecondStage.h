@@ -6,7 +6,7 @@
 #define TPTALLER1_SECONDSTAGE_H
 
 
-#include "src/TextureManager.h"
+#include "../TextureManager.h"
 #include "BackgroundStage.h"
 
 class SecondStage: public BackgroundStage {

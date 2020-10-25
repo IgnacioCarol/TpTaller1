@@ -6,8 +6,8 @@
 #define TPTALLER1_BACKGROUNDSTAGE_H
 
 
-#include <src/logger/logger.h>
-#include "src/TextureManager.h"
+#include "../logger/logger.h"
+#include "../TextureManager.h"
 
 class BackgroundStage {
 public:

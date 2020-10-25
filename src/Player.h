@@ -3,7 +3,7 @@
 
 
 #include <string>
-#include <src/logger/logger.h>
+#include "../src/logger/logger.h"
 #include "TextureManager.h"
 #include "GameObject.h"
 

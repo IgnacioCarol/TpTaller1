@@ -7,7 +7,7 @@
 #include "TextureManager.h"
 #include "GameObject.h"
 #include "Player.h"
-#include "src/BackgroundStages/BackgroundStage.h"
+#include "../src/BackgroundStages/BackgroundStage.h"
 
 using namespace std;
 

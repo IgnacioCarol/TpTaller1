@@ -1,9 +1,9 @@
 #include "Game.h"
-#include "src/BackgroundStages/FirstStage.h"
-#include "src/BackgroundStages/BackgroundStage.h"
+#include "BackgroundStages/FirstStage.h"
+#include "BackgroundStages/BackgroundStage.h"
 
 #include <unistd.h>
-#include <src/config/Config.h>
+#include "config/Config.h"
 
 Game* Game::instance = 0;
 const static char* BACKGROUND = "BG";
