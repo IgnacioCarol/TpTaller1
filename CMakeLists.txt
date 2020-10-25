@@ -20,21 +20,10 @@ add_executable(TpTaller1
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")
 
-    INCLUDE(FindPkgConfig)
-    PKG_SEARCH_MODULE(SDL2 REQUIRED sdl2)
-    PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
-    PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
-    PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
-
-
-    include_directories(.)
-    target_link_libraries(TpTaller1 ${SDL2_LIBRARIES}
-            ${SDL2IMAGE_LIBRARIES}
-            ${SDL2_TTF_LIBRARIES}
-            ${SDL2_MIXER_LIBRARIES}
-            gtest
-            gtest_main
-            ${Boost_LIBRARIES})
+    find_package(SDL2 REQUIRED sdl2)
+    find_package(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
+    find_package(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
+    find_package(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
 
 else (APPLE)
     INCLUDE(FindPkgConfig)
@@ -43,12 +32,15 @@ else (APPLE)
     PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
     PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
 
-    include_directories(.)
-    target_link_libraries(TpTaller1 ${SDL2_LIBRARIES}
-            ${SDL2IMAGE_LIBRARIES}
-            ${SDL2_TTF_LIBRARIES}
-            ${SDL2_MIXER_LIBRARIES}
-            gtest
-            gtest_main)
 
 endif (APPLE)
+include_directories(.)
+target_link_libraries(
+        TpTaller1 ${SDL2_LIBRARIES}
+        ${SDL2IMAGE_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
+        ${SDL2_MIXER_LIBRARIES}
+        gtest
+        gtest_main
+        ${Boost_LIBRARIES}
+        )
