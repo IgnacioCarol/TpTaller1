@@ -1,5 +1,5 @@
 #include "Game.h"
-
+#include <unistd.h>
 Game* Game::instance = 0;
 
 Game::Game(){
@@ -48,7 +48,6 @@ bool Game::init(const char *levelName, int width, int height) {
 void Game::render() {
     SDL_RenderClear(renderer);
     textureManager->drawBackground(800, 600, renderer);
-    //textureManager->draw("dino", mario->position()[0], mario->position()[1], 1, 1, renderer);
     player->draw(renderer);
     //Aca deberia ir la parte de cargar las imagenes y esas cosas
     //El textureManager deberia tener un puntero al renderer asi le carga las cosas
@@ -59,7 +58,7 @@ void Game::clean() {
     printf("Cleaning game");
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
-    textureManager->destroy();
+    textureManager->clearTextureMap();
     SDL_Quit();
 }
 
@@ -71,20 +70,20 @@ void Game::handleEvents() {
 
 bool Game::loadImages() {
     bool success;
-    success = textureManager->load("../Sprites/sprites_prueba/dino.png", "dino", renderer);
+    success = textureManager->load("Sprites/sprites_prueba/dino.png", "dino", renderer);
     if (!success){
         printf("No encontre la ruta\n");
         return false;
     }
-    success = success && textureManager -> load("../Sprites/sprites_prueba/backgroundCompleto.png", "BG", renderer);
-    success = success && textureManager -> load("../Sprites/sprites_prueba/dog.png", "dog", renderer);
-    success = success && textureManager -> load("../Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
+    success = textureManager -> load("Sprites/sprites_prueba/backgroundCompleto.png", "BG", renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
     return success;
 }
 
 void Game::createGameObjects() {
-    Player* mario = new Player();
-    mario->init(0, 403, pWidth, pHeight,"dino",0);
+    auto* mario = new Player();
+    mario->init(0, 403, "dino", 0);
     player = mario;
 
     //TODO inicializar el vector GameObject

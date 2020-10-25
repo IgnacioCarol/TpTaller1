@@ -1,20 +1,30 @@
+//
+// Created by nacho on 10/10/20.
+//
+//
+//  main.cpp
+//  test
+//
+//  Created by Daniel Bizari on 08/10/2020.
+//  Copyright © 2020 Daniel Bizari. All rights reserved.
+//
+#ifdef __APPLE__
+#include "SDL.h"
+#else
+#include "SDL2/SDL.h"
+#endif
+#include <iostream>
+#include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include "logger/logger.h"
 #include "Game.h"
-#include <SDL2/SDL.h>
-#include <string>
-#include "Game.h"
+const int SCREEN_WIDTH = 800;
+int main(int argc, char * argv[]) {
+        Game* game = Game::Instance();
 
-int main(int argc, char* argv[]){
-/*if (!game){
-        printf("No se pudo crear el juego\n");
-        return 1;
-    }*/
-
-    Game* game = Game::Instance();
-
-    if (!game->init("Level 1", 800, 600)){ //Aca inicializo el background
-        printf("No se pudo inicializar el juego\n");
-        return 1;
-    }
+        if (!game->init("Level 1", 800, 600)){ //Aca inicializo el background
+            printf("No se pudo inicializar el juego\n");
+            return 1;    }
 
     if (!game->loadImages()){
         printf("Error cargando las imagenes\n");
@@ -23,15 +33,10 @@ int main(int argc, char* argv[]){
 
     game->createGameObjects();
 
-    //Main loop flag
     bool quit = false;
 
     //Event handler
     SDL_Event e;
-    /*int xValue = 0;
-    int xValueBackground = 0;
-    int yPosition = 450;
-    int maxYPosition = 350;*/
 
     while(game->isPlaying()){
 
@@ -45,12 +50,10 @@ int main(int argc, char* argv[]){
         game->handleEvents();
         //game->update();
         game->render();
-        //SDL_Delay(10000);
-        //printf("Termino el delay\n");
         SDL_Delay(2);
     }
     printf("Sali del juego");
     game->clean();
-
-    return 0;
+    SDL_Quit();
+    return EXIT_SUCCESS;
 }

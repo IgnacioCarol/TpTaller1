@@ -8,7 +8,7 @@
 
 TextureManager* TextureManager::instance = 0;
 
-bool TextureManager::load(std::string fileName, std::string ID, SDL_Renderer *imageRenderer) {
+bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
         printf("Falle cargando la imagen\n");
@@ -28,7 +28,6 @@ bool TextureManager::load(std::string fileName, std::string ID, SDL_Renderer *im
 
 void TextureManager::draw(std::string ID, int x, int y, int width, int height, SDL_Renderer *renderer,
                           SDL_RendererFlip flip) {
-    //deberia tener un tamanio fijo para la imagen y otro para el backgroun, back 800x600 la imagen
     SDL_Rect  srcRect; //Aca defino size de la imagen
     SDL_Rect destRect; //Aca donde va a ir, se mapea para ajustarse el tamanio
 
@@ -74,13 +73,6 @@ void TextureManager::drawFrame(std::string ID, int x, int y, int width, int heig
                                SDL_Renderer *renderer, SDL_RendererFlip flip) {
     SDL_Rect srcRect;
     SDL_Rect destRect;
-    /*srcRect.x = width * currentFrame;
-    srcRect.y = height * (currentRow - 1);
-    srcRect.w = destRect.w = width;
-    srcRect.h = destRect.h = height;
-    destRect.x = x;
-    destRect.y = y;
-     */
     srcRect.x = currentRow;
     srcRect.y = currentFrame;
     srcRect.w = width;
@@ -93,9 +85,12 @@ void TextureManager::drawFrame(std::string ID, int x, int y, int width, int heig
     //Creo que esta se usa para elegir bien la posicion del sprite
 }
 
-void TextureManager::destroy(){
-    SDL_DestroyTexture(textureMap["dino"]);
-    SDL_DestroyTexture(textureMap["BG"]);
-    SDL_DestroyTexture(textureMap["dog"]);
-    SDL_DestroyTexture(textureMap["runDog"]);
+void TextureManager::clearTextureMap()
+{
+    textureMap.clear();
+}
+
+void TextureManager::clearFromTextureMap(std::string id)
+{
+    textureMap.erase(id);
 }

@@ -1,14 +1,12 @@
 //
-// Created by lisandro on 23/10/20.
+// Created by DANIELA CARRERO on 2020-10-13.
 //
 
-#ifndef TPTALLER1_MAIN_H
-#define TPTALLER1_MAIN_H
+#ifndef MAIN_H
+
+#include <iostream>
 
 
-class main {
-
-};
-
+#define MAIN_H
 
 #endif //TPTALLER1_MAIN_H

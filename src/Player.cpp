@@ -1,8 +1,9 @@
 #include <cstdio>
+#include <utility>
 #include "Player.h"
 
-void Player::init(size_t x, size_t y, size_t width, size_t height, std::string textureID, int currentFrame) {
-    GameObject::init(x, y, width, height, textureID, currentFrame);
+void Player::init(size_t x, size_t y, std::string textureID, int currentFrame) {
+    GameObject::init(x, y, std::move(textureID), currentFrame);
     playerState = "dino"; //dino jumpDino, runDino, asi accedo a la imagen en el map del TextureManager TODO cambiar por clase state
     xDirection = true;
     jumping = false;
@@ -18,15 +19,7 @@ void Player::init(size_t x, size_t y, size_t width, size_t height, std::string t
 void Player::run(int direction) {
     _currentFrame = (frames[_currentFrame] + 1) % ((sizeof(frames) / sizeof(frames[0])) - 1);
     xDirection = direction ? direction > 0 : xDirection;
-    //direction puede ser +x o -x  hacemos que valga +- 1 por ahora
-    //el y se mantiene igual
     xPosition += direction;
-    /*if (!jumping){
-        marioState = (marioState == "dino") ? "runDino" : "dino";
-    }
-    if (jumping || (!jumping && yPosition != initialJumpingPosition)){
-        this->jump(); //para que avance mientras salto
-    }*/
     playerState = (playerState != "jumpDino" && direction) ? "runDino" : playerState;
 }
 
@@ -42,4 +35,8 @@ void Player::jump(int yMovement) {
 
 bool Player::canJump() const {
     return ((jumping && yPosition > maxYPosition) || (!jumping && yPosition == initialJumpingPosition));
+}
+
+Player::Player() {
+    this->init(0, 403, std::string(), 0);
 }

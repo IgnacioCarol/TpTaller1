@@ -15,7 +15,7 @@ class Player : public GameObject {
 public:
     //Podria tener un estado, asi el draw se delega a ese estado
     Player();
-    void init(size_t x, size_t y, size_t width, size_t height, std::string textureID, int currentFrame);
+    void init(size_t x, size_t y, std::string textureID, int currentFrame);
     void jump(int yMove);
     void run(int direction);
 
@@ -24,7 +24,7 @@ public:
     void draw(SDL_Renderer* renderer){ //state = running, jumping normal en este caso es dino
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         int xFramePos = (jumping) ? pFrameMultiplier * pWidth : _currentFrame * pWidth;
-        textureManager->drawFrame("dino", xPosition, yPosition, _width, _height, xFramePos, 0, renderer, flip);
+        textureManager->drawFrame("dino", xPosition, yPosition, pWidth, pHeight, xFramePos, 0, renderer, flip);
     }
 
     void setPlayerState(std::string state){ playerState = state;}

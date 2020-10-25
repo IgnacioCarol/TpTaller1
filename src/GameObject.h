@@ -6,13 +6,15 @@
 #include "SDL.h"
 #else
 #include "SDL2/SDL.h"
+#include "TextureManager.h"
+
 #endif
 #include <cstdio>
 #include <string>
 
 class GameObject {
 public:
-    virtual void init(int x, int y, size_t width, size_t height, std::string textureID, int currentFrame);
+    virtual void init(int x, int y, std::string textureID, int currentFrame);
     virtual void draw(SDL_Renderer* renderer) = 0;
 
 protected:

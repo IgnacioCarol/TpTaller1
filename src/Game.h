@@ -40,6 +40,8 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
+
+    static char *getAbsolutePath() ;
 };
 
 
