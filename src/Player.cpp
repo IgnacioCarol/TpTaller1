@@ -7,7 +7,7 @@ void Player::init(size_t x, size_t y, std::string textureID, int currentFrame) {
     playerState = "dino"; //dino jumpDino, runDino, asi accedo a la imagen en el map del TextureManager TODO cambiar por clase state
     xDirection = true;
     jumping = false;
-    initialJumpingPosition = 403;
+    initialJumpingPosition = yPosition;
     maxYPosition = yPosition - 100;
     frames[0]= 0;
     frames[1]= 1;
@@ -25,7 +25,7 @@ void Player::run(int direction) {
 
 void Player::jump(int yMovement) {
     bool isNotStartingPos = yPosition < initialJumpingPosition;
-    if ((jumping = canJump())) {
+    if ((jumping = canJump() && yMovement)) {
         yPosition = yPosition + (!isNotStartingPos || yMovement ? - yMovement : + 1);
     } else if (isNotStartingPos) {
         yPosition += 1;
