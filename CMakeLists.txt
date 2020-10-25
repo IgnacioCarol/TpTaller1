@@ -28,6 +28,13 @@ if (APPLE)
             ${SDL2_TTF_INCLUDE_DIR}
             ${SDL2_MIXER_INCLUDE_DIR}
             ${Boost_INCLUDE_DIRS})
+    target_link_libraries(TpTaller1 ${SDL2_LIBRARY}
+            ${SDL2_IMAGE_LIBRARIES}
+            ${SDL2_TTF_LIBRARIES}
+            ${SDL2_MIXER_LIBRARIES}
+            gtest
+            gtest_main
+            ${Boost_LIBRARIES})
 else(APPLE)
     INCLUDE(FindPkgConfig)
     include_directories(.)
@@ -35,12 +42,11 @@ else(APPLE)
     PKG_SEARCH_MODULE(SDL2IMAGE REQUIRED SDL2_image>=2.0.0)
     PKG_SEARCH_MODULE(SDL2TTF REQUIRED SDL2_ttf>=2.0.0)
     PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
+    target_link_libraries(TpTaller1 ${SDL2_LIBRARY}
+            ${SDL2IMAGE_LIBRARIES}
+            ${SDL2_TTF_LIBRARIES}
+            ${SDL2_MIXER_LIBRARIES}
+            gtest
+            gtest_main
+            ${Boost_LIBRARIES})
 endif (APPLE)
-
-target_link_libraries(TpTaller1 ${SDL2_LIBRARY}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-        ${SDL2_MIXER_LIBRARIES}
-        gtest
-        gtest_main
-        ${Boost_LIBRARIES})
