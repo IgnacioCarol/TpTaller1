@@ -17,41 +17,44 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "logger/logger.h"
-
+#include "Game.h"
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 int main(int argc, char * argv[]) {
+        Game* game = Game::Instance();
 
-#ifdef TEST
-    testing::InitGoogleTest(&argc, argv); //TODO agregar macro para correr tests solo en ambientes de test
-    return RUN_ALL_TESTS();
-#endif
+        if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)){ //Aca inicializo el background
+            printf("No se pudo inicializar el juego\n");
+            return 1;    }
 
-    if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
-        std::cout << "Error inicializando: " << SDL_GetError() << std::endl;
+    if (!game->loadImages()){
+        printf("Error cargando las imagenes\n");
+        return 1;
     }
 
-    SDL_Window * window = SDL_CreateWindow("holi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 600, 400, SDL_WINDOW_ALLOW_HIGHDPI);
-    if(!window) {
-        std::cout << "Error creando window" << SDL_GetError() << std::endl;
-        return EXIT_FAILURE;
-    }
+    game->createGameObjects();
 
-    SDL_Event windowEvent;
-    SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, 0);
+    bool quit = false;
 
-    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+    //Event handler
+    SDL_Event e;
 
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+    while(game->isPlaying()){
 
-    SDL_Delay(3000);
-
-    while(true) {
-        if (SDL_PollEvent(&windowEvent) && windowEvent.type == SDL_QUIT) {
-            break;
+        while(SDL_PollEvent(&e) != 0) {
+            if (e.type  == SDL_QUIT ) {
+                printf("Entre a esto para cerrar\n");
+                Game::Instance()->gameOver();
+            }
         }
-    }
 
-    SDL_DestroyWindow(window);
+        game->handleEvents();
+        //game->update();
+        game->render();
+        SDL_Delay(2);
+    }
+    printf("Sali del juego");
+    game->clean();
     SDL_Quit();
     return EXIT_SUCCESS;
 }
