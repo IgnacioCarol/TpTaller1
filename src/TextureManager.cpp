@@ -5,7 +5,7 @@
 #include "TextureManager.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
-
+static const char *const BACKGROUND = "BG";
 TextureManager* TextureManager::instance = 0;
 
 bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
@@ -57,7 +57,7 @@ void TextureManager::drawBackground(int width, int height, SDL_Renderer *rendere
     SDL_Rect srcRect;
     SDL_Rect destRect;
 
-    SDL_Texture* texture = textureMap["BG"];
+    SDL_Texture* texture = textureMap[BACKGROUND];
     SDL_QueryTexture(texture, NULL, NULL, &srcRect.w, &srcRect.h);
 
     srcRect.x = 100;  //vas cambiando este vaor siempre
@@ -67,6 +67,23 @@ void TextureManager::drawBackground(int width, int height, SDL_Renderer *rendere
     destRect.h = srcRect.h = 600;
 
     SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
+}
+
+void TextureManager::drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect* clip) {
+    {
+        //Set rendering space and render to screen
+        SDL_Rect renderQuad = { 0, 0, width, height };
+        SDL_Texture* texture = textureMap[BACKGROUND];
+        //Set clip rendering dimensions
+        if( clip != NULL )
+        {
+            renderQuad.w = clip->w;
+            renderQuad.h = clip->h;
+        }
+
+        //Render to screen
+        SDL_RenderCopyEx( renderer, texture, clip, &renderQuad, 0, 0, SDL_FLIP_NONE );
+    }
 }
 
 void TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentRow, int currentFrame,

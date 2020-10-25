@@ -31,7 +31,7 @@ public:
 private:
     Game(); //Private constructor to prevent instancing.
     static Game* instance; //Here will be the instance stored.
-
+    SDL_Rect camera;
     //Elements of the game
     Player* player;
     //std::vector <GameObject*> _gameObjects;
@@ -42,6 +42,10 @@ private:
     TextureManager* textureManager = TextureManager::Instance();
 
     static char *getAbsolutePath() ;
+
+    int lastValue;
+
+    bool setBackground(const char *path);
 };
 
 

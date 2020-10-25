@@ -43,19 +43,22 @@ public:
     void drawBackground(int width, int height, SDL_Renderer* renderer);
     std::map<std::string, SDL_Texture*> getTextureMap() { return textureMap; }
 
+    void drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect *clip);
+
 private:
-    
     TextureManager() {}
+
     ~TextureManager() {}
-    
     TextureManager(const TextureManager&);
+
 	TextureManager& operator=(const TextureManager&);
-    
+
     std::map<std::string, SDL_Texture*> textureMap;
-    
+
     static TextureManager* instance;
 };
 
 typedef TextureManager TheTextureManager;
+
 
 #endif /* defined(__SDL_Game_Programming_Book__TextureManager__) */

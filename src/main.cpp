@@ -19,10 +19,11 @@
 #include "logger/logger.h"
 #include "Game.h"
 const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 int main(int argc, char * argv[]) {
         Game* game = Game::Instance();
 
-        if (!game->init("Level 1", 800, 600)){ //Aca inicializo el background
+        if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)){ //Aca inicializo el background
             printf("No se pudo inicializar el juego\n");
             return 1;    }
 

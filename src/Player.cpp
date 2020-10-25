@@ -1,8 +1,9 @@
 #include <cstdio>
+#include <stdio.h>
 #include <utility>
 #include "Player.h"
 
-void Player::init(size_t x, size_t y, std::string textureID, int currentFrame) {
+void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera) {
     GameObject::init(x, y, std::move(textureID), currentFrame);
     playerState = "dino"; //dino jumpDino, runDino, asi accedo a la imagen en el map del TextureManager TODO cambiar por clase state
     xDirection = true;
@@ -14,12 +15,13 @@ void Player::init(size_t x, size_t y, std::string textureID, int currentFrame) {
     frames[2]= 2;
     frames[3]= 3;
     frames[4]= 4;
+    cam =  camera;
 }
 
 void Player::run(int direction) {
     _currentFrame = (frames[_currentFrame] + 1) % ((sizeof(frames) / sizeof(frames[0])) - 1);
     xDirection = direction ? direction > 0 : xDirection;
-    xPosition += direction;
+    xPosition += cam->x < xPosition || direction > 0 ? direction : 0;
     playerState = (playerState != "jumpDino" && direction) ? "runDino" : playerState;
 }
 
@@ -38,5 +40,5 @@ bool Player::canJump() const {
 }
 
 Player::Player() {
-    this->init(0, 403, std::string(), 0);
+    this->init(0, 403, std::string(), 0, NULL);
 }
