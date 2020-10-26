@@ -5,6 +5,7 @@
 #include "TextureManager.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include <src/logger/logger.h>
 static const char *const BACKGROUND = "BG";
 static const int CURRENT_ROW = 0; //The sprite sheet always has one row
 
@@ -13,7 +14,7 @@ TextureManager* TextureManager::instance = 0;
 bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
-        printf("Falle cargando la imagen\n");
+        Logger::getInstance() -> error("Error: couldnt load the image\n");
         return false;
     }
 
@@ -21,7 +22,6 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
     SDL_FreeSurface(tempSurface);
 
     if (imageTexture != 0){
-        printf("Success creating the texture\n");
         textureMap[ID] = imageTexture;
         return true;
     }
