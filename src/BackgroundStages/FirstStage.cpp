@@ -3,7 +3,7 @@
 //
 const static char* PATH = "Sprites/sprites_prueba/backgroundCompleto.png";
 
-#include <src/Game.h>
+#include "../Game.h"
 #include "FirstStage.h"
 #include "BackgroundStage.h"
 #include "SecondStage.h"

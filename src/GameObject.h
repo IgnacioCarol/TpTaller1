@@ -6,9 +6,9 @@
 #include "SDL.h"
 #else
 #include "SDL2/SDL.h"
-#include "TextureManager.h"
-
 #endif
+
+#include "TextureManager.h"
 #include <cstdio>
 #include <string>
 
