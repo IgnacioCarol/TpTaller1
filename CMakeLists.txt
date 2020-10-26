@@ -12,7 +12,8 @@ add_executable(TpTaller1
         src/main.cpp
         test/logger_test.cpp src/logger/logger.cpp src/logger/logger.h src/logger/loggerException.cpp src/logger/loggerException.h
         test/config_test.cpp src/config/Config.cpp src/config/Config.h src/Game.h src/Game.cpp src/TextureManager.h src/TextureManager.cpp
-        src/Player.h src/Player.cpp src/GameObject.cpp src/GameObject.h
+        src/gameobjects/Player.h src/gameobjects/Player.cpp src/gameobjects/GameObject.cpp src/gameobjects/GameObject.h
+        src/Factory/Factory.cpp src/Factory/Factory.h src/gameobjects/Coin.cpp src/gameobjects/Coin.h src/GameMap.cpp src/GameMap.h test/gamemap_test.cpp src/gameobjects/EnemyMushroom.cpp src/gameobjects/EnemyMushroom.h src/gameobjects/EnemyTurtle.cpp src/gameobjects/EnemyTurtle.h src/gameobjects/PlatformNormal.cpp src/gameobjects/PlatformNormal.h src/gameobjects/PlatformSurprise.cpp src/gameobjects/PlatformSurprise.h
         src/Camera.cpp src/Camera.h src/BackgroundStages/FirstStage.cpp src/BackgroundStages/FirstStage.h src/BackgroundStages/BackgroundStage.h
         src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/SecondStage.cpp src/BackgroundStages/SecondStage.h src/CharacterStates/CharacterState.cpp
         src/CharacterStates/CharacterState.h src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h

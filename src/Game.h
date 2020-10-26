@@ -5,8 +5,8 @@
 #include "Camera.h"
 #include <string>
 #include "TextureManager.h"
-#include "GameObject.h"
-#include "Player.h"
+#include "gameobjects/GameObject.h"
+#include "gameobjects/Player.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
 
 using namespace std;

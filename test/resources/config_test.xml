@@ -23,25 +23,25 @@
                 </monedas>
                 <enemigos>
                     <enemigo>
-                        <tipo>1</tipo>
+                        <tipo>enemigo_hongo</tipo>
                         <imagen>/home/test_file2.bmp</imagen>
                         <cantidad>10</cantidad>
                     </enemigo>
                     <enemigo>
-                        <tipo>2</tipo>
+                        <tipo>enemigo_tortuga</tipo>
                         <imagen>/home/test_file3.bmp</imagen>
                         <cantidad>5</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
                     <plataforma>
-                        <tipo>ladrillo_test</tipo>
+                        <tipo>plataforma_normal</tipo>
                         <coordX>500</coordX>
                         <coordY>300</coordY>
                         <cantidad>2</cantidad>
                     </plataforma>
                     <plataforma>
-                        <tipo>sorpresa_test</tipo>
+                        <tipo>plataforma_sorpresa</tipo>
                         <coordX>400</coordX>
                         <coordY>500</coordY>
                         <cantidad>5</cantidad>
