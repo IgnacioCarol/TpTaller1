@@ -38,7 +38,7 @@ size_t GameMap::getRandomX(size_t y) {
     srand(time(NULL));
 
     while (!found) {
-        result = rand() % 30 + 10; //TODO averiguar rango de x del mapa, quiza esto depende del mapa asi que habria que ver si es necesario pasarle por parametro rango max
+        result = rand() % 3840 + 1; //TODO averiguar rango de x del mapa, quiza esto depende del mapa asi que habria que ver si es necesario pasarle por parametro rango max
         key = buildKey(result, y);
         if (this->gameMap.find(key) == this->gameMap.end()) {
             found = true;
