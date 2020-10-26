@@ -9,6 +9,11 @@
 #include "Player.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
 
+#define TEXT_WORLD_LEVEL_LABEL_KEY "world_level"
+#define TEXT_WORLD_LEVEL_LABEL_VALUE "WORLD"
+#define TEXT_WORLD_LEVEL_NUMBER_KEY "world_level_number"
+
+
 using namespace std;
 
 class Game {
@@ -18,6 +23,7 @@ public:
 
     bool init(const char* levelName, int width, int height);
     bool loadImages();
+    bool loadLevel(int level);
 
     //Introduces the interactive objects in the game such as Mario, Koopa, etc.
     void createGameObjects();
@@ -45,6 +51,7 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
+    Printer* printer = Printer::getInstance();
 
     int lastValue;
 

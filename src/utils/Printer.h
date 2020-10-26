@@ -9,18 +9,31 @@
 #define FONT_PTR_SIZE 20
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 #include <string>
+#include <map>
+
+struct TextTexture {
+    TextTexture(SDL_Texture *pTexture, int w, int h);
+
+    SDL_Texture* texture = NULL;
+    int width = 0;
+    int height = 0;
+};
 
 class Printer {
 public:
     static Printer *getInstance();
-    void print(SDL_Renderer* renderer, std::string text, SDL_Color color);
+    TextTexture* getTextTexture(std::string text, SDL_Color color, SDL_Renderer* renderer);
+    void free(TextTexture* texture); //TODO: Ver si es necesario
+    void render(TextTexture* texture, int x, int y, SDL_Renderer* renderer);
     virtual ~Printer() { };
 private:
     static Printer *instance;
     TTF_Font *font;
-    TTF_Font* loadFont();
+
     Printer();
+    TTF_Font* loadFont();
 };
 
 

@@ -28,6 +28,17 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
     return false;
 }
 
+bool TextureManager::loadText(const std::string key, const std::string text, SDL_Color color, SDL_Renderer* pRenderer) {
+    TextTexture* textTexture = Printer::getInstance()->getTextTexture(text, color, pRenderer);
+    if (textTexture == NULL) {
+        Logger::getInstance()->error("Couldnt load text: " + text);
+        return false;
+    }
+
+    this->textTextureMap.insert({ key, textTexture});
+    return true;
+}
+
 void TextureManager::draw(std::string ID, int x, int y, int width, int height, SDL_Renderer *renderer,
                           SDL_RendererFlip flip) {
     SDL_Rect  srcRect; //Aca defino size de la imagen
@@ -105,6 +116,15 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
     destRect.h = height / 4;
     SDL_RenderCopyEx(renderer, textureMap[ID], &srcRect, &destRect, 0, 0, flip);
     //Creo que esta se usa para elegir bien la posicion del sprite
+}
+
+void TextureManager::printText(std::string id, int x, int y, SDL_Renderer* pRenderer) {
+    if (textTextureMap[id] == NULL) {
+        Logger::getInstance()->error("Couldnt find text with id: " + id);
+        return;
+    }
+
+    Printer::getInstance()->render(textTextureMap[id], x, y, pRenderer);
 }
 
 void TextureManager::clearTextureMap()

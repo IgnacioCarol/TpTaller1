@@ -39,6 +39,11 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
+    if (!game->loadLevel(1)) {
+        Logger::getInstance()->error("Error: Loading level went wrong");
+        return 1;
+    }
+
     game->createGameObjects();
 
     bool quit = false;
