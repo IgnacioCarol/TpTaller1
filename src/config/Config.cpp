@@ -4,7 +4,7 @@
 
 #include "Config.h"
 
-Config::Config(void){
+Config::Config(){
     this->setDefaults();
 }
 
