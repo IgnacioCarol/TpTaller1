@@ -10,41 +10,37 @@
 //Image related
 #define pWidth 682
 #define pHeight 474
-#define pFrameMultiplier 4
+class CharacterState;
 
 class Player : public GameObject {
 public:
-    //Podria tener un estado, asi el draw se delega a ese estado
     Player();
-    void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera);
+    void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
 
     int getXPosition(){return xPosition;}
 
-    void draw(SDL_Renderer *renderer, int cameraX, int cameraY) { //state = running, jumping normal en este caso es dino //TODO no deberia haber implementacion en el .h
-        SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        int xFramePos = (jumping) ? pFrameMultiplier * pWidth : _currentFrame * pWidth;
-        textureManager->drawFrame("dino", xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, xFramePos, 0, renderer, flip);
-    }
+    void draw(SDL_Renderer *renderer, int cameraX, int cameraY);
 
-    void setPlayerState(std::string state){ playerState = state;}
+    bool isJumping();
 
-    bool isJumping(){return jumping;}
-
-    bool finishJump(){ return initialJumpingPosition == yPosition;}
+    bool finishJump();
 
     void restartPos(int i, int i1);
 
+    void changeState(CharacterState* newState);
+
+    void move();
+
 private:
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
-    std::string playerState; //Puede ser running, jumping o normal
 
+    CharacterState* characterState;
     bool jumping;
     bool canJump() const;
     int initialJumpingPosition;
     int maxYPosition;
-    int frames[5];
     SDL_Rect *cam;
     Logger* logger = Logger::getInstance(); //ToDo Volar esto de aca, looger no deberia ser un atributo de ninguna clase ya que es un singleton.
 };

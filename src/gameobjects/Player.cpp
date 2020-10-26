@@ -1,28 +1,22 @@
 #include <cstdio>
 #include <stdio.h>
 #include <utility>
+#include "../src/CharacterStates/Normal.h"
 #include "Player.h"
 
-void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera) {
+void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID), currentFrame);
-    playerState = "dino"; //dino jumpDino, runDino, asi accedo a la imagen en el map del TextureManager TODO cambiar por clase state
     xDirection = true;
     jumping = false;
     initialJumpingPosition = yPosition;
     maxYPosition = yPosition - 100;
-    frames[0]= 0;
-    frames[1]= 1;
-    frames[2]= 2;
-    frames[3]= 3;
-    frames[4]= 4;
     cam =  camera;
+    characterState = new Normal(0, framesAmount);
 }
 
 void Player::run(int direction) {
-    _currentFrame = (frames[_currentFrame] + 1) % ((sizeof(frames) / sizeof(frames[0])) - 1);
     xDirection = direction ? direction > 0 : xDirection;
     xPosition += cam->x < xPosition || direction > 0 ? direction : 0;
-    playerState = (playerState != "jumpDino" && direction) ? "runDino" : playerState;
 }
 
 void Player::jump(int yMovement) {
@@ -32,7 +26,6 @@ void Player::jump(int yMovement) {
     } else if (isNotStartingPos) {
         yPosition += 1;
     }
-    playerState = (isNotStartingPos) ? "jumpDino" : "dino";
 }
 
 bool Player::canJump() const {
@@ -40,10 +33,33 @@ bool Player::canJump() const {
 }
 
 Player::Player() {
-    this->init(0, 403, std::string(), 0, NULL);
+    this->init(0, 403, std::string(), 0, NULL, 5);
 }
 
 void Player::restartPos(int x, int y) {
     xPosition = x;
     yPosition = y;
+}
+
+void Player::changeState(CharacterState *newState) {
+    characterState = newState;
+}
+
+void Player::move() {
+    const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
+    characterState->changeState(currentKeyStates, this);
+    characterState->move(currentKeyStates, this);
+}
+
+void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
+    SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+    characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+}
+
+bool Player::isJumping() {
+    return jumping;
+}
+
+bool Player::finishJump() {
+    return initialJumpingPosition == yPosition;
 }

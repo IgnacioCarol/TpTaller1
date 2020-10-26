@@ -36,9 +36,8 @@ public:
 
     void draw(std::string ID, int x, int y, int width, int height, SDL_Renderer* renderer,
               SDL_RendererFlip flip = SDL_FLIP_NONE);
-    void drawFrame(std::string ID, int x, int y, int width, int height,
-                   int currentRow, int currentFrame, SDL_Renderer* renderer,
-                   SDL_RendererFlip flip = SDL_FLIP_NONE);
+    void drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
+                   SDL_RendererFlip flip);
 
     void drawBackground(int width, int height, SDL_Renderer* renderer);
     std::map<std::string, SDL_Texture*> getTextureMap() { return textureMap; }

@@ -20,6 +20,7 @@
 #include "Game.h"
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
+
 int main(int argc, char * argv[]) {
 
 #ifdef TEST
@@ -29,11 +30,11 @@ int main(int argc, char * argv[]) {
         Game* game = Game::Instance();
 
         if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)){ //Aca inicializo el background
-            printf("No se pudo inicializar el juego\n");
+            Logger::getInstance() -> error("Error: the game could not be initialized");
             return 1;    }
 
     if (!game->loadImages()){
-        printf("Error cargando las imagenes\n");
+        Logger::getInstance() -> error("Error: Loading the sprites went wrong");
         return 1;
     }
 
@@ -48,7 +49,6 @@ int main(int argc, char * argv[]) {
 
         while(SDL_PollEvent(&e) != 0) {
             if (e.type  == SDL_QUIT ) {
-                printf("Entre a esto para cerrar\n");
                 Game::Instance()->gameOver();
             }
         }
@@ -58,7 +58,7 @@ int main(int argc, char * argv[]) {
         game->render();
         SDL_Delay(2);
     }
-    printf("Sali del juego");
+    Logger::getInstance() -> info("Game over");
     game->clean();
     SDL_Quit();
     return EXIT_SUCCESS;
