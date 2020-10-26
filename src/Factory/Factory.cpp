@@ -22,8 +22,12 @@ std::vector<GameObject> Factory::createGameObjectsFromLevelConfig(Level levelCon
 
     // Init Blocks
     for(auto platform : levelConfig.platforms) {
-        //ToDo determinar tipo de plataforma e instanciar
-//        actors.push_back(new Coin());
+        if (platform.type == PLATFORM_NORMAL) {
+            // instanciar plataforma normal
+        } else if (platform.type == PLATFORM_SURPRISE) {
+            // instanciar plataforma sorpresa
+        }
+//      actors.push_back(new Coin()); TODO crear clases
     }
 
     // Init Coins
@@ -35,7 +39,7 @@ std::vector<GameObject> Factory::createGameObjectsFromLevelConfig(Level levelCon
         //ToDo determianr que tipo de enemigo instanciar segun numero de enemigo
 //                actors.push_back(new Coin());
     }
-
+//TODO Crear clase mapa, que sea un hashmap y que le pueda pedir dame un random x,
 
     // Init
     return std::vector<GameObject>();
