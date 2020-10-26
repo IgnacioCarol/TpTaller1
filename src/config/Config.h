@@ -5,6 +5,15 @@
 #ifndef CONFIG_H
 #define CONFIG_H
 
+#define XML_STAGE_LEVEL_ENEMY_TURTLE   "enemigo_tortuga"
+#define XML_STAGE_LEVEL_ENEMY_MUSHROOM "enemigo_hongo"
+typedef enum{ENEMY_MUSHROOM, ENEMY_TURTLE} enemyType;
+
+
+#define XML_STAGE_LEVEL_PLATFORM_NORMAL   "plataforma_normal"
+#define XML_STAGE_LEVEL_PLATFORM_SURPRISE "plataforma_sorpresa"
+typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
+
 #define DEFAULT_LOG_LEVEL "ERROR"
 #define DEFAULT_WINDOW_WIDTH 800
 #define DEFAULT_WINDOW_HEIGHT 600
@@ -13,9 +22,9 @@
 #define DEFAULT_STAGE_LEVEL_COINS_QTY 30
 #define DEFAULT_STAGE_LEVEL_COINS_COORD_Y 200
 #define DEFAULT_STAGE_LEVEL_ENEMY_QTY 20
-#define DEFAULT_STAGE_LEVEL_ENEMY_TYPE 1
+#define DEFAULT_STAGE_LEVEL_ENEMY_TYPE ENEMY_MUSHROOM
 #define DEFAULT_STAGE_LEVEL_ENEMY_IMG "/home/file3.bmp" //TODO: Change file with the correct one
-#define DEFAULT_STAGE_LEVEL_PLATFORM_TYPE "ladrillo"
+#define DEFAULT_STAGE_LEVEL_PLATFORM_TYPE PLATFORM_NORMAL
 #define DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X 100
 #define DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y 200
 #define DEFAULT_STAGE_LEVEL_PLATFORM_QTY 5
@@ -55,26 +64,26 @@ using namespace std;
 using boost::property_tree::ptree;
 
 struct Enemy {
-    int type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
-    string image = DEFAULT_STAGE_LEVEL_ENEMY_IMG;
-    int quantity = DEFAULT_STAGE_LEVEL_ENEMY_QTY;
+    enemyType type;
+    string image;
+    int quantity;
 };
 
 struct Platform {
-    string type = DEFAULT_STAGE_LEVEL_PLATFORM_TYPE;
-    int coordX = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X;
-    int coordY = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y;
-    int quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
+    platformType type;
+    int coordX;
+    int coordY;
+    int quantity;
 };
 
 struct Coin {
-    int coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
-    int quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
+    int coordY;
+    int quantity;
 };
 
 struct Level {
-    int number = DEFAULT_STAGE_LEVEL_NUMBER;
-    string background = DEFAULT_STAGE_LEVEL_BACKGROUND;
+    int number;
+    string background;
     vector<Coin> coins;
     vector<Enemy> enemies;
     vector<Platform> platforms;
@@ -85,12 +94,12 @@ struct Stage {
 };
 
 struct Window {
-    int width = DEFAULT_WINDOW_WIDTH;
-    int height = DEFAULT_WINDOW_HEIGHT;
+    int width;
+    int height;
 };
 
 struct Log {
-    string level = DEFAULT_LOG_LEVEL;
+    string level;
 };
 
 class Config {
