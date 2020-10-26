@@ -3,8 +3,8 @@
 
 
 #include <string>
-#include "../src/logger/logger.h"
-#include "TextureManager.h"
+#include "../logger/logger.h"
+#include "../TextureManager.h"
 #include "GameObject.h"
 
 //Image related
@@ -22,7 +22,7 @@ public:
 
     int getXPosition(){return xPosition;}
 
-    void draw(SDL_Renderer *renderer, int cameraX, int cameraY) { //state = running, jumping normal en este caso es dino
+    void draw(SDL_Renderer *renderer, int cameraX, int cameraY) { //state = running, jumping normal en este caso es dino //TODO no deberia haber implementacion en el .h
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         int xFramePos = (jumping) ? pFrameMultiplier * pWidth : _currentFrame * pWidth;
         textureManager->drawFrame("dino", xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, xFramePos, 0, renderer, flip);
@@ -46,7 +46,7 @@ private:
     int maxYPosition;
     int frames[5];
     SDL_Rect *cam;
-    Logger* logger = Logger::getInstance();
+    Logger* logger = Logger::getInstance(); //ToDo Volar esto de aca, looger no deberia ser un atributo de ninguna clase ya que es un singleton.
 };
 
 

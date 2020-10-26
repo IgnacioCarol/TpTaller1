@@ -27,6 +27,7 @@ bool Game::init(const char *levelName, int width, int height) {
     Logger::getInstance()->setLogLevel(config->getLog().level);
     Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
 
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     //SDL initializing
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
         printf("SDL init success\n");

@@ -6,7 +6,7 @@
 #define TPTALLER1_FACTORY_H
 
 #include <vector>
-#include "../GameObject.h"
+#include "../gameobjects/GameObject.h"
 #include "../config/Config.h"
 
 class Factory {

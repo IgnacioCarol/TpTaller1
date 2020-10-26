@@ -20,18 +20,18 @@ Factory::Factory() = default;
 std::vector<GameObject> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
     std::vector<GameObject> actors;
 
-    // Init Coins
-    for(auto coin : levelConfig.coins) {
-//        actors.push_back(new Coin());
-    }
-
     // Init Blocks
     for(auto platform : levelConfig.platforms) {
         //ToDo determinar tipo de plataforma e instanciar
 //        actors.push_back(new Coin());
     }
 
-    for(auto platform : levelConfig.enemies) {
+    // Init Coins
+    for(auto coin : levelConfig.coins) {
+//        actors.push_back(new Coin());
+    }
+
+    for(auto enemies : levelConfig.enemies) {
         //ToDo determianr que tipo de enemigo instanciar segun numero de enemigo
 //                actors.push_back(new Coin());
     }
