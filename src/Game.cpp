@@ -22,6 +22,7 @@ Game* Game::Instance() {
 
 bool Game::init(const char *levelName, int width, int height) {
     //SDL initializing
+    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
         logger -> info("SDL init success\n");
         window = SDL_CreateWindow(levelName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
