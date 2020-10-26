@@ -4,6 +4,9 @@
 
 #include "GameMap.h"
 #include <sstream>
+#include <stdio.h>      /* printf, scanf, puts, NULL */
+#include <stdlib.h>     /* srand, rand */
+#include <time.h>       /* time */
 
 GameMap* GameMap::instance = nullptr;
 
@@ -16,11 +19,9 @@ GameMap * GameMap::getInstance() {
 }
 
 bool GameMap::insertTo(size_t x, size_t y, GameObject * actor) {
-    std::stringstream stream;
     std::string key;
 
-    stream << x << "-" << y;
-    key = stream.str();
+    key = buildKey(x, y);
 
     if (this->gameMap.find(key) != this->gameMap.end()) {
         return false;
@@ -30,6 +31,29 @@ bool GameMap::insertTo(size_t x, size_t y, GameObject * actor) {
     return true;
 }
 
+size_t GameMap::getRandomX(size_t y) {
+    std::string key;
+    size_t result = 0;
+    bool found = false;
+    srand(time(NULL));
+
+    while (!found) {
+        result = rand() % 30 + 10; //TODO averiguar rango de x del mapa, quiza esto depende del mapa asi que habria que ver si es necesario pasarle por parametro rango max
+        key = buildKey(result, y);
+        if (this->gameMap.find(key) == this->gameMap.end()) {
+            found = true;
+        }
+    }
+
+    return result;
+}
+
+std::string GameMap::buildKey(size_t x, size_t y) {
+    std::stringstream stream;
+
+    stream << x << "-" << y;
+    return stream.str();
+}
 
 
 GameMap::GameMap() = default;

@@ -34,3 +34,15 @@ TEST(GameMapTest, insertRepeatedGameObjectReturnFalse) {
     ASSERT_EQ(true, response1);
     ASSERT_EQ(false, response2);
 }
+
+TEST(GameMapTest, getRandomX) {
+    GameMap * map = GameMap::getInstance();
+    GameObject * actor = new Coin();
+
+    bool response1 = map->insertTo(1, 3, actor);
+    size_t x = map->getRandomX(3);
+
+    ASSERT_EQ(true, response1);
+    ASSERT_GT(x, 0);
+    std::cout << "x: " << x << " y: " << 3 << std::endl;
+}

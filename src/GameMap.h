@@ -13,6 +13,7 @@ class GameMap {
         static GameMap * getInstance();
         virtual ~GameMap();
         bool insertTo(size_t x, size_t y, GameObject * actor);
+        size_t getRandomX(size_t y);
         //Move
         //Remove
         //
@@ -22,6 +23,7 @@ class GameMap {
         std::map<std::string, GameObject* > gameMap;
 
         GameMap();
+        std::string buildKey(size_t x, size_t y);
 };
 
 
