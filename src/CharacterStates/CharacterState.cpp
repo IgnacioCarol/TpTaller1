@@ -2,7 +2,7 @@
 // Created by lisandro on 25/10/20.
 //
 
-#include <src/TextureManager.h>
+#include "../TextureManager.h"
 #include "CharacterState.h"
 
 void CharacterState::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,

@@ -2,7 +2,7 @@
 // Created by lisandro on 25/10/20.
 //
 
-#include <src/Player.h>
+#include "../Player.h"
 #include "Running.h"
 #include "Jumping.h"
 #include "Normal.h"

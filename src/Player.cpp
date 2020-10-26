@@ -1,7 +1,7 @@
 #include <cstdio>
 #include <stdio.h>
 #include <utility>
-#include <src/CharacterStates/Normal.h>
+#include "../src/CharacterStates/Normal.h"
 #include "Player.h"
 
 void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount) {
