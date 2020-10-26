@@ -24,30 +24,52 @@ Factory::Factory() = default;
 
 std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
     std::vector<GameObject*> actors;
+    GameObject * tmp;
+    int anchoPlataforma = 2; //TODO determinar que valor es el correcto, quiza convenga que sea configurable desde el XML
 
-    // Init Blocks
+    // Init Platforms
     for(auto platform : levelConfig.platforms) {
-        if (platform.type == PLATFORM_NORMAL) {
-            actors.push_back(new PlatformNormal());
-        } else if (platform.type == PLATFORM_SURPRISE) {
-            // instanciar plataforma sorpresa
+        for(size_t i = 0; i < platform.quantity; i++) {
+            if (platform.type == PLATFORM_SURPRISE) {
+                tmp = new PlatformSurprise();
+            } else {
+                tmp = new PlatformNormal();
+            }
+
+            tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,
+                    "sarasa", 0); //TODO definir lo de texture y current frame
+
+            actors.push_back(tmp);
         }
-//      actors.push_back(new Coin()); TODO crear clases
     }
 
     // Init Coins
     for(auto coin : levelConfig.coins) {
-//        actors.push_back(new Coin());
+        for(size_t i = 0; i < coin.quantity; i++) {
+            tmp = new Coin();
+            tmp->init(0, coin.coordY, //Position x determined by init randomly
+                      "sarasa", 0); //TODO definir lo de texture y current frame
+
+            actors.push_back(tmp);
+        }
     }
 
     for(auto enemies : levelConfig.enemies) {
-        //ToDo determianr que tipo de enemigo instanciar segun numero de enemigo
-//                actors.push_back(new Coin());
-    }
-//TODO Crear clase mapa, que sea un hashmap y que le pueda pedir dame un random x,
+        for(size_t i = 0; i < enemies.quantity; i++) {
+            if (enemies.type == ENEMY_TURTLE) {
+                tmp = new EnemyTurtle();
+            } else {
+                tmp = new EnemyMushroom();
+            }
 
-    // Init
-    return std::vector<GameObject>();
+            tmp->init(0, 0, //Position x and y determined by init randomly
+                      "sarasa", 0); //TODO definir lo de texture y current frame
+
+            actors.push_back(tmp);
+        }
+    }
+
+    return actors;
 }
 
 Factory::~Factory() = default;

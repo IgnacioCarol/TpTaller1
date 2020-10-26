@@ -125,7 +125,7 @@ void Config::parsePlatforms(Level *level, ptree pt) {
 
 void Config::parseCoins(Level *level, ptree pt) {
     for (const auto &e : pt.get_child(XML_STAGE_LEVEL_COINS)) {
-        Coin coin;
+        xmlCoin coin;
         string coin_name;
         ptree coin_pt;
         tie(coin_name, coin_pt) = e;
@@ -153,7 +153,7 @@ void Config::setDefaults() {
     platform.coordY = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y;
     platform.quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
 
-    Coin coin;
+    xmlCoin coin;
     coin.coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
     coin.quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
 

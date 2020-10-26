@@ -3,10 +3,13 @@
 //
 
 #include "EnemyTurtle.h"
+#include "../GameMap.h"
 
 EnemyTurtle::EnemyTurtle() = default;
 
 void EnemyTurtle::init(int x, int y, std::string textureID, int currentFrame) {
+    y = 403; //ToDo Pasar a macro
+    x = GameMap::getInstance()->getRandomX(y);
     GameObject::init(x, y, textureID, currentFrame);
 }
 

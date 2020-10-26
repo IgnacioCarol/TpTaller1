@@ -3,10 +3,13 @@
 //
 
 #include "EnemyMushroom.h"
+#include "../GameMap.h"
 
 EnemyMushroom::EnemyMushroom() = default;
 
 void EnemyMushroom::init(int x, int y, std::string textureID, int currentFrame) {
+    y = 403; //ToDo Pasar a macro
+    x = GameMap::getInstance()->getRandomX(y);
     GameObject::init(x, y, textureID, currentFrame);
 }
 

@@ -52,8 +52,8 @@ TEST(ConfigTest, loadXMLConfig) {
     ASSERT_EQ(ENEMY_TURTLE, enemy2.type);
 
     ASSERT_EQ(2, config.getStage().levels.back().coins.size());
-    Coin coin1 = config.getStage().levels.back().coins.front();
-    Coin coin2 = config.getStage().levels.back().coins.back();
+    xmlCoin coin1 = config.getStage().levels.back().coins.front();
+    xmlCoin coin2 = config.getStage().levels.back().coins.back();
     ASSERT_EQ(13, coin1.quantity);
     ASSERT_EQ(10, coin1.coordY);
     ASSERT_EQ(3, coin2.quantity);
@@ -96,7 +96,7 @@ static void assertDefaults(Config config) {
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_QTY, platform.quantity);
 
     ASSERT_EQ(1, config.getStage().levels.back().enemies.size());
-    Coin coin = config.getStage().levels.back().coins.back();
+    xmlCoin coin = config.getStage().levels.back().coins.back();
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_QTY, coin.quantity);
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_COORD_Y, platform.coordY);
 }

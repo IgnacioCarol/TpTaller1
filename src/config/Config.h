@@ -76,7 +76,7 @@ struct Platform {
     int quantity;
 };
 
-struct Coin {
+struct xmlCoin {
     int coordY;
     int quantity;
 };
@@ -84,7 +84,7 @@ struct Coin {
 struct Level {
     int number;
     string background;
-    vector<Coin> coins;
+    vector<xmlCoin> coins;
     vector<Enemy> enemies;
     vector<Platform> platforms;
 };
