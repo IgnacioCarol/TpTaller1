@@ -3,12 +3,13 @@
 //
 
 #include "Coin.h"
+#include "../GameMap.h"
 
 Coin::Coin() = default;
 
 void Coin::init(int x, int y, std::string textureID, int currentFrame) {
-
-    GameObject::init(x, y, textureID, currentFrame);
+    int new_x = (int) GameMap::getInstance()->getRandomX(y);
+    GameObject::init(new_x, y, textureID, currentFrame);
 }
 
 void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
