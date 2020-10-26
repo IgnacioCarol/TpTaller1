@@ -23,7 +23,7 @@ const int SCREEN_HEIGHT = 600;
 int main(int argc, char * argv[]) {
 
 #ifdef TEST
-    testing::InitGoogleTest(&argc, argv); //TODO agregar macro para correr tests solo en ambientes de test
+    testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
 #endif
         Game* game = Game::Instance();
