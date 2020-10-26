@@ -4,6 +4,11 @@
 
 #include "Factory.h"
 #include <vector>
+#include "../gameobjects/Coin.h"
+#include "../gameobjects/EnemyMushroom.h"
+#include "../gameobjects/EnemyTurtle.h"
+#include "../gameobjects/PlatformNormal.h"
+#include "../gameobjects/PlatformSurprise.h"
 
 Factory* Factory::instance = nullptr;
 
@@ -23,7 +28,7 @@ std::vector<GameObject> Factory::createGameObjectsFromLevelConfig(Level levelCon
     // Init Blocks
     for(auto platform : levelConfig.platforms) {
         if (platform.type == PLATFORM_NORMAL) {
-            // instanciar plataforma normal
+            actors.push_back(new PlatformNormal());
         } else if (platform.type == PLATFORM_SURPRISE) {
             // instanciar plataforma sorpresa
         }

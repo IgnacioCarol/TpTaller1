@@ -8,11 +8,11 @@
 #include "GameObject.h"
 
 class EnemyMushroom : public GameObject {
-public:
-    EnemyMushroom();
-    void init(int x, int y, std::string textureID, int currentFrame) override;
-    void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
-    virtual ~EnemyMushroom();
+    public:
+        EnemyMushroom();
+        void init(int x, int y, std::string textureID, int currentFrame) override;
+        void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
+        virtual ~EnemyMushroom();
 };
 
 

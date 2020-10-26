@@ -8,10 +8,11 @@
 #include "GameObject.h"
 
 class EnemyTurtle : public GameObject {
-    EnemyTurtle();
-    void init(int x, int y, std::string textureID, int currentFrame) override;
-    void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
-    virtual ~EnemyTurtle();
+    public:
+        EnemyTurtle();
+        void init(int x, int y, std::string textureID, int currentFrame) override;
+        void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
+        virtual ~EnemyTurtle();
 
 };
 
