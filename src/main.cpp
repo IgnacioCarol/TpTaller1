@@ -1,69 +1,66 @@
 //
-// Created by lisandro on 23/10/20.
+// Created by nacho on 10/10/20.
 //
-
-#include "main.h"
-#include "Game.h"
-#include <SDL2/SDL.h>
-#include <string>
-#include "Mario.h"
-#include "Hongo.h"
+//
+//  main.cpp
+//  test
+//
+//  Created by Daniel Bizari on 08/10/2020.
+//  Copyright © 2020 Daniel Bizari. All rights reserved.
+//
+#ifdef __APPLE__
+#include "SDL.h"
+#else
+#include "SDL2/SDL.h"
+#endif
+#include <iostream>
 #include "gtest/gtest.h"
+#include "gmock/gmock.h"
+#include "logger/logger.h"
+#include "Game.h"
+const int SCREEN_WIDTH = 800;
+const int SCREEN_HEIGHT = 600;
 
-Game* game = NULL;
+int main(int argc, char * argv[]) {
 
-int main(int argc, char* argv[]){
+//#ifdef TEST
+//    testing::InitGoogleTest(&argc, argv); //TODO agregar macro para correr tests solo en ambientes de test
+//    return RUN_ALL_TESTS();
+//#endif
+    Game* game = Game::Instance();
 
-    game = new Game();
-
-    if (!game) {
-        printf("No se pudo crear el juego\n");
-        return 1;
-    }
-
-
-    if (!game->init("Level 1", 800, 600)){ //Aca inicializo el background
-        printf("No se pudo inicializar el juego\n");
+    if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)) { //Aca inicializo el background
+        Logger::getInstance() -> error("Error: the game could not be initialized");
         return 1;
     }
 
     if (!game->loadImages()){
-        printf("Error cargando las imagenes\n");
+        Logger::getInstance() -> error("Error: Loading the sprites went wrong");
         return 1;
     }
-    Mario* marito = new Mario();
-    Hongo* honguito = new Hongo();
 
-    game->setGameObjects(marito, honguito);
+    game->createGameObjects();
 
-    //Main loop flag
     bool quit = false;
 
     //Event handler
     SDL_Event e;
-    /*int xValue = 0;
-    int xValueBackground = 0;
-    int yPosition = 450;
-    int maxYPosition = 350;*/
 
-    while (game->isPlaying()) {
+    while(game->isPlaying()){
 
         while(SDL_PollEvent(&e) != 0) {
             if (e.type  == SDL_QUIT ) {
-                printf("Entre a esto para cerrar\n");
-                game->gameOver();
+                Game::Instance()->gameOver();
             }
         }
 
         game->handleEvents();
         //game->update();
         game->render();
-        //SDL_Delay(10000);
-        //printf("Termino el delay\n");
         SDL_Delay(2);
     }
-    printf("Sali del juego");
+    Logger::getInstance() -> info("Game over");
     game->clean();
-
-    return 0;
+    SDL_Quit();
+    return EXIT_SUCCESS;
 }

@@ -1,75 +1,104 @@
-//
-// Created by lisandro on 23/10/20.
-//
-
 #include "Game.h"
+#include "BackgroundStages/FirstStage.h"
+#include "BackgroundStages/BackgroundStage.h"
+
+#include <unistd.h>
+#include "config/Config.h"
+
+Game* Game::instance = 0;
+const static char* BACKGROUND = "BG";
+int IMAGE_WIDTH;
+Logger* logger = Logger::getInstance();
+
+Game::Game(){
+}
+
+Game* Game::Instance() {
+    //First time we create an instance of Game
+    if(instance == 0) instance = new Game();
+    return instance;
+}
+
 
 bool Game::init(const char *levelName, int width, int height) {
     //SDL initializing
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
-        printf("SDL init success\n");
+        logger -> info("SDL init success\n");
         window = SDL_CreateWindow(levelName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   width, height, 0);
         if (window){
-            printf("Window init success\n");
+            logger -> info("Window init success\n");
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
-                printf("Renderer init success\n");
+                camera = new Camera(0, 0, width, height);
+                stage = new FirstStage(textureManager, renderer);
+                logger -> info("Renderer init success\n");
             }
 
             else {
-                printf("Render init fail\n");
+                logger -> error("Render init fail\n");
                 return false;
             }
         }
         else{
-            printf("Window init fail\n");
+            logger -> error("Window init fail\n");
             return false;
         }
     }
     else{
-        printf("SDL init fail\n");
+        logger -> error("SDL init fail\n");
         return false;
     }
 
-    printf("Init success\n");
+    logger -> info("Init success\n");
     playing = true;
     return true;
 }
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    textureManager->drawBackground(800, 600, renderer);
-    //textureManager->draw("dino", mario->position()[0], mario->position()[1], 1, 1, renderer);
-    mario->draw(renderer);
-    //Aca deberia ir la parte de cargar las imagenes y esas cosas
-    //El textureManager deberia tener un puntero al renderer asi le carga las cosas
+    camera->render(player->getXPosition(), stage->getWidth());
+    textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
+    player->draw(renderer, camera -> getXpos(), 0);
     SDL_RenderPresent(renderer);
 }
 
 void Game::clean() {
-    printf("Cleaning game");
+    logger ->info("Cleaning game\n");
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
-    textureManager->destroy();
+    textureManager->clearTextureMap();
     SDL_Quit();
 }
 
 void Game::handleEvents() {
-    const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-    mario->jump(currentKeyStates [ SDL_SCANCODE_UP]);
-    mario->run(currentKeyStates[ SDL_SCANCODE_RIGHT ] - currentKeyStates[ SDL_SCANCODE_LEFT ]);
+    player->move();
 }
 
 bool Game::loadImages() {
     bool success;
-    success = textureManager->load("../Sprites/sprites_prueba/dino.png", "dino", renderer);
-    if (!success){
-        printf("No encontre la ruta\n");
-        return false;
-    }
-    success = success && textureManager -> load("../Sprites/sprites_prueba/backgroundCompleto.png", "BG", renderer);
-    success = success && textureManager -> load("../Sprites/sprites_prueba/dog.png", "dog", renderer);
-    success = success && textureManager -> load("../Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
+    success = textureManager->load("Sprites/sprites_prueba/dino.png", "dino", renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
     return success;
 }
+
+void Game::createGameObjects() {
+    auto* mario = new Player();
+    mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
+    player = mario;
+
+    //TODO inicializar el vector GameObject
+}
+
+void Game::nextStage() {
+    stage = stage->nextStage();
+}
+
+void Game::restartCharacters() {
+    player->restartPos(0, 403);
+    camera->restartPos();
+}
+
+
+

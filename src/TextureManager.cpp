@@ -5,13 +5,16 @@
 #include "TextureManager.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
+#include "../src/logger/logger.h"
+static const char *const BACKGROUND = "BG";
+static const int CURRENT_ROW = 0; //The sprite sheet always has one row
 
 TextureManager* TextureManager::instance = 0;
 
-bool TextureManager::load(std::string fileName, std::string ID, SDL_Renderer *imageRenderer) {
+bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
-        printf("Falle cargando la imagen\n");
+        Logger::getInstance() -> error("Error: couldnt load the image\n");
         return false;
     }
 
@@ -19,7 +22,6 @@ bool TextureManager::load(std::string fileName, std::string ID, SDL_Renderer *im
     SDL_FreeSurface(tempSurface);
 
     if (imageTexture != 0){
-        printf("Success creating the texture\n");
         textureMap[ID] = imageTexture;
         return true;
     }
@@ -28,7 +30,6 @@ bool TextureManager::load(std::string fileName, std::string ID, SDL_Renderer *im
 
 void TextureManager::draw(std::string ID, int x, int y, int width, int height, SDL_Renderer *renderer,
                           SDL_RendererFlip flip) {
-    //deberia tener un tamanio fijo para la imagen y otro para el backgroun, back 800x600 la imagen
     SDL_Rect  srcRect; //Aca defino size de la imagen
     SDL_Rect destRect; //Aca donde va a ir, se mapea para ajustarse el tamanio
 
@@ -58,7 +59,7 @@ void TextureManager::drawBackground(int width, int height, SDL_Renderer *rendere
     SDL_Rect srcRect;
     SDL_Rect destRect;
 
-    SDL_Texture* texture = textureMap["BG"];
+    SDL_Texture* texture = textureMap[BACKGROUND];
     SDL_QueryTexture(texture, NULL, NULL, &srcRect.w, &srcRect.h);
 
     srcRect.x = 100;  //vas cambiando este vaor siempre
@@ -70,21 +71,34 @@ void TextureManager::drawBackground(int width, int height, SDL_Renderer *rendere
     SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
 }
 
-void TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentRow, int currentFrame,
-                               SDL_Renderer *renderer, SDL_RendererFlip flip) {
+void TextureManager::drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect* clip) {
+    {
+        //Set rendering space and render to screen
+        SDL_Rect renderQuad = { 0, 0, width, height };
+        SDL_Texture* texture = textureMap[BACKGROUND];
+        //Set clip rendering dimensions
+        if( clip != NULL )
+        {
+            renderQuad.w = clip->w;
+            renderQuad.h = clip->h;
+        }
+
+        //Render to screen
+        SDL_RenderCopyEx( renderer, texture, clip, &renderQuad, 0, 0, SDL_FLIP_NONE );
+    }
+}
+
+void
+TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
+                          SDL_RendererFlip flip) {
     SDL_Rect srcRect;
     SDL_Rect destRect;
-    /*srcRect.x = width * currentFrame;
-    srcRect.y = height * (currentRow - 1);
-    srcRect.w = destRect.w = width;
-    srcRect.h = destRect.h = height;
-    destRect.x = x;
-    destRect.y = y;
-     */
-    srcRect.x = currentRow;
-    srcRect.y = currentFrame;
+
+    srcRect.x = currentFrame;
+    srcRect.y = CURRENT_ROW;
     srcRect.w = width;
     srcRect.h = height;
+
     destRect.x = x;
     destRect.y = y;
     destRect.w = width / 4;
@@ -93,9 +107,12 @@ void TextureManager::drawFrame(std::string ID, int x, int y, int width, int heig
     //Creo que esta se usa para elegir bien la posicion del sprite
 }
 
-void TextureManager::destroy(){
-    SDL_DestroyTexture(textureMap["dino"]);
-    SDL_DestroyTexture(textureMap["BG"]);
-    SDL_DestroyTexture(textureMap["dog"]);
-    SDL_DestroyTexture(textureMap["runDog"]);
+void TextureManager::clearTextureMap()
+{
+    textureMap.clear();
+}
+
+void TextureManager::clearFromTextureMap(std::string id)
+{
+    textureMap.erase(id);
 }

@@ -1,42 +1,54 @@
-//
-// Created by lisandro on 23/10/20.
-//
-
 #ifndef TPTALLER1_GAME_H
 #define TPTALLER1_GAME_H
 #include <iostream>
 #include <SDL2/SDL.h>
+#include "Camera.h"
 #include <string>
 #include "TextureManager.h"
-#include "Mario.h"
-#include "Hongo.h"
+#include "GameObject.h"
+#include "Player.h"
+#include "../src/BackgroundStages/BackgroundStage.h"
+
+using namespace std;
 
 class Game {
 public:
-    Game() {}
-    ~Game() {}
+    //Public instance function
+    static Game* Instance();
+
     bool init(const char* levelName, int width, int height);
     bool loadImages();
+
+    //Introduces the interactive objects in the game such as Mario, Koopa, etc.
+    void createGameObjects();
+
     void render();
     //void update(){}
     void handleEvents();
     void clean();
-    bool isPlaying(){ return playing;}
-
-    void setGameObjects(Mario* mario, Hongo* hongo){
-        this->mario = mario;
-        this->hongo = hongo;
-    }
+    bool isPlaying() const{ return playing;}
 
     void gameOver(){ playing = false;}
 
+    void nextStage();
+    void restartCharacters();
+
 private:
+    Game(); //Private constructor to prevent instancing.
+    static Game* instance; //Here will be the instance stored.
+    Camera* camera;
+    //Elements of the game
+    Player* player;
+    //std::vector <GameObject*> _gameObjects;
+
     bool playing = false;
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
-    Mario* mario;
-    Hongo* hongo;
+
+    int lastValue;
+
+    BackgroundStage* stage;
 };
 
 
