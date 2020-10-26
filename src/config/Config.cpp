@@ -97,7 +97,7 @@ void Config::parsePlatforms(Level *level, ptree pt) {
             continue;
         }
 
-        platform.type = platform_pt.get<string>(XML_STAGE_LEVEL_PLATFORM_TYPE);
+        platform.type = platform_pt.get<string>(XML_STAGE_LEVEL_PLATFORM_TYPE); //ToDo
         platform.coordX = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDX);
         platform.coordY = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDY);
         platform.quantity = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_QTY);

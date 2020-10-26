@@ -2,7 +2,8 @@
 #include "BackgroundStages/FirstStage.h"
 #include "BackgroundStages/BackgroundStage.h"
 
-#include <unistd.h>
+#include "Factory/Factory.h"
+#include "logger/logger.h"
 #include "config/Config.h"
 
 Game* Game::instance = 0;
@@ -19,11 +20,18 @@ Game* Game::Instance() {
 
 
 bool Game::init(const char *levelName, int width, int height) {
+    Config * config = new Config();
+    config->load("asdf"); //ToDo poner path de xml de test
+//    config->getStage(); //ToDo handlear init de stage
+    Window windowConfig = config->getWindow();
+    Logger::getInstance()->setLogLevel(config->getLog().level);
+    Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
+
     //SDL initializing
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
         printf("SDL init success\n");
         window = SDL_CreateWindow(levelName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                  width, height, 0);
+                                  windowConfig.width, windowConfig.height, 0);
         if (window){
             printf("Window init success\n");
             renderer = SDL_CreateRenderer(window, -1, 0);
@@ -62,6 +70,8 @@ void Game::render() {
 }
 
 void Game::clean() {
+    delete Logger::getInstance();
+    // ToDo liberar memoria de todos los singleton.
     printf("Cleaning game");
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);

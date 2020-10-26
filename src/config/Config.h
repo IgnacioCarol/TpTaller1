@@ -43,7 +43,7 @@
 #define XML_STAGE_LEVEL_PLATFORM_COORDY "coordY"
 #define XML_STAGE_LEVEL_PLATFORM_QTY "cantidad"
 
-#include <list>
+#include <vector>
 #include <string>
 #include <iostream>
 #include <boost/property_tree/ptree.hpp>
@@ -75,13 +75,13 @@ struct Coin {
 struct Level {
     int number = DEFAULT_STAGE_LEVEL_NUMBER;
     string background = DEFAULT_STAGE_LEVEL_BACKGROUND;
-    list<Coin> coins;
-    list<Enemy> enemies;
-    list<Platform> platforms;
+    vector<Coin> coins;
+    vector<Enemy> enemies;
+    vector<Platform> platforms;
 };
 
 struct Stage {
-    list<Level> levels;
+    vector<Level> levels;
 };
 
 struct Window {
