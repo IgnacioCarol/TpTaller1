@@ -6,6 +6,8 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 static const char *const BACKGROUND = "BG";
+static const int CURRENT_ROW = 0; //The sprite sheet always has one row
+
 TextureManager* TextureManager::instance = 0;
 
 bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
@@ -86,14 +88,17 @@ void TextureManager::drawBackgroundWithCamera(int width, int height, SDL_Rendere
     }
 }
 
-void TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentRow, int currentFrame,
-                               SDL_Renderer *renderer, SDL_RendererFlip flip) {
+void
+TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
+                          SDL_RendererFlip flip) {
     SDL_Rect srcRect;
     SDL_Rect destRect;
-    srcRect.x = currentRow;
-    srcRect.y = currentFrame;
+
+    srcRect.x = currentFrame;
+    srcRect.y = CURRENT_ROW;
     srcRect.w = width;
     srcRect.h = height;
+
     destRect.x = x;
     destRect.y = y;
     destRect.w = width / 4;
