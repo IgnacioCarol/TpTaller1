@@ -16,7 +16,7 @@ class GameMapTest : testing::Test {
 
 TEST(GameMapTest, insertNewGameObject) {
     GameMap * map = GameMap::getInstance();
-    GameObject * actor = new xmlCoin();
+    GameObject * actor = new Coin();
 
     bool response = map->insertTo(1, 2, actor);
 
@@ -25,8 +25,8 @@ TEST(GameMapTest, insertNewGameObject) {
 
 TEST(GameMapTest, insertRepeatedGameObjectReturnFalse) {
     GameMap * map = GameMap::getInstance();
-    GameObject * actor1 = new xmlCoin();
-    GameObject * actor2 = new xmlCoin();
+    GameObject * actor1 = new Coin();
+    GameObject * actor2 = new Coin();
 
     bool response1 = map->insertTo(1, 3, actor1);//Todo quiza estaria bueno que el init del gameObject llame al gameMap
     bool response2 = map->insertTo(1, 3, actor2);
@@ -37,10 +37,10 @@ TEST(GameMapTest, insertRepeatedGameObjectReturnFalse) {
 
 TEST(GameMapTest, getRandomX) {
     GameMap * map = GameMap::getInstance();
-    GameObject * actor = new xmlCoin();
+    GameObject * actor = new Coin();
 
-    bool response1 = map->insertTo(1, 3, actor);
-    size_t x = map->getRandomX(3);
+    bool response1 = map->insertTo(1, 4, actor);
+    size_t x = map->getRandomX(4);
 
     ASSERT_EQ(true, response1);
     ASSERT_GT(x, 0);
