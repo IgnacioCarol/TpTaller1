@@ -12,7 +12,7 @@
 class Factory {
     public:
         static Factory * getInstance();
-        std::vector<GameObject> createGameObjectsFromLevelConfig(Level levelConfig);
+        std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig);
         virtual ~Factory();
 
     private:

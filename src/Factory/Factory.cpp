@@ -22,8 +22,8 @@ Factory * Factory::getInstance() {
 
 Factory::Factory() = default;
 
-std::vector<GameObject> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
-    std::vector<GameObject> actors;
+std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
+    std::vector<GameObject*> actors;
 
     // Init Blocks
     for(auto platform : levelConfig.platforms) {
