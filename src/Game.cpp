@@ -72,7 +72,7 @@ void Game::render() {
     player->draw(renderer, camera -> getXpos(), 0);
     //TODO renderizar todos los game objects iterando
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
-        _gameObjects[i]->draw(renderer, 0, 0);
+        _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
     SDL_RenderPresent(renderer);
 }

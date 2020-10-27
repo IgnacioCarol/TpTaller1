@@ -11,7 +11,7 @@ void Coin::init(int x, int y, std::string textureID, int currentFrame) {
 
 void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     _currentFrame = (delayCounter % coinDelay) ? _currentFrame : (_currentFrame + 1) % coinsFrames;
-    TextureManager::Instance()->drawFrame(_textureID, xPosition, yPosition, CWidth, CHeight,
+    TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, CWidth, CHeight,
                                           CWidth * _currentFrame, renderer, SDL_FLIP_NONE);
     delayCounter++;
 }

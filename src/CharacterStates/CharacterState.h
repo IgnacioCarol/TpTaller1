@@ -9,7 +9,7 @@
 #include <SDL2/SDL_render.h>
 #include <string>
 class Player;
-//class Enemy;
+class Enemy;
 
 class CharacterState {
 public:
