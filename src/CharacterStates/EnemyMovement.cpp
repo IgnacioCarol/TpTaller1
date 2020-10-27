@@ -3,14 +3,13 @@
 //
 
 #include "EnemyMovement.h"
-#include "../TextureManager.h" //OJO
 
 EnemyMovement::EnemyMovement(int currentFrame, int framesAmount) : CharacterState(currentFrame, framesAmount) {
 
 }
 
 void EnemyMovement::move(Enemy *enemy) {
-    //enemy -> walk();
+    enemy->move();
 }
 
 void EnemyMovement::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,

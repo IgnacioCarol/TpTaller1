@@ -5,7 +5,7 @@
 #ifndef TPTALLER1_ENEMYMOVEMENT_H
 #define TPTALLER1_ENEMYMOVEMENT_H
 
-
+#include "../gameobjects/Enemy.h"
 #include "CharacterState.h"
 
 class EnemyMovement: public CharacterState {
