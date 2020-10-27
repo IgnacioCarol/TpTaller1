@@ -18,7 +18,7 @@ public:
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
 
 protected:
-    //To manage movement
+    //To manage the movement
     int xPosition;
     int yPosition;
 

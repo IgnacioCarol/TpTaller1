@@ -14,7 +14,7 @@ TextureManager* TextureManager::instance = 0;
 bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
-        Logger::getInstance() -> error("Error: couldnt load the image\n");
+        Logger::getInstance() -> error("Error: couldn't load the image\n");
         return false;
     }
 

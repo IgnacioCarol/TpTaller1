@@ -2,8 +2,9 @@
 #define TPTALLER1_GAME_H
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "Camera.h"
+#include <vector>
 #include <string>
+#include "Camera.h"
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
@@ -23,8 +24,9 @@ public:
     void createGameObjects();
 
     void render();
-    //void update(){}
+
     void handleEvents();
+    void update();
     void clean();
     bool isPlaying() const{ return playing;}
 
@@ -39,7 +41,7 @@ private:
     Camera* camera;
     //Elements of the game
     Player* player;
-    //std::vector <GameObject*> _gameObjects;
+    std::vector <GameObject*> _gameObjects; //TODO pasar esto a refactor
 
     bool playing = false;
     SDL_Window* window;

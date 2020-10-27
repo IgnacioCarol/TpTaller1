@@ -1,13 +1,3 @@
-//
-// Created by nacho on 10/10/20.
-//
-//
-//  main.cpp
-//  test
-//
-//  Created by Daniel Bizari on 08/10/2020.
-//  Copyright © 2020 Daniel Bizari. All rights reserved.
-//
 #ifdef __APPLE__
 #include "SDL.h"
 #else
@@ -40,8 +30,6 @@ int main(int argc, char * argv[]) {
 
     game->createGameObjects();
 
-    bool quit = false;
-
     //Event handler
     SDL_Event e;
 
@@ -54,7 +42,7 @@ int main(int argc, char * argv[]) {
         }
 
         game->handleEvents();
-        //game->update();
+       // game->update();
         game->render();
         SDL_Delay(2);
     }

@@ -5,8 +5,6 @@
 #include "Factory.h"
 #include <vector>
 #include "../gameobjects/Coin.h"
-#include "../gameobjects/EnemyMushroom.h"
-#include "../gameobjects/EnemyTurtle.h"
 #include "../gameobjects/PlatformNormal.h"
 #include "../gameobjects/PlatformSurprise.h"
 
@@ -48,16 +46,16 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         for(size_t i = 0; i < coin.quantity; i++) {
             tmp = new Coin();
             tmp->init(0, coin.coordY, //Position x determined by init randomly
-                      "sarasa", 0); //TODO definir lo de texture y current frame
+                      coinsID, 0); //TODO definir lo de texture y current frame
 
             actors.push_back(tmp);
         }
     }
-
+/*
     for(auto enemies : levelConfig.enemies) {
         for(size_t i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) {
-                tmp = new EnemyTurtle();
+                tmp = new Enemy();
             } else {
                 tmp = new EnemyMushroom();
             }
@@ -68,6 +66,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             actors.push_back(tmp);
         }
     }
+*/
 
     return actors;
 }

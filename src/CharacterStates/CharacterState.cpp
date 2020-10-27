@@ -1,7 +1,3 @@
-//
-// Created by lisandro on 25/10/20.
-//
-
 #include "../TextureManager.h"
 #include "CharacterState.h"
 

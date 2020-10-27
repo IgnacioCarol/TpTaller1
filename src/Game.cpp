@@ -5,6 +5,7 @@
 #include "Factory/Factory.h"
 #include "logger/logger.h"
 #include "config/Config.h"
+#include "gameobjects/Coin.h"
 
 Game* Game::instance = 0;
 const static char* BACKGROUND = "BG";
@@ -69,6 +70,10 @@ void Game::render() {
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
+    //TODO renderizar todos los game objects iterando
+    for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
+        _gameObjects[i]->draw(renderer, 0, 0);
+    }
     SDL_RenderPresent(renderer);
 }
 
@@ -94,6 +99,7 @@ bool Game::loadImages() {
     success = textureManager->load("Sprites/sprites_prueba/dino.png", "dino", renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/coinsSprites.png", coinsID, renderer);
     return success;
 }
 
@@ -102,7 +108,10 @@ void Game::createGameObjects() {
     mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
     player = mario;
 
-    //TODO inicializar el vector GameObject
+    //TODO inicializar la cantidad de monedas que especifica el XML en Factory
+    GameObject* coin1 = new Coin();
+    coin1->init(20, 250, coinsID, -1);
+    _gameObjects.push_back(coin1);
 }
 
 void Game::nextStage() {
@@ -112,6 +121,9 @@ void Game::nextStage() {
 void Game::restartCharacters() {
     player->restartPos(0, 403);
     camera->restartPos();
+}
+
+void Game::update() {
 }
 
 
