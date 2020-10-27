@@ -51,8 +51,7 @@ TextTexture* Printer::getTextTexture(std::string text, SDL_Color color, SDL_Rend
 
 void Printer::render(TextTexture* textTexture, int x, int y, SDL_Renderer* renderer) {
     SDL_Rect renderQuad = { x, y, textTexture->width, textTexture->height};
-    SDL_RendererFlip flip = SDL_FLIP_NONE;
-    SDL_RenderCopyEx(renderer, textTexture->texture, NULL, &renderQuad, 0, NULL, flip);
+    SDL_RenderCopyEx(renderer, textTexture->texture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }
 
 void Printer::free(TextTexture* textTexture) {

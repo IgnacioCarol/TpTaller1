@@ -61,8 +61,8 @@ void Game::render() {
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
-    textureManager->printText(TEXT_WORLD_LEVEL_LABEL_KEY, camera->getXpos() + 600, 10, renderer);
-    textureManager->printText(TEXT_WORLD_LEVEL_NUMBER_KEY, camera->getXpos() + 600, 30, renderer);
+    textureManager->printText(TEXT_WORLD_LEVEL_LABEL_KEY, 600, 10, renderer);
+    textureManager->printText(TEXT_WORLD_LEVEL_NUMBER_KEY, 630, 30, renderer);
     SDL_RenderPresent(renderer);
 }
 

@@ -29,9 +29,9 @@ add_executable(TpTaller1
         src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h
         src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h
         src/CharacterStates/Running.cpp src/CharacterStates/Running.h
+        src/utils/Timer.cpp src/utils/Timer.h
         test/config_test.cpp
-        test/logger_test.cpp
-        )
+        test/logger_test.cpp)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")
