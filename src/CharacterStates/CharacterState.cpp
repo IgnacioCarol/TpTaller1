@@ -21,3 +21,7 @@ void CharacterState::move(const Uint8 *currentKeyStates, Player *player) {
 void CharacterState::changeState(const Uint8 *currentKeyStates, Player *player) {
 
 }
+
+void CharacterState::move(Enemy *enemy) {
+
+}

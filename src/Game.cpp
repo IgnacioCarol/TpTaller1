@@ -24,7 +24,7 @@ Game* Game::Instance() {
 
 bool Game::init(const char *levelName, int width, int height) {
     Config * config = new Config();
-    config->load("test/resources/config_test.xml");
+    config->load("test/resources/config_test_sarasa.xml");
 //    config->getStage(); //ToDo handlear init de stage
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
@@ -100,6 +100,7 @@ bool Game::loadImages() {
     success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/coinsSprites.png", coinsID, renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/goomba.png", "goomba", renderer);
     return success;
 }
 
