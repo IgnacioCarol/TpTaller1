@@ -24,11 +24,11 @@ Game* Game::Instance() {
 
 bool Game::init(const char *levelName, int width, int height) {
     Config * config = new Config();
-    config->load("asdf"); //ToDo poner path de xml de test
+    config->load("test/resources/config_test.xml");
 //    config->getStage(); //ToDo handlear init de stage
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
-    Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
+    _gameObjects = Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
 
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     //SDL initializing
@@ -107,11 +107,6 @@ void Game::createGameObjects() {
     auto* mario = new Player();
     mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
     player = mario;
-
-    //TODO inicializar la cantidad de monedas que especifica el XML en Factory
-    GameObject* coin1 = new Coin();
-    coin1->init(20, 250, coinsID, -1);
-    _gameObjects.push_back(coin1);
 }
 
 void Game::nextStage() {
