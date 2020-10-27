@@ -44,10 +44,12 @@ public:
 
     void drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect *clip);
 
+
+    ~TextureManager() {}
+
 private:
     TextureManager() {}
 
-    ~TextureManager() {}
     TextureManager(const TextureManager&);
 
 	TextureManager& operator=(const TextureManager&);

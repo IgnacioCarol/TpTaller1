@@ -80,13 +80,18 @@ void Game::render() {
 void Game::clean() {
     logger ->info("Cleaning game\n");
     printf("Cleaning game");
-    delete Logger::getInstance();
-    // ToDo liberar memoria de todos los singleton.
-    
     
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
+
+    _gameObjects.clear();
     textureManager->clearTextureMap();
+
+    delete Logger::getInstance();
+    // ToDo liberar memoria de todos los singleton.
+    delete Factory::getInstance();
+    delete TextureManager::Instance();
+
     SDL_Quit();
 }
 

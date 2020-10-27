@@ -41,7 +41,7 @@ private:
     Camera* camera;
     //Elements of the game
     Player* player;
-    std::vector <GameObject*> _gameObjects; //TODO pasar esto a refactor
+    std::vector <GameObject*> _gameObjects;
 
     bool playing = false;
     SDL_Window* window;
