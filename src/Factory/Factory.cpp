@@ -55,7 +55,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     for(auto enemies : levelConfig.enemies) {
         for(size_t i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) {
-                tmp = new Enemy();
+                tmp = new xmlEnemy();
             } else {
                 tmp = new EnemyMushroom();
             }
