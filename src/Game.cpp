@@ -29,7 +29,6 @@ bool Game::init(const char *levelName, int width, int height) {
     Logger::getInstance()->setLogLevel(config->getLog().level);
     Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
 
-    SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
@@ -65,13 +64,21 @@ bool Game::init(const char *levelName, int width, int height) {
     return true;
 }
 
+Game::~Game() {
+    delete this->camera;
+    delete this->stage;
+    delete this->player;
+}
+
 void Game::render() {
     SDL_RenderClear(renderer);
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
-    textureManager->printText(TEXT_WORLD_LEVEL_LABEL_KEY, 600, 10, renderer);
-    textureManager->printText(TEXT_WORLD_LEVEL_NUMBER_KEY, 630, 30, renderer);
+    textureManager->printText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_XPOS, TEXT_WORLD_LEVEL_LABEL_YPOS, renderer);
+    stage->renderLevel();
+    textureManager->printText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_XPOS, TEXT_TIMER_LABEL_YPOS, renderer);
+    stage->renderTime();
     SDL_RenderPresent(renderer);
 }
 
@@ -100,9 +107,9 @@ bool Game::loadImages() {
     return success;
 }
 
-bool Game::loadLevel(int level) {
-    bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, {255,255,255}, renderer);
-    success = success && textureManager->loadText(TEXT_WORLD_LEVEL_NUMBER_KEY, std::to_string(level), {255,255,255}, renderer);
+bool Game::loadTexts() {
+    bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_VALUE, WHITE_COLOR, renderer);
     return success;
 }
 

@@ -7,11 +7,9 @@
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "../src/BackgroundStages/BackgroundStage.h"
-
-#define TEXT_WORLD_LEVEL_LABEL_KEY "world_level"
-#define TEXT_WORLD_LEVEL_LABEL_VALUE "WORLD"
-#define TEXT_WORLD_LEVEL_NUMBER_KEY "world_level_number"
+#include "Utils/Timer.h"
+#include "BackgroundStages/BackgroundStage.h"
+#include "config/Constants.h"
 
 
 using namespace std;
@@ -23,7 +21,7 @@ public:
 
     bool init(const char* levelName, int width, int height);
     bool loadImages();
-    bool loadLevel(int level);
+    bool loadTexts();
 
     //Introduces the interactive objects in the game such as Mario, Koopa, etc.
     void createGameObjects();
@@ -41,6 +39,7 @@ public:
 
 private:
     Game(); //Private constructor to prevent instancing.
+    ~Game();
     static Game* instance; //Here will be the instance stored.
     Camera* camera;
     //Elements of the game

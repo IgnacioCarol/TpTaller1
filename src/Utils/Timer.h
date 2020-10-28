@@ -6,14 +6,17 @@
 #define TPTALLER1_TIMER_H
 
 
-#include <SDL_types.h>
+#include <SDL.h>
 
 class Timer {
 public:
-    //void start();
+    Timer(Uint32 stopTime);
+    void start();
+    Uint32 getTimeSecond();
 
 private:
-    Uint32 mStartTicks;
+    Uint32 startTime = 0;
+    Uint32 stopTime;
 };
 
 

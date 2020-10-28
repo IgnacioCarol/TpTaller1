@@ -12,6 +12,8 @@
 class SecondStage: public BackgroundStage {
     SecondStage() : BackgroundStage(nullptr, nullptr) {}
 
+    ~SecondStage();
+
 public:
     SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 

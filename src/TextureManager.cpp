@@ -35,7 +35,7 @@ bool TextureManager::loadText(const std::string key, const std::string text, SDL
         return false;
     }
 
-    this->textTextureMap.insert({ key, textTexture});
+    textTextureMap[key] = textTexture;
     return true;
 }
 

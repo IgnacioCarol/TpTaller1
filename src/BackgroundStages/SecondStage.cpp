@@ -6,7 +6,16 @@ const static char* PATH = "Sprites/sprites_prueba/world1-2.jpeg";
 #include "../Game.h"
 
 SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
+    this->level = 2;
+    this->timer = new Timer(300); //TODO sacar de la config
     setBackground();
+    renderLevel();
+    this->timer->start();
+    renderTime();
+}
+
+SecondStage::~SecondStage() {
+    delete this->timer;
 }
 
 bool SecondStage::setBackground() {
@@ -27,6 +36,7 @@ int SecondStage::getWidth() const {
 
 BackgroundStage * SecondStage::nextStage() {
     textureManager->clearFromTextureMap(BACKGROUND);
+    textureManager->clearFromTextureMap(TEXT_WORLD_LEVEL_NUMBER_KEY);
     Game::Instance()->gameOver();
     return nullptr;
 }

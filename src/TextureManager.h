@@ -13,7 +13,7 @@
 #include <string>
 #include <map>
 #include "SDL2/SDL.h"
-#include "utils/Printer.h"
+#include "Utils/Printer.h"
 
 class TextureManager
 {

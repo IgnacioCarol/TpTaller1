@@ -48,6 +48,7 @@ void Config::load(const std::string &filename) {
 
             level.number = level_pt.get<int>(XML_STAGE_LEVEL_NUMBER);
             level.background = level_pt.get<string>(XML_STAGE_LEVEL_BACKGROUND);
+            level.time = level_pt.get<int>(XML_STAGE_LEVEL_TIME);
 
             level.enemies.clear();
             Config::parseEnemies(&level, level_pt);
@@ -168,6 +169,7 @@ void Config::setDefaults() {
     Level level;
     level.number = DEFAULT_STAGE_LEVEL_NUMBER;
     level.background = DEFAULT_STAGE_LEVEL_BACKGROUND;
+    level.time = DEFAULT_STAGE_LEVEL_TIME;
     level.enemies.push_back(enemy);
     level.platforms.push_back(platform);
     level.coins.push_back(coin);

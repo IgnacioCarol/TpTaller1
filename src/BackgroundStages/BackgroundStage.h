@@ -8,6 +8,8 @@
 
 #include "../logger/logger.h"
 #include "../TextureManager.h"
+#include "../config/Constants.h"
+#include "../Utils/Timer.h"
 
 class BackgroundStage {
 public:
@@ -17,14 +19,20 @@ public:
 
     virtual int getWidth() const;
 
+    bool renderLevel();
+
+    bool renderTime();
+
 protected:
     char* pathToCurrentImageStage; //Each stage should, and will have one for the constructor
     TextureManager* textureManager;
     SDL_Renderer* renderer;
     Logger* logger = Logger::getInstance();
-    virtual bool setBackground();
+    virtual bool setBackground() = 0;
     int imageWidth;
     const char* BACKGROUND = "BG";
+    Timer* timer;
+    int level;
 };
 
 

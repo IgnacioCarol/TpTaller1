@@ -39,8 +39,8 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
-    if (!game->loadLevel(1)) {
-        Logger::getInstance()->error("Error: Loading level went wrong");
+    if (!game->loadTexts()) {
+        Logger::getInstance()->error("Error: Loading texts went wrong");
         return 1;
     }
 

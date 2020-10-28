@@ -37,7 +37,7 @@ add_executable(TpTaller1
         src/gameobjects/Player.cpp src/gameobjects/Player.h
         src/utils/Timer.cpp src/utils/Timer.h
         test/config_test.cpp
-        test/logger_test.cpp)
+        test/logger_test.cpp src/config/Constants.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")
