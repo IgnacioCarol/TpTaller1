@@ -8,7 +8,7 @@
 #include "SDL2/SDL.h"
 #endif
 
-#include "TextureManager.h"
+#include "../TextureManager.h"
 #include <cstdio>
 #include <string>
 

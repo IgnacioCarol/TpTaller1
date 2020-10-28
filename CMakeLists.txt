@@ -17,11 +17,9 @@ add_executable(TpTaller1
         src/config/Config.cpp src/config/Config.h
         src/utils/Printer.cpp src/utils/Printer.h
         src/Game.cpp src/Game.h
-        src/Hongo.cpp src/Hongo.h
-        src/Player.cpp src/Player.h
+        src/GameMap.cpp src/GameMap.h
         src/TextureManager.cpp src/TextureManager.h
         src/Camera.cpp src/Camera.h
-        src/GameObject.cpp src/GameObject.h
         src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/BackgroundStage.h
         src/BackgroundStages/FirstStage.cpp src/BackgroundStages/FirstStage.h
         src/BackgroundStages/SecondStage.cpp src/BackgroundStages/SecondStage.h
@@ -29,6 +27,14 @@ add_executable(TpTaller1
         src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h
         src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h
         src/CharacterStates/Running.cpp src/CharacterStates/Running.h
+        src/Factory/Factory.cpp src/Factory/Factory.h
+        src/gameobjects/Coin.cpp src/gameobjects/Coin.h
+        src/gameobjects/EnemyMushroom.cpp src/gameobjects/EnemyMushroom.h
+        src/gameobjects/EnemyTurtle.cpp src/gameobjects/EnemyTurtle.h
+        src/gameobjects/GameObject.cpp src/gameobjects/GameObject.h
+        src/gameobjects/PlatformNormal.cpp src/gameobjects/PlatformNormal.h
+        src/gameobjects/PlatformSurprise.cpp src/gameobjects/PlatformSurprise.h
+        src/gameobjects/Player.cpp src/gameobjects/Player.h
         src/utils/Timer.cpp src/utils/Timer.h
         test/config_test.cpp
         test/logger_test.cpp)

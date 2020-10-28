@@ -3,8 +3,8 @@
 
 
 #include <string>
-#include "../src/logger/logger.h"
-#include "TextureManager.h"
+#include "../logger/logger.h"
+#include "../TextureManager.h"
 #include "GameObject.h"
 
 //Image related
@@ -42,7 +42,7 @@ private:
     int initialJumpingPosition;
     int maxYPosition;
     SDL_Rect *cam;
-    Logger* logger = Logger::getInstance();
+    Logger* logger = Logger::getInstance(); //ToDo Volar esto de aca, looger no deberia ser un atributo de ninguna clase ya que es un singleton.
 };
 
 

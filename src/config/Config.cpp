@@ -79,7 +79,16 @@ void Config::parseEnemies(Level *level, ptree pt) {
             continue;
         }
 
-        enemy.type = enemy_pt.get<int>(XML_STAGE_LEVEL_ENEMY_TYPE);
+        string type = enemy_pt.get<string>(XML_STAGE_LEVEL_ENEMY_TYPE);
+        if (type == XML_STAGE_LEVEL_ENEMY_MUSHROOM) {
+            enemy.type = ENEMY_MUSHROOM;
+        } else if (type == XML_STAGE_LEVEL_ENEMY_TURTLE) {
+            enemy.type = ENEMY_TURTLE;
+        } else {
+            //TODO uso default o tiro una excepcion ?
+            enemy.type = ENEMY_MUSHROOM;
+        }
+
         enemy.image = enemy_pt.get<string>(XML_STAGE_LEVEL_ENEMY_IMAGE);
         enemy.quantity = enemy_pt.get<int>(XML_STAGE_LEVEL_ENEMY_QTY);
         level->enemies.push_back(enemy);
@@ -97,7 +106,16 @@ void Config::parsePlatforms(Level *level, ptree pt) {
             continue;
         }
 
-        platform.type = platform_pt.get<string>(XML_STAGE_LEVEL_PLATFORM_TYPE);
+        string type = platform_pt.get<string>(XML_STAGE_LEVEL_PLATFORM_TYPE);
+        if (type == XML_STAGE_LEVEL_PLATFORM_NORMAL) {
+            platform.type = PLATFORM_NORMAL;
+        } else if (type == XML_STAGE_LEVEL_PLATFORM_SURPRISE) {
+            platform.type = PLATFORM_SURPRISE;
+        } else {
+            //TODO uso default o tiro una excepcion ?
+            platform.type = PLATFORM_NORMAL;
+        }
+
         platform.coordX = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDX);
         platform.coordY = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDY);
         platform.quantity = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_QTY);
@@ -107,7 +125,7 @@ void Config::parsePlatforms(Level *level, ptree pt) {
 
 void Config::parseCoins(Level *level, ptree pt) {
     for (const auto &e : pt.get_child(XML_STAGE_LEVEL_COINS)) {
-        Coin coin;
+        xmlCoin coin;
         string coin_name;
         ptree coin_pt;
         tie(coin_name, coin_pt) = e;
@@ -125,18 +143,36 @@ void Config::parseCoins(Level *level, ptree pt) {
 
 void Config::setDefaults() {
     Enemy enemy;
+    enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
+    enemy.image = DEFAULT_STAGE_LEVEL_ENEMY_IMG;
+    enemy.quantity = DEFAULT_STAGE_LEVEL_ENEMY_QTY;
+
     Platform platform;
-    Level level;
-    Coin coin;
+    platform.type = DEFAULT_STAGE_LEVEL_PLATFORM_TYPE;
+    platform.coordX = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X;
+    platform.coordY = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y;
+    platform.quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
+
+    xmlCoin coin;
+    coin.coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
+    coin.quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
 
     Window window;
-    Stage stage;
+    window.width = DEFAULT_WINDOW_WIDTH;
+    window.height = DEFAULT_WINDOW_HEIGHT;
+
+
     Log log;
+    log.level = DEFAULT_LOG_LEVEL;
 
-
+    Level level;
+    level.number = DEFAULT_STAGE_LEVEL_NUMBER;
+    level.background = DEFAULT_STAGE_LEVEL_BACKGROUND;
     level.enemies.push_back(enemy);
     level.platforms.push_back(platform);
     level.coins.push_back(coin);
+
+    Stage stage;
     stage.levels.push_back(level);
 
     this->window = window;
