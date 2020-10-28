@@ -8,6 +8,7 @@
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
+#include "gameobjects/Enemy.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
 
 using namespace std;
@@ -41,6 +42,7 @@ private:
     Camera* camera;
     //Elements of the game
     Player* player;
+    Enemy* enemy;
     std::vector <GameObject*> _gameObjects; //TODO pasar esto a refactor
 
     bool playing = false;

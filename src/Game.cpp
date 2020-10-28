@@ -6,6 +6,7 @@
 #include "logger/logger.h"
 #include "config/Config.h"
 #include "gameobjects/Coin.h"
+#include "src/CharacterStates/EnemyMovement.h"
 
 Game* Game::instance = 0;
 const static char* BACKGROUND = "BG";
@@ -70,6 +71,8 @@ void Game::render() {
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
+    enemy->draw(renderer, camera ->getXpos(), 0);
+
     //TODO renderizar todos los game objects iterando
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
@@ -92,6 +95,7 @@ void Game::clean() {
 
 void Game::handleEvents() {
     player->move();
+    enemy->move();
 }
 
 bool Game::loadImages() {
@@ -108,6 +112,9 @@ void Game::createGameObjects() {
     auto* mario = new Player();
     mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
     player = mario;
+    auto* hongo = new Enemy();
+    hongo -> init(900, 403, "goomba", 0, camera->getCamera(), 3, new EnemyMovement(0, 3));
+    enemy = hongo;
 }
 
 void Game::nextStage() {

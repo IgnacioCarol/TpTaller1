@@ -16,6 +16,7 @@ class GameObject {
 public:
     virtual void init(int x, int y, std::string textureID, int currentFrame);
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
+    virtual void move();
 
 protected:
     //To manage the movement

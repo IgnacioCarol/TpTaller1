@@ -46,7 +46,7 @@ int main(int argc, char * argv[]) {
         game->render();
         SDL_Delay(2);
     }
-    Logger::getInstance() -> info("Game over");
+    Logger::getInstance() -> info("Game over\n");
     game->clean();
     SDL_Quit();
     return EXIT_SUCCESS;

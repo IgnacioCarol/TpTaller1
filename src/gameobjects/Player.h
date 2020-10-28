@@ -21,7 +21,7 @@ public:
 
     int getXPosition(){return xPosition;}
 
-    void draw(SDL_Renderer *renderer, int cameraX, int cameraY);
+    void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
 
     bool isJumping();
 
@@ -31,7 +31,7 @@ public:
 
     void changeState(CharacterState* newState);
 
-    void move();
+    void move() override;
 
 private:
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
