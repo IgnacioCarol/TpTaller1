@@ -10,5 +10,5 @@ void NormalBlock::init(int x, int y, std::string textureID, int currentFrame) {
 
 void NormalBlock::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, NBWidth, NBHeight,
-                                          NBWidth, renderer, SDL_FLIP_NONE);
+                                          0, renderer, SDL_FLIP_NONE);
 }
