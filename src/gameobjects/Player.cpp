@@ -16,7 +16,7 @@ void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, S
 
 void Player::run(int direction) {
     xDirection = direction ? direction > 0 : xDirection;
-    xPosition += cam->x < xPosition || direction > 0 ? direction : 0;
+    xPosition += cam->x < xPosition || direction > 0 ? playerVelocity * direction : 0;
 }
 
 void Player::jump(int yMovement) {

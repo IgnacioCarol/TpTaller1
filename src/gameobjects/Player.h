@@ -10,6 +10,7 @@
 //Image related
 #define pWidth 682
 #define pHeight 474
+const int playerVelocity = 2;
 class CharacterState;
 
 class Player : public GameObject {

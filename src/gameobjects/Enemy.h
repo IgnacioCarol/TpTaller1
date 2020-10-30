@@ -5,9 +5,9 @@
 #ifndef TPTALLER1_ENEMY_H
 #define TPTALLER1_ENEMY_H
 #include "GameObject.h"
-#define BLOCK_MOVEMENT 25 //For the pseudo random walk
-const int EnemyWidth = 193;
-const int EnemyHeight = 161;
+const int enemyWidth = 193;
+const int enemyHeight = 161;
+const int enemyVelocity = 1;
 class CharacterState;
 
 class Enemy: public GameObject {
@@ -20,7 +20,7 @@ public:
 
 protected:
     CharacterState* enemyState;
-    int direction = -1;  //TODO later we must modify this value, now the enemy only can walk to the left
+    int direction = -enemyVelocity;
     bool flipFlag = false;
     bool inScene = false; //To know if the enemy appears in scene
     SDL_Rect* cam;

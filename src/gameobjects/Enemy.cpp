@@ -31,18 +31,18 @@ void Enemy::walk() {
         xPosition = ((xPosition += direction) < 0) ? 0 : xPosition;
 
         if (xPosition == camXPosition){
-            direction = 1;
+            direction = enemyVelocity;
         }
         else if (xPosition == camXPosition + 800){
-            direction = -1;
+            direction = -enemyVelocity;
         }
-        flipFlag = direction == 1;
+        flipFlag = direction == enemyVelocity;
     }
 }
 
 void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     SDL_RendererFlip flip = (flipFlag) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    enemyState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, EnemyWidth, EnemyHeight, renderer, flip);
+    enemyState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, enemyWidth, enemyHeight, renderer, flip);
 }
 
 Enemy::Enemy() {
