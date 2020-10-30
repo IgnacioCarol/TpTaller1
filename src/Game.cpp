@@ -76,7 +76,7 @@ void Game::render() {
     //TODO renderizar todos los game objects iterando
     normalBlock -> draw(renderer, camera -> getXpos(), 0);
     surpriseBlock -> draw(renderer, camera -> getXpos(), 0);
-    
+
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
@@ -109,6 +109,7 @@ bool Game::loadImages() {
     success = success && textureManager -> load("Sprites/coinsSprites.png", coinsID, renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/goomba.png", "goomba", renderer);
     success = success && textureManager -> load("Sprites/normalBlock.png", nBlockID, renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/surpriseBlockSprite.png", sBlockID, renderer);
     return success;
 }
 
@@ -127,7 +128,7 @@ void Game::createGameObjects() {
     normalBlock = nblock;
 
     auto* sblock = new SurpriseBlock();
-    sblock -> init(10, 300, nBlockID, 0);
+    sblock -> init(10, 300, sBlockID, 0);
     surpriseBlock = sblock;
 }
 
