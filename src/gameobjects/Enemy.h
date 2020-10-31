@@ -5,8 +5,8 @@
 #ifndef TPTALLER1_ENEMY_H
 #define TPTALLER1_ENEMY_H
 #include "GameObject.h"
-const int enemyWidth = 193;
-const int enemyHeight = 161;
+const int enemyWidth = 400;
+const int enemyHeight = 400;
 const int enemyVelocity = 1;
 class CharacterState;
 

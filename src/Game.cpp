@@ -107,7 +107,7 @@ bool Game::loadImages() {
     success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
     success = success && textureManager -> load("Sprites/coinsSprites.png", coinsID, renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/goomba.png", "goomba", renderer);
+    success = success && textureManager -> load("Sprites/sprites_prueba/Goomba.png", "goomba", renderer);
     success = success && textureManager -> load("Sprites/normalBlock.png", nBlockID, renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/surpriseBlockSprite.png", sBlockID, renderer);
     return success;
@@ -120,7 +120,7 @@ void Game::createGameObjects() {
 
     //TODO poner esto en Factory
     auto* hongo = new Enemy();
-    hongo -> init(900, 403, "goomba", 0, camera->getCamera(), 3, new EnemyMovement(0, 3));
+    hongo -> init(900, 425, "goomba", 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
     enemy = hongo;}
 
 void Game::nextStage() {
