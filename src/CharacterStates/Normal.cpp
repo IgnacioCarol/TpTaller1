@@ -23,6 +23,6 @@ void Normal::changeState(const Uint8 *currentKeyStates, Player* player) {
     }
 
     else if (currentKeyStates[SDL_SCANCODE_DOWN]){
-        player -> changeState(new Crouched(framesAmount - 1, framesAmount)); //ToDo revisar currentFrame
+        player -> changeState(new Crouched(2, framesAmount)); //ToDo revisar currentFrame
     }
 }

@@ -12,17 +12,9 @@ Crouched::Crouched(int currentFrame, int frameAmount) : CharacterState(currentFr
 }
 
 void Crouched::changeState(const Uint8 *currentKeyStates, Player *player) {
-    if (currentKeyStates[SDL_SCANCODE_UP]){
-        player -> changeState(new Jumping(framesAmount -1, framesAmount));
-    }
-
-    else if (currentKeyStates[SDL_SCANCODE_RIGHT] || currentKeyStates[SDL_SCANCODE_LEFT]){
-        player -> changeState(new Running(currentFrame, framesAmount));
-    }
-
-    else if (!currentKeyStates[SDL_SCANCODE_DOWN]){
+    if (!currentKeyStates[SDL_SCANCODE_DOWN]) {
         CharacterState * tmp = player->getCurrentState();
-        player -> changeState(new Normal(0, framesAmount));
+        player->changeState(new Normal(0, framesAmount));
         delete tmp; //ToDo recordar eliminar los otros estados
     }
 }
