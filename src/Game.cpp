@@ -77,6 +77,7 @@ void Game::render() {
     enemy->draw(renderer, camera ->getXpos(), 0);
 
     //TODO renderizar todos los game objects iterando (faltan los enemigos)
+
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
@@ -109,7 +110,7 @@ bool Game::loadImages() {
     success = success && textureManager -> load("Sprites/coinsSprites.png", coinsID, renderer);
     success = success && textureManager -> load("Sprites/sprites_prueba/Goomba.png", "goomba", renderer);
     success = success && textureManager -> load("Sprites/normalBlock.png", nBlockID, renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/surpriseBlockSprite.png", sBlockID, renderer);
+    success = success && textureManager -> load("Sprites/surpriseBlockSprite.png", sBlockID, renderer);
     return success;
 }
 
@@ -121,8 +122,9 @@ void Game::createGameObjects() {
     //TODO poner esto en Factory
     auto* hongo = new Enemy();
     hongo -> init(900, 425, "goomba", 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
-    enemy = hongo;}
+    enemy = hongo;
 
+}
 void Game::nextStage() {
     stage = stage->nextStage();
 }

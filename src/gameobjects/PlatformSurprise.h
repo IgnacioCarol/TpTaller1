@@ -2,8 +2,8 @@
 #define TPTALLER1_PLATFORMSURPRISE_H
 
 //Image related definitions
-#define SBWidth 313
-#define SBHeight 327
+#define SBWidth 256
+#define SBHeight 256
 
 //Animation related definitions
 #define sBlockDelay 200

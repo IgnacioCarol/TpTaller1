@@ -27,10 +27,10 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         for(size_t i = 0; i < platform.quantity; i++) {
             if (platform.type == PLATFORM_SURPRISE) {
                 tmp = new PlatformSurprise();
-                textureID = nBlockID;
+                textureID = sBlockID;
             } else {
                 tmp = new PlatformNormal();
-                textureID = sBlockID;
+                textureID = nBlockID;
             }
 
             tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,

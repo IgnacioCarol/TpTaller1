@@ -4,8 +4,8 @@
 #include "GameObject.h"
 
 //Image related definitions
-#define NBWidth 88
-#define NBHeight 86
+#define NBWidth 256
+#define NBHeight 256
 #define nBlockID "normalBlock"
 
 class PlatformNormal : public GameObject {

@@ -11,6 +11,7 @@
 #include "gameobjects/Enemy.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
 
+
 using namespace std;
 
 class Game {
@@ -42,8 +43,10 @@ private:
     Camera* camera;
     //Elements of the game
     Player* player;
-    Enemy* enemy;
-    std::vector <GameObject*> _gameObjects; //TODO pasar esto a refactor
+
+    Enemy* enemy;//TODO pasar esto a refactor
+
+    std::vector <GameObject*> _gameObjects;
 
     bool playing = false;
     SDL_Window* window;
