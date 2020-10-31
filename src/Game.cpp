@@ -8,6 +8,9 @@
 #include "gameobjects/Coin.h"
 #include "src/CharacterStates/EnemyMovement.h"
 
+#include "src/gameobjects/PlatformNormal.h"
+#include "src/gameobjects/PlatformSurprise.h"
+
 Game* Game::instance = 0;
 const static char* BACKGROUND = "BG";
 int IMAGE_WIDTH;
@@ -73,10 +76,7 @@ void Game::render() {
     player->draw(renderer, camera -> getXpos(), 0);
     enemy->draw(renderer, camera ->getXpos(), 0);
 
-    //TODO renderizar todos los game objects iterando
-    normalBlock -> draw(renderer, camera -> getXpos(), 0);
-    surpriseBlock -> draw(renderer, camera -> getXpos(), 0);
-
+    //TODO renderizar todos los game objects iterando (faltan los enemigos)
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
@@ -121,16 +121,7 @@ void Game::createGameObjects() {
     //TODO poner esto en Factory
     auto* hongo = new Enemy();
     hongo -> init(900, 403, "goomba", 0, camera->getCamera(), 3, new EnemyMovement(0, 3));
-    enemy = hongo;
-
-    auto* nblock = new NormalBlock();
-    nblock -> init(200, 300, nBlockID, 0);
-    normalBlock = nblock;
-
-    auto* sblock = new SurpriseBlock();
-    sblock -> init(10, 300, sBlockID, 0);
-    surpriseBlock = sblock;
-}
+    enemy = hongo;}
 
 void Game::nextStage() {
     stage = stage->nextStage();
@@ -143,6 +134,3 @@ void Game::restartCharacters() {
 
 void Game::update() {
 }
-
-
-

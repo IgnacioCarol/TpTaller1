@@ -9,11 +9,7 @@
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
 #include "gameobjects/Enemy.h"
-#include "gameobjects/NormalBlock.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
-
-#include "../src/gameobjects/NormalBlock.h"
-#include "../src/gameobjects/SurpriseBlock.h"
 
 using namespace std;
 
@@ -48,9 +44,6 @@ private:
     Player* player;
     Enemy* enemy;
     std::vector <GameObject*> _gameObjects; //TODO pasar esto a refactor
-
-    NormalBlock * normalBlock;
-    SurpriseBlock * surpriseBlock;
 
     bool playing = false;
     SDL_Window* window;
