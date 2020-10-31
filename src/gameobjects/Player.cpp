@@ -63,3 +63,7 @@ bool Player::isJumping() {
 bool Player::finishJump() {
     return initialJumpingPosition == yPosition;
 }
+
+CharacterState * Player::getCurrentState() {
+    return this->characterState;
+}
