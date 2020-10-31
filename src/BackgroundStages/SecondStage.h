@@ -8,6 +8,7 @@
 
 #include "../TextureManager.h"
 #include "BackgroundStage.h"
+#include "../Game.h"
 
 class SecondStage: public BackgroundStage {
     SecondStage() : BackgroundStage(nullptr, nullptr) {}

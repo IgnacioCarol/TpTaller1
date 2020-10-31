@@ -3,9 +3,6 @@
 //
 
 #include "TextureManager.h"
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include "../src/logger/logger.h"
 static const char *const BACKGROUND = "BG";
 static const int CURRENT_ROW = 0; //The sprite sheet always has one row
 

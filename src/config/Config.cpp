@@ -4,6 +4,8 @@
 
 #include "Config.h"
 
+Config* Config::instance = nullptr;
+
 Config::Config(){
     this->setDefaults();
 }
@@ -22,6 +24,17 @@ Stage Config::getStage() {
 
 Log Config::getLog() {
     return this->log;
+}
+
+Level Config::getLevel(int levelFilter) {
+    for (const auto & level : this->stage.levels) {
+        if (level.number == levelFilter) {
+            return level;
+        }
+    }
+    std::string errorMsg = "Couldn't find level " + std::to_string(levelFilter) + " in stage config";
+    Logger::getInstance()->error(errorMsg);
+    throw ConfigException(errorMsg);
 }
 
 void Config::load(const std::string &filename) {

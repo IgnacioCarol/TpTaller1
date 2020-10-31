@@ -13,7 +13,9 @@
 #include <string>
 #include <map>
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
 #include "Utils/Printer.h"
+#include "../src/logger/logger.h"
 
 class TextureManager
 {

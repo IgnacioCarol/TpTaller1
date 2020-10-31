@@ -7,11 +7,9 @@ const static char* PATH = "Sprites/sprites_prueba/backgroundCompleto.png";
 
 FirstStage::FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
     this->level = 1;
-    this->timer = new Timer(300); //TODO obtener de la config
+    this->timer = new Timer(this->getLevelTime());
     setBackground();
-    renderLevel();
     this->timer->start();
-    renderTime();
 }
 
 FirstStage::~FirstStage() {

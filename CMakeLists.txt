@@ -8,14 +8,14 @@ add_subdirectory(lib/googletest-master)
 include_directories(lib/googletest-master/googletest/include)
 include_directories(lib/googletest-master/googlemock/include)
 
-find_package(SDL2 REQUIRED)
-
 add_executable(TpTaller1
         src/main.cpp src/main.h
         src/logger/logger.cpp src/logger/logger.h
         src/logger/loggerException.cpp src/logger/loggerException.h
         src/config/Config.cpp src/config/Config.h
-        src/utils/Printer.cpp src/utils/Printer.h
+        src/Utils/Printer.cpp src/Utils/Printer.h
+        src/Utils/Timer.cpp src/Utils/Timer.h
+        src/Utils/Vector.cpp src/Utils/Vector.h
         src/Game.cpp src/Game.h
         src/GameMap.cpp src/GameMap.h
         src/TextureManager.cpp src/TextureManager.h
@@ -35,9 +35,8 @@ add_executable(TpTaller1
         src/gameobjects/PlatformNormal.cpp src/gameobjects/PlatformNormal.h
         src/gameobjects/PlatformSurprise.cpp src/gameobjects/PlatformSurprise.h
         src/gameobjects/Player.cpp src/gameobjects/Player.h
-        src/utils/Timer.cpp src/utils/Timer.h
         test/config_test.cpp
-        test/logger_test.cpp src/config/Constants.h)
+        test/logger_test.cpp src/config/Constants.h src/config/ConfigException.cpp src/config/ConfigException.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

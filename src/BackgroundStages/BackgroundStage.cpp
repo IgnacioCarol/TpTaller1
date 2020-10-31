@@ -22,6 +22,7 @@ bool BackgroundStage::setBackground() {
 }
 
 bool BackgroundStage::renderLevel() {
+    textureManager->printText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_XPOS, TEXT_WORLD_LEVEL_LABEL_YPOS, renderer);
     bool success = textureManager->loadText(TEXT_WORLD_LEVEL_NUMBER_KEY, std::to_string(level), WHITE_COLOR, renderer);
     if (!success) {
         logger->error("Error loading level text in level: " + std::to_string(level));
@@ -32,6 +33,7 @@ bool BackgroundStage::renderLevel() {
 }
 
 bool BackgroundStage::renderTime() {
+    textureManager->printText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_XPOS, TEXT_TIMER_LABEL_YPOS, renderer);
     bool success = textureManager->loadText(TEXT_TIMER_VALUE_KEY, std::to_string(timer->getTimeSecond()), WHITE_COLOR, renderer);
     if (!success) {
         logger->error("Error loading timer value in level: " + std::to_string(level));
@@ -39,5 +41,15 @@ bool BackgroundStage::renderTime() {
     }
     textureManager->printText(TEXT_TIMER_VALUE_KEY, TEXT_TIMER_VALUE_XPOS, TEXT_TIMER_VALUE_YPOS, renderer);
     return true;
+}
+
+int BackgroundStage::getLevelTime() {
+    int time;
+    try {
+        time = Config::getInstance()->getLevel(this->level).time;
+    } catch (ConfigException &ex) {
+        time = DEFAULT_STAGE_LEVEL_TIME;
+    }
+    return time;
 }
 

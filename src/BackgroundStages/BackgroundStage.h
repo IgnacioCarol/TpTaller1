@@ -10,6 +10,7 @@
 #include "../TextureManager.h"
 #include "../config/Constants.h"
 #include "../Utils/Timer.h"
+#include "../config/Config.h"
 
 class BackgroundStage {
 public:
@@ -28,11 +29,13 @@ protected:
     TextureManager* textureManager;
     SDL_Renderer* renderer;
     Logger* logger = Logger::getInstance();
-    virtual bool setBackground() = 0;
     int imageWidth;
     const char* BACKGROUND = "BG";
     Timer* timer;
     int level;
+
+    virtual bool setBackground() = 0;
+    int getLevelTime();
 };
 
 

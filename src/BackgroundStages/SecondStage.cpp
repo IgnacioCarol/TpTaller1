@@ -3,15 +3,12 @@
 //
 const static char* PATH = "Sprites/sprites_prueba/world1-2.jpeg";
 #include "SecondStage.h"
-#include "../Game.h"
 
 SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
     this->level = 2;
-    this->timer = new Timer(300); //TODO sacar de la config
+    this->timer = new Timer(this->getLevelTime());
     setBackground();
-    renderLevel();
     this->timer->start();
-    renderTime();
 }
 
 SecondStage::~SecondStage() {

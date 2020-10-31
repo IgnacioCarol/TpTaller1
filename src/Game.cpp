@@ -22,7 +22,7 @@ Game* Game::Instance() {
 
 
 bool Game::init(const char *levelName, int width, int height) {
-    Config * config = new Config();
+    Config * config = Config::getInstance();
     config->load("asdf"); //ToDo poner path de xml de test
 //    config->getStage(); //ToDo handlear init de stage
     Window windowConfig = config->getWindow();
@@ -75,9 +75,7 @@ void Game::render() {
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
-    textureManager->printText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_XPOS, TEXT_WORLD_LEVEL_LABEL_YPOS, renderer);
     stage->renderLevel();
-    textureManager->printText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_XPOS, TEXT_TIMER_LABEL_YPOS, renderer);
     stage->renderTime();
     SDL_RenderPresent(renderer);
 }

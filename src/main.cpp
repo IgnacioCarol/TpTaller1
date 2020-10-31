@@ -39,7 +39,7 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
-    if (!game->loadTexts()) {
+    if (!game-> loadTexts()) {
         Logger::getInstance()->error("Error: Loading texts went wrong");
         return 1;
     }

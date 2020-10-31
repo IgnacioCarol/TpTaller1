@@ -61,6 +61,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #include <boost/property_tree/xml_parser.hpp>
 
 #include "../logger/logger.h"
+#include "ConfigException.h"
 
 using namespace std;
 using boost::property_tree::ptree;
@@ -107,20 +108,29 @@ struct Log {
 
 class Config {
 public:
-    Config();
+    static Config* getInstance() {
+        if (instance == nullptr) {
+            instance = new Config();
+        }
+        return instance;
+    }
+
     ~Config();
 
     Window getWindow();
     Stage getStage();
     Log getLog();
+    Level getLevel(int level);
 
     void load(const std::string &filename);
     void setDefaults();
 private:
+    static Config* instance;
     Window window;
     Stage stage;
     Log log;
 
+    Config();
     static void parseEnemies(Level *level, ptree pt);
     static void parsePlatforms(Level *level, ptree pt);
     static void parseCoins(Level *level, ptree pt);

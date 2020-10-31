@@ -6,11 +6,11 @@
 #define TPTALLER1_TIMER_H
 
 
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 class Timer {
 public:
-    Timer(Uint32 stopTime);
+    explicit Timer(Uint32 stopTime);
     void start();
     Uint32 getTimeSecond();
 
