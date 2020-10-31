@@ -43,6 +43,10 @@ bool BackgroundStage::renderTime() {
     return true;
 }
 
+bool BackgroundStage::isTimeOver() {
+    return this->timer->isTimeOver();
+}
+
 int BackgroundStage::getLevelTime() {
     int time;
     try {

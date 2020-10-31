@@ -13,6 +13,7 @@ public:
     explicit Timer(Uint32 stopTime);
     void start();
     Uint32 getTimeSecond();
+    bool isTimeOver();
 
 private:
     Uint32 startTime = 0;

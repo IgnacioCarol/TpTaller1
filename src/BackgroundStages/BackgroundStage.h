@@ -15,14 +15,11 @@
 class BackgroundStage {
 public:
     explicit BackgroundStage(TextureManager *pManager, SDL_Renderer *pRenderer);
-
     virtual BackgroundStage* nextStage();
-
     virtual int getWidth() const;
-
     bool renderLevel();
-
     bool renderTime();
+    bool isTimeOver();
 
 protected:
     char* pathToCurrentImageStage; //Each stage should, and will have one for the constructor

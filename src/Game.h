@@ -30,7 +30,7 @@ public:
     //void update(){}
     void handleEvents();
     void clean();
-    bool isPlaying() const{ return playing;}
+    bool isPlaying() const;
 
     void gameOver(){ playing = false;}
 

@@ -128,5 +128,9 @@ void Game::restartCharacters() {
     camera->restartPos();
 }
 
+bool Game::isPlaying() const {
+    return this->playing && !this->stage->isTimeOver();
+}
+
 
 

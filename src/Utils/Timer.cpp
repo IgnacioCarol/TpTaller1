@@ -18,3 +18,7 @@ Uint32 Timer::getTimeSecond() {
     }
     return this->stopTime;
 }
+
+bool Timer::isTimeOver() {
+    return getTimeSecond() <= 0;
+}
