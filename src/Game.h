@@ -16,7 +16,7 @@ public:
     //Public instance function
     static Game* Instance();
 
-    bool init(const char* levelName, int width, int height);
+    bool init(const char *levelName, int width, int height, std::string xmlPath);
     bool loadImages();
 
     //Introduces the interactive objects in the game such as Mario, Koopa, etc.

@@ -21,9 +21,13 @@ Game* Game::Instance() {
 }
 
 
-bool Game::init(const char *levelName, int width, int height) {
+bool Game::init(const char *levelName, int width, int height, std::string xmlPath) {
     Config * config = new Config();
-    config->load("asdf"); //ToDo poner path de xml de test
+    config->load(xmlPath);
+
+    Logger::getInstance()->info(config->getStage().levels.at(0).enemies.at(0).image);
+    Logger::getInstance()->info(std::to_string(config->getStage().levels.at(0).platforms.at(0).quantity));
+
 //    config->getStage(); //ToDo handlear init de stage
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);

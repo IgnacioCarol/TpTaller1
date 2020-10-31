@@ -20,6 +20,19 @@
 #include "Game.h"
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
+#define MAX_ARGS 2
+
+bool parseCLI(int argc, char * argv[], std::string * xmlPath) {
+    if (argc > MAX_ARGS) {
+        return false;
+    } else if (argc == 1) {
+        *xmlPath = "./test/resources/config_test.xml"; // set default xml
+    } else {
+        *xmlPath = argv[1];
+    }
+
+    return true;
+}
 
 int main(int argc, char * argv[]) {
 
@@ -27,15 +40,27 @@ int main(int argc, char * argv[]) {
 //    testing::InitGoogleTest(&argc, argv);
 //    return RUN_ALL_TESTS();
 //#endif
-        Game* game = Game::Instance();
+    Logger::getInstance()->info("System initializing...");
 
-        if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)){ //Aca inicializo el background
-            Logger::getInstance() -> error("Error: the game could not be initialized");
-            return 1;    }
+    std::string xmlPath = "";
+
+    if (!parseCLI(argc, argv, &xmlPath)) {
+        Logger::getInstance() -> error("Error: incorrect the program does not support the amount of CLI params");
+        return EXIT_FAILURE;
+    }
+
+    Logger::getInstance()->info(xmlPath);
+
+    Game* game = Game::Instance();
+
+    if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT, xmlPath)){ //Aca inicializo el background
+        Logger::getInstance() -> error("Error: the game could not be initialized");
+        return EXIT_FAILURE;
+    }
 
     if (!game->loadImages()){
         Logger::getInstance() -> error("Error: Loading the sprites went wrong");
-        return 1;
+        return EXIT_FAILURE;
     }
 
     game->createGameObjects();
@@ -58,8 +83,10 @@ int main(int argc, char * argv[]) {
         game->render();
         SDL_Delay(2);
     }
-    Logger::getInstance() -> info("Game over");
+
     game->clean();
+    Logger::getInstance() -> info("Game over");
+
     SDL_Quit();
     return EXIT_SUCCESS;
 }
