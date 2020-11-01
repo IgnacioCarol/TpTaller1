@@ -120,8 +120,8 @@ void Game::createGameObjects() {
     player = mario;
 
     //TODO poner esto en Factory
-    auto* hongo = new Enemy();
-    hongo -> init(900, 425, "goomba", 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
+    auto* hongo = new EnemyMushroom();
+    hongo -> init(900, 425, emID, 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
     enemy = hongo;
 
 }

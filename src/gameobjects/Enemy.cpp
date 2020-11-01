@@ -1,7 +1,3 @@
-//
-// Created by lisandro on 27/10/20.
-//
-
 #include "Enemy.h"
 #include "../CharacterStates/CharacterState.h"
 #include "../CharacterStates/EnemyMovement.h"
@@ -25,7 +21,6 @@ void Enemy::walk() {
     }
     else if (inScene){ //The enemy was in scene but its over
         inScene = false;
-        //TODO decidir que hacer con el enemigo una vez que lo pasamos con la camara. Si vai fora dejar este if, sino volarlo
     }
     if (inScene) {
         xPosition = ((xPosition += direction) < 0) ? 0 : xPosition;
@@ -37,14 +32,10 @@ void Enemy::walk() {
             direction = -enemyVelocity;
         }
         flipFlag = direction == enemyVelocity;
-    }
+    }  //TODO hacer que se de vuelta cuando chocque contra tuberia/plataforma
 }
 
-void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
+void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) {
     SDL_RendererFlip flip = (flipFlag) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    enemyState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, enemyWidth, enemyHeight, renderer, flip);
-}
-
-Enemy::Enemy() {
-    this -> init(5, 403, "goomba", 0, NULL, 3, new EnemyMovement(0, 3));
+    enemyState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, width, height, renderer, flip);
 }

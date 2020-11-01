@@ -8,7 +8,7 @@
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "gameobjects/Enemy.h"
+#include "gameobjects/EnemyMushroom.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
 
 
@@ -44,7 +44,7 @@ private:
     //Elements of the game
     Player* player;
 
-    Enemy* enemy;//TODO pasar esto a refactor
+    EnemyMushroom* enemy;//TODO pasar esto a refactor
 
     std::vector <GameObject*> _gameObjects;
 
