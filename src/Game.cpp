@@ -69,6 +69,7 @@ bool Game::init(const char *levelName, int width, int height) {
 }
 
 void Game::render() {
+    SDL_Delay(2);
     SDL_RenderClear(renderer);
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
@@ -85,7 +86,6 @@ void Game::render() {
 
 void Game::clean() {
     logger ->info("Cleaning game\n");
-    printf("Cleaning game");
     delete Logger::getInstance();
     // ToDo liberar memoria de todos los singleton.
     

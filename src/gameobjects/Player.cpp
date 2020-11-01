@@ -22,7 +22,7 @@ void Player::run(int direction) {
 void Player::jump(int yMovement) {
     bool isNotStartingPos = yPosition < initialJumpingPosition;
     if ((jumping = canJump() && yMovement)) {
-        yPosition = yPosition + (!isNotStartingPos || yMovement ? - yMovement : + 1);
+        yPosition = yPosition + (!isNotStartingPos || yMovement ? - yMovement : + 1); //TODO change velocity to go up
     } else if (isNotStartingPos) {
         yPosition += 1;
     }
