@@ -8,8 +8,9 @@
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "gameobjects/EnemyMushroom.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
+
+#include "src/gameobjects/EnemyMushroom.h"
 
 
 using namespace std;

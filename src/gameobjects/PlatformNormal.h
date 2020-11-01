@@ -6,7 +6,6 @@
 //Image related definitions
 #define NBWidth 256
 #define NBHeight 256
-#define nBlockID "normalBlock"
 
 class PlatformNormal : public GameObject {
     public:

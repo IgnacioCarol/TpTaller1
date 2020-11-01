@@ -7,7 +7,6 @@ class CharacterState;
 
 #define emWidth  400
 #define emHeight 400
-#define emID "goomba"
 
 class EnemyMushroom : public Enemy{
 public:

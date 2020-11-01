@@ -8,7 +8,6 @@
 //Animation related definitions
 #define sBlockDelay 200
 #define sBlockFrames 4
-#define sBlockID "surpriseBlockSprites"
 
 #include "GameObject.h"
 

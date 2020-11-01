@@ -5,7 +5,6 @@
 #include "Factory/Factory.h"
 #include "logger/logger.h"
 #include "config/Config.h"
-#include "gameobjects/Coin.h"
 #include "src/CharacterStates/EnemyMovement.h"
 
 #include "src/gameobjects/PlatformNormal.h"
@@ -103,14 +102,7 @@ void Game::handleEvents() {
 }
 
 bool Game::loadImages() {
-    bool success;
-    success = textureManager->load("Sprites/sprites_prueba/dino.png", "dino", renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
-    success = success && textureManager -> load("Sprites/coinsSprites.png", coinsID, renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/Goomba.png", "goomba", renderer);
-    success = success && textureManager -> load("Sprites/normalBlock.png", nBlockID, renderer);
-    success = success && textureManager -> load("Sprites/surpriseBlockSprite.png", sBlockID, renderer);
+    bool success = textureManager -> load(renderer);
     return success;
 }
 

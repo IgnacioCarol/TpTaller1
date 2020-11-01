@@ -11,7 +11,6 @@
 //Animation related definitions
 #define coinDelay 50
 #define coinsFrames 4
-#define coinsID "coinsSprites"
 
 class Coin : public GameObject {
     public:
