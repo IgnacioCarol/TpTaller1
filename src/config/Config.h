@@ -63,7 +63,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 using namespace std;
 using boost::property_tree::ptree;
 
-struct Enemy {
+struct xmlEnemy {
     enemyType type;
     string image;
     int quantity;
@@ -85,7 +85,7 @@ struct Level {
     int number;
     string background;
     vector<xmlCoin> coins;
-    vector<Enemy> enemies;
+    vector<xmlEnemy> enemies;
     vector<Platform> platforms;
 };
 

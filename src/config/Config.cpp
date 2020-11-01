@@ -70,7 +70,7 @@ void Config::load(const std::string &filename) {
 
 void Config::parseEnemies(Level *level, ptree pt) {
     for (const auto &e : pt.get_child(XML_STAGE_LEVEL_ENEMIES)) {
-        Enemy enemy;
+        xmlEnemy enemy;
         string enemy_name;
         ptree enemy_pt;
         tie(enemy_name, enemy_pt) = e;
@@ -142,7 +142,7 @@ void Config::parseCoins(Level *level, ptree pt) {
 
 
 void Config::setDefaults() {
-    Enemy enemy;
+    xmlEnemy enemy;
     enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
     enemy.image = DEFAULT_STAGE_LEVEL_ENEMY_IMG;
     enemy.quantity = DEFAULT_STAGE_LEVEL_ENEMY_QTY;

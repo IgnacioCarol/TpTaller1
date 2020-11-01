@@ -42,8 +42,8 @@ TEST(ConfigTest, loadXMLConfig) {
     ASSERT_EQ(2, config.getStage().levels.back().number);
 
     ASSERT_EQ(2, config.getStage().levels.back().enemies.size());
-    Enemy enemy1 = config.getStage().levels.back().enemies.front();
-    Enemy enemy2 = config.getStage().levels.back().enemies.back();
+    xmlEnemy enemy1 = config.getStage().levels.back().enemies.front();
+    xmlEnemy enemy2 = config.getStage().levels.back().enemies.back();
     ASSERT_EQ(10, enemy1.quantity);
     ASSERT_EQ("/home/test_file2.bmp", enemy1.image);
     ASSERT_EQ(ENEMY_MUSHROOM, enemy1.type);
@@ -83,7 +83,7 @@ static void assertDefaults(Config config) {
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_NUMBER, config.getStage().levels.back().number);
 
     ASSERT_EQ(1, config.getStage().levels.back().enemies.size());
-    Enemy enemy = config.getStage().levels.back().enemies.back();
+    xmlEnemy enemy = config.getStage().levels.back().enemies.back();
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_ENEMY_QTY, enemy.quantity);
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_ENEMY_IMG, enemy.image);
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_ENEMY_TYPE, enemy.type);

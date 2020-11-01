@@ -5,7 +5,10 @@
 #include "Factory/Factory.h"
 #include "logger/logger.h"
 #include "config/Config.h"
-#include "gameobjects/Coin.h"
+#include "src/CharacterStates/EnemyMovement.h"
+
+#include "src/gameobjects/PlatformNormal.h"
+#include "src/gameobjects/PlatformSurprise.h"
 
 Game* Game::instance = 0;
 const static char* BACKGROUND = "BG";
@@ -24,7 +27,7 @@ Game* Game::Instance() {
 
 bool Game::init(const char *levelName, int width, int height) {
     Config * config = new Config();
-    config->load("test/resources/config_test.xml");
+    config->load("test/resources/config_test_sarasa.xml");
 //    config->getStage(); //ToDo handlear init de stage
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
@@ -70,9 +73,12 @@ void Game::render() {
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
-    //TODO renderizar todos los game objects iterando
+    enemy->draw(renderer, camera ->getXpos(), 0);
+
+    //TODO renderizar todos los game objects iterando (faltan los enemigos)
+
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
-        _gameObjects[i]->draw(renderer, 0, 0);
+        _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
     SDL_RenderPresent(renderer);
 }
@@ -97,14 +103,11 @@ void Game::clean() {
 
 void Game::handleEvents() {
     player->move();
+    enemy->move();
 }
 
 bool Game::loadImages() {
-    bool success;
-    success = textureManager->load("Sprites/sprites_prueba/dino.png", "dino", renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/dog.png", "dog", renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/RunDog.png", "runDog", renderer);
-    success = success && textureManager -> load("Sprites/sprites_prueba/coinsSprites.png", coinsID, renderer);
+    bool success = textureManager -> load(renderer);
     return success;
 }
 
@@ -112,8 +115,13 @@ void Game::createGameObjects() {
     auto* mario = new Player();
     mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
     player = mario;
-}
 
+    //TODO poner esto en Factory
+    auto* hongo = new EnemyMushroom();
+    hongo -> init(900, 425, emID, 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
+    enemy = hongo;
+
+}
 void Game::nextStage() {
     stage = stage->nextStage();
 }
@@ -125,6 +133,3 @@ void Game::restartCharacters() {
 
 void Game::update() {
 }
-
-
-

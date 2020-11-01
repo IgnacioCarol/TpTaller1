@@ -1,11 +1,11 @@
-//
-// Created by Daniel Bizari on 26/10/2020.
-//
-
 #ifndef TPTALLER1_PLATFORMNORMAL_H
 #define TPTALLER1_PLATFORMNORMAL_H
 
 #include "GameObject.h"
+
+//Image related definitions
+#define NBWidth 256
+#define NBHeight 256
 
 class PlatformNormal : public GameObject {
     public:

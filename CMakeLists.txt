@@ -17,7 +17,7 @@ add_executable(TpTaller1
         src/Camera.cpp src/Camera.h src/BackgroundStages/FirstStage.cpp src/BackgroundStages/FirstStage.h src/BackgroundStages/BackgroundStage.h
         src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/SecondStage.cpp src/BackgroundStages/SecondStage.h src/CharacterStates/CharacterState.cpp
         src/CharacterStates/CharacterState.h src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h
-        src/CharacterStates/Running.cpp src/CharacterStates/Running.h src/Utils/Vector.cpp src/Utils/Vector.h)
+        src/CharacterStates/Running.cpp src/CharacterStates/Running.h src/Utils/Vector.cpp src/Utils/Vector.h src/gameobjects/Enemy.cpp src/gameobjects/Enemy.h src/CharacterStates/EnemyMovement.cpp src/CharacterStates/EnemyMovement.h src/gameobjects/EnemyTurtle.cpp src/gameobjects/EnemyTurtle.h src/gameobjects/EnemyMushroom.cpp src/gameobjects/EnemyMushroom.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

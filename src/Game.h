@@ -10,6 +10,9 @@
 #include "gameobjects/Player.h"
 #include "../src/BackgroundStages/BackgroundStage.h"
 
+#include "src/gameobjects/EnemyMushroom.h"
+
+
 using namespace std;
 
 class Game {
@@ -41,6 +44,9 @@ private:
     Camera* camera;
     //Elements of the game
     Player* player;
+
+    EnemyMushroom* enemy;//TODO pasar esto a refactor
+
     std::vector <GameObject*> _gameObjects;
 
     bool playing = false;
