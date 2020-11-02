@@ -21,7 +21,6 @@ public:
 
     int getXPosition(){return xPosition;}
 
-    CharacterState * getCurrentState();
 
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY);
 

@@ -42,6 +42,7 @@ void Player::restartPos(int x, int y) {
 }
 
 void Player::changeState(CharacterState *newState) {
+    delete characterState;
     characterState = newState;
 }
 
@@ -64,6 +65,3 @@ bool Player::finishJump() {
     return initialJumpingPosition == yPosition;
 }
 
-CharacterState * Player::getCurrentState() {
-    return this->characterState;
-}

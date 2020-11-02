@@ -13,9 +13,7 @@ Crouched::Crouched(int currentFrame, int frameAmount) : CharacterState(currentFr
 
 void Crouched::changeState(const Uint8 *currentKeyStates, Player *player) {
     if (!currentKeyStates[SDL_SCANCODE_DOWN]) {
-        CharacterState * tmp = player->getCurrentState();
         player->changeState(new Normal(0, framesAmount));
-        delete tmp; //ToDo recordar eliminar los otros estados
     }
 }
 
