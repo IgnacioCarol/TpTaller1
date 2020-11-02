@@ -15,25 +15,25 @@
                 <tiempo>300</tiempo>
                 <enemigos>
                     <enemigo>
-                        <tipo>1</tipo>
+                        <tipo>enemigo_tortuga</tipo>
                         <imagen>/home/file3.bmp</imagen>
                         <cantidad>15</cantidad>
                     </enemigo>
                     <enemigo>
-                        <tipo>2</tipo>
+                        <tipo>enemigo_hongo</tipo>
                         <imagen>/home/file4.bmp</imagen>
                         <cantidad>20</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
                     <plataforma>
-                        <tipo>ladrillo</tipo>
+                        <tipo>plataforma_normal</tipo>
                         <coordX>100</coordX>
                         <coordY>200</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
-                        <tipo>sorpresa</tipo>
+                        <tipo>plataforma_sorpresa</tipo>
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>6</cantidad>

@@ -9,10 +9,11 @@
 #include "Utils/Printer.h"
 #include "../src/logger/logger.h"
 
-#define imgCount 5
+#define imgCount 6
 
 //Images ID
 #define emID "goomba" //Enemy Mushroom
+#define etID "koopaGreen" //Enemy turtle
 #define coinsID "coinsSprites" //Coins
 #define sBlockID "surpriseBlockSprites" //Platform Surprise
 #define nBlockID "normalBlock" //Platform Normal
@@ -67,9 +68,10 @@ private:
 
     const char* fileNames[imgCount] = {"Sprites/sprites_prueba/dino.png", "Sprites/coinsSprites.png",
                                         "Sprites/sprites_prueba/Goomba.png", "Sprites/normalBlock.png",
-                                        "Sprites/surpriseBlockSprite.png"};
+                                        "Sprites/surpriseBlockSprite.png",
+                                        "Sprites/sprites_prueba/koopaGreen.png"};
 
-    const char* id[imgCount] = {"dino", coinsID, emID, nBlockID, sBlockID};
+    const char* id[imgCount] = {"dino", coinsID, emID, nBlockID, sBlockID, etID};
 };
 
 typedef TextureManager TheTextureManager;

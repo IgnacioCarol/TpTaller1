@@ -26,8 +26,9 @@ Game* Game::Instance() {
 
 
 bool Game::init(const char *levelName, int width, int height) {
+    camera = new Camera(0, 0, width, height);
     Config * config = Config::getInstance();
-    config->load("../resources/config.xml"); //ToDo poner path de xml de test
+    config->load("./resources/config.xml"); //ToDo poner path de xml de test
 //    config->getStage(); //ToDo handlear init de stage
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
@@ -43,7 +44,6 @@ bool Game::init(const char *levelName, int width, int height) {
             logger -> info("Window init success\n");
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
-                camera = new Camera(0, 0, width, height);
                 stage = new FirstStage(textureManager, renderer);
                 logger -> info("Renderer init success\n");
             }
@@ -107,6 +107,14 @@ void Game::clean() {
 void Game::handleEvents() {
     player->move();
     enemy->move();
+    for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
+        try {
+            _gameObjects[i]->move();
+        } catch (std::exception &e) {
+            printf("Valor: %d\n ", i);
+        }
+    }
+    Logger::getInstance()->error("Sali del for\n");
 }
 
 bool Game::loadImages() {
@@ -127,7 +135,7 @@ void Game::createGameObjects() {
 
     //TODO poner esto en Factory
     auto* hongo = new EnemyMushroom();
-    hongo -> init(900, 425, emID, 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
+    hongo -> init(900, 425, etID, 0, camera->getCamera(), 3, new EnemyMovement(0, 3));
     enemy = hongo;
 
 }
@@ -144,6 +152,10 @@ void Game::update() {
 }
 bool Game::isPlaying() const {
     return this->playing && !this->stage->isTimeOver();
+}
+
+SDL_Rect *Game::getCamera() {
+    return camera -> getCamera();
 }
 
 

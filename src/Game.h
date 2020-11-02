@@ -42,6 +42,8 @@ public:
     void nextStage();
     void restartCharacters();
 
+    SDL_Rect * getCamera();
+
 private:
     Game(); //Private constructor to prevent instancing.
     ~Game();

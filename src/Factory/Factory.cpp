@@ -5,6 +5,8 @@
 #include "../gameobjects/PlatformSurprise.h"
 #include "../gameobjects/EnemyMushroom.h"
 #include "../gameobjects/EnemyTurtle.h"
+#include "../CharacterStates/EnemyMovement.h"
+#include "../Game.h"
 
 Factory* Factory::instance = nullptr;
 
@@ -21,6 +23,7 @@ Factory::Factory() = default;
 std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
     std::vector<GameObject*> actors;
     GameObject * tmp;
+    Enemy* tmpEnemy;
     int anchoPlataforma = 2; //TODO determinar que valor es el correcto, quiza convenga que sea configurable desde el XML
     std::string textureID;
 
@@ -53,22 +56,22 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         }
     }
 
-    /*for(auto enemies : levelConfig.enemies) {
+    for(auto enemies : levelConfig.enemies) {
         for(size_t i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) {
-                tmp = new EnemyTurtle();
+                tmpEnemy = new EnemyTurtle(); //ToDo hacer lo mismo que abajo del init
+                tmpEnemy -> init(900, 425, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
+
             } else {
-                tmp = new EnemyMushroom();
-                tmp -> init(900, 425, emID, 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
+                tmpEnemy = new EnemyMushroom();
+                tmpEnemy -> init(900, 425, emID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
 
             }
-
-            tmp->init(0, 0, //Position x and y determined by init randomly
-                      "sarasa", 0); //TODO definir lo de texture y current frame
+            tmp = tmpEnemy;
 
             actors.push_back(tmp);
         }
-    }*/
+    }
 
 
     return actors;
