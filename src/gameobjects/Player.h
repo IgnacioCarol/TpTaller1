@@ -10,6 +10,7 @@
 //Image related
 #define pWidth 682
 #define pHeight 474
+const int playerVelocity = 2;
 class CharacterState;
 
 class Player : public GameObject {
@@ -21,9 +22,7 @@ public:
 
     int getXPosition(){return xPosition;}
 
-    CharacterState * getCurrentState();
-
-    void draw(SDL_Renderer *renderer, int cameraX, int cameraY);
+    void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
 
     bool isJumping();
 
@@ -33,7 +32,7 @@ public:
 
     void changeState(CharacterState* newState);
 
-    void move();
+    void move() override;
 
 private:
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x

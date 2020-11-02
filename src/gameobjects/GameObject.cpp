@@ -11,3 +11,7 @@ void GameObject::init(int x, int y, std::string textureID, int currentFrame) {
 
     _currentFrame = currentFrame;
 }
+
+void GameObject::move() {
+
+}

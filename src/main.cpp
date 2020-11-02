@@ -1,13 +1,3 @@
-//
-// Created by nacho on 10/10/20.
-//
-//
-//  main.cpp
-//  test
-//
-//  Created by Daniel Bizari on 08/10/2020.
-//  Copyright © 2020 Daniel Bizari. All rights reserved.
-//
 #ifdef __APPLE__
 #include "SDL.h"
 #else
@@ -20,6 +10,10 @@
 #include "Game.h"
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
+#define FPS 40;
+const int DELAY_TIME = 1000.0f / FPS;
+Uint32 frameStart, frameTime;
+
 
 int main(int argc, char * argv[]) {
 
@@ -27,25 +21,26 @@ int main(int argc, char * argv[]) {
 //    testing::InitGoogleTest(&argc, argv);
 //    return RUN_ALL_TESTS();
 //#endif
-        Game* game = Game::Instance();
+    Game* game = Game::Instance();
 
-        if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)){ //Aca inicializo el background
-            Logger::getInstance() -> error("Error: the game could not be initialized");
-            return 1;    }
-
+    if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)) { //Aca inicializo el background
+        Logger::getInstance() -> error("Error: the game could not be initialized");
+        return 1;
+    }
     if (!game->loadImages()){
         Logger::getInstance() -> error("Error: Loading the sprites went wrong");
         return 1;
     }
-
+    if (!game-> loadTexts()) {
+        Logger::getInstance()->error("Error: Loading texts went wrong");
+        return 1;
+    }
     game->createGameObjects();
-
-    bool quit = false;
-
     //Event handler
     SDL_Event e;
 
     while(game->isPlaying()){
+        frameStart = SDL_GetTicks(); //To get the time at the start of the loop
 
         while(SDL_PollEvent(&e) != 0) {
             if (e.type  == SDL_QUIT ) {
@@ -54,11 +49,15 @@ int main(int argc, char * argv[]) {
         }
 
         game->handleEvents();
-        //game->update();
+       // game->update();
         game->render();
+        /*frameTime = SDL_GetTicks() - frameStart;
+        if (frameTime < DELAY_TIME){
+            SDL_Delay((int)(DELAY_TIME - frameTime));
+        }*/
         SDL_Delay(2);
     }
-    Logger::getInstance() -> info("Game over");
+    Logger::getInstance() -> info("Game over\n");
     game->clean();
     SDL_Quit();
     return EXIT_SUCCESS;

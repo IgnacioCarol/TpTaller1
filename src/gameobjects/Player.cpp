@@ -16,13 +16,13 @@ void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, S
 
 void Player::run(int direction) {
     xDirection = direction ? direction > 0 : xDirection;
-    xPosition += cam->x < xPosition || direction > 0 ? direction : 0;
+    xPosition += cam->x < xPosition || direction > 0 ? playerVelocity * direction : 0;
 }
 
 void Player::jump(int yMovement) {
     bool isNotStartingPos = yPosition < initialJumpingPosition;
     if ((jumping = canJump() && yMovement)) {
-        yPosition = yPosition + (!isNotStartingPos || yMovement ? - yMovement : + 1);
+        yPosition = yPosition + (!isNotStartingPos || yMovement ? - yMovement : + 1); //TODO change velocity to go up
     } else if (isNotStartingPos) {
         yPosition += 1;
     }
@@ -62,8 +62,4 @@ bool Player::isJumping() {
 
 bool Player::finishJump() {
     return initialJumpingPosition == yPosition;
-}
-
-CharacterState * Player::getCurrentState() {
-    return this->characterState;
 }

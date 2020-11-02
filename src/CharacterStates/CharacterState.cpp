@@ -1,7 +1,3 @@
-//
-// Created by lisandro on 25/10/20.
-//
-
 #include "../TextureManager.h"
 #include "CharacterState.h"
 
@@ -23,5 +19,9 @@ void CharacterState::move(const Uint8 *currentKeyStates, Player *player) {
 }
 
 void CharacterState::changeState(const Uint8 *currentKeyStates, Player *player) {
+
+}
+
+void CharacterState::move(Enemy *enemy) {
 
 }

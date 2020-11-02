@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 25/10/2020.
-//
-
 #ifndef TPTALLER1_FACTORY_H
 #define TPTALLER1_FACTORY_H
 
