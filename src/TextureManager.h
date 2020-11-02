@@ -1,11 +1,3 @@
-
-//  TextureManager.h
-//  SDL Game Programming Book
-//
-//  Created by shaun mitchell on 31/12/2012.
-//  Copyright (c) 2012 shaun mitchell. All rights reserved.
-//
-
 #ifndef __TextureManager__
 #define __TextureManager__
 
@@ -16,6 +8,15 @@
 #include "SDL2/SDL_image.h"
 #include "Utils/Printer.h"
 #include "../src/logger/logger.h"
+
+#define imgCount 6
+
+//Images ID
+#define emID "goomba" //Enemy Mushroom
+#define etID "koopaGreen" //Enemy turtle
+#define coinsID "coinsSprites" //Coins
+#define sBlockID "surpriseBlockSprites" //Platform Surprise
+#define nBlockID "normalBlock" //Platform Normal
 
 class TextureManager
 {
@@ -34,6 +35,8 @@ public:
 
     bool load(const std::string& fileName, const std::string& id, SDL_Renderer* pRenderer);
     bool loadText(const std::string id, const std::string text, SDL_Color color, SDL_Renderer* pRenderer);
+
+    bool load(SDL_Renderer* pRenderer);
 
     void clearTextureMap();
     void clearFromTextureMap(std::string id);
@@ -62,6 +65,13 @@ private:
     std::map<std::string, TextTexture*> textTextureMap;
 
     static TextureManager* instance;
+
+    const char* fileNames[imgCount] = {"Sprites/sprites_prueba/dino.png", "Sprites/coinsSprites.png",
+                                        "Sprites/sprites_prueba/Goomba.png", "Sprites/normalBlock.png",
+                                        "Sprites/surpriseBlockSprite.png",
+                                        "Sprites/sprites_prueba/koopaGreen.png"};
+
+    const char* id[imgCount] = {"dino", coinsID, emID, nBlockID, sBlockID, etID};
 };
 
 typedef TextureManager TheTextureManager;

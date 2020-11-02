@@ -9,7 +9,7 @@ include_directories(lib/googletest-master/googletest/include)
 include_directories(lib/googletest-master/googlemock/include)
 
 add_executable(TpTaller1
-        src/main.cpp src/main.h
+        src/main.cpp
         src/logger/logger.cpp src/logger/logger.h
         src/logger/loggerException.cpp src/logger/loggerException.h
         src/config/Config.cpp src/config/Config.h
@@ -36,7 +36,9 @@ add_executable(TpTaller1
         src/gameobjects/PlatformSurprise.cpp src/gameobjects/PlatformSurprise.h
         src/gameobjects/Player.cpp src/gameobjects/Player.h
         test/config_test.cpp
-        test/logger_test.cpp src/config/Constants.h src/config/ConfigException.cpp src/config/ConfigException.h)
+        test/logger_test.cpp src/config/Constants.h src/config/ConfigException.cpp src/config/ConfigException.h
+        src/CharacterStates/EnemyMovement.h src/CharacterStates/EnemyMovement.cpp src/gameobjects/Enemy.h src/gameobjects/Enemy.cpp
+        )
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

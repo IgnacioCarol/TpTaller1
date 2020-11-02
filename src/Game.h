@@ -2,14 +2,18 @@
 #define TPTALLER1_GAME_H
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "Camera.h"
+#include <vector>
 #include <string>
+#include "Camera.h"
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
 #include "Utils/Timer.h"
 #include "BackgroundStages/BackgroundStage.h"
 #include "config/Constants.h"
+#include "src/Camera.h"
+
+#include "gameobjects/EnemyMushroom.h"
 
 
 using namespace std;
@@ -27,8 +31,9 @@ public:
     void createGameObjects();
 
     void render();
-    //void update(){}
+
     void handleEvents();
+    void update();
     void clean();
     bool isPlaying() const;
 
@@ -37,6 +42,8 @@ public:
     void nextStage();
     void restartCharacters();
 
+    SDL_Rect * getCamera();
+
 private:
     Game(); //Private constructor to prevent instancing.
     ~Game();
@@ -44,7 +51,8 @@ private:
     Camera* camera;
     //Elements of the game
     Player* player;
-    //std::vector <GameObject*> _gameObjects;
+
+    std::vector <GameObject*> _gameObjects;
 
     bool playing = false;
     SDL_Window* window;

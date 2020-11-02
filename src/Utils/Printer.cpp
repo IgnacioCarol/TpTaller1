@@ -2,8 +2,9 @@
 // Created by DANIELA CARRERO on 2020-10-25.
 //
 
+#include <SDL2/SDL_ttf.h>
 #include "Printer.h"
-
+#include "../logger/logger.h"
 
 Printer *Printer::instance = nullptr;
 

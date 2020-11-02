@@ -1,7 +1,3 @@
-//
-// Created by nacho on 25/10/20.
-//
-
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "Game.h"
