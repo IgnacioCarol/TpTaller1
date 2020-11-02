@@ -7,7 +7,10 @@
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "../src/BackgroundStages/BackgroundStage.h"
+#include "Utils/Timer.h"
+#include "BackgroundStages/BackgroundStage.h"
+#include "config/Constants.h"
+
 
 using namespace std;
 
@@ -18,6 +21,7 @@ public:
 
     bool init(const char* levelName, int width, int height);
     bool loadImages();
+    bool loadTexts();
 
     //Introduces the interactive objects in the game such as Mario, Koopa, etc.
     void createGameObjects();
@@ -26,7 +30,7 @@ public:
     //void update(){}
     void handleEvents();
     void clean();
-    bool isPlaying() const{ return playing;}
+    bool isPlaying() const;
 
     void gameOver(){ playing = false;}
 
@@ -35,6 +39,7 @@ public:
 
 private:
     Game(); //Private constructor to prevent instancing.
+    ~Game();
     static Game* instance; //Here will be the instance stored.
     Camera* camera;
     //Elements of the game
@@ -45,6 +50,7 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
+    Printer* printer = Printer::getInstance();
 
     int lastValue;
 

@@ -9,15 +9,34 @@ include_directories(lib/googletest-master/googletest/include)
 include_directories(lib/googletest-master/googlemock/include)
 
 add_executable(TpTaller1
-        src/main.cpp
-        test/logger_test.cpp src/logger/logger.cpp src/logger/logger.h src/logger/loggerException.cpp src/logger/loggerException.h
-        test/config_test.cpp src/config/Config.cpp src/config/Config.h src/Game.h src/Game.cpp src/TextureManager.h src/TextureManager.cpp
-        src/gameobjects/Player.h src/gameobjects/Player.cpp src/gameobjects/GameObject.cpp src/gameobjects/GameObject.h
-        src/Factory/Factory.cpp src/Factory/Factory.h src/gameobjects/Coin.cpp src/gameobjects/Coin.h src/GameMap.cpp src/GameMap.h test/gamemap_test.cpp src/gameobjects/EnemyMushroom.cpp src/gameobjects/EnemyMushroom.h src/gameobjects/EnemyTurtle.cpp src/gameobjects/EnemyTurtle.h src/gameobjects/PlatformNormal.cpp src/gameobjects/PlatformNormal.h src/gameobjects/PlatformSurprise.cpp src/gameobjects/PlatformSurprise.h
-        src/Camera.cpp src/Camera.h src/BackgroundStages/FirstStage.cpp src/BackgroundStages/FirstStage.h src/BackgroundStages/BackgroundStage.h
-        src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/SecondStage.cpp src/BackgroundStages/SecondStage.h src/CharacterStates/CharacterState.cpp
-        src/CharacterStates/CharacterState.h src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h
-        src/CharacterStates/Running.cpp src/CharacterStates/Running.h src/Utils/Vector.cpp src/Utils/Vector.h)
+        src/main.cpp src/main.h
+        src/logger/logger.cpp src/logger/logger.h
+        src/logger/loggerException.cpp src/logger/loggerException.h
+        src/config/Config.cpp src/config/Config.h
+        src/Utils/Printer.cpp src/Utils/Printer.h
+        src/Utils/Timer.cpp src/Utils/Timer.h
+        src/Utils/Vector.cpp src/Utils/Vector.h
+        src/Game.cpp src/Game.h
+        src/GameMap.cpp src/GameMap.h
+        src/TextureManager.cpp src/TextureManager.h
+        src/Camera.cpp src/Camera.h
+        src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/BackgroundStage.h
+        src/BackgroundStages/FirstStage.cpp src/BackgroundStages/FirstStage.h
+        src/BackgroundStages/SecondStage.cpp src/BackgroundStages/SecondStage.h
+        src/CharacterStates/CharacterState.cpp src/CharacterStates/CharacterState.h
+        src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h
+        src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h
+        src/CharacterStates/Running.cpp src/CharacterStates/Running.h
+        src/Factory/Factory.cpp src/Factory/Factory.h
+        src/gameobjects/Coin.cpp src/gameobjects/Coin.h
+        src/gameobjects/EnemyMushroom.cpp src/gameobjects/EnemyMushroom.h
+        src/gameobjects/EnemyTurtle.cpp src/gameobjects/EnemyTurtle.h
+        src/gameobjects/GameObject.cpp src/gameobjects/GameObject.h
+        src/gameobjects/PlatformNormal.cpp src/gameobjects/PlatformNormal.h
+        src/gameobjects/PlatformSurprise.cpp src/gameobjects/PlatformSurprise.h
+        src/gameobjects/Player.cpp src/gameobjects/Player.h
+        test/config_test.cpp
+        test/logger_test.cpp src/config/Constants.h src/config/ConfigException.cpp src/config/ConfigException.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")
@@ -48,8 +67,8 @@ else(APPLE)
     PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
     target_link_libraries(TpTaller1 ${SDL2_LIBRARY}
             ${SDL2IMAGE_LIBRARIES}
-            ${SDL2_TTF_LIBRARIES}
-            ${SDL2_MIXER_LIBRARIES}
+            ${SDL2TTF_LIBRARIES}
+            ${SDL2MIXER_LIBRARIES}
             gtest
             gtest_main
             ${Boost_LIBRARIES})

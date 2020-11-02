@@ -12,6 +12,7 @@
                 <numero>1</numero>
                 <fondo>/home/file21.bmp</fondo>
                 <monedas>30</monedas>
+                <tiempo>300</tiempo>
                 <enemigos>
                     <enemigo>
                         <tipo>1</tipo>

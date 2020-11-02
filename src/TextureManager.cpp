@@ -3,9 +3,6 @@
 //
 
 #include "TextureManager.h"
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include "../src/logger/logger.h"
 static const char *const BACKGROUND = "BG";
 static const int CURRENT_ROW = 0; //The sprite sheet always has one row
 
@@ -26,6 +23,17 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
         return true;
     }
     return false;
+}
+
+bool TextureManager::loadText(const std::string key, const std::string text, SDL_Color color, SDL_Renderer* pRenderer) {
+    TextTexture* textTexture = Printer::getInstance()->getTextTexture(text, color, pRenderer);
+    if (textTexture == NULL) {
+        Logger::getInstance()->error("Couldnt load text: " + text);
+        return false;
+    }
+
+    textTextureMap[key] = textTexture;
+    return true;
 }
 
 void TextureManager::draw(std::string ID, int x, int y, int width, int height, SDL_Renderer *renderer,
@@ -105,6 +113,15 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
     destRect.h = height / 4;
     SDL_RenderCopyEx(renderer, textureMap[ID], &srcRect, &destRect, 0, 0, flip);
     //Creo que esta se usa para elegir bien la posicion del sprite
+}
+
+void TextureManager::printText(std::string id, int x, int y, SDL_Renderer* pRenderer) {
+    if (textTextureMap[id] == NULL) {
+        Logger::getInstance()->error("Couldnt find text with id: " + id);
+        return;
+    }
+
+    Printer::getInstance()->render(textTextureMap[id], x, y, pRenderer);
 }
 
 void TextureManager::clearTextureMap()

@@ -13,6 +13,9 @@
 #include <string>
 #include <map>
 #include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "Utils/Printer.h"
+#include "../src/logger/logger.h"
 
 class TextureManager
 {
@@ -30,6 +33,7 @@ public:
     }
 
     bool load(const std::string& fileName, const std::string& id, SDL_Renderer* pRenderer);
+    bool loadText(const std::string id, const std::string text, SDL_Color color, SDL_Renderer* pRenderer);
 
     void clearTextureMap();
     void clearFromTextureMap(std::string id);
@@ -44,6 +48,8 @@ public:
 
     void drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect *clip);
 
+    void printText(std::string id, int x, int y, SDL_Renderer* pRenderer);
+
 private:
     TextureManager() {}
 
@@ -53,6 +59,7 @@ private:
 	TextureManager& operator=(const TextureManager&);
 
     std::map<std::string, SDL_Texture*> textureMap;
+    std::map<std::string, TextTexture*> textTextureMap;
 
     static TextureManager* instance;
 };
