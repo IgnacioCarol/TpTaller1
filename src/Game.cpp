@@ -85,8 +85,10 @@ void Game::render() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
-    stage->renderLevel();
-    stage->renderTime();
+    if (stage != nullptr) {
+        stage->renderLevel();
+        stage->renderTime();
+    }
     SDL_RenderPresent(renderer);
 }
 
