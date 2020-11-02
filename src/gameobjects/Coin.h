@@ -9,7 +9,6 @@
 #define CHeight 164
 
 //Animation related definitions
-#define coinDelay 50
 #define coinsFrames 4
 
 class Coin : public GameObject {

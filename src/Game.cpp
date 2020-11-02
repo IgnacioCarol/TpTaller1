@@ -5,10 +5,10 @@
 #include "Factory/Factory.h"
 #include "logger/logger.h"
 #include "config/Config.h"
-#include "src/CharacterStates/EnemyMovement.h"
+#include "CharacterStates/EnemyMovement.h"
 
-#include "src/gameobjects/PlatformNormal.h"
-#include "src/gameobjects/PlatformSurprise.h"
+#include "gameobjects/PlatformNormal.h"
+#include "gameobjects/PlatformSurprise.h"
 
 Game* Game::instance = 0;
 const static char* BACKGROUND = "BG";

@@ -13,7 +13,7 @@
 #include "config/Constants.h"
 
 
-#include "src/gameobjects/EnemyMushroom.h"
+#include "gameobjects/EnemyMushroom.h"
 
 
 using namespace std;
