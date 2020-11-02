@@ -12,7 +12,7 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
         Logger::getInstance() -> error("Error: couldn't load the image\n");
-        return false;
+        return false; //ToDo load default image in case of an error
     }
 
     SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(imageRenderer, tempSurface);

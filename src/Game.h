@@ -11,7 +11,7 @@
 #include "Utils/Timer.h"
 #include "BackgroundStages/BackgroundStage.h"
 #include "config/Constants.h"
-
+#include "src/Camera.h"
 
 #include "gameobjects/EnemyMushroom.h"
 

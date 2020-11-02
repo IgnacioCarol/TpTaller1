@@ -10,7 +10,7 @@
 #include "Game.h"
 const int SCREEN_WIDTH = 800;
 const int SCREEN_HEIGHT = 600;
-const int FPS = 40;
+#define FPS 40;
 const int DELAY_TIME = 1000.0f / FPS;
 Uint32 frameStart, frameTime;
 

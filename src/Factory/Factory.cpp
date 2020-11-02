@@ -3,6 +3,8 @@
 #include "../gameobjects/Coin.h"
 #include "../gameobjects/PlatformNormal.h"
 #include "../gameobjects/PlatformSurprise.h"
+#include "../gameobjects/EnemyMushroom.h"
+#include "../gameobjects/EnemyTurtle.h"
 
 Factory* Factory::instance = nullptr;
 
@@ -50,13 +52,15 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             actors.push_back(tmp);
         }
     }
-/*
-    for(auto enemies : levelConfig.enemies) {
+
+    /*for(auto enemies : levelConfig.enemies) {
         for(size_t i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) {
-                tmp = new xmlEnemy();
+                tmp = new EnemyTurtle();
             } else {
                 tmp = new EnemyMushroom();
+                tmp -> init(900, 425, emID, 0, camera->getCamera(), 3, new EnemyMovement(0, 5));
+
             }
 
             tmp->init(0, 0, //Position x and y determined by init randomly
@@ -64,8 +68,8 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
             actors.push_back(tmp);
         }
-    }
-*/
+    }*/
+
 
     return actors;
 }
