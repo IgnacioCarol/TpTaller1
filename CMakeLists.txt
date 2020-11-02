@@ -67,8 +67,8 @@ else(APPLE)
     PKG_SEARCH_MODULE(SDL2MIXER REQUIRED SDL2_mixer>=2.0.0)
     target_link_libraries(TpTaller1 ${SDL2_LIBRARY}
             ${SDL2IMAGE_LIBRARIES}
-            ${SDL2_TTF_LIBRARIES}
-            ${SDL2_MIXER_LIBRARIES}
+            ${SDL2TTF_LIBRARIES}
+            ${SDL2MIXER_LIBRARIES}
             gtest
             gtest_main
             ${Boost_LIBRARIES})
