@@ -17,10 +17,10 @@ Uint32 frameStart, frameTime;
 
 int main(int argc, char * argv[]) {
 
-/*#ifdef TEST
-    testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-#endif*/
+//#ifdef TEST
+//    testing::InitGoogleTest(&argc, argv);
+//    return RUN_ALL_TESTS();
+//#endif
     Game* game = Game::Instance();
 
     if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)) { //Aca inicializo el background

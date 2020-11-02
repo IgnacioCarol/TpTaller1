@@ -17,7 +17,7 @@ add_executable(TpTaller1
         src/Utils/Timer.cpp src/Utils/Timer.h
         src/Utils/Vector.cpp src/Utils/Vector.h
         src/Game.cpp src/Game.h
-        src/GameMap.cpp src/GameMap.h
+        src/GameMap.cpp src/GameMap.h test/gamemap_test.cpp
         src/TextureManager.cpp src/TextureManager.h
         src/Camera.cpp src/Camera.h
         src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/BackgroundStage.h
@@ -27,7 +27,7 @@ add_executable(TpTaller1
         src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h
         src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h
         src/CharacterStates/Running.cpp src/CharacterStates/Running.h
-        src/Factory/Factory.cpp src/Factory/Factory.h
+        src/Factory/Factory.cpp src/Factory/Factory.h test/factory_test.cpp
         src/gameobjects/Coin.cpp src/gameobjects/Coin.h
         src/gameobjects/EnemyMushroom.cpp src/gameobjects/EnemyMushroom.h
         src/gameobjects/EnemyTurtle.cpp src/gameobjects/EnemyTurtle.h
