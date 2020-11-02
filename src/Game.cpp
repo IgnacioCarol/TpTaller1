@@ -28,8 +28,7 @@ Game* Game::Instance() {
 bool Game::init(const char *levelName, int width, int height) {
     camera = new Camera(0, 0, width, height);
     Config * config = Config::getInstance();
-    config->load("./resources/config.xml"); //ToDo poner path de xml de test
-//    config->getStage(); //ToDo handlear init de stage
+    config->load("./resources/config.xml");
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
     _gameObjects = Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
@@ -80,7 +79,6 @@ void Game::render() {
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
-    enemy->draw(renderer, camera ->getXpos(), 0);
 
     //TODO renderizar todos los game objects iterando (faltan los enemigos)
 
@@ -106,13 +104,8 @@ void Game::clean() {
 
 void Game::handleEvents() {
     player->move();
-    enemy->move();
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
-        try {
-            _gameObjects[i]->move();
-        } catch (std::exception &e) {
-            printf("Valor: %d\n ", i);
-        }
+        _gameObjects[i]->move();
     }
     Logger::getInstance()->error("Sali del for\n");
 }
@@ -132,11 +125,6 @@ void Game::createGameObjects() {
     auto* mario = new Player();
     mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
     player = mario;
-
-    //TODO poner esto en Factory
-    auto* hongo = new EnemyMushroom();
-    hongo -> init(900, 425, etID, 0, camera->getCamera(), 3, new EnemyMovement(0, 3));
-    enemy = hongo;
 
 }
 void Game::nextStage() {

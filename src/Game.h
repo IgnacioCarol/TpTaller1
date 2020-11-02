@@ -52,8 +52,6 @@ private:
     //Elements of the game
     Player* player;
 
-    EnemyMushroom* enemy;//TODO pasar esto a refactor
-
     std::vector <GameObject*> _gameObjects;
 
     bool playing = false;
