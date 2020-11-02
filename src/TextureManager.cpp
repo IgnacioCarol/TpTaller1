@@ -3,9 +3,6 @@
 //
 
 #include "TextureManager.h"
-#include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
-#include "../src/logger/logger.h"
 static const char *const BACKGROUND = "BG";
 static const int CURRENT_ROW = 0; //The sprite sheet always has one row
 
@@ -14,8 +11,8 @@ TextureManager* TextureManager::instance = 0;
 bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
-        Logger::getInstance() -> error("Error: couldnt load the image\n");
-        return false;
+        Logger::getInstance() -> error("Error: couldn't load the image\n");
+        return false; //ToDo load default image in case of an error
     }
 
     SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(imageRenderer, tempSurface);
@@ -26,6 +23,17 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
         return true;
     }
     return false;
+}
+
+bool TextureManager::loadText(const std::string key, const std::string text, SDL_Color color, SDL_Renderer* pRenderer) {
+    TextTexture* textTexture = Printer::getInstance()->getTextTexture(text, color, pRenderer);
+    if (textTexture == NULL) {
+        Logger::getInstance()->error("Couldnt load text: " + text);
+        return false;
+    }
+
+    textTextureMap[key] = textTexture;
+    return true;
 }
 
 void TextureManager::draw(std::string ID, int x, int y, int width, int height, SDL_Renderer *renderer,
@@ -107,6 +115,15 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
     //Creo que esta se usa para elegir bien la posicion del sprite
 }
 
+void TextureManager::printText(std::string id, int x, int y, SDL_Renderer* pRenderer) {
+    if (textTextureMap[id] == NULL) {
+        Logger::getInstance()->error("Couldnt find text with id: " + id);
+        return;
+    }
+
+    Printer::getInstance()->render(textTextureMap[id], x, y, pRenderer);
+}
+
 void TextureManager::clearTextureMap()
 {
     textureMap.clear();
@@ -115,4 +132,12 @@ void TextureManager::clearTextureMap()
 void TextureManager::clearFromTextureMap(std::string id)
 {
     textureMap.erase(id);
+}
+
+bool TextureManager::load(SDL_Renderer *pRenderer) {
+    bool success = true;
+    for(size_t i = 0; i < imgCount && success; i++) {
+        success = this->load(fileNames[i], id[i], pRenderer);
+    }
+    return success;
 }

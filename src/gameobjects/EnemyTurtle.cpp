@@ -1,20 +1,23 @@
-//
-// Created by Daniel Bizari on 26/10/2020.
-//
-
 #include "EnemyTurtle.h"
 #include "../GameMap.h"
 
-EnemyTurtle::EnemyTurtle() = default;
+void EnemyTurtle::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount,
+                       CharacterState *state) {
 
-void EnemyTurtle::init(int x, int y, std::string textureID, int currentFrame) {
-    y = 403; //ToDo Pasar a macro
     x = GameMap::getInstance()->getRandomX(y);
-    GameObject::init(x, y, textureID, currentFrame);
+    Enemy::init(x, y, textureID, currentFrame, camera, framesAmount, state);
+}
+
+
+
+void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) {
+    Enemy::draw(renderer, cameraX, cameraY, width, height);
+}
+
+void EnemyTurtle::walk() {
+    Enemy::walk();
 }
 
 void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-
+    this->draw(renderer, cameraX, cameraY, etWidth, etHeight);
 }
-
-EnemyTurtle::~EnemyTurtle() = default;
