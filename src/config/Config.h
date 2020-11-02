@@ -21,6 +21,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_LEVEL_BACKGROUND "/home/file21.bmp" //TODO: Change file with the correct one
 #define DEFAULT_STAGE_LEVEL_COINS_QTY 30
 #define DEFAULT_STAGE_LEVEL_COINS_COORD_Y 200
+#define DEFAULT_STAGE_LEVEL_TIME 300
 #define DEFAULT_STAGE_LEVEL_ENEMY_QTY 20
 #define DEFAULT_STAGE_LEVEL_ENEMY_TYPE ENEMY_MUSHROOM
 #define DEFAULT_STAGE_LEVEL_ENEMY_IMG "/home/file3.bmp" //TODO: Change file with the correct one
@@ -38,6 +39,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_STAGE_LEVEL_BACKGROUND "fondo"
 #define XML_STAGE_LEVEL_COINS "monedas"
 #define XML_STAGE_LEVEL_COIN_NAME "moneda"
+#define XML_STAGE_LEVEL_TIME "tiempo"
 #define XML_STAGE_LEVEL_COIN_COORDY "coordY"
 #define XML_STAGE_LEVEL_COIN_QTY "cantidad"
 #define XML_STAGE_LEVEL_ENEMIES "enemigos"
@@ -59,6 +61,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #include <boost/property_tree/xml_parser.hpp>
 
 #include "../logger/logger.h"
+#include "ConfigException.h"
 
 using namespace std;
 using boost::property_tree::ptree;
@@ -84,6 +87,7 @@ struct xmlCoin {
 struct Level {
     int number;
     string background;
+    int time;
     vector<xmlCoin> coins;
     vector<xmlEnemy> enemies;
     vector<Platform> platforms;
@@ -104,20 +108,29 @@ struct Log {
 
 class Config {
 public:
-    Config();
+    static Config* getInstance() {
+        if (instance == nullptr) {
+            instance = new Config();
+        }
+        return instance;
+    }
+
     ~Config();
 
     Window getWindow();
     Stage getStage();
     Log getLog();
+    Level getLevel(int level);
 
     void load(const std::string &filename);
     void setDefaults();
 private:
+    static Config* instance;
     Window window;
     Stage stage;
     Log log;
 
+    Config();
     static void parseEnemies(Level *level, ptree pt);
     static void parsePlatforms(Level *level, ptree pt);
     static void parseCoins(Level *level, ptree pt);

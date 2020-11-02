@@ -6,6 +6,7 @@
 #define TPTALLER1_PRINTER_H
 
 #define FONT_FILE_PATH "../resources/fonts/SuperMario256.ttf"
+#include "../logger/logger.h"
 #define FONT_PTR_SIZE 20
 
 #include <SDL2/SDL.h>

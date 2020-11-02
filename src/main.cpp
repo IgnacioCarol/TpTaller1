@@ -17,18 +17,24 @@ Uint32 frameStart, frameTime;
 
 int main(int argc, char * argv[]) {
 
-//#ifdef TEST
-//    testing::InitGoogleTest(&argc, argv);
-//    return RUN_ALL_TESTS();
-//#endif
-        Game* game = Game::Instance();
+/*#ifdef TEST
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
+#endif*/
+    Game* game = Game::Instance();
 
-        if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)){ //Aca inicializo el background
-            Logger::getInstance() -> error("Error: the game could not be initialized");
-            return 1;    }
+    if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)) { //Aca inicializo el background
+        Logger::getInstance() -> error("Error: the game could not be initialized");
+        return 1;
+    }
 
     if (!game->loadImages()){
         Logger::getInstance() -> error("Error: Loading the sprites went wrong");
+        return 1;
+    }
+
+    if (!game-> loadTexts()) {
+        Logger::getInstance()->error("Error: Loading texts went wrong");
         return 1;
     }
 
