@@ -4,8 +4,11 @@
 
 #ifndef TPTALLER1_PRINTER_H
 #define TPTALLER1_PRINTER_H
-
+#ifdef __APPLE__
 #define FONT_FILE_PATH "../resources/fonts/SuperMario256.ttf"
+#else
+#define FONT_FILE_PATH "resources/fonts/SuperMario256.ttf"
+#endif
 #define FONT_PTR_SIZE 20
 
 #include <SDL2/SDL.h>
