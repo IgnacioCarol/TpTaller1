@@ -20,7 +20,7 @@ class FactoryTest : testing::Test {
 };
 
 TEST(FactoryTest, testAhre) {
-    Config * config = new Config();
+    Config * config = Config::getInstance();
     PlatformNormal * pn = new PlatformNormal();
     PlatformSurprise * ps = new PlatformSurprise();
     EnemyMushroom * em = new EnemyMushroom();

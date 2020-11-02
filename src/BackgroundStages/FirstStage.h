@@ -7,10 +7,14 @@
 
 
 #include "BackgroundStage.h"
+#include "SecondStage.h"
+#include "../Game.h"
 
 class FirstStage: public BackgroundStage {
 
     FirstStage() : BackgroundStage(nullptr, nullptr) {}
+
+    ~FirstStage();
 
     BackgroundStage *nextStage() override;
 
