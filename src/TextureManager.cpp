@@ -137,7 +137,10 @@ void TextureManager::clearFromTextureMap(std::string id)
 bool TextureManager::load(SDL_Renderer *pRenderer) {
     bool success = true;
     for(size_t i = 0; i < imgCount && success; i++) {
-        success = this->load(fileNames[i], id[i], pRenderer);
+        success = this->load(fileNames[i][0], id[i], pRenderer);
+        if(!success) {
+            success = this->load(fileNames[i][1], id[i], pRenderer);
+        }
     }
     return success;
 }

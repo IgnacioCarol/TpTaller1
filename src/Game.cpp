@@ -125,7 +125,7 @@ bool Game::loadTexts() {
 
 void Game::createGameObjects() {
     auto* mario = new Player();
-    mario->init(0, 380, "dino", 0, camera->getCamera(), 6);
+    mario->init(0, 380, "mario", 0, camera->getCamera(), 6);
     player = mario;
 
 }
