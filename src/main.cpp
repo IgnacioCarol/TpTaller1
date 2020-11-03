@@ -49,7 +49,7 @@ int main(int argc, char * argv[]) {
         return EXIT_FAILURE;
     }
 
-    Logger::getInstance()->info(xmlPath);
+    Logger::getInstance()->info("XML Path: " + xmlPath);
 
     Game* game = Game::Instance();
 
