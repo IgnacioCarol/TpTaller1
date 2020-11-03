@@ -66,7 +66,7 @@ private:
 
     static TextureManager* instance;
 
-    const char* fileNames[imgCount] = {"Sprites/sprites_prueba/dino.png", "Sprites/coinsSprites.png",
+    const char* fileNames[imgCount] = {"Sprites/sprites_prueba/mario.png", "Sprites/coinsSprites.png",
                                         "Sprites/sprites_prueba/Goomba.png", "Sprites/normalBlock.png",
                                         "Sprites/surpriseBlockSprite.png",
                                         "Sprites/sprites_prueba/koopaGreen.png"};

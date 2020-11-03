@@ -8,8 +8,8 @@
 #include "GameObject.h"
 
 //Image related
-#define pWidth 682
-#define pHeight 474
+#define pWidth 600
+#define pHeight 600
 const int playerVelocity = 2;
 class CharacterState;
 

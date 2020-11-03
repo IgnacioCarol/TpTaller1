@@ -3,8 +3,8 @@
 
 #include "Enemy.h"
 
-#define etWidth 400
-#define etHeight 400
+#define etWidth 450
+#define etHeight 450
 
 class EnemyTurtle : public Enemy{
 public:

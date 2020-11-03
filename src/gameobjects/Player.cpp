@@ -33,7 +33,7 @@ bool Player::canJump() const {
 }
 
 Player::Player() {
-    this->init(0, 403, std::string(), 0, NULL, 5);
+    this->init(0, 380, std::string(), 0, NULL, 5);
 }
 
 void Player::restartPos(int x, int y) {
