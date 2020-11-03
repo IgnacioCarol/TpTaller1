@@ -30,3 +30,7 @@ void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width,
     SDL_RendererFlip flip = (!flipFlag) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
     enemyState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, width, height, renderer, flip);
 }
+
+Enemy::~Enemy() {
+    delete this->enemyState;
+}

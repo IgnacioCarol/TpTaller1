@@ -17,5 +17,3 @@ void PlatformSurprise::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
                                           SBWidth * _currentFrame, renderer, SDL_FLIP_NONE);
     delayCounter++;
 }
-
-PlatformSurprise::~PlatformSurprise() = default;

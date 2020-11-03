@@ -9,6 +9,7 @@ class Camera {
 
 public:
     Camera(int x, int y, int width, int height);
+    ~Camera() = default;
 
 
     void render(int playerXPos, int borderLimit);
