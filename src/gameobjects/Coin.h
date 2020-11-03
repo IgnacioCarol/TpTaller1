@@ -2,7 +2,7 @@
 #define TPTALLER1_COIN_H
 
 #include "GameObject.h"
-#define coinDelay 100
+#define coinDelay 30
 
 //Image related definitions
 #define CWidth 161

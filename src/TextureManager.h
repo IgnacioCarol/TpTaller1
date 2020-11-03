@@ -12,6 +12,13 @@
 #define imgCount 6
 
 //Images ID
+#define defaultPlayer "Sprites/Default/defaultPlayer.png"
+#define defaultBlock "Sprites/Default/defaultBlock.png"
+#define defaultCoin "Sprites/Default/defaultCoins.png"
+#define defaultGoomba "Sprites/Default/defaultGoomba.png"
+#define defaultKoopa "Sprites/Default/defaultKoopa.png"
+
+#define playerID "dino" //TODO cambiar esto por mario
 #define emID "goomba" //Enemy Mushroom
 #define etID "koopaGreen" //Enemy turtle
 #define coinsID "coinsSprites" //Coins
@@ -66,12 +73,14 @@ private:
 
     static TextureManager* instance;
 
-    const char* fileNames[imgCount] = {"Sprites/sprites_prueba/dino.png", "Sprites/coinsSprites.png",
-                                        "Sprites/sprites_prueba/Goomba.png", "Sprites/normalBlock.png",
-                                        "Sprites/surpriseBlockSprite.png",
-                                        "Sprites/sprites_prueba/koopaGreen.png"};
+    std::string fileNames[imgCount][2]= {{"Sprites/sprites_prueba/dino.png", defaultPlayer},
+                                                {"Sprites/coinsSprites.png", defaultCoin},
+                                                {"Sprites/sprites_prueba/Goomba.png", defaultGoomba},
+                                                {"Sprites/normalBlock.png", defaultBlock},
+                                                {"Sprites/surpriseBlockSprite.png", defaultBlock },
+                                                {"Sprites/sprites_prueba/koopaGreen.png", defaultKoopa}};
 
-    const char* id[imgCount] = {"dino", coinsID, emID, nBlockID, sBlockID, etID};
+    std::string id[imgCount] = {playerID, coinsID, emID, nBlockID, sBlockID, etID};
 };
 
 typedef TextureManager TheTextureManager;
