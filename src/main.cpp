@@ -26,7 +26,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath) {
     if (argc > MAX_ARGS) {
         return false;
     } else if (argc == 1) {
-        *xmlPath = "./test/resources/config_test.xml"; // set default xml
+        *xmlPath = "./resources/config.xml"; // set default xml
     } else {
         *xmlPath = argv[1];
     }
