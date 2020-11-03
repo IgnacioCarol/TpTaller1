@@ -12,9 +12,9 @@
 #define imgCount 6
 
 //Images ID
-#define defaultBlockPath "Sprites/Default/defaultBlock.png"
+#define defaultPlayer "Sprites/Default/defaultPlayer.png"
+#define defaultBlock "Sprites/Default/defaultBlock.png"
 #define defaultCoin "Sprites/Default/defaultCoins.png"
-#define defaultPlayer "Sprites/sprites_prueba/dino.png"
 #define defaultGoomba "Sprites/Default/defaultGoomba.png"
 #define defaultKoopa "Sprites/Default/defaultKoopa.png"
 
@@ -72,14 +72,12 @@ private:
 
     static TextureManager* instance;
 
-    const char* fileNames[imgCount]= {"Sprites/sprites_prueba/dino.png",
-                                                 "Sprites/coinsSprites.png",
-                                                 "Sprites/sprites_prueba/Goomba.png",
-                                                 "Sprites/normalBlock.png",
-                                                 "Sprites/surpriseBlockSprite.png",
-                                                 "Sprites/sprites_prueba/koopaGreen.png"};
-
-    const char* defaultFileNames[imgCount] = {defaultPlayer, defaultCoin, defaultGoomba, defaultBlockPath, defaultBlockPath, defaultKoopa};
+    std::string fileNames[imgCount][2]= {{"Sprites/sprites_pruebgfdga/dino.png", defaultPlayer},
+                                                {"Sprites/coinsSprites.png", defaultCoin},
+                                                {"Sprites/sprites_prueba/Goomba.png", defaultGoomba},
+                                                {"Sprites/normalBlock.png", defaultBlock},
+                                                {"Sprites/surpriseBlockSprite.png", defaultBlock },
+                                                {"Sprites/sprites_prueba/koopaGreen.png", defaultKoopa}};
 
     const char* id[imgCount] = {"dino", coinsID, emID, nBlockID, sBlockID, etID};
 };
