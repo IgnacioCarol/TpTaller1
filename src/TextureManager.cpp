@@ -138,6 +138,9 @@ bool TextureManager::load(SDL_Renderer *pRenderer) {
     bool success = true;
     for(size_t i = 0; i < imgCount && success; i++) {
         success = this->load(fileNames[i], id[i], pRenderer);
+        if(!success) {
+            success = this->load(defaultFileNames[i], id[i], pRenderer);
+        }
     }
     return success;
 }
