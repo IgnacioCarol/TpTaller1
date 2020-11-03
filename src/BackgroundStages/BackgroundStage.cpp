@@ -73,3 +73,7 @@ int BackgroundStage::getWidth() const {
     return imageWidth;
 }
 
+int BackgroundStage::getLevel() {
+    return level;
+}
+

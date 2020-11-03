@@ -22,6 +22,7 @@ public:
     bool renderLevel();
     bool renderTime();
     bool isTimeOver();
+    int getLevel();
 
 protected:
     std::string backgroundPath;
