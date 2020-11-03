@@ -1,14 +1,4 @@
 #include "Game.h"
-#include "BackgroundStages/FirstStage.h"
-#include "BackgroundStages/BackgroundStage.h"
-
-#include "Factory/Factory.h"
-#include "logger/logger.h"
-#include "config/Config.h"
-#include "CharacterStates/EnemyMovement.h"
-
-#include "gameobjects/PlatformNormal.h"
-#include "gameobjects/PlatformSurprise.h"
 
 Game* Game::instance = 0;
 const static char* BACKGROUND = "BG";
@@ -27,11 +17,9 @@ Game* Game::Instance() {
 
 bool Game::init(const char *levelName, int width, int height) {
     camera = new Camera(0, 0, width, height);
-    Config * config = Config::getInstance();
     config->load("./resources/config.xml");
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
-    _gameObjects = Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
 
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -68,9 +56,15 @@ bool Game::init(const char *levelName, int width, int height) {
 }
 
 Game::~Game() {
-    delete this->camera;
-    delete this->stage;
     delete this->player;
+    for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
+        delete _gameObjects[i];
+    }
+    delete this->camera;
+    delete this->config;
+    delete this->factory;
+    delete this->textureManager;
+    delete Game::instance;
 }
 
 void Game::render() {
@@ -85,10 +79,8 @@ void Game::render() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
-    if (stage != nullptr) {
-        stage->renderLevel();
-        stage->renderTime();
-    }
+    stage->renderLevel();
+    stage->renderTime();
     SDL_RenderPresent(renderer);
 }
 
@@ -127,10 +119,16 @@ void Game::createGameObjects() {
     auto* mario = new Player();
     mario->init(0, 380, "mario", 0, camera->getCamera(), 6);
     player = mario;
+    initializeGameObjects(1);
 
 }
 void Game::nextStage() {
+    BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
+
+    cleanGameObjects();
+    initializeGameObjects(stage->getLevel());
+    delete currentStage;
 }
 
 void Game::restartCharacters() {
@@ -146,6 +144,17 @@ bool Game::isPlaying() const {
 
 SDL_Rect *Game::getCamera() {
     return camera -> getCamera();
+}
+
+void Game::cleanGameObjects() {
+    for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
+        delete _gameObjects[i];
+    }
+    _gameObjects.clear();
+}
+
+void Game::initializeGameObjects(int level) {
+    _gameObjects = factory->createGameObjectsFromLevelConfig(config->getLevel(level));
 }
 
 

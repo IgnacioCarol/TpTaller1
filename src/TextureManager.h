@@ -40,6 +40,8 @@ public:
         return instance;
     }
 
+    ~TextureManager();
+
     bool load(const std::string& fileName, const std::string& id, SDL_Renderer* pRenderer);
     bool loadText(const std::string id, const std::string text, SDL_Color color, SDL_Renderer* pRenderer);
 
@@ -63,13 +65,13 @@ public:
 private:
     TextureManager() {}
 
-    ~TextureManager() {}
     TextureManager(const TextureManager&);
 
 	TextureManager& operator=(const TextureManager&);
 
     std::map<std::string, SDL_Texture*> textureMap;
     std::map<std::string, TextTexture*> textTextureMap;
+    Printer *printer = Printer::getInstance();
 
     static TextureManager* instance;
 

@@ -79,8 +79,8 @@ static void assertDefaults(Config* config) {
     ASSERT_EQ(DEFAULT_WINDOW_WIDTH, config->getWindow().width);
 
     ASSERT_EQ(1, config->getStage().levels.size());
-//    ASSERT_EQ(DEFAULT_STAGE_LEVEL_BACKGROUND, config.getStage().levels.back().background);
-    ASSERT_EQ(DEFAULT_STAGE_LEVEL_NUMBER, config->getStage().levels.back().number);
+//    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, config.getStage().levels.back().background);
+    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_NUMBER, config->getStage().levels.back().number);
 
     ASSERT_EQ(1, config->getStage().levels.back().enemies.size());
     xmlEnemy enemy = config->getStage().levels.back().enemies.back();

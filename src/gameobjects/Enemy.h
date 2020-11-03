@@ -8,6 +8,7 @@ class CharacterState;
 
 class Enemy: public GameObject {
 public:
+    ~Enemy() override;
     virtual void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount, CharacterState* state);
     void move() override;
     virtual void walk();  //If we have to implement the turtle that can fly we must add a new function fly()
