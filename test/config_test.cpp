@@ -84,19 +84,19 @@ static void assertDefaults(Config* config) {
 
     ASSERT_EQ(1, config->getStage().levels.back().enemies.size());
     xmlEnemy enemy = config->getStage().levels.back().enemies.back();
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_ENEMY_QTY, enemy.quantity);
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_ENEMY_IMG, enemy.image);
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_ENEMY_TYPE, enemy.type);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_ENEMY_QTY, enemy.quantity);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_ENEMY_IMG, enemy.image);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_ENEMY_TYPE, enemy.type);
 
     ASSERT_EQ(1, config->getStage().levels.back().platforms.size());
     Platform platform = config->getStage().levels.back().platforms.back();
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_TYPE, platform.type);
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_COORD_X, platform.coordX);
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_COORD_Y, platform.coordY);
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_QTY, platform.quantity);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_TYPE, platform.type);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X, platform.coordX);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y, platform.coordY);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_PLATFORM_QTY, platform.quantity);
 
     ASSERT_EQ(1, config->getStage().levels.back().enemies.size());
     xmlCoin coin = config->getStage().levels.back().coins.back();
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_COINS_QTY, coin.quantity);
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_COINS_COORD_Y, platform.coordY);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_QTY, coin.quantity);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_COORD_Y, platform.coordY);
 }

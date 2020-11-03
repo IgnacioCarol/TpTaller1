@@ -52,7 +52,7 @@ int BackgroundStage::getLevelTime() {
     try {
         time = Config::getInstance()->getLevel(this->level).time;
     } catch (ConfigException &ex) {
-        time = DEFAULT_STAGE_FIRST_LEVEL_TIME;
+        time = DEFAULT_STAGE_LEVEL_TIME;
     }
     return time;
 }

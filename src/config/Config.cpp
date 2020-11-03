@@ -157,19 +157,19 @@ void Config::parseCoins(Level *level, ptree pt) {
 
 void Config::setDefaults() {
     xmlEnemy enemy;
-    enemy.type = DEFAULT_STAGE_FIRST_LEVEL_ENEMY_TYPE;
-    enemy.image = DEFAULT_STAGE_FIRST_LEVEL_ENEMY_IMG;
-    enemy.quantity = DEFAULT_STAGE_FIRST_LEVEL_ENEMY_QTY;
+    enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
+    enemy.image = DEFAULT_STAGE_LEVEL_ENEMY_IMG;
+    enemy.quantity = DEFAULT_STAGE_LEVEL_ENEMY_QTY;
 
     Platform platform;
-    platform.type = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_TYPE;
-    platform.coordX = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_COORD_X;
-    platform.coordY = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_COORD_Y;
-    platform.quantity = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_QTY;
+    platform.type = DEFAULT_STAGE_LEVEL_PLATFORM_TYPE;
+    platform.coordX = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X;
+    platform.coordY = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y;
+    platform.quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
 
     xmlCoin coin;
-    coin.coordY = DEFAULT_STAGE_FIRST_LEVEL_COINS_COORD_Y;
-    coin.quantity = DEFAULT_STAGE_FIRST_LEVEL_COINS_QTY;
+    coin.coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
+    coin.quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
 
     Window window;
     window.width = DEFAULT_WINDOW_WIDTH;
@@ -179,16 +179,34 @@ void Config::setDefaults() {
     Log log;
     log.level = DEFAULT_LOG_LEVEL;
 
-    Level level;
-    level.number = DEFAULT_STAGE_FIRST_LEVEL_NUMBER;
-    level.background = DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND;
-    level.time = DEFAULT_STAGE_FIRST_LEVEL_TIME;
-    level.enemies.push_back(enemy);
-    level.platforms.push_back(platform);
-    level.coins.push_back(coin);
+    Level level1;
+    level1.number = DEFAULT_STAGE_FIRST_LEVEL_NUMBER;
+    level1.background = DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND;
+    level1.time = DEFAULT_STAGE_LEVEL_TIME;
+    level1.enemies.push_back(enemy);
+    level1.platforms.push_back(platform);
+    level1.coins.push_back(coin);
+
+    Level level2;
+    level2.number = DEFAULT_STAGE_SECOND_LEVEL_NUMBER;
+    level2.background = DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND;
+    level2.time = DEFAULT_STAGE_LEVEL_TIME;
+    level2.enemies.push_back(enemy);
+    level2.platforms.push_back(platform);
+    level2.coins.push_back(coin);
+
+    Level level3;
+    level3.number = DEFAULT_STAGE_THIRD_LEVEL_NUMBER;
+    level3.background = DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND;
+    level3.time = DEFAULT_STAGE_LEVEL_TIME;
+    level3.enemies.push_back(enemy);
+    level3.platforms.push_back(platform);
+    level3.coins.push_back(coin);
 
     Stage stage;
-    stage.levels.push_back(level);
+    stage.levels.push_back(level1);
+    stage.levels.push_back(level2);
+    stage.levels.push_back(level3);
 
     this->window = window;
     this->stage = stage;

@@ -25,12 +25,12 @@
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
-                        <imagen>/home/file3.bmp</imagen>
+                        <imagen>Sprites/sprites_prueba/koopaGreen.png</imagen>
                         <cantidad>15</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
-                        <imagen>/home/file4.bmp</imagen>
+                        <imagen>Sprites/sprites_prueba/Goomba.png</imagen>
                         <cantidad>20</cantidad>
                     </enemigo>
                 </enemigos>
@@ -84,12 +84,12 @@
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
-                        <imagen>/home/file3.bmp</imagen>
+                        <imagen>Sprites/sprites_prueba/koopaGreen.png</imagen>
                         <cantidad>2</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
-                        <imagen>/home/file4.bmp</imagen>
+                        <imagen>Sprites/sprites_prueba/Goomba.png</imagen>
                         <cantidad>20</cantidad>
                     </enemigo>
                 </enemigos>
@@ -143,12 +143,12 @@
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
-                        <imagen>/home/file3.bmp</imagen>
+                        <imagen>Sprites/sprites_prueba/koopaGreen.png</imagen>
                         <cantidad>2</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
-                        <imagen>/home/file4.bmp</imagen>
+                        <imagen>Sprites/sprites_prueba/Goomba.png</imagen>
                         <cantidad>2</cantidad>
                     </enemigo>
                 </enemigos>
