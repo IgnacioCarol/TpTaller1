@@ -26,7 +26,7 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
 }
 
 bool TextureManager::loadText(const std::string key, const std::string text, SDL_Color color, SDL_Renderer* pRenderer) {
-    TextTexture* textTexture = Printer::getInstance()->getTextTexture(text, color, pRenderer);
+    TextTexture* textTexture = printer->getTextTexture(text, color, pRenderer);
     if (textTexture == NULL) {
         Logger::getInstance()->error("Couldnt load text: " + text);
         return false;
@@ -121,7 +121,7 @@ void TextureManager::printText(std::string id, int x, int y, SDL_Renderer* pRend
         return;
     }
 
-    Printer::getInstance()->render(textTextureMap[id], x, y, pRenderer);
+    printer->render(textTextureMap[id], x, y, pRenderer);
 }
 
 void TextureManager::clearTextureMap()
@@ -140,4 +140,9 @@ bool TextureManager::load(SDL_Renderer *pRenderer) {
         success = this->load(fileNames[i], id[i], pRenderer);
     }
     return success;
+}
+
+TextureManager::~TextureManager() {
+    delete this->printer;
+    delete this->instance;
 }

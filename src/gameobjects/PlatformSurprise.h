@@ -14,10 +14,10 @@
 class PlatformSurprise : public GameObject {
     public:
         PlatformSurprise();
+        ~PlatformSurprise() override = default;
         void init(int x, int y, std::string textureID, int currentFrame) override;
         void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
         void move() override {};
-        virtual ~PlatformSurprise();
 
 private:
     size_t delayCounter;

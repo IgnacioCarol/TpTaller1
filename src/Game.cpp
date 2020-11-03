@@ -68,9 +68,13 @@ bool Game::init(const char *levelName, int width, int height) {
 }
 
 Game::~Game() {
-    delete this->camera;
-    delete this->stage;
     delete this->player;
+    for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
+        delete _gameObjects[i];
+    }
+    delete this->camera;
+    delete this->textureManager;
+    delete Game::instance;
 }
 
 void Game::render() {

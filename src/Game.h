@@ -22,6 +22,8 @@ public:
     //Public instance function
     static Game* Instance();
 
+    ~Game();
+
     bool init(const char* levelName, int width, int height);
     bool loadImages();
     bool loadTexts();
@@ -45,7 +47,6 @@ public:
 
 private:
     Game(); //Private constructor to prevent instancing.
-    ~Game();
     static Game* instance; //Here will be the instance stored.
     Camera* camera;
     //Elements of the game
@@ -57,7 +58,6 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
-    Printer* printer = Printer::getInstance();
 
     int lastValue;
 
