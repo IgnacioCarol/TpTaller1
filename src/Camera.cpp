@@ -1,7 +1,3 @@
-//
-// Created by nacho on 25/10/20.
-//
-
 #include "Camera.h"
 
 Camera::Camera(int x, int y, int width, int height) {

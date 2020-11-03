@@ -33,6 +33,9 @@
                         <cantidad>5</cantidad>
                     </enemigo>
                 </enemigos>
+                <tiempo>
+                    666
+                </tiempo>
                 <plataformas>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>

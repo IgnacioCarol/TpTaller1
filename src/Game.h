@@ -2,12 +2,18 @@
 #define TPTALLER1_GAME_H
 #include <iostream>
 #include <SDL2/SDL.h>
-#include "Camera.h"
+#include <vector>
 #include <string>
+#include "Camera.h"
 #include "TextureManager.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "../src/BackgroundStages/BackgroundStage.h"
+#include "Utils/Timer.h"
+#include "BackgroundStages/BackgroundStage.h"
+#include "config/Constants.h"
+
+#include "gameobjects/EnemyMushroom.h"
+
 
 using namespace std;
 
@@ -18,33 +24,40 @@ public:
 
     bool init(const char *levelName, int width, int height, std::string xmlPath);
     bool loadImages();
+    bool loadTexts();
 
     //Introduces the interactive objects in the game such as Mario, Koopa, etc.
     void createGameObjects();
 
     void render();
-    //void update(){}
+
     void handleEvents();
+    void update();
     void clean();
-    bool isPlaying() const{ return playing;}
+    bool isPlaying() const;
 
     void gameOver(){ playing = false;}
 
     void nextStage();
     void restartCharacters();
 
+    SDL_Rect * getCamera();
+
 private:
     Game(); //Private constructor to prevent instancing.
+    ~Game();
     static Game* instance; //Here will be the instance stored.
     Camera* camera;
     //Elements of the game
     Player* player;
-    //std::vector <GameObject*> _gameObjects;
+
+    std::vector <GameObject*> _gameObjects;
 
     bool playing = false;
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
+    Printer* printer = Printer::getInstance();
 
     int lastValue;
 
