@@ -11,18 +11,20 @@
 #include "../config/Constants.h"
 #include "../Utils/Timer.h"
 #include "../config/Config.h"
+#include <string.h>
 
 class BackgroundStage {
 public:
     explicit BackgroundStage(TextureManager *pManager, SDL_Renderer *pRenderer);
+    ~BackgroundStage();
     virtual BackgroundStage* nextStage();
-    virtual int getWidth() const;
+    int getWidth() const;
     bool renderLevel();
     bool renderTime();
     bool isTimeOver();
 
 protected:
-    char* pathToCurrentImageStage; //Each stage should, and will have one for the constructor
+    std::string backgroundPath;
     TextureManager* textureManager;
     SDL_Renderer* renderer;
     Logger* logger = Logger::getInstance();
@@ -31,7 +33,7 @@ protected:
     Timer* timer;
     int level;
 
-    virtual bool setBackground() = 0;
+    bool setBackground();
     int getLevelTime();
 };
 

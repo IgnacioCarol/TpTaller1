@@ -85,10 +85,8 @@ void Game::render() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
-    if (stage != nullptr) {
-        stage->renderLevel();
-        stage->renderTime();
-    }
+    stage->renderLevel();
+    stage->renderTime();
     SDL_RenderPresent(renderer);
 }
 
@@ -130,7 +128,9 @@ void Game::createGameObjects() {
 
 }
 void Game::nextStage() {
+    BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
+    delete currentStage;
 }
 
 void Game::restartCharacters() {

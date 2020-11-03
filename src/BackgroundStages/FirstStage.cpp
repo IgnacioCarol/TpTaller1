@@ -1,35 +1,16 @@
 //
 // Created by nacho on 25/10/20.
 //
-const static char* PATH = "Sprites/sprites_prueba/backgroundCompleto.png";
+#define PATH "Sprites/sprites_prueba/backgroundCompleto.png";
 
 #include "FirstStage.h"
 
 FirstStage::FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
     this->level = 1;
+    this->backgroundPath = PATH;
     this->timer = new Timer(this->getLevelTime());
     setBackground();
     this->timer->start();
-}
-
-FirstStage::~FirstStage() {
-    delete this->timer;
-}
-
-bool FirstStage::setBackground() {
-    bool success =  textureManager-> load(PATH, BACKGROUND, renderer);
-    if (!success) {
-        string error = "error image not found at ";
-        error.append(PATH);
-        logger->error(error);
-        return false;
-    }
-    SDL_QueryTexture(textureManager->getTextureMap()[BACKGROUND], NULL, NULL, &imageWidth, NULL);
-    return true;
-}
-
-int FirstStage::getWidth() const {
-    return imageWidth;
 }
 
 BackgroundStage * FirstStage::nextStage() {

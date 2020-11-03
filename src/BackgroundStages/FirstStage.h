@@ -14,16 +14,10 @@ class FirstStage: public BackgroundStage {
 
     FirstStage() : BackgroundStage(nullptr, nullptr) {}
 
-    ~FirstStage();
-
-    BackgroundStage *nextStage() override;
-
 public:
     FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 
-    int getWidth() const override;
-
-    bool setBackground() override;
+    BackgroundStage *nextStage() override;
 
 };
 
