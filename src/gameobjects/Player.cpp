@@ -42,6 +42,7 @@ void Player::restartPos(int x, int y) {
 }
 
 void Player::changeState(CharacterState *newState) {
+    delete characterState;
     characterState = newState;
 }
 

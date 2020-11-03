@@ -26,7 +26,7 @@ add_executable(TpTaller1
         src/CharacterStates/CharacterState.cpp src/CharacterStates/CharacterState.h
         src/CharacterStates/Jumping.cpp src/CharacterStates/Jumping.h
         src/CharacterStates/Normal.cpp src/CharacterStates/Normal.h
-        src/CharacterStates/Running.cpp src/CharacterStates/Running.h
+        src/CharacterStates/Running.cpp src/CharacterStates/Running.h src/CharacterStates/Crouched.cpp src/CharacterStates/Crouched.h
         src/Factory/Factory.cpp src/Factory/Factory.h test/factory_test.cpp
         src/gameobjects/Coin.cpp src/gameobjects/Coin.h
         src/gameobjects/EnemyMushroom.cpp src/gameobjects/EnemyMushroom.h
