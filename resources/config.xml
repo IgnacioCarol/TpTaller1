@@ -69,7 +69,7 @@
             </nivel>
             <nivel>
                 <numero>2</numero>
-                <fondo>Sprites/sprites_prueba/world1-2.jpeg</fondo>
+                <fondo>Sprites/sprites_prueba/level2.png</fondo>
                 <monedas>
                     <moneda>
                         <coordY>100</coordY>

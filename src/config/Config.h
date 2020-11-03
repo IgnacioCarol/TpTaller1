@@ -22,7 +22,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND "Sprites/sprites_prueba/backgroundCompleto.png"
 
 #define DEFAULT_STAGE_SECOND_LEVEL_NUMBER 2
-#define DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND "Sprites/sprites_prueba/world1-2.jpeg"
+#define DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND "Sprites/sprites_prueba/level2.png"
 
 #define DEFAULT_STAGE_THIRD_LEVEL_NUMBER 3
 #define DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND "Sprites/sprites_prueba/level3.png"
