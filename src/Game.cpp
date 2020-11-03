@@ -25,21 +25,11 @@ Game* Game::Instance() {
 }
 
 
-<<<<<<< HEAD
 bool Game::init(const char *levelName, int width, int height, std::string xmlPath) {
-    Config * config = new Config();
-    config->load(xmlPath);
-
-    Logger::getInstance()->info(config->getStage().levels.at(0).enemies.at(0).image);
-    Logger::getInstance()->info(std::to_string(config->getStage().levels.at(0).platforms.at(0).quantity));
-
-//    config->getStage(); //ToDo handlear init de stage
-=======
-bool Game::init(const char *levelName, int width, int height) {
     camera = new Camera(0, 0, width, height);
     Config * config = Config::getInstance();
-    config->load("./resources/config.xml");
->>>>>>> c2f744a38a0e3f80ac2db5015868ad20bb27c278
+    config->load(xmlPath);
+
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
     _gameObjects = Factory::getInstance()->createGameObjectsFromLevelConfig(config->getStage().levels.at(0)); //ToDo Asumo que el 0 contiene el level inicial, chequear!!
