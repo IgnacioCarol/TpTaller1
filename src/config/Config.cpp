@@ -157,19 +157,19 @@ void Config::parseCoins(Level *level, ptree pt) {
 
 void Config::setDefaults() {
     xmlEnemy enemy;
-    enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
-    enemy.image = DEFAULT_STAGE_LEVEL_ENEMY_IMG;
-    enemy.quantity = DEFAULT_STAGE_LEVEL_ENEMY_QTY;
+    enemy.type = DEFAULT_STAGE_FIRST_LEVEL_ENEMY_TYPE;
+    enemy.image = DEFAULT_STAGE_FIRST_LEVEL_ENEMY_IMG;
+    enemy.quantity = DEFAULT_STAGE_FIRST_LEVEL_ENEMY_QTY;
 
     Platform platform;
-    platform.type = DEFAULT_STAGE_LEVEL_PLATFORM_TYPE;
-    platform.coordX = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X;
-    platform.coordY = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y;
-    platform.quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
+    platform.type = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_TYPE;
+    platform.coordX = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_COORD_X;
+    platform.coordY = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_COORD_Y;
+    platform.quantity = DEFAULT_STAGE_FIRST_LEVEL_PLATFORM_QTY;
 
     xmlCoin coin;
-    coin.coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
-    coin.quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
+    coin.coordY = DEFAULT_STAGE_FIRST_LEVEL_COINS_COORD_Y;
+    coin.quantity = DEFAULT_STAGE_FIRST_LEVEL_COINS_QTY;
 
     Window window;
     window.width = DEFAULT_WINDOW_WIDTH;
@@ -180,9 +180,9 @@ void Config::setDefaults() {
     log.level = DEFAULT_LOG_LEVEL;
 
     Level level;
-    level.number = DEFAULT_STAGE_LEVEL_NUMBER;
-    level.background = DEFAULT_STAGE_LEVEL_BACKGROUND;
-    level.time = DEFAULT_STAGE_LEVEL_TIME;
+    level.number = DEFAULT_STAGE_FIRST_LEVEL_NUMBER;
+    level.background = DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND;
+    level.time = DEFAULT_STAGE_FIRST_LEVEL_TIME;
     level.enemies.push_back(enemy);
     level.platforms.push_back(platform);
     level.coins.push_back(coin);

@@ -10,7 +10,7 @@
         <niveles>
             <nivel>
                 <numero>1</numero>
-                <fondo>/home/file21.bmp</fondo>
+                <fondo>Sprites/sprites_prueba/backgroundCompleto.png</fondo>
                 <monedas>
                     <moneda>
                         <coordY>100</coordY>
@@ -69,7 +69,7 @@
             </nivel>
             <nivel>
                 <numero>2</numero>
-                <fondo>/home/file21.bmp</fondo>
+                <fondo>Sprites/sprites_prueba/world1-2.jpeg</fondo>
                 <monedas>
                     <moneda>
                         <coordY>100</coordY>
@@ -128,7 +128,7 @@
             </nivel>
             <nivel>
                 <numero>3</numero>
-                <fondo>/home/file21.bmp</fondo>
+                <fondo>Sprites/sprites_prueba/level3.png</fondo>
                 <monedas>
                     <moneda>
                         <coordY>100</coordY>

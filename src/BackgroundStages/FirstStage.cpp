@@ -1,13 +1,11 @@
 //
 // Created by nacho on 25/10/20.
 //
-#define PATH "Sprites/sprites_prueba/backgroundCompleto.png";
-
 #include "FirstStage.h"
 
 FirstStage::FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
     this->level = 1;
-    this->backgroundPath = PATH;
+    this->backgroundPath = this->getLevelBackground().empty() ? DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND : this->getLevelBackground();
     this->timer = new Timer(this->getLevelTime());
     setBackground();
     this->timer->start();

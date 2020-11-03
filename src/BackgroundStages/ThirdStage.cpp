@@ -2,12 +2,11 @@
 // Created by DANIELA CARRERO on 2020-11-02.
 //
 
-#define PATH "Sprites/sprites_prueba/level3.png";
 #include "ThirdStage.h"
 
 ThirdStage::ThirdStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
     this->level = 3;
-    this->backgroundPath = PATH;
+    this->backgroundPath = this->getLevelBackground().empty() ? DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND : this->getLevelBackground();
     this->timer = new Timer(this->getLevelTime());
     setBackground();
     this->timer->start();

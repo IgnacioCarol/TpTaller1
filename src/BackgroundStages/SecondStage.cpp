@@ -1,12 +1,11 @@
 //
 // Created by nacho on 25/10/20.
 //
-#define PATH "Sprites/sprites_prueba/world1-2.jpeg";
 #include "SecondStage.h"
 
 SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
     this->level = 2;
-    this->backgroundPath = PATH;
+    this->backgroundPath = this->getLevelBackground().empty() ? DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND : this->getLevelBackground();
     this->timer = new Timer(this->getLevelTime());
     setBackground();
     this->timer->start();

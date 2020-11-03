@@ -5,7 +5,6 @@
 #ifndef TPTALLER1_FIRSTSTAGE_H
 #define TPTALLER1_FIRSTSTAGE_H
 
-
 #include "BackgroundStage.h"
 #include "SecondStage.h"
 #include "../Game.h"

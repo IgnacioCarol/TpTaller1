@@ -52,9 +52,19 @@ int BackgroundStage::getLevelTime() {
     try {
         time = Config::getInstance()->getLevel(this->level).time;
     } catch (ConfigException &ex) {
-        time = DEFAULT_STAGE_LEVEL_TIME;
+        time = DEFAULT_STAGE_FIRST_LEVEL_TIME;
     }
     return time;
+}
+
+std::string BackgroundStage::getLevelBackground() {
+    std::string background;
+    try {
+        background = Config::getInstance()->getLevel(this->level).background;
+    } catch (ConfigException &ex) {
+        Logger::getInstance()->error("Couldn't find background for level " + std::to_string(level));
+    }
+    return background;
 }
 
 bool BackgroundStage::setBackground() {
