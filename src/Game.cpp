@@ -69,7 +69,7 @@ bool Game::init(const char *levelName, int width, int height) {
 
 Game::~Game() {
     delete this->camera;
-    delete this->stage;
+//    delete this->stage;
     delete this->player;
 }
 
