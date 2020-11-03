@@ -1,8 +1,9 @@
 #include <cstdio>
-#include <stdio.h>
 #include <utility>
 #include "../CharacterStates/Normal.h"
 #include "Player.h"
+
+static const int GRAVITY = 2;
 
 void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID), currentFrame);
@@ -22,9 +23,9 @@ void Player::run(int direction) {
 void Player::jump(int yMovement) {
     bool isNotStartingPos = yPosition < initialJumpingPosition;
     if ((jumping = canJump() && yMovement)) {
-        yPosition = yPosition + (!isNotStartingPos || yMovement ? - yMovement : + 1); //TODO change velocity to go up
+        yPosition = yPosition + (!isNotStartingPos || yMovement ? - (yMovement + GRAVITY - 1) : + GRAVITY); //TODO change velocity to go up
     } else if (isNotStartingPos) {
-        yPosition += 1;
+        yPosition += GRAVITY;
     }
 }
 
