@@ -57,7 +57,7 @@ int main(int argc, char * argv[]) {
         }*/
         SDL_Delay(2);
     }
-    Logger::getInstance() -> info("Game over\n");
+    Logger::getInstance() -> info("Game over");
     game->clean();
     delete game;
     delete Logger::getInstance();
