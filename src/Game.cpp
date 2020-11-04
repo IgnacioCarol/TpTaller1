@@ -101,7 +101,6 @@ void Game::handleEvents() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->move();
     }
-    Logger::getInstance()->error("Sali del for\n");
 }
 
 bool Game::loadImages() {
