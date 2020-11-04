@@ -25,6 +25,9 @@ int main(int argc, char * argv[]) {
         Logger::getInstance() -> error("Error: the game could not be initialized");
         return 1;
     }
+
+    game->createGameObjects();
+
     if (!game->loadImages()){
         Logger::getInstance() -> error("Error: Loading the sprites went wrong");
         return 1;
@@ -33,7 +36,7 @@ int main(int argc, char * argv[]) {
         Logger::getInstance()->error("Error: Loading texts went wrong");
         return 1;
     }
-    game->createGameObjects();
+
     //Event handler
     SDL_Event e;
 

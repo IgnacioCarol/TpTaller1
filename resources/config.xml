@@ -13,10 +13,12 @@
                 <fondo>Sprites/sprites_prueba/backgroundCompleto.png</fondo>
                 <monedas>
                     <moneda>
+                        <imagen>Sprites/coinsSprites.png</imagen>
                         <coordY>100</coordY>
                         <cantidad>13</cantidad>
                     </moneda>
                     <moneda>
+                        <imagen>Sprites/coinsSprites.png</imagen>
                         <coordY>200</coordY>
                         <cantidad>30</cantidad>
                     </moneda>
@@ -72,10 +74,12 @@
                 <fondo>Sprites/sprites_prueba/level2.png</fondo>
                 <monedas>
                     <moneda>
+                        <imagen>Sprites/coinsSprites.png</imagen>
                         <coordY>100</coordY>
                         <cantidad>13</cantidad>
                     </moneda>
                     <moneda>
+                        <imagen>Sprites/coinsSprites.png</imagen>
                         <coordY>200</coordY>
                         <cantidad>30</cantidad>
                     </moneda>
@@ -131,10 +135,12 @@
                 <fondo>Sprites/sprites_prueba/level3.png</fondo>
                 <monedas>
                     <moneda>
+                        <imagen>Sprites/coinsSprites.png</imagen>
                         <coordY>100</coordY>
                         <cantidad>13</cantidad>
                     </moneda>
                     <moneda>
+                        <imagen>Sprites/coinsSprites.png</imagen>
                         <coordY>200</coordY>
                         <cantidad>30</cantidad>
                     </moneda>

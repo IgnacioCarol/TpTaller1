@@ -114,7 +114,7 @@ bool Game::loadImages() {
             success = textureManager->load(defaultImg, ID, renderer);
         }
     }
-    return false;
+    return success;
 }
 
 bool Game::loadTexts() {
