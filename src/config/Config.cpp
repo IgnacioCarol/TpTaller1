@@ -99,11 +99,10 @@ void Config::parseEnemies(Level *level, ptree pt) {
         } else if (type == XML_STAGE_LEVEL_ENEMY_TURTLE) {
             enemy.type = ENEMY_TURTLE;
         } else {
-            //TODO uso default o tiro una excepcion ?
-            enemy.type = ENEMY_MUSHROOM;
+            enemy.type = ENEMY_MUSHROOM; //If the type of enemy is not specified, it will show a mushroom.
         }
 
-        enemy.image = enemy_pt.get<string>(XML_STAGE_LEVEL_ENEMY_IMAGE);
+        enemy.image = enemy_pt.get<string>(XML_STAGE_LEVEL_IMAGE);
         enemy.quantity = enemy_pt.get<int>(XML_STAGE_LEVEL_ENEMY_QTY);
         level->enemies.push_back(enemy);
     }
@@ -126,10 +125,10 @@ void Config::parsePlatforms(Level *level, ptree pt) {
         } else if (type == XML_STAGE_LEVEL_PLATFORM_SURPRISE) {
             platform.type = PLATFORM_SURPRISE;
         } else {
-            //TODO uso default o tiro una excepcion ?
-            platform.type = PLATFORM_NORMAL;
+            platform.type = PLATFORM_NORMAL; //If the type of the platforms is not specified, it will show a normal one.
         }
 
+        platform.image = platform_pt.get<string>(XML_STAGE_LEVEL_IMAGE);
         platform.coordX = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDX);
         platform.coordY = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDY);
         platform.quantity = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_QTY);
@@ -148,6 +147,7 @@ void Config::parseCoins(Level *level, ptree pt) {
             continue;
         }
 
+        coin.image = coin_pt.get<string>(XML_STAGE_LEVEL_IMAGE);
         coin.coordY = coin_pt.get<int>(XML_STAGE_LEVEL_COIN_COORDY);
         coin.quantity = coin_pt.get<int>(XML_STAGE_LEVEL_COIN_QTY);
         level->coins.push_back(coin);
@@ -163,12 +163,14 @@ void Config::setDefaults() {
     enemy.quantity = DEFAULT_STAGE_LEVEL_ENEMY_QTY;
 
     Platform platform;
+    platform.image = DEFAULT_STAGE_LEVEL_PLATFORM_IMG;
     platform.type = DEFAULT_STAGE_LEVEL_PLATFORM_TYPE;
     platform.coordX = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X;
     platform.coordY = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y;
     platform.quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
 
     xmlCoin coin;
+    coin.image = DEFAULT_STAGE_LEVEL_COIN_IMG;
     coin.coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
     coin.quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
 

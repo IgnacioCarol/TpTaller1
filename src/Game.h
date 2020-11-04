@@ -15,11 +15,7 @@
 #include "config/Config.h"
 #include "logger/logger.h"
 
-#include "gameobjects/PlatformNormal.h"
-#include "gameobjects/PlatformSurprise.h"
-#include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "gameobjects/EnemyMushroom.h"
 
 
 using namespace std;

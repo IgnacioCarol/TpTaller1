@@ -88,9 +88,7 @@ void Game::render() {
 
 void Game::clean() {
     logger ->info("Cleaning game\n");
-    //delete Logger::getInstance();
-    // ToDo liberar memoria de todos los singleton.
-    
+
     
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
@@ -106,7 +104,30 @@ void Game::handleEvents() {
 }
 
 bool Game::loadImages() {
-    bool success = textureManager -> load(renderer);
+    //load gameObjects
+    std::string filePath;
+    std::string ID;
+    std::string defaultImg;
+    bool success = true;
+
+    for(size_t i = 0; i < _gameObjects.size() && success; i++) {
+        filePath = _gameObjects[i] -> getFilePath();
+        ID = _gameObjects[i] -> getID();
+        if(!textureManager -> load(filePath, ID, renderer)) {
+            defaultImg = _gameObjects[i] -> getDefault();
+            success = textureManager->load(defaultImg, ID, renderer);
+        }
+    }
+
+    //load player
+    if(!success) return success;
+    filePath = player -> getFilePath();
+    ID = player -> getID();
+    if(!textureManager -> load(filePath, ID, renderer)) {
+        defaultImg = player -> getDefault();
+        success = textureManager->load(defaultImg, ID, renderer);
+    }
+
     return success;
 }
 
@@ -123,10 +144,12 @@ void Game::createGameObjects() {
 void Game::nextStage() {
     BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
-    Logger::getInstance()->info("Stage changed");
+    if (currentStage != stage) {
+        Logger::getInstance()->info("Stage changed");
 
-    cleanGameObjects();
-    initializeGameObjects(stage->getLevel());
+        cleanGameObjects();
+        initializeGameObjects(stage->getLevel());
+    }
     delete currentStage;
 }
 
