@@ -144,10 +144,12 @@ void Game::createGameObjects() {
 void Game::nextStage() {
     BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
-    Logger::getInstance()->info("Stage changed");
+    if (currentStage != stage) {
+        Logger::getInstance()->info("Stage changed");
 
-    cleanGameObjects();
-    initializeGameObjects(stage->getLevel());
+        cleanGameObjects();
+        initializeGameObjects(stage->getLevel());
+    }
     delete currentStage;
 }
 
