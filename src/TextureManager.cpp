@@ -12,7 +12,7 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
         Logger::getInstance() -> error("Error: couldn't load the image\n");
-        return false; //ToDo load default image in case of an error
+        return false;
     }
 
     SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(imageRenderer, tempSurface);
@@ -132,6 +132,7 @@ void TextureManager::clearTextureMap()
 void TextureManager::clearFromTextureMap(std::string id)
 {
     textureMap.erase(id);
+    Logger::getInstance()->debug("Texture deleted correctly");
 }
 
 bool TextureManager::load(SDL_Renderer *pRenderer) {
@@ -140,7 +141,9 @@ bool TextureManager::load(SDL_Renderer *pRenderer) {
         success = this->load(fileNames[i][0], id[i], pRenderer);
         if(!success) {
             success = this->load(fileNames[i][1], id[i], pRenderer);
+            Logger::getInstance()->debug("Default image loaded");
         }
+        else Logger::getInstance()->debug("Image loaded correctly");
     }
     return success;
 }

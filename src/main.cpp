@@ -60,6 +60,7 @@ int main(int argc, char * argv[]) {
     Logger::getInstance() -> info("Game over\n");
     game->clean();
     delete game;
+    delete Logger::getInstance();
 
     SDL_Quit();
     return EXIT_SUCCESS;

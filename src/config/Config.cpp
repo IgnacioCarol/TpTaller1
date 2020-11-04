@@ -156,6 +156,7 @@ void Config::parseCoins(Level *level, ptree pt) {
 
 
 void Config::setDefaults() {
+    Logger::getInstance()->info("Setting default config");
     xmlEnemy enemy;
     enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
     enemy.image = DEFAULT_STAGE_LEVEL_ENEMY_IMG;
