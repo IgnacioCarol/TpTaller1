@@ -24,33 +24,33 @@ bool Game::init(const char *levelName, int width, int height) {
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
-        logger -> info("SDL init success\n");
+        logger -> info("SDL init success");
         window = SDL_CreateWindow(levelName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   windowConfig.width, windowConfig.height, 0);
         if (window){
-            logger -> info("Window init success\n");
+            logger -> info("Window init success");
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
                 stage = new FirstStage(textureManager, renderer);
-                logger -> info("Renderer init success\n");
+                logger -> info("Renderer init success");
             }
 
             else {
-                logger -> error("Render init fail\n");
+                logger -> error("Render init fail");
                 return false;
             }
         }
         else{
-            logger -> error("Window init fail\n");
+            logger -> error("Window init fail");
             return false;
         }
     }
     else{
-        logger -> error("SDL init fail\n");
+        logger -> error("SDL init fail");
         return false;
     }
 
-    logger -> info("Init success\n");
+    logger -> info("Init success");
     playing = true;
     return true;
 }

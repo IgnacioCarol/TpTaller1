@@ -1,6 +1,6 @@
 <configuracion>
     <log>
-        <level>DEBUG</level>
+        <level>INFO</level>
     </log>
     <ventana>
         <ancho>800</ancho>
