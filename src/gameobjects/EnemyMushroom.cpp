@@ -3,11 +3,11 @@
 #include "../GameMap.h"
 
 void
-EnemyMushroom::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount,
+EnemyMushroom::init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount,
                     CharacterState *state) {
 
     x = GameMap::getInstance()->getRandomX(y);
-    Enemy::init(x, y, textureID, currentFrame, camera, framesAmount, state);
+    Enemy::init(x, y, fileName, defaultImg, textureID, currentFrame, camera, framesAmount, state);
 }
 
 void EnemyMushroom::move() {
@@ -24,4 +24,16 @@ void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_
 
 void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     this->draw(renderer, cameraX, cameraY, emWidth, emHeight);
+}
+
+std::string EnemyMushroom::getFilePath() {
+    return Enemy::getFilePath();
+}
+
+std::string EnemyMushroom::getID() {
+    return Enemy::getID();
+}
+
+std::string EnemyMushroom::getDefault() {
+    return Enemy::getDefault();
 }

@@ -7,14 +7,19 @@ class CharacterState;
 
 #define emWidth  400
 #define emHeight 400
+#define defaultGoomba "Sprites/Default/defaultGoomba.png"
+#define emID "goomba" //Enemy Mushroom
 
 class EnemyMushroom : public Enemy{
 public:
-    void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount, CharacterState* state) override;
+    void init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount, CharacterState* state) override;
     void move() override; // override;
     void walk() override;  //If we have to implement the turtle that can fly we must add a new function fly()
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) override;
+    std::string getFilePath() override;
+    std::string getID() override;
+    std::string getDefault() override;
 
 };
 

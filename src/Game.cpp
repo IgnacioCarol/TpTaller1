@@ -73,8 +73,6 @@ void Game::render() {
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
 
-    //TODO renderizar todos los game objects iterando (faltan los enemigos)
-
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
@@ -103,8 +101,20 @@ void Game::handleEvents() {
 }
 
 bool Game::loadImages() {
-    bool success = textureManager -> load(renderer);
-    return success;
+    std::string filePath;
+    std::string ID;
+    std::string defaultImg;
+    bool success = true;
+
+    for(size_t i = 0; i < _gameObjects.size() && success; i++) {
+        filePath = _gameObjects[i] -> getFilePath();
+        ID = _gameObjects[i] -> getID();
+        defaultImg = _gameObjects[i] -> getDefault();
+        if(!textureManager -> load(filePath, ID, renderer)) {
+            success = textureManager->load(defaultImg, ID, renderer);
+        }
+    }
+    return false;
 }
 
 bool Game::loadTexts() {

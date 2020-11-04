@@ -5,8 +5,8 @@
 
 static const int GRAVITY = 2;
 
-void Player::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount) {
-    GameObject::init(x, y, std::move(textureID), currentFrame);
+void Player::init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount) {
+    GameObject::init(x, y, fileName, textureID, std::move(textureID), currentFrame);
     xDirection = true;
     jumping = false;
     initialJumpingPosition = yPosition;
@@ -34,7 +34,7 @@ bool Player::canJump() const {
 }
 
 Player::Player(SDL_Rect *camera) {
-    this->init(0, 380, "mario", 0, camera, 6);
+    this->init(0, 380, imgPlayer, defaultPlayer,playerID, 0, camera, 6);
 }
 
 void Player::restartPos(int x, int y) {
@@ -68,4 +68,16 @@ bool Player::finishJump() {
 
 Player::~Player() {
     delete characterState;
+}
+
+std::string Player::getFilePath() {
+    return GameObject::getFilePath();
+}
+
+std::string Player::getID() {
+    return GameObject::getID();
+}
+
+std::string Player::getDefault() {
+    return GameObject::getDefault();
 }

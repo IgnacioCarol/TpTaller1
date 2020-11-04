@@ -1,8 +1,5 @@
-//
-// Created by lisandro on 23/10/20.
-//
-
 #include "TextureManager.h"
+
 static const char *const BACKGROUND = "BG";
 static const int CURRENT_ROW = 0; //The sprite sheet always has one row
 
@@ -12,7 +9,7 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
         Logger::getInstance() -> error("Error: couldn't load the image\n");
-        return false; //ToDo load default image in case of an error
+        return false;
     }
 
     SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(imageRenderer, tempSurface);
@@ -134,17 +131,9 @@ void TextureManager::clearFromTextureMap(std::string id)
     textureMap.erase(id);
 }
 
-bool TextureManager::load(SDL_Renderer *pRenderer) {
-    bool success = true;
-    for(size_t i = 0; i < imgCount && success; i++) {
-        success = this->load(fileNames[i][0], id[i], pRenderer);
-        if(!success) {
-            success = this->load(fileNames[i][1], id[i], pRenderer);
-        }
-    }
-    return success;
-}
+
 
 TextureManager::~TextureManager() {
     delete this->printer;
 }
+

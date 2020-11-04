@@ -11,19 +11,6 @@
 
 #define imgCount 6
 
-//Images ID
-#define defaultPlayer "Sprites/Default/defaultPlayer.png"
-#define defaultBlock "Sprites/Default/defaultBlock.png"
-#define defaultCoin "Sprites/Default/defaultCoins.png"
-#define defaultGoomba "Sprites/Default/defaultGoomba.png"
-#define defaultKoopa "Sprites/Default/defaultKoopa.png"
-
-#define playerID "mario" //Principal Player
-#define emID "goomba" //Enemy Mushroom
-#define etID "koopaGreen" //Enemy turtle
-#define coinsID "coinsSprites" //Coins
-#define sBlockID "surpriseBlockSprites" //Platform Surprise
-#define nBlockID "normalBlock" //Platform Normal
 
 class TextureManager
 {
@@ -44,8 +31,6 @@ public:
 
     bool load(const std::string& fileName, const std::string& id, SDL_Renderer* pRenderer);
     bool loadText(const std::string id, const std::string text, SDL_Color color, SDL_Renderer* pRenderer);
-
-    bool load(SDL_Renderer* pRenderer);
 
     void clearTextureMap();
     void clearFromTextureMap(std::string id);
@@ -74,15 +59,6 @@ private:
     Printer *printer = Printer::getInstance();
 
     static TextureManager* instance;
-
-    std::string fileNames[imgCount][2]= {{"Sprites/sprites_prueba/mario.png", defaultPlayer},
-                                                {"Sprites/coinsSprites.png", defaultCoin},
-                                                {"Sprites/sprites_prueba/Goomba.png", defaultGoomba},
-                                                {"Sprites/normalBlock.png", defaultBlock},
-                                                {"Sprites/surpriseBlockSprite.png", defaultBlock },
-                                                {"Sprites/sprites_prueba/koopaGreen.png", defaultKoopa}};
-
-    std::string id[imgCount] = {playerID, coinsID, emID, nBlockID, sBlockID, etID};
 };
 
 typedef TextureManager TheTextureManager;

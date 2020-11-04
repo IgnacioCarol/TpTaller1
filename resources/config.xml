@@ -51,19 +51,19 @@
                         <tipo>plataforma_normal</tipo>
                         <coordX>1900</coordX>
                         <coordY>150</coordY>
-                        <cantidad>5</cantidad>
+                        <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
-                        <cantidad>5</cantidad>
+                        <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <coordX>200</coordX>
                         <coordY>300</coordY>
-                        <cantidad>6</cantidad>
+                        <cantidad>2</cantidad>
                     </plataforma>
                 </plataformas>
             </nivel>

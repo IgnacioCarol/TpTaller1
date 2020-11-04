@@ -7,6 +7,10 @@
 #include "../TextureManager.h"
 #include "GameObject.h"
 
+#define playerID "mario" //Principal Player
+#define imgPlayer "Sprites/sprites_prueba.png"
+#define defaultPlayer "Sprites/Default/defaultPlayer.png"
+
 //Image related
 #define pWidth 600
 #define pHeight 600
@@ -17,7 +21,7 @@ class Player : public GameObject {
 public:
     Player(SDL_Rect *camera);
     ~Player();
-    void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount);
+    void init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
 
@@ -34,6 +38,9 @@ public:
     void changeState(CharacterState* newState);
 
     void move() override;
+    std::string getFilePath() override;
+    std::string getID() override;
+    std::string getDefault() override;
 
 private:
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x

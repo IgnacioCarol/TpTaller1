@@ -38,6 +38,9 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y 200
 #define DEFAULT_STAGE_LEVEL_PLATFORM_QTY 5
 
+#define DEFAULT_STAGE_LEVEL_PLATFORM_IMG "Sprites/sprites_prueba/Goomba.png"
+#define DEFAULT_STAGE_LEVEL_COIN_IMG "Sprites/coinsSprites.png"
+
 #define XML_LOG_LEVEL "configuracion.log.level"
 #define XML_WINDOW_WIDTH "configuracion.ventana.ancho"
 #define XML_WINDOW_HEIGHT "configuracion.ventana.alto"
@@ -45,6 +48,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_STAGE_LEVEL_NAME "nivel"
 #define XML_STAGE_LEVEL_NUMBER "numero"
 #define XML_STAGE_LEVEL_BACKGROUND "fondo"
+#define XML_STAGE_LEVEL_IMAGE "imagen"
 #define XML_STAGE_LEVEL_COINS "monedas"
 #define XML_STAGE_LEVEL_COIN_NAME "moneda"
 #define XML_STAGE_LEVEL_TIME "tiempo"
@@ -53,7 +57,6 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_STAGE_LEVEL_ENEMIES "enemigos"
 #define XML_STAGE_LEVEL_ENEMY_NAME "enemigo"
 #define XML_STAGE_LEVEL_ENEMY_TYPE "tipo"
-#define XML_STAGE_LEVEL_ENEMY_IMAGE "imagen"
 #define XML_STAGE_LEVEL_ENEMY_QTY "cantidad"
 #define XML_STAGE_LEVEL_PLATFORMS "plataformas"
 #define XML_STAGE_LEVEL_PLATFORM_NAME "plataforma"
@@ -82,12 +85,14 @@ struct xmlEnemy {
 
 struct Platform {
     platformType type;
+    string image;
     int coordX;
     int coordY;
     int quantity;
 };
 
 struct xmlCoin {
+    string image;
     int coordY;
     int quantity;
 };
