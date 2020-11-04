@@ -88,9 +88,7 @@ void Game::render() {
 
 void Game::clean() {
     logger ->info("Cleaning game\n");
-    //delete Logger::getInstance();
-    // ToDo liberar memoria de todos los singleton.
-    
+
     
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
