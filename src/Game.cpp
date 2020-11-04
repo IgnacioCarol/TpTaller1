@@ -64,7 +64,6 @@ Game::~Game() {
     delete this->config;
     delete this->factory;
     delete this->textureManager;
-    delete Game::instance;
 }
 
 void Game::render() {
@@ -115,9 +114,7 @@ bool Game::loadTexts() {
 }
 
 void Game::createGameObjects() {
-    auto* mario = new Player();
-    mario->init(0, 380, "mario", 0, camera->getCamera(), 6);
-    player = mario;
+    player = new Player(camera->getCamera());
     initializeGameObjects(1);
 
 }
