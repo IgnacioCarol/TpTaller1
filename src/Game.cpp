@@ -101,6 +101,7 @@ void Game::handleEvents() {
 }
 
 bool Game::loadImages() {
+    //load gameObjects
     std::string filePath;
     std::string ID;
     std::string defaultImg;
@@ -114,6 +115,16 @@ bool Game::loadImages() {
             success = textureManager->load(defaultImg, ID, renderer);
         }
     }
+
+    //load player
+    if(!success) return success;
+    filePath = player -> getFilePath();
+    ID = player -> getID();
+    defaultImg = player -> getDefault();
+    if(!textureManager -> load(filePath, ID, renderer)) {
+        success = textureManager->load(defaultImg, ID, renderer);
+    }
+
     return success;
 }
 
