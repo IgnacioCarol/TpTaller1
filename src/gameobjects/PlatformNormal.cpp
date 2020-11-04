@@ -6,8 +6,8 @@
 
 PlatformNormal::PlatformNormal() = default;
 
-void PlatformNormal::init(int x, int y, std::string textureID, int currentFrame) {
-    GameObject::init(x, y, textureID, currentFrame);
+void PlatformNormal::init(int x, int y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame) {
+    GameObject::init(x, y, fileName, defaultImg, textureID, currentFrame);
 }
 
 void PlatformNormal::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {

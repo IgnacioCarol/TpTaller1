@@ -9,10 +9,13 @@ class CharacterState;
 class Enemy: public GameObject {
 public:
     ~Enemy() override;
-    virtual void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount, CharacterState* state);
+    virtual void init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount, CharacterState* state);
     void move() override;
     virtual void walk();  //If we have to implement the turtle that can fly we must add a new function fly()
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height);
+    std::string getFilePath() override;
+    std::string getID() override;
+    std::string getDefault() override;
 
 protected:
     CharacterState* enemyState{};
