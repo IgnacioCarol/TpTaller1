@@ -21,15 +21,3 @@ void EnemyTurtle::walk() {
 void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     this->draw(renderer, cameraX, cameraY, etWidth, etHeight);
 }
-
-std::string EnemyTurtle::getFilePath() {
-    return Enemy::getFilePath();
-}
-
-std::string EnemyTurtle::getID() {
-    return Enemy::getID();
-}
-
-std::string EnemyTurtle::getDefault() {
-    return Enemy::getDefault();
-}

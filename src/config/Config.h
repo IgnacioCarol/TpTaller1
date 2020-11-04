@@ -91,7 +91,7 @@ struct Platform {
     int quantity;
 };
 
-struct xmlCoin {
+struct xmlCoin { //ToDo el xml no deberia tener un path por moneda, reconfigurar para que reciba el path de las imagenes una sola vez
     string image;
     int coordY;
     int quantity;

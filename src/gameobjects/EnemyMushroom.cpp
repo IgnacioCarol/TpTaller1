@@ -25,15 +25,3 @@ void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_
 void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     this->draw(renderer, cameraX, cameraY, emWidth, emHeight);
 }
-
-std::string EnemyMushroom::getFilePath() {
-    return Enemy::getFilePath();
-}
-
-std::string EnemyMushroom::getID() {
-    return Enemy::getID();
-}
-
-std::string EnemyMushroom::getDefault() {
-    return Enemy::getDefault();
-}

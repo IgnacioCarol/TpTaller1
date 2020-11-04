@@ -16,16 +16,4 @@ void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     delayCounter++;
 }
 
-std::string Coin::getFilePath() {
-    return GameObject::getFilePath();
-}
-
-std::string Coin::getID() {
-    return GameObject::getID();
-}
-
-std::string Coin::getDefault() {
-    return GameObject::getDefault();
-}
-
 Coin::~Coin() = default;

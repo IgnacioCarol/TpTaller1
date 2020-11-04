@@ -12,15 +12,3 @@ void PlatformSurprise::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
                                           SBWidth * _currentFrame, renderer, SDL_FLIP_NONE);
     delayCounter++;
 }
-
-std::string PlatformSurprise::getFilePath() {
-    return GameObject::getFilePath();
-}
-
-std::string PlatformSurprise::getID() {
-    return GameObject::getID();
-}
-
-std::string PlatformSurprise::getDefault() {
-    return GameObject::getDefault();
-}

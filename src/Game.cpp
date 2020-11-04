@@ -110,8 +110,8 @@ bool Game::loadImages() {
     for(size_t i = 0; i < _gameObjects.size() && success; i++) {
         filePath = _gameObjects[i] -> getFilePath();
         ID = _gameObjects[i] -> getID();
-        defaultImg = _gameObjects[i] -> getDefault();
         if(!textureManager -> load(filePath, ID, renderer)) {
+            defaultImg = _gameObjects[i] -> getDefault();
             success = textureManager->load(defaultImg, ID, renderer);
         }
     }
@@ -120,8 +120,8 @@ bool Game::loadImages() {
     if(!success) return success;
     filePath = player -> getFilePath();
     ID = player -> getID();
-    defaultImg = player -> getDefault();
     if(!textureManager -> load(filePath, ID, renderer)) {
+        defaultImg = player -> getDefault();
         success = textureManager->load(defaultImg, ID, renderer);
     }
 

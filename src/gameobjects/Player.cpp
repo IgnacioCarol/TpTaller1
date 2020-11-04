@@ -69,15 +69,3 @@ bool Player::finishJump() {
 Player::~Player() {
     delete characterState;
 }
-
-std::string Player::getFilePath() {
-    return GameObject::getFilePath();
-}
-
-std::string Player::getID() {
-    return GameObject::getID();
-}
-
-std::string Player::getDefault() {
-    return GameObject::getDefault();
-}

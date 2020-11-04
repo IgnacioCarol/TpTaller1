@@ -38,9 +38,6 @@ public:
     void changeState(CharacterState* newState);
 
     void move() override;
-    std::string getFilePath() override;
-    std::string getID() override;
-    std::string getDefault() override;
 
 private:
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x

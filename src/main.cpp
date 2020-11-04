@@ -26,7 +26,7 @@ int main(int argc, char * argv[]) {
         return 1;
     }
 
-    game->createGameObjects();
+    game->createGameObjects(); //ToDo refactorizar y mover al Factory, factory tiene que ser el unico responsable de instanciar gameObjects
 
     if (!game->loadImages()){
         Logger::getInstance() -> error("Error: Loading the sprites went wrong");
