@@ -15,8 +15,8 @@ Game* Game::Instance() {
 }
 
 
-bool Game::init(const char *levelName, int width, int height) {
-    camera = new Camera(0, 0, width, height);
+bool Game::init(const char *levelName) {
+    camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     config->load("./resources/config.xml");
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
@@ -116,7 +116,6 @@ bool Game::loadTexts() {
 void Game::createGameObjects() {
     player = new Player(camera->getCamera());
     initializeGameObjects(1);
-
 }
 void Game::nextStage() {
     BackgroundStage *currentStage = this->stage;
