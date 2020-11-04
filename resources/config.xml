@@ -39,30 +39,35 @@
                 <plataformas>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>100</coordX>
                         <coordY>200</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>900</coordX>
                         <coordY>200</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>1900</coordX>
                         <coordY>150</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
+                        <imagen>Sprites/surpriseBlockSprite.png</imagen>
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
+                        <imagen>Sprites/surpriseBlockSprite.png</imagen>
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>2</cantidad>
@@ -100,30 +105,35 @@
                 <plataformas>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>100</coordX>
                         <coordY>200</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>900</coordX>
                         <coordY>200</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>1900</coordX>
                         <coordY>150</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
+                        <imagen>Sprites/surpriseBlockSprite.png</imagen>
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
+                        <imagen>Sprites/surpriseBlockSprite.png</imagen>
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>6</cantidad>
@@ -161,30 +171,35 @@
                 <plataformas>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>100</coordX>
                         <coordY>200</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>900</coordX>
                         <coordY>200</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/normalBlock.png</imagen>
                         <coordX>1900</coordX>
                         <coordY>150</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
+                        <imagen>Sprites/surpriseBlockSprite.png</imagen>
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
+                        <imagen>Sprites/surpriseBlockSprite.png</imagen>
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>6</cantidad>
