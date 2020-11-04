@@ -24,7 +24,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     std::vector<GameObject*> actors;
     GameObject * tmp;
     Enemy* tmpEnemy;
-    int anchoPlataforma = 2; //TODO determinar que valor es el correcto, quiza convenga que sea configurable desde el XML
+    int anchoPlataforma;
     std::string textureID;
 
     // Init Platforms
@@ -33,9 +33,11 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             if (platform.type == PLATFORM_SURPRISE) {
                 tmp = new PlatformSurprise();
                 textureID = sBlockID;
+                anchoPlataforma = SBHeight / 4;
             } else {
                 tmp = new PlatformNormal();
                 textureID = nBlockID;
+                anchoPlataforma = NBHeight / 4;
             }
 
             tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,

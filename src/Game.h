@@ -6,12 +6,19 @@
 #include <string>
 #include "Camera.h"
 #include "TextureManager.h"
+#include "BackgroundStages/BackgroundStage.h"
+#include "BackgroundStages/FirstStage.h"
+#include "CharacterStates/EnemyMovement.h"
+#include "Factory/Factory.h"
+#include "Utils/Timer.h"
+#include "config/Constants.h"
+#include "config/Config.h"
+#include "logger/logger.h"
+
+#include "gameobjects/PlatformNormal.h"
+#include "gameobjects/PlatformSurprise.h"
 #include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "Utils/Timer.h"
-#include "BackgroundStages/BackgroundStage.h"
-#include "config/Constants.h"
-
 #include "gameobjects/EnemyMushroom.h"
 
 
@@ -21,8 +28,9 @@ class Game {
 public:
     //Public instance function
     static Game* Instance();
-
     bool init(const char *levelName, int width, int height, std::string xmlPath);
+    ~Game();
+  
     bool loadImages();
     bool loadTexts();
 
@@ -45,9 +53,14 @@ public:
 
 private:
     Game(); //Private constructor to prevent instancing.
-    ~Game();
     static Game* instance; //Here will be the instance stored.
+
+    void cleanGameObjects();
+    void initializeGameObjects(int level);
+
     Camera* camera;
+    Config* config = Config::getInstance();
+    Factory* factory = Factory::getInstance();
     //Elements of the game
     Player* player;
 
@@ -57,7 +70,6 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager = TextureManager::Instance();
-    Printer* printer = Printer::getInstance();
 
     int lastValue;
 
