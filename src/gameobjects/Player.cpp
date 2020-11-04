@@ -33,8 +33,8 @@ bool Player::canJump() const {
     return ((jumping && yPosition > maxYPosition) || (!jumping && yPosition == initialJumpingPosition));
 }
 
-Player::Player() {
-    this->init(0, 380, std::string(), 0, NULL, 5);
+Player::Player(SDL_Rect *camera) {
+    this->init(0, 380, "mario", 0, camera, 6);
 }
 
 void Player::restartPos(int x, int y) {
@@ -64,4 +64,8 @@ bool Player::isJumping() {
 
 bool Player::finishJump() {
     return initialJumpingPosition == yPosition;
+}
+
+Player::~Player() {
+    delete characterState;
 }

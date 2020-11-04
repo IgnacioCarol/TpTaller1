@@ -15,7 +15,8 @@ class CharacterState;
 
 class Player : public GameObject {
 public:
-    Player();
+    Player(SDL_Rect *camera);
+    ~Player();
     void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
