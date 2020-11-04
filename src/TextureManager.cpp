@@ -147,5 +147,4 @@ bool TextureManager::load(SDL_Renderer *pRenderer) {
 
 TextureManager::~TextureManager() {
     delete this->printer;
-    delete this->instance;
 }

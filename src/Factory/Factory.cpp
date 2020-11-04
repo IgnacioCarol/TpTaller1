@@ -61,8 +61,8 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     for(auto enemies : levelConfig.enemies) {
         for(size_t i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) {
-                tmpEnemy = new EnemyTurtle(); //ToDo hacer lo mismo que abajo del init
-                tmpEnemy -> init(900, 425, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
+                tmpEnemy = new EnemyTurtle();
+                tmpEnemy -> init(900, 415, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
 
             } else {
                 tmpEnemy = new EnemyMushroom();

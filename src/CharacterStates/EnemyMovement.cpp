@@ -14,7 +14,11 @@ void EnemyMovement::move(Enemy *enemy) {
 
 void EnemyMovement::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
                          SDL_Renderer *renderer, SDL_RendererFlip flip) {
-    currentFrame = (currentFrame + 1) % (framesAmount - 1);
+    if (contAux == ITER_TIMES) {
+        currentFrame = (currentFrame + 1) % (framesAmount - 1);
+        contAux = 0;
+    }
+    else contAux ++;
 
     TextureManager::Instance()->drawFrame(ID, xPosition, yPosition, imageWidth, imageHeigth,
                                           imageWidth * currentFrame, renderer, flip);

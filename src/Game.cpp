@@ -64,7 +64,6 @@ Game::~Game() {
     delete this->config;
     delete this->factory;
     delete this->textureManager;
-    delete Game::instance;
 }
 
 void Game::render() {
@@ -101,7 +100,6 @@ void Game::handleEvents() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->move();
     }
-    Logger::getInstance()->error("Sali del for\n");
 }
 
 bool Game::loadImages() {
@@ -116,9 +114,7 @@ bool Game::loadTexts() {
 }
 
 void Game::createGameObjects() {
-    auto* mario = new Player();
-    mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
-    player = mario;
+    player = new Player(camera->getCamera());
     initializeGameObjects(1);
 
 }
@@ -132,7 +128,7 @@ void Game::nextStage() {
 }
 
 void Game::restartCharacters() {
-    player->restartPos(0, 403);
+    player->restartPos(0, 380);
     camera->restartPos();
 }
 

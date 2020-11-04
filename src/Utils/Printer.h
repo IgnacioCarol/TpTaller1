@@ -28,10 +28,10 @@ struct TextTexture {
 
 class Printer {
 public:
-    static Printer *getInstance();
     ~Printer();
+    static Printer *getInstance();
     TextTexture* getTextTexture(std::string text, SDL_Color color, SDL_Renderer* renderer);
-    void free(TextTexture* texture); //TODO: Ver si es necesario
+    void freeTexture(TextTexture* texture); //TODO: Ver si es necesario
     void render(TextTexture* texture, int x, int y, SDL_Renderer* renderer);
 private:
     static Printer *instance;

@@ -8,14 +8,15 @@
 #include "GameObject.h"
 
 //Image related
-#define pWidth 682
-#define pHeight 474
+#define pWidth 600
+#define pHeight 600
 const int playerVelocity = 2;
 class CharacterState;
 
 class Player : public GameObject {
 public:
-    Player();
+    Player(SDL_Rect *camera);
+    ~Player();
     void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
