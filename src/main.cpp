@@ -8,8 +8,6 @@
 #include "gmock/gmock.h"
 #include "logger/logger.h"
 #include "Game.h"
-const int SCREEN_WIDTH = 800;
-const int SCREEN_HEIGHT = 600;
 #define FPS 40;
 const int DELAY_TIME = 1000.0f / FPS;
 Uint32 frameStart, frameTime;
@@ -23,7 +21,7 @@ int main(int argc, char * argv[]) {
 //#endif
     Game* game = Game::Instance();
 
-    if (!game->init("Level 1", SCREEN_WIDTH, SCREEN_HEIGHT)) { //Aca inicializo el background
+    if (!game->init("Level 1")) { //Aca inicializo el background
         Logger::getInstance() -> error("Error: the game could not be initialized");
         return 1;
     }
