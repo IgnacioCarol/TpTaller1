@@ -31,7 +31,7 @@ public:
 
     ~Game();
 
-    bool init(const char* levelName, int width, int height);
+    bool init(const char* levelName);
     bool loadImages();
     bool loadTexts();
 

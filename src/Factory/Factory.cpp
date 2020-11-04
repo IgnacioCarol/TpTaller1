@@ -34,10 +34,12 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmp = new PlatformSurprise();
                 textureID = sBlockID;
                 anchoPlataforma = SBHeight / 4;
+                Logger::getInstance()->debug("Platform surprise created correctly");
             } else {
                 tmp = new PlatformNormal();
                 textureID = nBlockID;
                 anchoPlataforma = NBHeight / 4;
+                Logger::getInstance()->debug("Normal platform created correctly");
             }
 
             tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,
@@ -55,6 +57,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                       coinsID, 0);
 
             actors.push_back(tmp);
+            Logger::getInstance()->debug("Coin created correctly");
         }
     }
 
@@ -63,11 +66,11 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             if (enemies.type == ENEMY_TURTLE) {
                 tmpEnemy = new EnemyTurtle();
                 tmpEnemy -> init(900, 415, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
-
+                Logger::getInstance()->debug("Turtle enemy created correctly");
             } else {
                 tmpEnemy = new EnemyMushroom();
                 tmpEnemy -> init(900, 425, emID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
-
+                Logger::getInstance()->debug("Mushroom enemy created correctly");
             }
             tmp = tmpEnemy;
 

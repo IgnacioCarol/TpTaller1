@@ -44,6 +44,7 @@ void Player::restartPos(int x, int y) {
 
 void Player::changeState(CharacterState *newState) {
     delete characterState;
+    Logger::getInstance()->debug("Changing Player State");
     characterState = newState;
 }
 

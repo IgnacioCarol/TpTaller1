@@ -7,6 +7,7 @@
 
 #include <map>
 #include "gameobjects/GameObject.h"
+static const int MAP_WIDTH = 3500;
 
 class GameMap {
     public:
@@ -14,6 +15,7 @@ class GameMap {
         virtual ~GameMap();
         bool insertTo(size_t x, size_t y, GameObject * actor);
         size_t getRandomX(size_t y);
+        size_t getRandomX();
         //Move
         //Remove
         //

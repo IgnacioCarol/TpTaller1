@@ -15,8 +15,8 @@ Game* Game::Instance() {
 }
 
 
-bool Game::init(const char *levelName, int width, int height) {
-    camera = new Camera(0, 0, width, height);
+bool Game::init(const char *levelName) {
+    camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     config->load("./resources/config.xml");
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
@@ -24,33 +24,33 @@ bool Game::init(const char *levelName, int width, int height) {
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
-        logger -> info("SDL init success\n");
+        logger -> info("SDL init success");
         window = SDL_CreateWindow(levelName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   windowConfig.width, windowConfig.height, 0);
         if (window){
-            logger -> info("Window init success\n");
+            logger -> info("Window init success");
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
                 stage = new FirstStage(textureManager, renderer);
-                logger -> info("Renderer init success\n");
+                logger -> info("Renderer init success");
             }
 
             else {
-                logger -> error("Render init fail\n");
+                logger -> error("Render init fail");
                 return false;
             }
         }
         else{
-            logger -> error("Window init fail\n");
+            logger -> error("Window init fail");
             return false;
         }
     }
     else{
-        logger -> error("SDL init fail\n");
+        logger -> error("SDL init fail");
         return false;
     }
 
-    logger -> info("Init success\n");
+    logger -> info("Init success");
     playing = true;
     return true;
 }
@@ -60,10 +60,15 @@ Game::~Game() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         delete _gameObjects[i];
     }
+    Logger::getInstance()->info("All Game Objects were deleted");
     delete this->camera;
+    Logger::getInstance()->info("The camera was deleted");
     delete this->config;
+    Logger::getInstance()->info("The parser(config) was deleted");
     delete this->factory;
+    Logger::getInstance()->info("The Factory was deleted");
     delete this->textureManager;
+    Logger::getInstance()->info("Texture Manager was deleted");
 }
 
 void Game::render() {
@@ -72,8 +77,6 @@ void Game::render() {
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
-
-    //TODO renderizar todos los game objects iterando (faltan los enemigos)
 
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
@@ -85,7 +88,7 @@ void Game::render() {
 
 void Game::clean() {
     logger ->info("Cleaning game\n");
-    delete Logger::getInstance();
+    //delete Logger::getInstance();
     // ToDo liberar memoria de todos los singleton.
     
     
@@ -116,11 +119,11 @@ bool Game::loadTexts() {
 void Game::createGameObjects() {
     player = new Player(camera->getCamera());
     initializeGameObjects(1);
-
 }
 void Game::nextStage() {
     BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
+    Logger::getInstance()->info("Stage changed");
 
     cleanGameObjects();
     initializeGameObjects(stage->getLevel());
@@ -128,6 +131,7 @@ void Game::nextStage() {
 }
 
 void Game::restartCharacters() {
+    Logger::getInstance()->info("Restarting Player and Camera position");
     player->restartPos(0, 380);
     camera->restartPos();
 }
