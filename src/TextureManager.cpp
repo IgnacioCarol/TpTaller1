@@ -129,9 +129,21 @@ void TextureManager::clearTextureMap()
 void TextureManager::clearFromTextureMap(std::string id)
 {
     textureMap.erase(id);
+    Logger::getInstance()->debug("Texture deleted correctly");
 }
 
-
+bool TextureManager::load(SDL_Renderer *pRenderer) {
+    bool success = true;
+    for(size_t i = 0; i < imgCount && success; i++) {
+        success = this->load(fileNames[i][0], id[i], pRenderer);
+        if(!success) {
+            success = this->load(fileNames[i][1], id[i], pRenderer);
+            Logger::getInstance()->debug("Default image loaded");
+        }
+        else Logger::getInstance()->debug("Image loaded correctly");
+    }
+    return success;
+}
 
 TextureManager::~TextureManager() {
     delete this->printer;

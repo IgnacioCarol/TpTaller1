@@ -71,6 +71,4 @@ TextTexture::TextTexture(SDL_Texture *pTexture, int w, int h) {
     this->height = h;
 }
 
-Printer::~Printer() {
-    free(Printer::instance);
-}
+
