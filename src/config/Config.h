@@ -38,7 +38,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y 200
 #define DEFAULT_STAGE_LEVEL_PLATFORM_QTY 5
 
-#define DEFAULT_STAGE_LEVEL_PLATFORM_IMG "Sprites/sprites_prueba/Goomba.png"
+#define DEFAULT_STAGE_LEVEL_PLATFORM_IMG "Sprites/normalBlock.png"
 #define DEFAULT_STAGE_LEVEL_COIN_IMG "Sprites/coinsSprites.png"
 
 #define XML_LOG_LEVEL "configuracion.log.level"
