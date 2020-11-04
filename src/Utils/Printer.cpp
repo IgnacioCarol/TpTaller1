@@ -54,7 +54,7 @@ void Printer::render(TextTexture* textTexture, int x, int y, SDL_Renderer* rende
     SDL_RenderCopyEx(renderer, textTexture->texture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }
 
-void Printer::free(TextTexture* textTexture) {
+void Printer::freeTexture(TextTexture* textTexture) {
     if (textTexture->texture != NULL) {
         SDL_DestroyTexture(textTexture->texture);
     }
@@ -72,5 +72,5 @@ TextTexture::TextTexture(SDL_Texture *pTexture, int w, int h) {
 }
 
 Printer::~Printer() {
-    delete this->instance;
+    free(Printer::instance);
 }

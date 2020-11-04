@@ -18,7 +18,7 @@
 #define defaultGoomba "Sprites/Default/defaultGoomba.png"
 #define defaultKoopa "Sprites/Default/defaultKoopa.png"
 
-#define playerID "dino" //TODO cambiar esto por mario
+#define playerID "mario" //Principal Player
 #define emID "goomba" //Enemy Mushroom
 #define etID "koopaGreen" //Enemy turtle
 #define coinsID "coinsSprites" //Coins
@@ -75,7 +75,7 @@ private:
 
     static TextureManager* instance;
 
-    std::string fileNames[imgCount][2]= {{"Sprites/sprites_prueba/dino.png", defaultPlayer},
+    std::string fileNames[imgCount][2]= {{"Sprites/sprites_prueba/mario.png", defaultPlayer},
                                                 {"Sprites/coinsSprites.png", defaultCoin},
                                                 {"Sprites/sprites_prueba/Goomba.png", defaultGoomba},
                                                 {"Sprites/normalBlock.png", defaultBlock},
@@ -88,4 +88,4 @@ private:
 typedef TextureManager TheTextureManager;
 
 
-#endif /* defined(__SDL_Game_Programming_Book__TextureManager__) */
+#endif
