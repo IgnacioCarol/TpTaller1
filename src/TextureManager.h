@@ -9,9 +9,6 @@
 #include "Utils/Printer.h"
 #include "../src/logger/logger.h"
 
-#define imgCount 6
-
-
 class TextureManager
 {
 public:
