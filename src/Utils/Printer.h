@@ -1,7 +1,3 @@
-//
-// Created by DANIELA CARRERO on 2020-10-25.
-//
-
 #ifndef TPTALLER1_PRINTER_H
 #define TPTALLER1_PRINTER_H
 
