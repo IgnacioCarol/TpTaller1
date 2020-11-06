@@ -3,8 +3,8 @@
 
 #include "Enemy.h"
 
-#define etWidth 380
-#define etHeight 380
+#define etWidth 360
+#define etHeight 360
 #define etID "koopaGreen" //Enemy turtle
 #define defaultKoopa "Sprites/Default/defaultKoopa.png"
 
