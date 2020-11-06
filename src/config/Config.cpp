@@ -77,6 +77,7 @@ void Config::load(const std::string &filename) {
                 Logger::getInstance()->error(errMsg);
                 throw ConfigException(errMsg);
             }
+
             level.background = level_pt.get<string>(XML_STAGE_LEVEL_BACKGROUND);
             level.time = level_pt.get<int>(XML_STAGE_LEVEL_TIME);
             if (level.time < 1) {
