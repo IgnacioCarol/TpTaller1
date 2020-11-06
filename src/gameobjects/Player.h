@@ -8,7 +8,7 @@
 #include "GameObject.h"
 
 #define playerID "mario" //Principal Player
-#define imgPlayer "Sprites/sprites_prueba/mario.png"
+#define imgPlayer "Sprites/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
 //Image related

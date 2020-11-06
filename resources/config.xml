@@ -10,7 +10,7 @@
         <niveles>
             <nivel>
                 <numero>1</numero>
-                <fondo>Sprites/sprites_prueba/backgroundCompleto.png</fondo>
+                <fondo>Sprites/backgroundCompleto.png</fondo>
                 <monedas>
                     <moneda>
                         <imagen>Sprites/coinsSprites.png</imagen>
@@ -27,12 +27,12 @@
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
-                        <imagen>Sprites/sprites_prueba/koopaGreen.png</imagen>
+                        <imagen>Sprites/koopaGreen.png</imagen>
                         <cantidad>15</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
-                        <imagen>Sprites/sprites_prueba/Goomba.png</imagen>
+                        <imagen>Sprites/Goomba.png</imagen>
                         <cantidad>20</cantidad>
                     </enemigo>
                 </enemigos>
@@ -76,7 +76,7 @@
             </nivel>
             <nivel>
                 <numero>2</numero>
-                <fondo>Sprites/sprites_prueba/level2.png</fondo>
+                <fondo>Sprites/level2.png</fondo>
                 <monedas>
                     <moneda>
                         <imagen>Sprites/coinsSprites.png</imagen>
@@ -93,12 +93,12 @@
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
-                        <imagen>Sprites/sprites_prueba/koopaGreen.png</imagen>
+                        <imagen>Sprites/koopaGreen.png</imagen>
                         <cantidad>2</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
-                        <imagen>Sprites/sprites_prueba/Goomba.png</imagen>
+                        <imagen>Sprites/GoombaDark.png</imagen>
                         <cantidad>20</cantidad>
                     </enemigo>
                 </enemigos>
@@ -142,7 +142,7 @@
             </nivel>
             <nivel>
                 <numero>3</numero>
-                <fondo>Sprites/sprites_prueba/level3.png</fondo>
+                <fondo>Sprites/level3.png</fondo>
                 <monedas>
                     <moneda>
                         <imagen>Sprites/coinsSprites.png</imagen>
@@ -159,12 +159,12 @@
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
-                        <imagen>Sprites/sprites_prueba/koopaGreen.png</imagen>
+                        <imagen>Sprites/koopaGreen.png</imagen>
                         <cantidad>2</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
-                        <imagen>Sprites/sprites_prueba/Goomba.png</imagen>
+                        <imagen>Sprites/Goomba.png</imagen>
                         <cantidad>2</cantidad>
                     </enemigo>
                 </enemigos>

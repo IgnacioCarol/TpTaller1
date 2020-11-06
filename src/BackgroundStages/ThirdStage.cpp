@@ -1,7 +1,3 @@
-//
-// Created by DANIELA CARRERO on 2020-11-02.
-//
-
 #include "ThirdStage.h"
 
 ThirdStage::ThirdStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {

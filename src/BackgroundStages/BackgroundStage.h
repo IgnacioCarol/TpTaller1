@@ -1,7 +1,3 @@
-//
-// Created by nacho on 25/10/20.
-//
-
 #ifndef TPTALLER1_BACKGROUNDSTAGE_H
 #define TPTALLER1_BACKGROUNDSTAGE_H
 
