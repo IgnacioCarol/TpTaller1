@@ -48,10 +48,12 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 else Logger::getInstance()->error("Error: couldn't create a Normal Platform");
             }
 
-            tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,  platform.image,
-                      defaultBlock, textureID, 0);
+            if (tmp != nullptr){
+                tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,  platform.image,
+                          defaultBlock, textureID, 0);
 
-            actors.push_back(tmp);
+                actors.push_back(tmp);
+            }
         }
     }
 
@@ -59,11 +61,14 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     for(auto coin : levelConfig.coins) {
         for(size_t i = 0; i < coin.quantity; i++) {
             tmp = new Coin();
-            tmp->init(0, coin.coordY, coin.image,//Position x determined by init randomly
-                      defaultCoin, coinsID, 0);
+            if (tmp != nullptr){
+                tmp->init(0, coin.coordY, coin.image,//Position x determined by init randomly
+                          defaultCoin, coinsID, 0);
 
-            actors.push_back(tmp);
-            Logger::getInstance()->debug("Coin created correctly");
+                actors.push_back(tmp);
+                Logger::getInstance()->debug("Coin created correctly");
+            }
+            else Logger::getInstance()->error("Error: couldn't create a Coin");
         }
     }
 
@@ -71,18 +76,24 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         for(size_t i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) {
                 tmpEnemy = new EnemyTurtle();
-                tmpEnemy -> init(900, 435, enemies.image, defaultKoopa, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
-                Logger::getInstance()->debug("Turtle enemy created correctly");
+                if (tmpEnemy != nullptr){
+                    tmpEnemy -> init(900, 435, enemies.image, defaultKoopa, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
+                    Logger::getInstance()->debug("Turtle enemy created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Turtle Enemy");
 
             } else {
                 tmpEnemy = new EnemyMushroom();
-                tmpEnemy -> init(900, 425, enemies.image, defaultGoomba, emID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
-                Logger::getInstance()->debug("Mushroom enemy created correctly");
-
+                if (tmpEnemy != nullptr){
+                    tmpEnemy -> init(900, 425, enemies.image, defaultGoomba, emID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
+                    Logger::getInstance()->debug("Mushroom enemy created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Mushroom Enemy");
             }
-            tmp = tmpEnemy;
-
-            actors.push_back(tmp);
+            if (tmpEnemy != nullptr){
+                tmp = tmpEnemy;
+                actors.push_back(tmp);
+            }
         }
     }
 
