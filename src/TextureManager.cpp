@@ -129,16 +129,12 @@ TextureManager::~TextureManager() {
     delete this->printer;
 }
 
-void TextureManager::addPath(std::string ID, std::string imagePath, bool defaultPath) {
-    if (!defaultPath){
-        if (!imagePathsMap.count(ID)){
-            imagePathsMap[ID] = imagePath;
-        }
+void TextureManager::addPath(std::string ID, std::string imagePath, std::string defaultImagePath) {
+    if (!imagePathsMap.count(ID)){
+        imagePathsMap[ID] = imagePath;
     }
-    else{
-        if (!defaultImagesPathsMap.count(ID)){
-            defaultImagesPathsMap[ID] = imagePath;
-        }
+    if (!defaultImagesPathsMap.count(ID)){
+        defaultImagesPathsMap[ID] = defaultImagePath;
     }
 }
 

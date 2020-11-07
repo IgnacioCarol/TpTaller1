@@ -26,6 +26,14 @@ private:
     const std::string FLYING_KOOPA_ID = "flyingKoopa";
     const std::string GOOMBA_ID = "goomba";
     const std::string GOOMBA_DARK_ID = "goombaDark";
+    const std::string COIN_ID = "coinsSprites";
+
+    //Default images paths
+    const std::string DEFAULT_MARIO_PATH = "Sprites/Default/defaultPlayer.png";
+    const std::string DEFAULT_TURTLE_PATH = "Sprites/Default/defaultKoopa.png";
+    const std::string DEFAULT_MUSHROOM_PATH = "Sprites/Default/defaultGoomba.png";
+    const std::string DEFAULT_PLATFORM_PATH = "Sprites/Default/defaultBlock.png";
+    const std::string DEFAULT_COIN_PATH = "Sprites/Default/defaultCoins.png";
 };
 
 

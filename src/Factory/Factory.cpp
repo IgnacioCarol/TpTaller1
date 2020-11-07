@@ -33,15 +33,16 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             if (platform.type == PLATFORM_SURPRISE) {
                 tmp = new PlatformSurprise();
                 if (tmp != nullptr){
-                    textureID = sBlockID;
+                    textureID = SURPRISE_BLOCK_ID;
                     anchoPlataforma = SBHeight / 4;
                     Logger::getInstance()->debug("Platform surprise created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Surprise Platform");
+
             } else {
                 tmp = new PlatformNormal();
                 if (tmp != nullptr){
-                    textureID = nBlockID;
+                    textureID = NORMAL_BLOCK_ID;
                     anchoPlataforma = NBHeight / 4;
                     Logger::getInstance()->debug("Normal platform created correctly");
                 }
@@ -49,6 +50,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             }
 
             if (tmp != nullptr){
+                TextureManager::Instance() -> addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
                 tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,  platform.image,
                           defaultBlock, textureID, 0);
 
@@ -61,9 +63,10 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     for(auto coin : levelConfig.coins) {
         for(size_t i = 0; i < coin.quantity; i++) {
             tmp = new Coin();
-            if (tmp != nullptr){
+            if (tmp != nullptr){ //TODO we can initialice the Y position randomly too
+                TextureManager::Instance()->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
                 tmp->init(0, coin.coordY, coin.image,//Position x determined by init randomly
-                          defaultCoin, coinsID, 0);
+                          defaultCoin, COIN_ID, 0);
 
                 actors.push_back(tmp);
                 Logger::getInstance()->debug("Coin created correctly");
@@ -74,10 +77,11 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
     for(auto enemies : levelConfig.enemies) {
         for(size_t i = 0; i < enemies.quantity; i++) {
-            if (enemies.type == ENEMY_TURTLE) {
+            if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
-                    tmpEnemy -> init(900, 435, enemies.image, defaultKoopa, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
+                    TextureManager::Instance() -> addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
+                    tmpEnemy -> init(900, 435, enemies.image, defaultKoopa, KOOPA_GREEN_ID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
                     Logger::getInstance()->debug("Turtle enemy created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Turtle Enemy");
@@ -85,7 +89,8 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             } else {
                 tmpEnemy = new EnemyMushroom();
                 if (tmpEnemy != nullptr){
-                    tmpEnemy -> init(900, 425, enemies.image, defaultGoomba, emID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
+                    TextureManager::Instance() -> addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
+                    tmpEnemy -> init(900, 425, enemies.image, defaultGoomba, GOOMBA_ID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
                     Logger::getInstance()->debug("Mushroom enemy created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Mushroom Enemy");

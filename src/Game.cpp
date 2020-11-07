@@ -140,6 +140,7 @@ bool Game::loadTexts() {
 
 void Game::createGameObjects() {
     player = new Player(camera->getCamera());
+    TextureManager::Instance() -> addPath("mario", imgPlayer, defaultPlayer); //FIXME hardcodeado porque me tengo que ir
     initializeGameObjects(1);
 }
 void Game::nextStage() {
