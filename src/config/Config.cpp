@@ -39,6 +39,7 @@ Level Config::getLevel(int levelFilter) {
 
 void Config::load(const std::string &filename) {
     ptree pt;
+    Logger::getInstance()->info("Starting loading XML configuration file: " + filename); // ToDo: ver con DaniB por qué no funciona este log
     try {
         read_xml(filename, pt);
 
