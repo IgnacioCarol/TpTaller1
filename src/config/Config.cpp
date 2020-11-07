@@ -39,7 +39,7 @@ Level Config::getLevel(int levelFilter) {
 
 void Config::load(const std::string &filename) {
     ptree pt;
-    Logger::getInstance()->info("Starting loading XML configuration file: " + filename); // ToDo: ver con DaniB por qué no funciona este log
+    Logger::getInstance()->info("Starting loading XML configuration file: " + filename);
     try {
         read_xml(filename, pt);
 
@@ -224,7 +224,7 @@ void Config::parseCoins(Level *level, ptree pt) {
 }
 
 void Config::setDefaults() {
-    Logger::getInstance()->info("Setting default config..."); // ToDo: ver con DaniB por qué no funciona este log
+    Logger::getInstance()->info("Setting default config...");
 
     xmlEnemy enemy;
     enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
