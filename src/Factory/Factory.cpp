@@ -51,8 +51,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
             if (tmp != nullptr){
                 TextureManager::Instance() -> addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
-                tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,  platform.image,
-                          defaultBlock, textureID, 0);
+                tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY, textureID, 0);
 
                 actors.push_back(tmp);
             }
@@ -65,8 +64,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             tmp = new Coin();
             if (tmp != nullptr){ //TODO we can initialice the Y position randomly too
                 TextureManager::Instance()->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
-                tmp->init(0, coin.coordY, coin.image,//Position x determined by init randomly
-                          defaultCoin, COIN_ID, 0);
+                tmp->init(0, coin.coordY, COIN_ID, 0);
 
                 actors.push_back(tmp);
                 Logger::getInstance()->debug("Coin created correctly");
@@ -81,7 +79,8 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
                     TextureManager::Instance() -> addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
-                    tmpEnemy -> init(900, 435, enemies.image, defaultKoopa, KOOPA_GREEN_ID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
+                    tmpEnemy->init(900, 435, KOOPA_GREEN_ID, 0, Game::Instance()->getCamera(), 3,
+                                   new EnemyMovement(0, 3));
                     Logger::getInstance()->debug("Turtle enemy created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Turtle Enemy");
@@ -90,7 +89,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmpEnemy = new EnemyMushroom();
                 if (tmpEnemy != nullptr){
                     TextureManager::Instance() -> addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
-                    tmpEnemy -> init(900, 425, enemies.image, defaultGoomba, GOOMBA_ID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
+                    tmpEnemy->init(900, 425, GOOMBA_ID, 0, Game::Instance()->getCamera(), 5, new EnemyMovement(0, 5));
                     Logger::getInstance()->debug("Mushroom enemy created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Mushroom Enemy");

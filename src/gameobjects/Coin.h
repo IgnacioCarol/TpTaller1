@@ -17,7 +17,7 @@ class Coin : public GameObject {
     public:
         Coin();
         ~Coin() override;
-        void  init(int x, int y, std::string fileName, std::string defaultImg,std::string textureID, int currentFrame) override; //ToDo setear defaultImg en el constructor y dejar de recibirlo por parametro, extender este concepto a todos los gameObjects
+        void init(int x, int y, std::string textureID, int currentFrame) override;
         void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
         void move() override {};
 

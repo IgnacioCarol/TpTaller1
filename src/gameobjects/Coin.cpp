@@ -3,9 +3,9 @@
 
 Coin::Coin() = default;
 
-void Coin::init(int x, int y, std::string fileName, std::string defaultImg,std::string textureID, int currentFrame) {
+void Coin::init(int x, int y, std::string textureID, int currentFrame) {
     int new_x = (int) GameMap::getInstance()->getRandomX(y);
-    GameObject::init(new_x, y, fileName, defaultImg, textureID, currentFrame);
+    GameObject::init(new_x, y, textureID, currentFrame);
     delayCounter = 0;
 }
 

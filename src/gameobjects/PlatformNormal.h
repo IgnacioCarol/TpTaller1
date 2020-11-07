@@ -6,13 +6,12 @@
 //Image related definitions
 #define NBWidth 256
 #define NBHeight 256
-#define nBlockID "normalBlock" //Platform Normal
 
 class PlatformNormal : public GameObject {
     public:
         PlatformNormal();
         ~PlatformNormal() override = default;
-        void init(int x, int y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame) override;
+        void init(int x, int y, std::string textureID, int currentFrame) override;
         void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
         void move() override {};
 };
