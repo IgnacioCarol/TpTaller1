@@ -101,34 +101,7 @@ void Game::handleEvents() {
 }
 
 bool Game::loadImages() {
-    //load gameObjects
-    std::string filePath;
-    std::string ID;
-    std::string defaultImg;
-    bool success = true;
-
-    for(size_t i = 0; i < _gameObjects.size() && success; i++) {
-        filePath = _gameObjects[i] -> getFilePath();
-        ID = _gameObjects[i] -> getID();
-        if(!textureManager -> load(filePath, ID, renderer)) {
-            defaultImg = _gameObjects[i] -> getDefault();
-            success = textureManager->load(defaultImg, ID, renderer);
-            if (success) Logger::getInstance() -> debug("Default image loaded for ID: " + ID);
-        }
-        else Logger::getInstance() -> debug("Image loaded correctly for ID: "+ ID);
-    }
-
-    //load player
-    if(!success) return success;
-    filePath = player -> getFilePath();
-    ID = player -> getID();
-    if(!textureManager -> load(filePath, ID, renderer)) {
-        defaultImg = player -> getDefault();
-        success = textureManager->load(defaultImg, ID, renderer);
-        if (success) Logger::getInstance() -> debug("Default image loaded for ID: " + ID);
-    }
-    else Logger::getInstance() -> debug("Image loaded correctly for ID: "+ ID);
-
+    bool success = TextureManager::Instance() -> loadImages(renderer);
     return success;
 }
 

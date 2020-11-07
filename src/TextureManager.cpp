@@ -13,17 +13,37 @@ TextureManager *TextureManager::Instance() {
     return instance;
 }
 
+bool TextureManager::loadImages(SDL_Renderer* renderer) {
+    bool success = true;
+    for (std::pair<std::string, std::vector<std::string>> element : imagePathsMap) {
+        std::vector<std::string> pathsVector = element.second;
+        std::string ID = element.first;
+
+        if(!load(pathsVector[0], ID, renderer)){
+            Logger::getInstance() -> debug("Loading the default image for the ID: " + ID);
+            success &= load(pathsVector[1], ID, renderer);
+            if (!success){
+                Logger::getInstance() -> error("Error: could't load the default image");
+                return false;
+            }
+            Logger::getInstance() -> debug("Default image loaded correctly");
+        }
+        else Logger::getInstance() -> debug("Image loaded correctly for the ID: "+ ID);
+    }
+    return success;
+}
+
 bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
-        Logger::getInstance() -> error("Error: couldn't load the image");
+        Logger::getInstance() -> error("Error: couldn't load the image with path: " + fileName);
         return false;
     }
 
     SDL_Texture* imageTexture = SDL_CreateTextureFromSurface(imageRenderer, tempSurface);
     SDL_FreeSurface(tempSurface);
 
-    if (imageTexture != 0){
+    if (imageTexture != nullptr){
         textureMap[ID] = imageTexture;
         return true;
     }
@@ -33,7 +53,7 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
 
 bool TextureManager::loadText(const std::string key, const std::string text, SDL_Color color, SDL_Renderer* pRenderer) {
     TextTexture* textTexture = printer->getTextTexture(text, color, pRenderer);
-    if (textTexture == NULL) {
+    if (textTexture == nullptr) {
         Logger::getInstance()->error("Couldnt load text: " + text);
         return false;
     }
@@ -48,7 +68,7 @@ void TextureManager::draw(std::string ID, int x, int y, int width, int height, S
     SDL_Rect destRect; //Aca donde va a ir, se mapea para ajustarse el tamanio
 
     SDL_Texture* texture = textureMap[ID];
-    SDL_QueryTexture(texture, NULL, NULL, &srcRect.w, &srcRect.h);
+    SDL_QueryTexture(texture, nullptr, nullptr, &srcRect.w, &srcRect.h);
 
     srcRect.x = 0;
     srcRect.y = 0; //Tomo parte superior de la imagen
@@ -76,7 +96,7 @@ void TextureManager::drawBackgroundWithCamera(int width, int height, SDL_Rendere
         SDL_Rect renderQuad = { 0, 0, width, height };
         SDL_Texture* texture = textureMap[BACKGROUND];
         //Set clip rendering dimensions
-        if( clip != NULL )
+        if( clip != nullptr )
         {
             renderQuad.w = clip->w;
             renderQuad.h = clip->h;
@@ -106,7 +126,7 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
 }
 
 void TextureManager::printText(std::string id, int x, int y, SDL_Renderer* pRenderer) {
-    if (textTextureMap[id] == NULL) {
+    if (textTextureMap[id] == nullptr) {
         Logger::getInstance()->error("Couldnt find text with id: " + id);
         return;
     }
@@ -131,10 +151,8 @@ TextureManager::~TextureManager() {
 
 void TextureManager::addPath(std::string ID, std::string imagePath, std::string defaultImagePath) {
     if (!imagePathsMap.count(ID)){
-        imagePathsMap[ID] = imagePath;
-    }
-    if (!defaultImagesPathsMap.count(ID)){
-        defaultImagesPathsMap[ID] = defaultImagePath;
+        imagePathsMap[ID].push_back(imagePath);
+        imagePathsMap[ID].push_back(defaultImagePath);
     }
 }
 

@@ -8,6 +8,7 @@
 #include "SDL2/SDL_image.h"
 #include "Utils/Printer.h"
 #include "../src/logger/logger.h"
+#include <vector>
 
 class TextureManager
 {
@@ -20,6 +21,7 @@ public:
     bool load(const std::string& fileName, const std::string& id, SDL_Renderer* pRenderer);
     bool loadText(const std::string id, const std::string text, SDL_Color color, SDL_Renderer* pRenderer);
     void addPath(std::string ID, std::string imagePath, std::string defaultImagePath);
+    bool loadImages(SDL_Renderer* renderer);
 
     void clearTextureMap();
     void clearFromTextureMap(std::string id);
@@ -44,9 +46,9 @@ private:
 
     std::map<std::string, SDL_Texture*> textureMap;
     std::map<std::string, TextTexture*> textTextureMap;
-    std::map<std::string, std::string> imagePathsMap;
-    std::map<std::string, std::string> defaultImagesPathsMap;
+    std::map<std::string, std::vector<std::string>> imagePathsMap;
     Printer *printer = Printer::getInstance();
+    int cont = 0;
 
     static TextureManager* instance;
 };
