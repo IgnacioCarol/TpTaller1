@@ -32,14 +32,20 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         for(size_t i = 0; i < platform.quantity; i++) {
             if (platform.type == PLATFORM_SURPRISE) {
                 tmp = new PlatformSurprise();
-                textureID = sBlockID;
-                anchoPlataforma = SBHeight / 4;
-                Logger::getInstance()->debug("Platform surprise created correctly");
+                if (tmp != nullptr){
+                    textureID = sBlockID;
+                    anchoPlataforma = SBHeight / 4;
+                    Logger::getInstance()->debug("Platform surprise created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Surprise Platform");
             } else {
                 tmp = new PlatformNormal();
-                textureID = nBlockID;
-                anchoPlataforma = NBHeight / 4;
-                Logger::getInstance()->debug("Normal platform created correctly");
+                if (tmp != nullptr){
+                    textureID = nBlockID;
+                    anchoPlataforma = NBHeight / 4;
+                    Logger::getInstance()->debug("Normal platform created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Normal Platform");
             }
 
             tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,  platform.image,

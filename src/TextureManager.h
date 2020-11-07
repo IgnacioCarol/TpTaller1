@@ -19,6 +19,7 @@ public:
 
     bool load(const std::string& fileName, const std::string& id, SDL_Renderer* pRenderer);
     bool loadText(const std::string id, const std::string text, SDL_Color color, SDL_Renderer* pRenderer);
+    void addPath(std::string ID, std::string imagePath, bool defaultPath = false);
 
     void clearTextureMap();
     void clearFromTextureMap(std::string id);
@@ -43,6 +44,8 @@ private:
 
     std::map<std::string, SDL_Texture*> textureMap;
     std::map<std::string, TextTexture*> textTextureMap;
+    std::map<std::string, std::string> imagePathsMap;
+    std::map<std::string, std::string> defaultImagesPathsMap;
     Printer *printer = Printer::getInstance();
 
     static TextureManager* instance;
