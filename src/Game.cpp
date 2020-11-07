@@ -72,7 +72,6 @@ Game::~Game() {
 }
 
 void Game::render() {
-    SDL_Delay(2);
     SDL_RenderClear(renderer);
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
@@ -88,8 +87,6 @@ void Game::render() {
 
 void Game::clean() {
     logger ->info("Cleaning game\n");
-
-    
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     textureManager->clearTextureMap();
@@ -116,7 +113,9 @@ bool Game::loadImages() {
         if(!textureManager -> load(filePath, ID, renderer)) {
             defaultImg = _gameObjects[i] -> getDefault();
             success = textureManager->load(defaultImg, ID, renderer);
+            if (success) Logger::getInstance() -> debug("Default image loaded for ID: " + ID);
         }
+        else Logger::getInstance() -> debug("Image loaded correctly for ID: "+ ID);
     }
 
     //load player
@@ -126,7 +125,9 @@ bool Game::loadImages() {
     if(!textureManager -> load(filePath, ID, renderer)) {
         defaultImg = player -> getDefault();
         success = textureManager->load(defaultImg, ID, renderer);
+        if (success) Logger::getInstance() -> debug("Default image loaded for ID: " + ID);
     }
+    else Logger::getInstance() -> debug("Image loaded correctly for ID: "+ ID);
 
     return success;
 }

@@ -8,9 +8,6 @@
 #include "gmock/gmock.h"
 #include "logger/logger.h"
 #include "Game.h"
-#define FPS 40;
-const int DELAY_TIME = 1000.0f / FPS;
-Uint32 frameStart, frameTime;
 
 
 int main(int argc, char * argv[]) {
@@ -41,7 +38,6 @@ int main(int argc, char * argv[]) {
     SDL_Event e;
 
     while(game->isPlaying()){
-        frameStart = SDL_GetTicks(); //To get the time at the start of the loop
 
         while(SDL_PollEvent(&e) != 0) {
             if (e.type  == SDL_QUIT ) {
@@ -52,11 +48,7 @@ int main(int argc, char * argv[]) {
         game->handleEvents();
        // game->update();
         game->render();
-        /*frameTime = SDL_GetTicks() - frameStart;
-        if (frameTime < DELAY_TIME){
-            SDL_Delay((int)(DELAY_TIME - frameTime));
-        }*/
-        SDL_Delay(2);
+        SDL_Delay(4);
     }
     Logger::getInstance() -> info("Game over");
     game->clean();

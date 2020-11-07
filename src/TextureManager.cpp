@@ -3,12 +3,20 @@
 static const char *const BACKGROUND = "BG";
 static const int CURRENT_ROW = 0; //The sprite sheet always has one row
 
-TextureManager* TextureManager::instance = 0;
+TextureManager* TextureManager::instance = nullptr;
+
+TextureManager *TextureManager::Instance() {
+    if(instance == nullptr){
+        instance = new TextureManager();
+    }
+
+    return instance;
+}
 
 bool TextureManager::load(const std::string& fileName, const std::string& ID, SDL_Renderer *imageRenderer) {
     SDL_Surface* tempSurface = IMG_Load(fileName.c_str());
     if (!tempSurface){
-        Logger::getInstance() -> error("Error: couldn't load the image\n");
+        Logger::getInstance() -> error("Error: couldn't load the image");
         return false;
     }
 
@@ -19,6 +27,7 @@ bool TextureManager::load(const std::string& fileName, const std::string& ID, SD
         textureMap[ID] = imageTexture;
         return true;
     }
+    Logger::getInstance() -> error("Error: couldn't create the imageTexture");
     return false;
 }
 
@@ -60,21 +69,6 @@ void TextureManager::draw(std::string ID, int x, int y, int width, int height, S
 
 }
 
-void TextureManager::drawBackground(int width, int height, SDL_Renderer *renderer) {
-    SDL_Rect srcRect;
-    SDL_Rect destRect;
-
-    SDL_Texture* texture = textureMap[BACKGROUND];
-    SDL_QueryTexture(texture, NULL, NULL, &srcRect.w, &srcRect.h);
-
-    srcRect.x = 100;  //vas cambiando este vaor siempre
-    destRect.x = destRect.y = srcRect.y = 0;
-
-    destRect.w = srcRect.w = 800;
-    destRect.h = srcRect.h = 600;
-
-    SDL_RenderCopyEx(renderer, texture, &srcRect, &destRect, 0, 0, SDL_FLIP_NONE);
-}
 
 void TextureManager::drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect* clip) {
     {
@@ -109,7 +103,6 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
     destRect.w = width / 4;
     destRect.h = height / 4;
     SDL_RenderCopyEx(renderer, textureMap[ID], &srcRect, &destRect, 0, 0, flip);
-    //Creo que esta se usa para elegir bien la posicion del sprite
 }
 
 void TextureManager::printText(std::string id, int x, int y, SDL_Renderer* pRenderer) {
@@ -135,4 +128,6 @@ void TextureManager::clearFromTextureMap(std::string id)
 TextureManager::~TextureManager() {
     delete this->printer;
 }
+
+
 

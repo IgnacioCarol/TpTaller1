@@ -12,9 +12,9 @@
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
 //Image related
-#define pWidth 600
-#define pHeight 600
-const int playerVelocity = 2;
+static const int pWidth = 600;
+static const int pHeight = 600;
+static const int playerVelocity = 2;
 class CharacterState;
 
 class Player : public GameObject {

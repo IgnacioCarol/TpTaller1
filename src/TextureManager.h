@@ -13,16 +13,7 @@ class TextureManager
 {
 public:
 
-    static TextureManager* Instance()
-    {
-        if(instance == 0)
-        {
-            instance = new TextureManager();
-            return instance;
-        }
-
-        return instance;
-    }
+    static TextureManager* Instance();
 
     ~TextureManager();
 
@@ -37,7 +28,6 @@ public:
     void drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
                    SDL_RendererFlip flip);
 
-    void drawBackground(int width, int height, SDL_Renderer* renderer);
     std::map<std::string, SDL_Texture*> getTextureMap() { return textureMap; }
 
     void drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect *clip);
@@ -57,8 +47,5 @@ private:
 
     static TextureManager* instance;
 };
-
-typedef TextureManager TheTextureManager;
-
 
 #endif
