@@ -224,7 +224,7 @@ void Config::parseCoins(Level *level, ptree pt) {
 }
 
 void Config::setDefaults() {
-    Logger::getInstance()->info("Setting default config...");
+    Logger::getInstance()->info("Setting default config..."); // ToDo: ver con DaniB por qué no funciona este log
 
     xmlEnemy enemy;
     enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
