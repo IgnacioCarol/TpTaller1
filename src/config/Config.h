@@ -37,6 +37,10 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_LEVEL_PLATFORM_IMG "Sprites/normalBlock.png"
 #define DEFAULT_STAGE_LEVEL_COIN_IMG "Sprites/coinsSprites.png"
 
+#define XML_CONFIG_TAG "configuracion"
+#define XML_LOG_TAG "configuracion.log"
+#define XML_WINDOW_TAG "configuracion.ventana"
+#define XML_STAGE_TAG "configuracion.escenario"
 #define XML_LOG_LEVEL "configuracion.log.level"
 #define XML_WINDOW_WIDTH "configuracion.ventana.ancho"
 #define XML_WINDOW_HEIGHT "configuracion.ventana.alto"
@@ -140,9 +144,24 @@ private:
     Log log;
 
     Config();
-    static void parseEnemies(Level *level, ptree pt);
-    static void parsePlatforms(Level *level, ptree pt);
-    static void parseCoins(Level *level, ptree pt);
+    void parseLog(ptree pt);
+    void parseWindow(ptree pt);
+    void parseStage(ptree pt);
+    void parseEnemies(Level *level, ptree pt);
+    void parsePlatforms(Level *level, ptree pt);
+    void parseCoins(Level *level, ptree pt);
+    void validateTags(string xmlLvl, vector<string> validTags, ptree pt);
+
+    const vector<string> validGeneralTags = {"configuracion"};
+    const vector<string> validConfigTags = {"log", "ventana", "escenario"};
+    const vector<string> validLogTags = {"level"};
+    const vector<string> validWindowTags = {"ancho", "alto"};
+    const vector<string> validStageTags = {"niveles"};
+    const vector<string> validLevelTags = {"numero", "fondo", "monedas", "tiempo", "enemigos", "plataformas"};
+    const vector<string> validCoinTags = {"imagen", "coordY", "cantidad"};
+    const vector<string> validEnemyTags = {"tipo", "imagen", "cantidad"};
+    const vector<string> validPlatformTags = {"tipo", "imagen", "coordX", "coordY", "cantidad"};
+    const vector<string> validLogLevels = {"ERROR", "DEBUG", "INFO"};
 };
 
 

@@ -27,6 +27,55 @@ TEST(ConfigTest, setDefaultsIfFileDoesNotExists) {
     assertDefaults(config);
 }
 
+TEST(ConfigTest, invalidWidthSize) {
+    Config *config = Config::getInstance();
+
+    config->load("test/resources/config_test_broken_width.xml");
+    assertDefaults(config);
+}
+
+TEST(ConfigTest, invalidHeightSize) {
+    Config *config = Config::getInstance();
+
+    config->load("test/resources/config_test_broken_height.xml");
+    assertDefaults(config);
+}
+
+TEST(ConfigTest, invalidLevelNumber) {
+    Config *config = Config::getInstance();
+
+    config->load("test/resources/config_test_broken_level_number.xml");
+    assertDefaults(config);
+}
+
+TEST(ConfigTest, invalidTime) {
+    Config *config = Config::getInstance();
+
+    config->load("test/resources/config_test_broken_time.xml");
+    assertDefaults(config);
+}
+
+TEST(ConfigTest, invalidEnemyQuantity) {
+    Config *config = Config::getInstance();
+
+    config->load("test/resources/config_test_broken_enemy_quantity.xml");
+    assertDefaults(config);
+}
+
+TEST(ConfigTest, invalidCoinQuantity) {
+    Config *config = Config::getInstance();
+
+    config->load("test/resources/config_test_broken_coin_quantity.xml");
+    assertDefaults(config);
+}
+
+TEST(ConfigTest, invalidPlatformQuantity) {
+    Config *config = Config::getInstance();
+
+    config->load("test/resources/config_test_broken_platform_quantity.xml");
+    assertDefaults(config);
+}
+
 TEST(ConfigTest, loadXMLConfig) {
     Config *config = Config::getInstance();
 
@@ -78,9 +127,9 @@ static void assertDefaults(Config* config) {
     ASSERT_EQ(DEFAULT_WINDOW_HEIGHT, config->getWindow().height);
     ASSERT_EQ(DEFAULT_WINDOW_WIDTH, config->getWindow().width);
 
-    ASSERT_EQ(1, config->getStage().levels.size());
-//    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, config.getStage().levels.back().background);
-    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_NUMBER, config->getStage().levels.back().number);
+    ASSERT_EQ(3, config->getStage().levels.size());
+    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, config->getStage().levels.at(0).background);
+    ASSERT_EQ(DEFAULT_STAGE_FIRST_LEVEL_NUMBER, config->getStage().levels.at(0).number);
 
     ASSERT_EQ(1, config->getStage().levels.back().enemies.size());
     xmlEnemy enemy = config->getStage().levels.back().enemies.back();
@@ -98,5 +147,5 @@ static void assertDefaults(Config* config) {
     ASSERT_EQ(1, config->getStage().levels.back().enemies.size());
     xmlCoin coin = config->getStage().levels.back().coins.back();
     ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_QTY, coin.quantity);
-    ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_COORD_Y, platform.coordY);
+    ASSERT_EQ(DEFAULT_STAGE_LEVEL_COINS_COORD_Y, coin.coordY);
 }
