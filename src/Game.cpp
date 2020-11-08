@@ -14,8 +14,8 @@ Game* Game::Instance() {
 
 
 bool Game::init(const char *levelName) {
-    camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     config->load("./resources/config.xml");
+    camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     Window windowConfig = config->getWindow();
     Logger::getInstance()->setLogLevel(config->getLog().level);
 
