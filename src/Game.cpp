@@ -122,6 +122,7 @@ void Game::nextStage() {
 
         cleanGameObjects();
         initializeGameObjects(stage->getLevel());
+        loadImages();
     }
     delete currentStage;
 }
