@@ -22,8 +22,8 @@ bool TextureManager::loadImages(SDL_Renderer* renderer) {
         if(!load(pathsVector[0], ID, renderer)){
             Logger::getInstance() -> debug("Loading the default image for the ID: " + ID);
             success &= load(pathsVector[1], ID, renderer);
-            if (!success){
-                Logger::getInstance() -> error("Error: could't load the default image");
+            if (!success) {
+                Logger::getInstance() -> error("Error: couldn't load the default image");
                 return false;
             }
             Logger::getInstance() -> debug("Default image loaded correctly");
@@ -57,7 +57,9 @@ bool TextureManager::loadText(const std::string key, const std::string text, SDL
         Logger::getInstance()->error("Couldnt load text: " + text);
         return false;
     }
-
+    if (textTextureMap[key]) {
+        printer->freeTexture(textTextureMap[key]);
+    }
     textTextureMap[key] = textTexture;
     return true;
 }
@@ -137,6 +139,10 @@ void TextureManager::printText(std::string id, int x, int y, SDL_Renderer* pRend
 void TextureManager::clearTextureMap()
 {
     textureMap.clear();
+    for(auto element: textTextureMap) {
+        this->printer->freeTexture(element.second);
+    }
+    textTextureMap.clear();
 }
 
 void TextureManager::clearFromTextureMap(std::string id)

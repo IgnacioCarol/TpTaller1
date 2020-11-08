@@ -13,6 +13,7 @@ BackgroundStage *ThirdStage::nextStage() {
     textureManager->clearFromTextureMap(TEXT_WORLD_LEVEL_NUMBER_KEY);
     Game::Instance()->gameOver();
     level = 0;
+    delete timer;
     timer = nullptr;
     return this;
 }

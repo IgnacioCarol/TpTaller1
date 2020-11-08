@@ -1,8 +1,6 @@
 #include "Game.h"
 
 Game* Game::instance = 0;
-const static char* BACKGROUND = "BG";
-int IMAGE_WIDTH;
 Logger* logger = Logger::getInstance();
 
 Game::Game(){
