@@ -21,7 +21,7 @@ class Player : public GameObject {
 public:
     Player(SDL_Rect *camera);
     ~Player();
-    void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount);
+    void init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
 

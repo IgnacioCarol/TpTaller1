@@ -24,3 +24,13 @@ void CharacterState::changeState(const Uint8 *currentKeyStates, Player *player) 
 void CharacterState::move(Enemy *enemy) {
 
 }
+
+int CharacterState::getCurrentFrame() {
+    return currentFrame;
+}
+
+int CharacterState::getFramesAmount() {
+    return framesAmount;
+}
+
+
