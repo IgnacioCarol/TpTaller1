@@ -21,7 +21,7 @@ Logger::Logger() {
         throw loggerException("unable to create log file");
     }
 
-    this->logLevel = ERROR; //Default level
+    this->logLevel = DEBUG; //Default level
 };
 
 Logger *Logger::getInstance() {
