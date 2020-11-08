@@ -6,13 +6,9 @@
 
 Config* Config::instance = nullptr;
 
-Config::Config(){
-    this->setDefaults();
-}
+Config::Config()= default;
 
-Config::~Config() {
-
-}
+Config::~Config() = default;
 
 Window Config::getWindow() {
     return this->window;
