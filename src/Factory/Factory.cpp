@@ -29,7 +29,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
     // Init Platforms
     for(auto platform : levelConfig.platforms) {
-        for(size_t i = 0; i < platform.quantity; i++) {
+        for(long i = 0; i < platform.quantity; i++) {
             if (platform.type == PLATFORM_SURPRISE) {
                 tmp = new PlatformSurprise();
                 if (tmp != nullptr){
@@ -60,7 +60,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
     // Init Coins
     for(auto coin : levelConfig.coins) {
-        for(size_t i = 0; i < coin.quantity; i++) {
+        for(long i = 0; i < coin.quantity; i++) {
             tmp = new Coin();
             if (tmp != nullptr){ //TODO we can initialice the Y position randomly too
                 TextureManager::Instance()->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
@@ -74,7 +74,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     }
 
     for(auto enemies : levelConfig.enemies) {
-        for(size_t i = 0; i < enemies.quantity; i++) {
+        for(long i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
