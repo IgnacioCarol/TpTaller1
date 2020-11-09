@@ -3,7 +3,7 @@
 
 #include "GameObject.h"
 
-const int enemyVelocity = 1;
+
 class CharacterState;
 
 class Enemy: public GameObject {
@@ -15,6 +15,7 @@ public:
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height);
 
 protected:
+    static const int enemyVelocity = 1;
     CharacterState* enemyState{};
     int direction = -enemyVelocity;
     bool flipFlag = false;

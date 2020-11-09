@@ -1,17 +1,6 @@
 #ifndef TPTALLER1_COIN_H
 #define TPTALLER1_COIN_H
-
 #include "GameObject.h"
-#define coinDelay 30
-
-//Image related definitions
-#define CWidth 161
-#define CHeight 164
-#define defaultCoin "Sprites/Default/defaultCoins.png"
-#define coinsID "coinsSprites" //Coins
-
-//Animation related definitions
-#define coinsFrames 4
 
 class Coin : public GameObject {
     public:
@@ -22,6 +11,12 @@ class Coin : public GameObject {
         void move() override {};
 
 private:
+    //Related to the image
+    static const int COIN_WIDTH = 161;
+    static const int COIN_HEIGHT = 164;
+    static const int COIN_DELAY = 30;
+    static const int COIN_FRAMES = 4;
+
     size_t delayCounter;
 };
 
