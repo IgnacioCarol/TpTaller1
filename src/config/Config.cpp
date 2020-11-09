@@ -51,6 +51,8 @@ void Config::load(const std::string &filename) {
         Logger::getInstance()->error(error_msg + ex.what());
         this->setDefaults();
     }
+
+    Logger::getInstance()->info("XML loaded successfully");
 }
 
 void Config::parseLog(ptree pt) {
