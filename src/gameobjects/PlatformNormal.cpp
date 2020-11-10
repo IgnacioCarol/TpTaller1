@@ -11,10 +11,10 @@ void PlatformNormal::init(int x, int y, std::string textureID) {
 }
 
 void PlatformNormal::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, NBWidth, NBHeight,
+    TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, NORMAL_BLOCK_WIDTH, NORMAL_BLOCK_HEIGHT,
                                           0, renderer, SDL_FLIP_NONE);
 }
 
 int PlatformNormal::getHeight() {
-    return NBHeight;
+    return NORMAL_BLOCK_HEIGHT;
 }

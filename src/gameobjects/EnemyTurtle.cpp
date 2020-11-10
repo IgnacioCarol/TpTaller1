@@ -18,5 +18,5 @@ void EnemyTurtle::walk() {
 }
 
 void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    this->draw(renderer, cameraX, cameraY, etWidth, etHeight);
+    this->draw(renderer, cameraX, cameraY, ENEMY_WIDTH, ENEMY_HEIGHT);
 }
