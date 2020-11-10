@@ -8,6 +8,7 @@ TextureManager* TextureManager::instance = nullptr;
 TextureManager *TextureManager::Instance() {
     if(instance == nullptr){
         instance = new TextureManager();
+        instance->printer = Printer::getInstance();
     }
 
     return instance;

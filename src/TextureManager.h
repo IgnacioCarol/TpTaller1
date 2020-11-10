@@ -47,7 +47,7 @@ private:
     std::map<std::string, SDL_Texture*> textureMap;
     std::map<std::string, TextTexture*> textTextureMap;
     std::map<std::string, std::vector<std::string>> imagePathsMap;
-    Printer *printer = Printer::getInstance();
+    Printer *printer;
     int cont = 0;
 
     static TextureManager* instance;

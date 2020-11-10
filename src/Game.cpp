@@ -15,9 +15,10 @@ Game* Game::Instance() {
 
 bool Game::init(const char *levelName) {
     config->load("./resources/config.xml");
+
+    this->textureManager = TextureManager::Instance();
     camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     Window windowConfig = config->getWindow();
-    Logger::getInstance()->setLogLevel(config->getLog().level);
 
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
