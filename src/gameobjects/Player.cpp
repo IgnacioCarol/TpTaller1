@@ -5,8 +5,8 @@
 
 static const int GRAVITY = 2;
 
-void Player::init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount) {
-    GameObject::init(x, y, fileName, defaultImg, std::move(textureID), currentFrame);
+void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
+    GameObject::init(x, y, std::move(textureID));
     xDirection = true;
     jumping = false;
     initialJumpingPosition = yPosition;
@@ -34,7 +34,7 @@ bool Player::canJump() const {
 }
 
 Player::Player(SDL_Rect *camera) {
-    this->init(0, 380, imgPlayer, defaultPlayer, playerID, 0, camera, 6);
+    this->init(0, 380, playerID, camera, 6);
 }
 
 void Player::restartPos(int x, int y) {

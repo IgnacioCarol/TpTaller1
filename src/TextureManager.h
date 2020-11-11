@@ -8,26 +8,20 @@
 #include "SDL2/SDL_image.h"
 #include "Utils/Printer.h"
 #include "../src/logger/logger.h"
+#include <vector>
 
 class TextureManager
 {
 public:
 
-    static TextureManager* Instance()
-    {
-        if(instance == 0)
-        {
-            instance = new TextureManager();
-            return instance;
-        }
-
-        return instance;
-    }
+    static TextureManager* Instance();
 
     ~TextureManager();
 
     bool load(const std::string& fileName, const std::string& id, SDL_Renderer* pRenderer);
     bool loadText(const std::string id, const std::string text, SDL_Color color, SDL_Renderer* pRenderer);
+    void addPath(std::string ID, std::string imagePath, std::string defaultImagePath);
+    bool loadImages(SDL_Renderer* renderer);
 
     void clearTextureMap();
     void clearFromTextureMap(std::string id);
@@ -37,7 +31,6 @@ public:
     void drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
                    SDL_RendererFlip flip);
 
-    void drawBackground(int width, int height, SDL_Renderer* renderer);
     std::map<std::string, SDL_Texture*> getTextureMap() { return textureMap; }
 
     void drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect *clip);
@@ -53,12 +46,11 @@ private:
 
     std::map<std::string, SDL_Texture*> textureMap;
     std::map<std::string, TextTexture*> textTextureMap;
-    Printer *printer = Printer::getInstance();
+    std::map<std::string, std::vector<std::string>> imagePathsMap;
+    Printer *printer;
+    int cont = 0;
 
     static TextureManager* instance;
 };
-
-typedef TextureManager TheTextureManager;
-
 
 #endif

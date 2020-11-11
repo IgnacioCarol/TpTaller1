@@ -15,12 +15,10 @@
 class GameObject {
 public:
     virtual ~GameObject() = default;
-    virtual void init(int x, int y, std::string fileName, std::string defaultImg,std::string textureID, int currentFrame);
+    virtual void init(int x, int y, std::string textureID);
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
-    virtual std::string getFilePath();
-    virtual std::string getID();
-    virtual std::string getDefault();
     virtual void move();
+    virtual int getHeight();
 
 protected:
     //To manage the movement
@@ -30,8 +28,6 @@ protected:
     //To manage the image
     TextureManager* textureManager = TextureManager::Instance();
     std::string _textureID;
-    std::string _fileName;
-    std::string _defaultImg;
     int _currentFrame;
 };
 

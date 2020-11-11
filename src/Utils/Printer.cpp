@@ -36,7 +36,7 @@ TextTexture* Printer::getTextTexture(std::string text, SDL_Color color, SDL_Rend
         if (texture == NULL) {
             Logger::getInstance()->error("Couldn't print text, unable to create texture from surface: " +  text);
         } else {
-            textTexture = new TextTexture(texture, textSurface->w, textSurface->h); //TODO: Ver de liberar esta memoria
+            textTexture = new TextTexture(texture, textSurface->w, textSurface->h);
         }
 
         SDL_FreeSurface(textSurface);
@@ -53,12 +53,18 @@ void Printer::render(TextTexture* textTexture, int x, int y, SDL_Renderer* rende
 void Printer::freeTexture(TextTexture* textTexture) {
     if (textTexture->texture != NULL) {
         SDL_DestroyTexture(textTexture->texture);
+        delete textTexture;
     }
 }
 
 TTF_Font* Printer::loadFont() {
     this->font = TTF_OpenFont(FONT_FILE_PATH, FONT_PTR_SIZE);
     return this->font;
+}
+
+Printer::~Printer() {
+    TTF_CloseFont(this->font);
+    TTF_Quit();
 }
 
 TextTexture::TextTexture(SDL_Texture *pTexture, int w, int h) {

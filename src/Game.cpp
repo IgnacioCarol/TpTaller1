@@ -1,8 +1,6 @@
 #include "Game.h"
 
 Game* Game::instance = 0;
-const static char* BACKGROUND = "BG";
-int IMAGE_WIDTH;
 Logger* logger = Logger::getInstance();
 
 Game::Game(){
@@ -16,10 +14,11 @@ Game* Game::Instance() {
 
 
 bool Game::init(const char *levelName) {
-    camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     config->load("./resources/config.xml");
+
+    this->textureManager = TextureManager::Instance();
+    camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     Window windowConfig = config->getWindow();
-    Logger::getInstance()->setLogLevel(config->getLog().level);
 
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -72,7 +71,6 @@ Game::~Game() {
 }
 
 void Game::render() {
-    SDL_Delay(2);
     SDL_RenderClear(renderer);
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
@@ -88,8 +86,6 @@ void Game::render() {
 
 void Game::clean() {
     logger ->info("Cleaning game\n");
-
-    
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     textureManager->clearTextureMap();
@@ -104,30 +100,7 @@ void Game::handleEvents() {
 }
 
 bool Game::loadImages() {
-    //load gameObjects
-    std::string filePath;
-    std::string ID;
-    std::string defaultImg;
-    bool success = true;
-
-    for(size_t i = 0; i < _gameObjects.size() && success; i++) {
-        filePath = _gameObjects[i] -> getFilePath();
-        ID = _gameObjects[i] -> getID();
-        if(!textureManager -> load(filePath, ID, renderer)) {
-            defaultImg = _gameObjects[i] -> getDefault();
-            success = textureManager->load(defaultImg, ID, renderer);
-        }
-    }
-
-    //load player
-    if(!success) return success;
-    filePath = player -> getFilePath();
-    ID = player -> getID();
-    if(!textureManager -> load(filePath, ID, renderer)) {
-        defaultImg = player -> getDefault();
-        success = textureManager->load(defaultImg, ID, renderer);
-    }
-
+    bool success = TextureManager::Instance() -> loadImages(renderer);
     return success;
 }
 
@@ -139,6 +112,7 @@ bool Game::loadTexts() {
 
 void Game::createGameObjects() {
     player = new Player(camera->getCamera());
+    TextureManager::Instance() -> addPath("mario", imgPlayer, defaultPlayer); //ToDo ver como hacer para conseguir los paths de mario sin usar los define que tiene
     initializeGameObjects(1);
 }
 void Game::nextStage() {
@@ -149,6 +123,7 @@ void Game::nextStage() {
 
         cleanGameObjects();
         initializeGameObjects(stage->getLevel());
+        loadImages();
     }
     delete currentStage;
 }

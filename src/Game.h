@@ -66,7 +66,7 @@ private:
     bool playing = false;
     SDL_Window* window;
     SDL_Renderer* renderer;
-    TextureManager* textureManager = TextureManager::Instance();
+    TextureManager* textureManager;
 
     int lastValue;
 

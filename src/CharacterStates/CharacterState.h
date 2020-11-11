@@ -23,6 +23,9 @@ public:
 
     virtual void changeState(const Uint8* currentKeyStates, Player* player);
 
+    int getCurrentFrame();
+    int getFramesAmount();
+
 protected:
     static const int ITER_TIMES = 8;
     static const int RUNNING_FRAME = 2;

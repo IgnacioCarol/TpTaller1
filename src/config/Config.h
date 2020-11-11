@@ -139,7 +139,7 @@ public:
     void setDefaults();
 private:
     static Config* instance;
-    Window window;
+    Window window{};
     Stage stage;
     Log log;
 

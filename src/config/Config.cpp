@@ -6,13 +6,9 @@
 
 Config* Config::instance = nullptr;
 
-Config::Config(){
-    this->setDefaults();
-}
+Config::Config()= default;
 
-Config::~Config() {
-
-}
+Config::~Config() = default;
 
 Window Config::getWindow() {
     return this->window;
@@ -39,7 +35,6 @@ Level Config::getLevel(int levelFilter) {
 
 void Config::load(const std::string &filename) {
     ptree pt;
-    Logger::getInstance()->info("Starting loading XML configuration file: " + filename);
     try {
         read_xml(filename, pt);
 
@@ -50,11 +45,16 @@ void Config::load(const std::string &filename) {
         parseWindow(pt);
         parseStage(pt);
 
+        Logger::getInstance()->setLogLevel(this->log.level);
+        Logger::getInstance()->info("XML: " + filename + " loaded successfully");
+
     } catch (exception& ex) {
         string error_msg = "Error loading XML file config, error: ";
         Logger::getInstance()->error(error_msg + ex.what());
         this->setDefaults();
     }
+
+    Logger::getInstance()->setLogLevel(this->log.level);
 }
 
 void Config::parseLog(ptree pt) {

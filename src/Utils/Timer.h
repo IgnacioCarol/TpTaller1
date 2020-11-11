@@ -7,17 +7,18 @@
 
 
 #include <SDL2/SDL.h>
+#include <tiff.h>
 
 class Timer {
 public:
-    explicit Timer(Uint32 stopTime);
+    explicit Timer(int32 stopTime);
     void start();
-    Uint32 getTimeSecond();
+    int32 getTimeSecond();
     bool isTimeOver();
 
 private:
-    Uint32 startTime = 0;
-    Uint32 stopTime;
+    int32 startTime = 0;
+    int32 stopTime;
 };
 
 

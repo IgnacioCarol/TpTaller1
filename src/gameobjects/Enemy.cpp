@@ -1,11 +1,9 @@
 #include "Enemy.h"
 #include "../CharacterStates/CharacterState.h"
-#include "../CharacterStates/EnemyMovement.h"
 
 
-void Enemy::init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount,
-                 CharacterState* state) {
-    GameObject::init(x, y, fileName, defaultImg, std::move(textureID), currentFrame);
+void Enemy::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, CharacterState *state) {
+    GameObject::init(x, y, std::move(textureID));
     enemyState = state;
     cam = camera;
 }
@@ -33,16 +31,4 @@ void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width,
 
 Enemy::~Enemy() {
     delete this->enemyState;
-}
-
-std::string Enemy::getFilePath() {
-    return GameObject::getFilePath();
-}
-
-std::string Enemy::getID() {
-    return GameObject::getID();
-}
-
-std::string Enemy::getDefault() {
-    return GameObject::getDefault();
 }

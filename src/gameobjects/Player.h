@@ -11,17 +11,13 @@
 #define imgPlayer "Sprites/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
-//Image related
-#define pWidth 600
-#define pHeight 600
-const int playerVelocity = 2;
 class CharacterState;
 
 class Player : public GameObject {
 public:
     Player(SDL_Rect *camera);
     ~Player();
-    void init(size_t x, size_t y, std::string fileName, std::string defaultImg, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount);
+    void init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
 
@@ -40,15 +36,18 @@ public:
     void move() override;
 
 private:
-    bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
+    //Image related
+    static const int pWidth = 600;
+    static const int pHeight = 600;
+    static const int playerVelocity = 2;
 
+    bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
     CharacterState* characterState;
     bool jumping;
     bool canJump() const;
     int initialJumpingPosition;
     int maxYPosition;
     SDL_Rect *cam;
-    Logger* logger = Logger::getInstance(); //ToDo Volar esto de aca, looger no deberia ser un atributo de ninguna clase ya que es un singleton.
 };
 
 
