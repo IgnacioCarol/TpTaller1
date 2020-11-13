@@ -134,6 +134,7 @@ public:
     Stage getStage();
     Log getLog();
     Level getLevel(int level);
+    bool isDefault();
 
     void load(const std::string &filename);
     void setDefaults();
@@ -142,6 +143,7 @@ private:
     Window window{};
     Stage stage;
     Log log;
+    bool defaultConfig = false;
 
     Config();
     void parseLog(ptree pt);

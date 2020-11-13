@@ -17,6 +17,7 @@ public:
     int getWidth() const;
     bool renderLevel();
     bool renderTime();
+    void renderDefaultBackground();
     bool isTimeOver();
     int getLevel();
     std::string getLevelBackground();

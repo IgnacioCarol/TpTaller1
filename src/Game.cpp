@@ -81,6 +81,9 @@ void Game::render() {
     }
     stage->renderLevel();
     stage->renderTime();
+    if (config->isDefault()) {
+        stage->renderDefaultBackground();
+    }
     SDL_RenderPresent(renderer);
 }
 
@@ -107,6 +110,9 @@ bool Game::loadImages() {
 bool Game::loadTexts() {
     bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_VALUE, WHITE_COLOR, renderer);
+    if (config->isDefault()) {
+        success = success && textureManager->loadText(TEXT_DEFAULT_BACKGROUND_KEY, TEXT_DEFAULT_BACKGROUND_VALUE, WHITE_COLOR, renderer);
+    }
     return success;
 }
 

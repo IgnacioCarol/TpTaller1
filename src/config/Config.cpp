@@ -225,6 +225,7 @@ void Config::parseCoins(Level *level, ptree pt) {
 
 void Config::setDefaults() {
     Logger::getInstance()->info("Setting default config...");
+    defaultConfig = true;
 
     xmlEnemy enemy;
     enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
@@ -295,4 +296,8 @@ void Config::validateTags(string xmlLvl, vector<string> validTags, ptree pt) {
             throw ConfigException("Unexpected tag in " + xmlLvl + ": " + level_name);
         }
     }
+}
+
+bool Config::isDefault() {
+    return this->defaultConfig;
 }
