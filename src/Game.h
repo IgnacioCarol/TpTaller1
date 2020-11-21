@@ -27,7 +27,7 @@ public:
     bool init(const char *levelName, int width, int height, std::string xmlPath);
     ~Game();
 
-    bool init(const char* levelName);
+    bool init(const char *levelName, std::string xmlPath);
     bool loadImages();
     bool loadTexts();
 

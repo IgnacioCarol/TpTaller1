@@ -89,7 +89,7 @@ int main(int argc, char * argv[]) {
 
     Game* game = Game::Instance();
 
-    if (!game->init("Level 1")) { //Aca inicializo el background
+    if (!game->init("Level 1", xmlPath)) { //Aca inicializo el background
         Logger::getInstance() -> error("Error: the game could not be initialized");
         return 1;
     }
