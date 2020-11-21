@@ -1,8 +1,6 @@
 #include "Game.h"
 
 Game* Game::instance = 0;
-const static char* BACKGROUND = "BG";
-int IMAGE_WIDTH;
 Logger* logger = Logger::getInstance();
 
 Game::Game(){
@@ -15,44 +13,43 @@ Game* Game::Instance() {
 }
 
 
-bool Game::init(const char *levelName, int width, int height, std::string xmlPath) {
-    camera = new Camera(0, 0, width, height);
-    Config * config = Config::getInstance();
-    config->load(xmlPath);
-  
+bool Game::init(const char *levelName) {
+    config->load("./resources/config.xml");
+
+    this->textureManager = TextureManager::Instance();
+    camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
     Window windowConfig = config->getWindow();
-    Logger::getInstance()->setLogLevel(config->getLog().level);
 
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
-        logger -> info("SDL init success\n");
+        logger -> info("SDL init success");
         window = SDL_CreateWindow(levelName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   windowConfig.width, windowConfig.height, 0);
         if (window){
-            logger -> info("Window init success\n");
+            logger -> info("Window init success");
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
                 stage = new FirstStage(textureManager, renderer);
-                logger -> info("Renderer init success\n");
+                logger -> info("Renderer init success");
             }
 
             else {
-                logger -> error("Render init fail\n");
+                logger -> error("Render init fail");
                 return false;
             }
         }
         else{
-            logger -> error("Window init fail\n");
+            logger -> error("Window init fail");
             return false;
         }
     }
     else{
-        logger -> error("SDL init fail\n");
+        logger -> error("SDL init fail");
         return false;
     }
 
-    logger -> info("Init success\n");
+    logger -> info("Init success");
     playing = true;
     return true;
 }
@@ -62,36 +59,36 @@ Game::~Game() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         delete _gameObjects[i];
     }
+    Logger::getInstance()->info("All Game Objects were deleted");
     delete this->camera;
+    Logger::getInstance()->info("The camera was deleted");
     delete this->config;
+    Logger::getInstance()->info("The parser(config) was deleted");
     delete this->factory;
+    Logger::getInstance()->info("The Factory was deleted");
     delete this->textureManager;
-    delete Game::instance;
+    Logger::getInstance()->info("Texture Manager was deleted");
 }
 
 void Game::render() {
-    SDL_Delay(2);
     SDL_RenderClear(renderer);
     camera->render(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
-
-    //TODO renderizar todos los game objects iterando (faltan los enemigos)
 
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->draw(renderer, camera->getXpos(), 0);
     }
     stage->renderLevel();
     stage->renderTime();
+    if (config->isDefault()) {
+        stage->renderDefaultBackground();
+    }
     SDL_RenderPresent(renderer);
 }
 
 void Game::clean() {
     logger ->info("Cleaning game\n");
-    delete Logger::getInstance();
-    // ToDo liberar memoria de todos los singleton.
-    
-    
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     textureManager->clearTextureMap();
@@ -103,38 +100,43 @@ void Game::handleEvents() {
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->move();
     }
-    Logger::getInstance()->error("Sali del for\n");
 }
 
 bool Game::loadImages() {
-    bool success = textureManager -> load(renderer);
+    bool success = TextureManager::Instance() -> loadImages(renderer);
     return success;
 }
 
 bool Game::loadTexts() {
     bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_VALUE, WHITE_COLOR, renderer);
+    if (config->isDefault()) {
+        success = success && textureManager->loadText(TEXT_DEFAULT_BACKGROUND_KEY, TEXT_DEFAULT_BACKGROUND_VALUE, WHITE_COLOR, renderer);
+    }
     return success;
 }
 
 void Game::createGameObjects() {
-    auto* mario = new Player();
-    mario->init(0, 403, "dino", 0, camera->getCamera(), 5);
-    player = mario;
+    player = new Player(camera->getCamera());
+    TextureManager::Instance() -> addPath("mario", imgPlayer, defaultPlayer); //ToDo ver como hacer para conseguir los paths de mario sin usar los define que tiene
     initializeGameObjects(1);
-
 }
 void Game::nextStage() {
     BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
+    if (currentStage != stage) {
+        Logger::getInstance()->info("Stage changed");
 
-    cleanGameObjects();
-    initializeGameObjects(stage->getLevel());
+        cleanGameObjects();
+        initializeGameObjects(stage->getLevel());
+        loadImages();
+    }
     delete currentStage;
 }
 
 void Game::restartCharacters() {
-    player->restartPos(0, 403);
+    Logger::getInstance()->info("Restarting Player and Camera position");
+    player->restartPos(0, 380);
     camera->restartPos();
 }
 

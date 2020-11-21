@@ -1,7 +1,3 @@
-//
-// Created by DANIELA CARRERO on 2020-10-25.
-//
-
 #ifndef TPTALLER1_PRINTER_H
 #define TPTALLER1_PRINTER_H
 
@@ -29,10 +25,10 @@ struct TextTexture {
 class Printer {
 public:
     static Printer *getInstance();
-    ~Printer();
     TextTexture* getTextTexture(std::string text, SDL_Color color, SDL_Renderer* renderer);
-    void free(TextTexture* texture); //TODO: Ver si es necesario
+    void freeTexture(TextTexture* texture); //TODO: Ver si es necesario
     void render(TextTexture* texture, int x, int y, SDL_Renderer* renderer);
+    ~Printer();
 private:
     static Printer *instance;
     TTF_Font *font;

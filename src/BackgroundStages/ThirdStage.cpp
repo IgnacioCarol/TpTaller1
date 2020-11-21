@@ -1,7 +1,3 @@
-//
-// Created by DANIELA CARRERO on 2020-11-02.
-//
-
 #include "ThirdStage.h"
 
 ThirdStage::ThirdStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
@@ -16,5 +12,8 @@ BackgroundStage *ThirdStage::nextStage() {
     textureManager->clearFromTextureMap(BACKGROUND);
     textureManager->clearFromTextureMap(TEXT_WORLD_LEVEL_NUMBER_KEY);
     Game::Instance()->gameOver();
+    level = 0;
+    delete timer;
+    timer = nullptr;
     return this;
 }

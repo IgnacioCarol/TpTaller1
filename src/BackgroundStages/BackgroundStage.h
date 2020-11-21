@@ -1,7 +1,3 @@
-//
-// Created by nacho on 25/10/20.
-//
-
 #ifndef TPTALLER1_BACKGROUNDSTAGE_H
 #define TPTALLER1_BACKGROUNDSTAGE_H
 
@@ -21,6 +17,7 @@ public:
     int getWidth() const;
     bool renderLevel();
     bool renderTime();
+    void renderDefaultBackground();
     bool isTimeOver();
     int getLevel();
     std::string getLevelBackground();

@@ -15,11 +15,7 @@
 #include "config/Config.h"
 #include "logger/logger.h"
 
-#include "gameobjects/PlatformNormal.h"
-#include "gameobjects/PlatformSurprise.h"
-#include "gameobjects/GameObject.h"
 #include "gameobjects/Player.h"
-#include "gameobjects/EnemyMushroom.h"
 
 
 using namespace std;
@@ -30,7 +26,8 @@ public:
     static Game* Instance();
     bool init(const char *levelName, int width, int height, std::string xmlPath);
     ~Game();
-  
+
+    bool init(const char* levelName);
     bool loadImages();
     bool loadTexts();
 
@@ -69,7 +66,7 @@ private:
     bool playing = false;
     SDL_Window* window;
     SDL_Renderer* renderer;
-    TextureManager* textureManager = TextureManager::Instance();
+    TextureManager* textureManager;
 
     int lastValue;
 

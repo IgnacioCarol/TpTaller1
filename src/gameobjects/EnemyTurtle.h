@@ -3,16 +3,18 @@
 
 #include "Enemy.h"
 
-#define etWidth 400
-#define etHeight 400
 
 class EnemyTurtle : public Enemy{
 public:
-    void init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount, CharacterState* state) override;
+    void init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, CharacterState *state) override;
     void walk() override;  //If we have to implement the turtle that can fly we must add a new function fly()
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) override;
 
+private:
+    //Related to the image
+    static const int ENEMY_WIDTH = 360;
+    static const int ENEMY_HEIGHT = 360;
 };
 
 

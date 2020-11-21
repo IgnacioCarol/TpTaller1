@@ -23,8 +23,15 @@ public:
 
     virtual void changeState(const Uint8* currentKeyStates, Player* player);
 
+    int getCurrentFrame();
+    int getFramesAmount();
+
 protected:
+    static const int ITER_TIMES = 8;
+    static const int RUNNING_FRAME = 2;
+    static const int CROUCHED_FRAME = 1;
     int currentFrame;
     int framesAmount; //Amount of pictures in the sprite sheet
+    int contAux = 0;
 };
 #endif //TPTALLER1_CHARACTERSTATE_H

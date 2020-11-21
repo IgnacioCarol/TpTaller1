@@ -6,13 +6,9 @@
 
 Config* Config::instance = nullptr;
 
-Config::Config(){
-    this->setDefaults();
-}
+Config::Config()= default;
 
-Config::~Config() {
-
-}
+Config::~Config() = default;
 
 Window Config::getWindow() {
     return this->window;
@@ -39,46 +35,92 @@ Level Config::getLevel(int levelFilter) {
 
 void Config::load(const std::string &filename) {
     ptree pt;
-
     try {
         read_xml(filename, pt);
 
-        this->log.level = pt.get<string>(XML_LOG_LEVEL);
+        validateTags(XML_CONFIG_TAG, validGeneralTags, pt);
+        validateTags(XML_CONFIG_TAG, validConfigTags, pt.get_child(XML_CONFIG_TAG));
 
-        this->window.width = pt.get<int>(XML_WINDOW_WIDTH);
-        this->window.height = pt.get<int>(XML_WINDOW_HEIGHT);
+        parseLog(pt);
+        Logger::getInstance()->setLogLevel(this->log.level);
 
-        this->stage.levels.clear();
-        for (const auto &l : pt.get_child(XML_STAGE_LEVELS)) {
-            Level level;
-            string level_name;
-            ptree level_pt;
-            tie(level_name, level_pt) = l;
+        parseWindow(pt);
+        parseStage(pt);
 
-            if (level_name != XML_STAGE_LEVEL_NAME) {
-                continue;
-            }
-
-            level.number = level_pt.get<int>(XML_STAGE_LEVEL_NUMBER);
-            level.background = level_pt.get<string>(XML_STAGE_LEVEL_BACKGROUND);
-            level.time = level_pt.get<int>(XML_STAGE_LEVEL_TIME);
-
-            level.enemies.clear();
-            Config::parseEnemies(&level, level_pt);
-
-            level.platforms.clear();
-            Config::parsePlatforms(&level, level_pt);
-
-            level.coins.clear();
-            Config::parseCoins(&level, level_pt);
-
-            this->stage.levels.push_back(level);
-        }
+        Logger::getInstance()->info("XML: " + filename + " loaded successfully");
 
     } catch (exception& ex) {
         string error_msg = "Error loading XML file config, error: ";
         Logger::getInstance()->error(error_msg + ex.what());
         this->setDefaults();
+    }
+
+    Logger::getInstance()->setLogLevel(this->log.level);
+}
+
+void Config::parseLog(ptree pt) {
+    validateTags(XML_LOG_TAG, validLogTags, pt.get_child(XML_LOG_TAG));
+    string logLevel = pt.get<string>(XML_LOG_LEVEL);
+    if (!(std::find(validLogLevels.begin(), validLogLevels.end(), logLevel) != validLogLevels.end())) {
+        throw ConfigException("Unknown log level type " + logLevel);
+    }
+    this->log.level = logLevel;
+}
+
+void Config::parseWindow(ptree pt) {
+    validateTags(XML_WINDOW_TAG, validWindowTags, pt.get_child(XML_WINDOW_TAG));
+
+    this->window.width = pt.get<int>(XML_WINDOW_WIDTH);
+    if (this->window.width < 1) {
+        Logger::getInstance()->error("Invalid windows width "+ to_string(window.width) + ". Expected greater than 0, setting default to 0");
+        this->window.width = 0;
+    }
+
+    this->window.height = pt.get<int>(XML_WINDOW_HEIGHT);
+    if (this->window.height < 1) {
+        Logger::getInstance()->error("Invalid windows height " + to_string(window.height) + ". Expected greater than 0, setting default to 0");
+        this->window.height = 0;
+    }
+}
+
+void Config::parseStage(ptree pt) {
+    validateTags(XML_STAGE_TAG, validStageTags, pt.get_child(XML_STAGE_TAG));
+    this->stage.levels.clear();
+    for (const auto &l : pt.get_child(XML_STAGE_LEVELS)) {
+        Level level;
+        string level_name;
+        ptree level_pt;
+        tie(level_name, level_pt) = l;
+
+        if (level_name != XML_STAGE_LEVEL_NAME) {
+            throw ConfigException("Invalid level tag, found: " + level_name);
+        }
+
+        validateTags(XML_STAGE_LEVEL_NAME, validLevelTags, level_pt);
+
+        level.number = level_pt.get<int>(XML_STAGE_LEVEL_NUMBER);
+        if (level.number < 1) {
+            Logger::getInstance()->error("Invalid level number " + to_string(level.number) + ". Expected greater than 0, setting default to 1");
+            level.number = 1;
+        }
+
+        level.background = level_pt.get<string>(XML_STAGE_LEVEL_BACKGROUND);
+        level.time = level_pt.get<int>(XML_STAGE_LEVEL_TIME);
+        if (level.time < 1) {
+            Logger::getInstance()->error("Invalid time configuration for level " + to_string(level.time) + ". Expected greater than 0, setting default to 0");
+            level.time = 300;
+        }
+
+        level.enemies.clear();
+        Config::parseEnemies(&level, level_pt);
+
+        level.platforms.clear();
+        Config::parsePlatforms(&level, level_pt);
+
+        level.coins.clear();
+        Config::parseCoins(&level, level_pt);
+
+        this->stage.levels.push_back(level);
     }
 }
 
@@ -90,8 +132,10 @@ void Config::parseEnemies(Level *level, ptree pt) {
         tie(enemy_name, enemy_pt) = e;
 
         if (enemy_name != XML_STAGE_LEVEL_ENEMY_NAME) {
-            continue;
+            throw ConfigException("Invalid enemy tag, found: " + enemy_name);
         }
+
+        validateTags(XML_STAGE_LEVEL_ENEMY_NAME, validEnemyTags, enemy_pt);
 
         string type = enemy_pt.get<string>(XML_STAGE_LEVEL_ENEMY_TYPE);
         if (type == XML_STAGE_LEVEL_ENEMY_MUSHROOM) {
@@ -99,12 +143,17 @@ void Config::parseEnemies(Level *level, ptree pt) {
         } else if (type == XML_STAGE_LEVEL_ENEMY_TURTLE) {
             enemy.type = ENEMY_TURTLE;
         } else {
-            //TODO uso default o tiro una excepcion ?
-            enemy.type = ENEMY_MUSHROOM;
+            throw ConfigException("Unknown enemy type " + type);
         }
 
-        enemy.image = enemy_pt.get<string>(XML_STAGE_LEVEL_ENEMY_IMAGE);
+        enemy.image = enemy_pt.get<string>(XML_STAGE_LEVEL_IMAGE);
         enemy.quantity = enemy_pt.get<int>(XML_STAGE_LEVEL_ENEMY_QTY);
+        if (enemy.quantity < 1) {
+            Logger::getInstance()->error("Invalid enemy quantity " + to_string(enemy.quantity) + " for enemy type " + type
+                                         + ". Expected greater than 0, setting default to 0");
+            enemy.quantity = 0;
+        }
+
         level->enemies.push_back(enemy);
     }
 }
@@ -117,8 +166,10 @@ void Config::parsePlatforms(Level *level, ptree pt) {
         tie(platform_name, platform_pt) = e;
 
         if (platform_name != XML_STAGE_LEVEL_PLATFORM_NAME) {
-            continue;
+            throw ConfigException("Invalid platform tag, found: " + platform_name);
         }
+
+        validateTags(XML_STAGE_LEVEL_PLATFORM_NAME, validPlatformTags, platform_pt);
 
         string type = platform_pt.get<string>(XML_STAGE_LEVEL_PLATFORM_TYPE);
         if (type == XML_STAGE_LEVEL_PLATFORM_NORMAL) {
@@ -126,16 +177,33 @@ void Config::parsePlatforms(Level *level, ptree pt) {
         } else if (type == XML_STAGE_LEVEL_PLATFORM_SURPRISE) {
             platform.type = PLATFORM_SURPRISE;
         } else {
-            //TODO uso default o tiro una excepcion ?
-            platform.type = PLATFORM_NORMAL;
+            throw ConfigException("Unknown platform type " + type);
         }
 
+        platform.image = platform_pt.get<string>(XML_STAGE_LEVEL_IMAGE);
         platform.coordX = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDX);
+        if (platform.coordX < 0) {
+            Logger::getInstance()->error("Invalid platform coordX " + to_string(platform.coordX) + " for platform type " + type
+                                         + ". Expected greater than 0, setting default to 0");
+            platform.coordX = 0;
+        }
         platform.coordY = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_COORDY);
+        if (platform.coordY < 1) {
+            Logger::getInstance()->error("Invalid platform coordY " + to_string(platform.coordY) + " for platform type " + type
+                                         + ". Expected greater than 0, setting default to 0");
+            platform.coordY = 0;
+        }
         platform.quantity = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_QTY);
+        if (platform.quantity < 1) {
+            Logger::getInstance()->error("Invalid platform quantity " + to_string(platform.quantity) + " for platform type " + type
+                                         + ". Expected greater than 0, setting default to 0");
+            platform.quantity = 0;
+        }
+
         level->platforms.push_back(platform);
     }
 }
+
 
 void Config::parseCoins(Level *level, ptree pt) {
     for (const auto &e : pt.get_child(XML_STAGE_LEVEL_COINS)) {
@@ -145,29 +213,45 @@ void Config::parseCoins(Level *level, ptree pt) {
         tie(coin_name, coin_pt) = e;
 
         if (coin_name != XML_STAGE_LEVEL_COIN_NAME) {
-            continue;
+            throw ConfigException("Invalid coin tag, found: " + coin_name);
         }
 
+        validateTags(XML_STAGE_LEVEL_COIN_NAME, validCoinTags, coin_pt);
+
+        coin.image = coin_pt.get<string>(XML_STAGE_LEVEL_IMAGE);
         coin.coordY = coin_pt.get<int>(XML_STAGE_LEVEL_COIN_COORDY);
+        if (coin.coordY < 0) {
+            Logger::getInstance()->error("Invalid coin coordY " + to_string(coin.coordY) + ". Expected greater than 0, setting default to 0");
+            coin.coordY = 0;
+        }
         coin.quantity = coin_pt.get<int>(XML_STAGE_LEVEL_COIN_QTY);
+        if (coin.quantity < 1) {
+            Logger::getInstance()->error("Invalid coin quantity " + to_string(coin.quantity) + ". Expected greater than 0, setting default to 0");
+            coin.quantity = 0;
+        }
+
         level->coins.push_back(coin);
     }
 }
 
-
 void Config::setDefaults() {
+    Logger::getInstance()->info("Setting default config...");
+    defaultConfig = true;
+
     xmlEnemy enemy;
     enemy.type = DEFAULT_STAGE_LEVEL_ENEMY_TYPE;
     enemy.image = DEFAULT_STAGE_LEVEL_ENEMY_IMG;
     enemy.quantity = DEFAULT_STAGE_LEVEL_ENEMY_QTY;
 
     Platform platform;
+    platform.image = DEFAULT_STAGE_LEVEL_PLATFORM_IMG;
     platform.type = DEFAULT_STAGE_LEVEL_PLATFORM_TYPE;
     platform.coordX = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X;
     platform.coordY = DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y;
     platform.quantity = DEFAULT_STAGE_LEVEL_PLATFORM_QTY;
 
     xmlCoin coin;
+    coin.image = DEFAULT_STAGE_LEVEL_COIN_IMG;
     coin.coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
     coin.quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
 
@@ -211,4 +295,22 @@ void Config::setDefaults() {
     this->window = window;
     this->stage = stage;
     this->log = log;
+
+
+}
+
+void Config::validateTags(string xmlLvl, vector<string> validTags, ptree pt) {
+    for (auto& it: pt) {
+        string level_name;
+        ptree level_pt;
+        tie(level_name, level_pt) = it;
+
+        if (!(std::find(validTags.begin(), validTags.end(), level_name) != validTags.end())) {
+            throw ConfigException("Unexpected tag in " + xmlLvl + ": " + level_name);
+        }
+    }
+}
+
+bool Config::isDefault() {
+    return this->defaultConfig;
 }

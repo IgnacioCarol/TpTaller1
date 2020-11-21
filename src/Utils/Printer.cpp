@@ -1,7 +1,3 @@
-//
-// Created by DANIELA CARRERO on 2020-10-25.
-//
-
 #include <SDL2/SDL_ttf.h>
 #include "Printer.h"
 #include "../logger/logger.h"
@@ -40,7 +36,7 @@ TextTexture* Printer::getTextTexture(std::string text, SDL_Color color, SDL_Rend
         if (texture == NULL) {
             Logger::getInstance()->error("Couldn't print text, unable to create texture from surface: " +  text);
         } else {
-            textTexture = new TextTexture(texture, textSurface->w, textSurface->h); //TODO: Ver de liberar esta memoria
+            textTexture = new TextTexture(texture, textSurface->w, textSurface->h);
         }
 
         SDL_FreeSurface(textSurface);
@@ -54,9 +50,10 @@ void Printer::render(TextTexture* textTexture, int x, int y, SDL_Renderer* rende
     SDL_RenderCopyEx(renderer, textTexture->texture, NULL, &renderQuad, 0.0, NULL, SDL_FLIP_NONE);
 }
 
-void Printer::free(TextTexture* textTexture) {
+void Printer::freeTexture(TextTexture* textTexture) {
     if (textTexture->texture != NULL) {
         SDL_DestroyTexture(textTexture->texture);
+        delete textTexture;
     }
 }
 
@@ -65,12 +62,15 @@ TTF_Font* Printer::loadFont() {
     return this->font;
 }
 
+Printer::~Printer() {
+    TTF_CloseFont(this->font);
+    TTF_Quit();
+}
+
 TextTexture::TextTexture(SDL_Texture *pTexture, int w, int h) {
     this->texture = pTexture;
     this->width = w;
     this->height = h;
 }
 
-Printer::~Printer() {
-    delete this->instance;
-}
+

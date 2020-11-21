@@ -43,6 +43,10 @@ bool BackgroundStage::renderTime() {
     return true;
 }
 
+void BackgroundStage::renderDefaultBackground() {
+    textureManager->printText(TEXT_DEFAULT_BACKGROUND_KEY, TEXT_DEFAULT_BACKGROUND_XPOS, TEXT_DEFAULT_BACKGROUND_YPOS, renderer);
+}
+
 bool BackgroundStage::isTimeOver() {
     return this->timer->isTimeOver();
 }

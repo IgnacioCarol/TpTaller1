@@ -1,11 +1,10 @@
 #include "EnemyTurtle.h"
 #include "../GameMap.h"
 
-void EnemyTurtle::init(size_t x, size_t y, std::string textureID, int currentFrame, SDL_Rect *camera, int framesAmount,
-                       CharacterState *state) {
+void EnemyTurtle::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, CharacterState *state) {
 
     x = GameMap::getInstance()->getRandomX(y);
-    Enemy::init(x, y, textureID, currentFrame, camera, framesAmount, state);
+    Enemy::init(x, y, textureID, camera, state);
 }
 
 
@@ -19,5 +18,5 @@ void EnemyTurtle::walk() {
 }
 
 void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    this->draw(renderer, cameraX, cameraY, etWidth, etHeight);
+    this->draw(renderer, cameraX, cameraY, ENEMY_WIDTH, ENEMY_HEIGHT);
 }

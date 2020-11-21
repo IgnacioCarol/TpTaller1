@@ -24,54 +24,80 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     std::vector<GameObject*> actors;
     GameObject * tmp;
     Enemy* tmpEnemy;
-    int anchoPlataforma;
+    int platformHeight;
     std::string textureID;
 
     // Init Platforms
     for(auto platform : levelConfig.platforms) {
-        for(size_t i = 0; i < platform.quantity; i++) {
+        for(long i = 0; i < platform.quantity; i++) {
             if (platform.type == PLATFORM_SURPRISE) {
                 tmp = new PlatformSurprise();
-                textureID = sBlockID;
-                anchoPlataforma = SBHeight / 4;
+                if (tmp != nullptr){
+                    textureID = SURPRISE_BLOCK_ID;
+                    platformHeight = tmp -> getHeight() / 4;
+                    Logger::getInstance()->debug("Platform surprise created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Surprise Platform");
+
             } else {
                 tmp = new PlatformNormal();
-                textureID = nBlockID;
-                anchoPlataforma = NBHeight / 4;
+                if (tmp != nullptr){
+                    textureID = NORMAL_BLOCK_ID;
+                    platformHeight = tmp->getHeight() / 4;
+                    Logger::getInstance()->debug("Normal platform created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Normal Platform");
             }
 
-            tmp->init(platform.coordX + i * anchoPlataforma, platform.coordY,
-                      textureID, 0);
+            if (tmp != nullptr){
+                TextureManager::Instance() -> addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
+                tmp->init(platform.coordX + i * platformHeight, platform.coordY, textureID);
 
-            actors.push_back(tmp);
+                actors.push_back(tmp);
+            }
         }
     }
 
     // Init Coins
     for(auto coin : levelConfig.coins) {
-        for(size_t i = 0; i < coin.quantity; i++) {
+        for(long i = 0; i < coin.quantity; i++) {
             tmp = new Coin();
-            tmp->init(0, coin.coordY, //Position x determined by init randomly
-                      coinsID, 0);
+            if (tmp != nullptr){ //TODO we can initialice the Y position randomly too
+                TextureManager::Instance()->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
+                tmp->init(0, coin.coordY, COIN_ID);
 
-            actors.push_back(tmp);
+                actors.push_back(tmp);
+                Logger::getInstance()->debug("Coin created correctly");
+            }
+            else Logger::getInstance()->error("Error: couldn't create a Coin");
         }
     }
 
     for(auto enemies : levelConfig.enemies) {
-        for(size_t i = 0; i < enemies.quantity; i++) {
-            if (enemies.type == ENEMY_TURTLE) {
-                tmpEnemy = new EnemyTurtle(); //ToDo hacer lo mismo que abajo del init
-                tmpEnemy -> init(900, 425, etID, 0, Game::Instance() -> getCamera() , 3, new EnemyMovement(0, 3));
+        for(long i = 0; i < enemies.quantity; i++) {
+            if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
+                tmpEnemy = new EnemyTurtle();
+                if (tmpEnemy != nullptr){
+                    TextureManager::Instance() -> addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
+                    tmpEnemy->init(900, 435, KOOPA_GREEN_ID, Game::Instance()->getCamera(),
+                                   new EnemyMovement(0, 3));
+                    Logger::getInstance()->debug("Turtle enemy created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Turtle Enemy");
 
             } else {
                 tmpEnemy = new EnemyMushroom();
-                tmpEnemy -> init(900, 425, emID, 0, Game::Instance() -> getCamera() , 5, new EnemyMovement(0, 5));
-
+                if (tmpEnemy != nullptr){
+                    TextureManager::Instance() -> addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
+                    tmpEnemy->init(900, 425, GOOMBA_ID, Game::Instance()->getCamera(), new EnemyMovement(0, 5));
+                    Logger::getInstance()->debug("Mushroom enemy created correctly");
+                }
+                else Logger::getInstance()->error("Error: couldn't create a Mushroom Enemy");
             }
-            tmp = tmpEnemy;
-
-            actors.push_back(tmp);
+            if (tmpEnemy != nullptr){
+                tmp = tmpEnemy;
+                actors.push_back(tmp);
+            }
         }
     }
 
