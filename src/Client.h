@@ -11,6 +11,7 @@ public:
     int init();
     bool isConnected();
     bool send(const void* msg, size_t len);
+    bool receive(const void* msg, size_t len);
     void release();
 private:
     const char * _IP;

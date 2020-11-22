@@ -1,8 +1,5 @@
 #include "Client.h"
-#include <src/logger/logger.h>
-
-
-Logger* logger = Logger::getInstance();
+#include "logger/logger.h"
 
 Client::Client(const char * IP, const char * port) {
     _IP = IP;
@@ -15,7 +12,7 @@ int Client::init() {
     if(_socket.connect()) { //TODO: ver como manejar si el socket falla -> creo que habia preguntas sobre eso en el campus
         _socket.release();
     }
-    logger -> info("Client connected");
+    Logger::getInstance()->info("Client connected");
     return 0;
 }
 
@@ -28,12 +25,17 @@ void Client::release() {
         return;
     }
     _socket.release();
-    logger -> info("Client disconnected");
+    Logger::getInstance()->info("Client disconnected");
 }
 
 bool Client::send(const void *msg, size_t len) {
     int sent = _socket.send(msg, len);
     return (sent == len);
+}
+
+bool Client::receive(const void *msg, size_t len) {
+    int recv = _socket.receive(msg, len);
+    return (recv == len);
 }
 
 

@@ -27,6 +27,10 @@ public:
     //If it returns 0 or a negative number, there was an error
     int send(const void* msg, size_t len);
 
+    //Returns the amount of bytes received
+    //If it returns 0 or a negative number, there was an error
+    int receive(const void *msg, size_t len);
+
     //Closes the socket
     void release() const;
 
@@ -35,6 +39,9 @@ private:
     ConnectionType _type;
     bool _connected;
     struct addrinfo * addresses;
+
+    //wrapper of send and receive functions
+    int communication(ssize_t (* fx)(int __fd, void *__buf, size_t __n, int __flags), const void* msg, size_t len);
 };
 
 

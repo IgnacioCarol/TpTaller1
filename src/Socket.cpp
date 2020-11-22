@@ -60,21 +60,27 @@ bool Socket::isConnected() {
     return _connected;
 }
 
-int Socket::send(const void *msg, size_t len) {
-    int sent_total = 0;
-    int sent_at_the_moment = 0;
+int Socket::communication(ssize_t (* fx)(int __fd, void *__buf, size_t __n, int __flags), const void *msg, size_t len) {
+    int total = 0; //Total bytes sent or received (depending on fx)
+    int at_the_moment = 0; //Total bytes sent or received (depending on fx) at the moment
     auto *msg_to_send = (uint8_t*)msg;
 
-    while(sent_total < len) {
-        sent_at_the_moment = ::send(fd, &msg_to_send[sent_total], len - sent_total, 0);
-        if(sent_at_the_moment == -1) {
+    while(total < len) {
+        at_the_moment = fx(fd, &msg_to_send[total], len - total, 0);
+        if(at_the_moment == -1) {
             //TODO: manejar error
             break;
-        } else if (sent_at_the_moment == 0) {
-            break;
         }
-        sent_total += sent_at_the_moment;
+        total += at_the_moment;
     }
-    return sent_total;
+    return total;
+}
+
+int Socket::send(const void *msg, size_t len) {
+    return communication(reinterpret_cast<ssize_t (*)(int, void *, size_t, int)>(::send), msg, len);
+}
+
+int Socket::receive(const void *msg, size_t len) {
+    return communication(::recv, msg, len);
 }
 
