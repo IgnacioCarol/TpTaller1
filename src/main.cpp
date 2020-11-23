@@ -90,7 +90,9 @@ int main(int argc, char * argv[]) {
     ss << "xmlPath: " << xmlPath << " mode: " << mode << " ipAddr: " << ipAddr << " port: " << port;
     Logger::getInstance()->debug(ss.str());
 
-    Logger::getInstance()->info("XML Path: " + xmlPath);
+    if (mode == SERVER) {
+        // ToDo launch server
+    }
 
     Game* game = Game::Instance();
 
