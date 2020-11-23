@@ -7,7 +7,7 @@
 
 class Client {
 public:
-    Client(const char * IP, const char * port);
+    Client(std::string IP, std::string port);
     int init();
     bool isConnected();
     bool send(const void* msg, size_t len);

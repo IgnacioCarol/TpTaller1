@@ -1,9 +1,9 @@
 #include "Client.h"
 #include "logger/logger.h"
 
-Client::Client(const char * IP, const char * port) {
-    _IP = IP;
-    _port = port;
+Client::Client(std::string IP, std::string port) {
+    _IP = IP.c_str();
+    _port = port.c_str();
     _socket = new Socket();
 }
 

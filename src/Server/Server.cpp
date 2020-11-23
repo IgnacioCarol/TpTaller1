@@ -31,6 +31,7 @@ bool Server::run() {
         auto * serverSocket = new Socket();
         serverSocket->init("127.0.0.1", "8080", SERVER);
         serverSocket->bindAndListen();
+        std::cout << "server is up and running" << std::endl;
         Socket * client = serverSocket->accept();
         //ToDo por cada nuevo cliente que se acepta se debe crear un thread
         msg_t message;

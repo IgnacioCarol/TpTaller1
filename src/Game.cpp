@@ -13,8 +13,8 @@ Game* Game::Instance() {
 }
 
 
-bool Game::init(const char *levelName) {
-    config->load("./resources/config.xml");
+bool Game::init(const char *levelName, std::string xmlPath) {
+    config->load(xmlPath);
 
     this->textureManager = TextureManager::Instance();
     camera = new Camera(0, 0, config->getWindow().width, config->getWindow().height);
