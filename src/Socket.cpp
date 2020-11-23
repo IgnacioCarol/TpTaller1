@@ -5,6 +5,8 @@
 #include <netdb.h>
 #include <unistd.h>
 
+Socket::Socket() {
+}
 
 void Socket::init(const char *IP, const char *port, ConnectionType type) {
     _connected = false;

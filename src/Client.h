@@ -16,7 +16,7 @@ public:
 private:
     const char * _IP;
     const char * _port;
-    Socket _socket;
+    Socket* _socket;
 
 };
 

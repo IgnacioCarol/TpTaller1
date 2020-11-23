@@ -12,6 +12,8 @@ enum ConnectionType {
 
 class Socket {
 public:
+
+    Socket();
     //Initializes the private features
     //Gets the addresses that matches the IP and port specified
     void init(const char *IP, const char *port, ConnectionType type);
