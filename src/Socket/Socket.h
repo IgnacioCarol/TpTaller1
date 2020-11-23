@@ -36,11 +36,24 @@ public:
     //Closes the socket
     void release() const;
 
+    // Bind server socket to local address and listen news.
+    bool bindAndListen();
+
+    // Accept incoming connection from a client, this is a blocking method.
+    Socket * accept();
+
+    virtual ~Socket();
+
+    void setSocketFileDescriptor(int fd);
+
+
 private:
     int fd; //File descriptor
     ConnectionType _type;
     bool _connected;
     struct addrinfo * addresses;
+    struct sockaddr_in server_addr;
+    std::string port;
 
     //wrapper of send and receive functions
     int communication(ssize_t (* fx)(int __fd, void *__buf, size_t __n, int __flags), const void* msg, size_t len);
