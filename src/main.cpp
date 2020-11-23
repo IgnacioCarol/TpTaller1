@@ -22,13 +22,14 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, game_mode_t * mode
         return false;
     }
 
-    if (argc == 1) {
+    if (argc < MAX_ARGS) {
         // set default values
         *xmlPath = "./resources/config.xml";
         *ipAddr = "127.0.0.1";
         *port = 8080;
         return true;
     }
+
     std::string tmp;
 
     // Parse XML file
@@ -84,6 +85,10 @@ int main(int argc, char * argv[]) {
         Logger::getInstance() -> error("Error: incorrect the program does not support the amount of CLI params");
         return EXIT_FAILURE;
     }
+
+    std::stringstream ss;
+    ss << "xmlPath: " << xmlPath << " mode: " << mode << " ipAddr: " << ipAddr << " port: " << port;
+    Logger::getInstance()->debug(ss.str());
 
     Logger::getInstance()->info("XML Path: " + xmlPath);
 
