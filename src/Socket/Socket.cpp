@@ -25,7 +25,7 @@ Socket::Socket() {
 void Socket::init(const char *IP, const char *port, ConnectionType type) {
     _connected = false;
     _type = type;
-    port = port;
+    this->port = port;
 
     int getaddr;
     struct addrinfo restrictions{};
@@ -161,8 +161,6 @@ Socket::~Socket() {
 }
 
 Socket *Socket::accept() {
-    Socket * client = new Socket();
-
     int client_socket;
     struct sockaddr_in client_addr;
     int client_addrlen;
@@ -178,6 +176,7 @@ Socket *Socket::accept() {
         throw SocketException("Fail accepting client connection");
     }
 
+    Socket * client = new Socket();
     client->setSocketFileDescriptor(client_socket);
     Logger::getInstance()->info("Connection accepted");
 

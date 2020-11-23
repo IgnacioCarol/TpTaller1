@@ -10,6 +10,12 @@ enum ConnectionType {
     CLIENT = 1
 };
 
+// Struct de test para probar comunicacion de sockets
+typedef struct {
+    int value;
+    std::string text;
+} msg_t;
+
 class Socket {
 public:
 
