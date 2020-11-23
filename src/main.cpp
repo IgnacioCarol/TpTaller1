@@ -8,7 +8,7 @@
 #include "gmock/gmock.h"
 #include "logger/logger.h"
 #include "Game.h"
-
+#include "Server/Server.h"
 
 int main(int argc, char * argv[]) {
 
@@ -16,6 +16,9 @@ int main(int argc, char * argv[]) {
 //    testing::InitGoogleTest(&argc, argv);
 //    return RUN_ALL_TESTS();
 //#endif
+    Server * server = Server::getInstance();
+    return server->run();
+
     Game* game = Game::Instance();
 
     if (!game->init("Level 1")) { //Aca inicializo el background
