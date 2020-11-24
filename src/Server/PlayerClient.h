@@ -10,7 +10,7 @@
 class PlayerClient {
 public:
     explicit PlayerClient(Socket * clientSocket);
-
+    Socket * getSocket();
     virtual ~PlayerClient();
 private:
     Socket * clientSocket;

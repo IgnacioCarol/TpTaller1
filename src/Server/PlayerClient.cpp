@@ -11,3 +11,7 @@ PlayerClient::PlayerClient(Socket *clientSocket) {
 PlayerClient::~PlayerClient() {
     delete this->clientSocket;
 }
+
+Socket *PlayerClient::getSocket() {
+    return this->clientSocket;
+}

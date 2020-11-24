@@ -38,7 +38,7 @@ bool Server::init(const char *ip, const char *port, int clientNo) {
     Logger::getInstance()->info("[Server] All clients have been accepted");
 
     //TODO: Multithreading
-    if(!receive(clients[0])) {
+    if(!receive(clients[0]->getSocket())) { //ToDo me parece que queda mejor si el receive es un metodo del client
         return false;
     }
     Logger::getInstance()->info("[Server] Message received");
