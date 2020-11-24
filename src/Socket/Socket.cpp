@@ -15,6 +15,16 @@ Socket::Socket() {
     Logger::getInstance()->info("[Socket] Socket created");
 }
 
+Socket::Socket(int fd) {
+    if (fd == -1) {
+        Logger::getInstance()->error("[Socket] Invalid file descriptor, could not create socket");
+        throw SocketException("[Socket] Invalid file descriptor, could not create socket");
+    }
+
+    this->fd = fd;
+    Logger::getInstance()->info("[Socket] Socket created");
+}
+
 void Socket::init(const char *IP, const char *port, ConnectionType type) {
     _connected = false;
     _type = type;
@@ -166,9 +176,7 @@ Socket *Socket::accept() {
         throw SocketException("[Socket] Fail accepting client connection");
     }
 
-    auto * client = new Socket();
-    close(client->fd);
-    client->fd = client_socket;
+    auto * client = new Socket(client_socket);
     Logger::getInstance()->info("[Socket] Connection accepted");
 
     return client;

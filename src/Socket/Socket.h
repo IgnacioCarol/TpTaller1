@@ -31,6 +31,7 @@ class Socket {
 public:
 
     Socket();
+    explicit Socket(int fd);
     //Initializes the private features
     //Gets the addresses that matches the IP and port specified
     void init(const char *IP, const char *port, ConnectionType type);
