@@ -62,7 +62,7 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
         //ToDo por el momento hardcodeo 8080, luego cambiar por port
     } else {
         // Prepare the sockaddr_in structure
-        server_addr.sin_addr.s_addr = inet_addr((const char*)IP);
+        server_addr.sin_addr.s_addr = inet_addr(IP);
         server_addr.sin_family = AF_INET;
         server_addr.sin_port = htons( (int)8080 );
         //ToDo por el momento hardcodeo 8080, luego cambiar por port
@@ -226,6 +226,7 @@ bool Socket::bindAndListen() {
 }
 
 Socket::~Socket() {
+    Logger::getInstance()->info("Destroying socket");
     close(fd);
 }
 

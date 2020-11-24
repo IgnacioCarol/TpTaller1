@@ -29,6 +29,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
         *xmlPath = "./resources/config.xml";
         *ipAddr = "127.0.0.1";
         *port = 8080;
+        *mode = SERVER;
         return true;
     }
 
@@ -94,14 +95,16 @@ int main(int argc, char * argv[]) {
 
     if (mode == SERVER) {
         // ToDo launch server
+        Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
-        if(server->run()) {
+        if (server->init(ipAddr.c_str(), std::to_string(port).c_str(), 1)) { //TODO: la cantidad de clientes deberia venir del XML
             return 0;
         } else {
             return 1;
         }
     } else {
-        auto * client = new Client(ipAddr, "8080");
+        Logger::getInstance()->info("Initializing in client mode");
+        auto * client = new Client(ipAddr, to_string(port).c_str());
         client->init();
         msg_t message;
         message.val1 = 10;
