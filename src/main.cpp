@@ -98,10 +98,11 @@ int main(int argc, char * argv[]) {
         Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
         if (server->init(ipAddr.c_str(), std::to_string(port).c_str(), 1)) { //TODO: la cantidad de clientes deberia venir del XML
+            delete server;
             return 0;
-        } else {
-            return 1;
         }
+        delete server;
+        return 1;
     } else {
         Logger::getInstance()->info("Initializing in client mode");
         auto * client = new Client(ipAddr, to_string(port).c_str());
@@ -116,8 +117,10 @@ int main(int argc, char * argv[]) {
         message.val7 = 4;
         if (client->send(&message) < 0) {
             Logger::getInstance()->error("send failed");
+            delete client;
             return 1;
         }
+        delete client;
         return 0;
     }
 

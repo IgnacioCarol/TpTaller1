@@ -8,6 +8,7 @@
 class Client {
 public:
     Client(std::string IP, std::string port);
+    ~Client();
     int init();
     bool isConnected();
     int send(msg_t *msg);

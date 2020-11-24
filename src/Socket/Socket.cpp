@@ -1,12 +1,4 @@
 #include "Socket.h"
-#include <cstring>
-#include <cstdio>
-#include <sys/socket.h>
-#include <netdb.h>
-#include <unistd.h>
-#include "../logger/logger.h"
-#include "SocketException.h"
-#include <arpa/inet.h>
 
 Socket::Socket() {
     // Create Socket
@@ -16,11 +8,11 @@ Socket::Socket() {
     // Protocol: 0 (chosen automatically)
     fd = socket(AF_INET , SOCK_STREAM , 0);
     if (fd == -1) {
-        Logger::getInstance()->error("Could not create socket");
-        throw SocketException("Could not create socket");
+        Logger::getInstance()->error("[Socket] Could not create socket");
+        throw SocketException("[Socket] Could not create socket");
     }
 
-    Logger::getInstance()->info("Socket created");
+    Logger::getInstance()->info("[Socket] Socket created");
 }
 
 void Socket::init(const char *IP, const char *port, ConnectionType type) {
@@ -28,72 +20,18 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
     _type = type;
     this->port = port;
 
-//    int getaddr;
-//    struct addrinfo restrictions{};
-//
-//    memset(&restrictions, 0, sizeof(struct addrinfo));
-//    restrictions.ai_family = AF_INET; //socket family
-//    restrictions.ai_socktype = SOCK_STREAM; //socket type
-//    restrictions.ai_flags = (type == SERVER) ? AI_PASSIVE : CLIENT;
-//    restrictions.ai_canonname = NULL;
-//    restrictions.ai_addr = NULL;
-//    restrictions.ai_next = NULL;
-//
-//    getaddr = getaddrinfo(IP, port, &restrictions, &addresses);
-//    if (getaddr) {
-//        printf("%s\n", gai_strerror(getaddr)); //TODO ver cómo manejar errores de sockets
-//    }
-
-    if (type == SERVER) {
-        // Prepare the sockaddr_in structure
-        /* Structures for handling internet addresses
-        struct sockaddr_in {
-            short            sin_family;   // e.g. AF_INET
-            unsigned short   sin_port;     // e.g. htons(3490)
-            struct in_addr   sin_addr;     // see struct in_addr, below
-            char             sin_zero[8];  // zero this if you want to
-        };
-        struct in_addr {
-            unsigned long s_addr;  // load with inet_aton()
-        }; */
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_addr.s_addr = INADDR_ANY; //Address to accept any incoming messages. INADDR_ANY accepts any.
-        server_addr.sin_port = htons((int)8080); // The htons() function converts the unsigned short integer hostshort from host byte order to network byte order.
-        //ToDo por el momento hardcodeo 8080, luego cambiar por port
-    } else {
-        // Prepare the sockaddr_in structure
-        server_addr.sin_addr.s_addr = inet_addr(IP);
-        server_addr.sin_family = AF_INET;
-        server_addr.sin_port = htons( (int)8080 );
-        //ToDo por el momento hardcodeo 8080, luego cambiar por port
-        //------------------------
-    }
+    // Prepare the server_addr structure
+    server_addr.sin_family = AF_INET;
+    server_addr.sin_port = htons(atoi(port));
+    server_addr.sin_addr.s_addr = (type == SERVER) ? INADDR_ANY : inet_addr(IP);
+    Logger::getInstance()->info("[Socker] Socket initialized");
 }
 
 bool Socket::connect() {
     if (_type == SERVER) {
-        Logger::getInstance()->error("Connect is only available for client side");
+        Logger::getInstance()->error("[Socket] Connect is only available for client side");
         return false;
     }
-
-//    int result;
-//    struct addrinfo *ptr;
-//
-//    for (ptr = addresses; ptr && !_connected; ptr = ptr->ai_next) {
-//        fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-//        if(fd == -1) {
-//            continue;
-//        }
-//        result = ::connect(fd, ptr->ai_addr, ptr->ai_addrlen);
-//        if (result == -1) { //if the conecction fails, close the skt and seek for another one
-//            close(fd);
-//        } else {
-//            _connected = true;
-//        }
-//    }
-//
-//    freeaddrinfo(addresses);
-//    return _connected;
 
     //Connect to remote server
     // int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
@@ -102,44 +40,26 @@ bool Socket::connect() {
     // addrlen -> size of sockaddr_in structure for the SERVER.
     // The connect() system call connects the socket referred to by the file descriptor sockfd to the address specified by addr.
     if (::connect(fd , (struct sockaddr *)&server_addr , sizeof(struct sockaddr_in)) < 0){
-        Logger::getInstance()->error("connect failed. Error");
+        Logger::getInstance()->error("[Socket] Connect failed. Error: " + std::string(strerror(errno)));
         return false;
     }
-    Logger::getInstance()->info("Connected socket!");
-    //------------------------
+    Logger::getInstance()->info("[Socket] Connected socket!");
     return true;
 }
 
 void Socket::release() const {
     shutdown(fd, SHUT_RDWR);
-    int return_value = close(fd);
-    if (return_value == -1) {
-       //TODO: manejar error de socket -> trycatch??
+    if (close(fd) < 0) {
+        Logger::getInstance()->error("[Socket] Close file descriptor failed. Error: " + std::string(strerror(errno)));
     }
+    Logger::getInstance()->info("[Socket] Socket released");
 }
 
 bool Socket::isConnected() {
     return _connected;
 }
 
-int Socket::communication(ssize_t (* fx)(int __fd, void *__buf, size_t __n, int __flags), const void *msg, size_t len) {
-    int total = 0; //Total bytes sent or received (depending on fx)
-    int at_the_moment = 0; //Total bytes sent or received (depending on fx) at the moment
-    auto *msg_to_send = (uint8_t*)msg;
-
-    while(total < len) {
-        at_the_moment = fx(fd, &msg_to_send[total], len - total, 0);
-        if(at_the_moment == -1) {
-            //TODO: manejar error
-            break;
-        }
-        total += at_the_moment;
-    }
-    return total;
-}
-
 int Socket::send(msg_t *msg) {
-//    return communication(reinterpret_cast<ssize_t (*)(int, void *, size_t, int)>(::send), msg, len);
     int total_bytes_written = 0;
     int bytes_written = 0;
     int send_data_size = sizeof(msg_t);
@@ -164,7 +84,7 @@ int Socket::send(msg_t *msg) {
 
 int Socket::receive(msg_t *msg, size_t len) {
     int total_bytes_receive = 0;
-    int bytes_receive = 0;
+    int bytes_received = 0;
     int receive_data_size = sizeof(msg_t);
     bool client_socket_still_open = true;
 
@@ -177,25 +97,25 @@ int Socket::receive(msg_t *msg, size_t len) {
     // The recv() call are used to receive messages from a socket.
     // If no messages are available at the socket, the receive call wait for a message to arrive. (Blocking)
 
-    while ((receive_data_size > bytes_receive) && client_socket_still_open) {
-        bytes_receive = recv(fd, (msg + total_bytes_receive), (receive_data_size - total_bytes_receive), 0);
-        if (bytes_receive < 0) { // Error
-            return bytes_receive;
+    while ((receive_data_size > bytes_received) && client_socket_still_open) {
+        bytes_received = recv(fd, (msg + total_bytes_receive), (receive_data_size - total_bytes_receive), 0);
+        if (bytes_received < 0) { // Error
+            return bytes_received;
         }
-        else if (bytes_receive == 0) { // Socket closed
+        else if (bytes_received == 0) { // Socket closed
             client_socket_still_open = false;
         }
         else {
-            total_bytes_receive += bytes_receive;
+            total_bytes_receive += bytes_received;
         }
     }
 
-    return 0;
+    return total_bytes_receive;
 }
 
 bool Socket::bindAndListen() {
     if (_type == CLIENT) {
-        Logger::getInstance()->error("Bind And Listen is only available for server side");
+        Logger::getInstance()->error("[Socket] Bind And Listen is only available for server side");
         return false;
     }
 
@@ -205,12 +125,12 @@ bool Socket::bindAndListen() {
     // addr -> pointer to sockaddr_in structure of the SERVER
     // addrlen -> size of the sockaddr_in structure
     // bind() assigns the address specified by addr to the socket referred to by the file descriptor sockfd.
-    if( bind(fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0){
-        Logger::getInstance()->error("Bind failed");
+    if (bind(fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
+        Logger::getInstance()->error("[Socket] Bind failed");
         return false;
     }
 
-    Logger::getInstance()->info("Bind success");
+    Logger::getInstance()->info("[Socket] Bind success");
 
     // Listen
     // int listen(int sockfd, int backlog);
@@ -221,12 +141,12 @@ bool Socket::bindAndListen() {
         Logger::getInstance()->error("Listen failed");
         return false;
     }
-    Logger::getInstance()->info("Listening on port: " + port + " Waiting for incoming connections...");
+    Logger::getInstance()->info("[Socket] Listening on port: " + port + " Waiting for incoming connections...");
     return true;
 }
 
 Socket::~Socket() {
-    Logger::getInstance()->info("Destroying socket");
+    Logger::getInstance()->info("[Socket] Destroying socket");
     close(fd);
 }
 
@@ -242,19 +162,15 @@ Socket *Socket::accept() {
     // addrlen -> size of sockaddr structure for the CLIENT.
     client_socket = ::accept(fd, (struct sockaddr *) &client_addr, (socklen_t*) &client_addrlen);
     if (client_socket < 0) {
-        Logger::getInstance()->error("Accept failed");
-        throw SocketException("Fail accepting client connection");
+        Logger::getInstance()->error("[Socket] Accept failed");
+        throw SocketException("[Socket] Fail accepting client connection");
     }
 
     auto * client = new Socket();
     close(client->fd);
     client->fd = client_socket;
-    Logger::getInstance()->info("Connection accepted");
+    Logger::getInstance()->info("[Socket] Connection accepted");
 
     return client;
-}
-
-void Socket::setSocketFileDescriptor(int fd) {
-    this->fd = fd;
 }
 

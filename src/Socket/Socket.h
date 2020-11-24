@@ -4,6 +4,12 @@
 #include <string>
 #include <netdb.h>
 #include <vector>
+#include <cstring>
+#include <sys/socket.h>
+#include <unistd.h>
+#include "../logger/logger.h"
+#include "SocketException.h"
+#include <arpa/inet.h>
 
 enum ConnectionType {
     SERVER = 0,
@@ -55,9 +61,6 @@ public:
 
     virtual ~Socket();
 
-    void setSocketFileDescriptor(int fd);
-
-
 private:
     int fd; //File descriptor
     ConnectionType _type;
@@ -65,9 +68,6 @@ private:
     struct addrinfo * addresses;
     struct sockaddr_in server_addr;
     std::string port;
-
-    //wrapper of send and receive functions
-    int communication(ssize_t (* fx)(int __fd, void *__buf, size_t __n, int __flags), const void* msg, size_t len);
 };
 
 

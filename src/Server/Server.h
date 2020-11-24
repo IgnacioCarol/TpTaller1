@@ -18,7 +18,6 @@ public:
     virtual ~Server();
 
     bool init(const char *ip, const char *port, int clientNo);
-    //bool run();
 
 private:
     static Server * instance;
