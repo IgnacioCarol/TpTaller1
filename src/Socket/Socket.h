@@ -33,7 +33,7 @@ public:
 
     //Returns the amount of bytes sent
     //If it returns 0 or a negative number, there was an error
-    int send(const void* msg, size_t len);
+    int send(msg_t *msg);
 
     //Returns the amount of bytes received
     //If it returns 0 or a negative number, there was an error

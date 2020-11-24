@@ -102,13 +102,8 @@ int main(int argc, char * argv[]) {
         msg_t message;
         message.text = "que onda ";
         message.value = 10;
-        if (client->isConnected()) {
-            if (!client->send(&message,sizeof(message))) {
-                Logger::getInstance()->error("send failed");
-                return 1;
-            }
-        } else {
-            Logger::getInstance()->error("there is no connection");
+        if (!client->send(&message)) {
+            Logger::getInstance()->error("send failed");
             return 1;
         }
         return 0;

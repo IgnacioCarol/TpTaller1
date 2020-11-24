@@ -28,9 +28,9 @@ void Client::release() {
     Logger::getInstance()->info("Client disconnected");
 }
 
-bool Client::send(const void *msg, size_t len) {
-    int sent = _socket->send(msg, len);
-    return (sent == len);
+bool Client::send(msg_t *msg) {
+    int sent = _socket->send(msg);
+    return sent;
 }
 
 bool Client::receive(const void *msg, size_t len) {

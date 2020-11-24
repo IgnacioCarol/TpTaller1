@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include "../logger/logger.h"
 #include "SocketException.h"
+#include <arpa/inet.h>
 
 Socket::Socket() {
     // Create Socket
@@ -27,21 +28,21 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
     _type = type;
     this->port = port;
 
-    int getaddr;
-    struct addrinfo restrictions{};
-
-    memset(&restrictions, 0, sizeof(struct addrinfo));
-    restrictions.ai_family = AF_INET; //socket family
-    restrictions.ai_socktype = SOCK_STREAM; //socket type
-    restrictions.ai_flags = (type == SERVER) ? AI_PASSIVE : CLIENT;
-    restrictions.ai_canonname = NULL;
-    restrictions.ai_addr = NULL;
-    restrictions.ai_next = NULL;
-
-    getaddr = getaddrinfo(IP, port, &restrictions, &addresses);
-    if (getaddr) {
-        printf("%s\n", gai_strerror(getaddr)); //TODO ver cómo manejar errores de sockets
-    }
+//    int getaddr;
+//    struct addrinfo restrictions{};
+//
+//    memset(&restrictions, 0, sizeof(struct addrinfo));
+//    restrictions.ai_family = AF_INET; //socket family
+//    restrictions.ai_socktype = SOCK_STREAM; //socket type
+//    restrictions.ai_flags = (type == SERVER) ? AI_PASSIVE : CLIENT;
+//    restrictions.ai_canonname = NULL;
+//    restrictions.ai_addr = NULL;
+//    restrictions.ai_next = NULL;
+//
+//    getaddr = getaddrinfo(IP, port, &restrictions, &addresses);
+//    if (getaddr) {
+//        printf("%s\n", gai_strerror(getaddr)); //TODO ver cómo manejar errores de sockets
+//    }
 
     if (type == SERVER) {
         // Prepare the sockaddr_in structure
@@ -59,6 +60,12 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
         server_addr.sin_addr.s_addr = INADDR_ANY; //Address to accept any incoming messages. INADDR_ANY accepts any.
         server_addr.sin_port = htons(8080); // The htons() function converts the unsigned short integer hostshort from host byte order to network byte order.
         //ToDo por el momento hardcodeo 8080, luego cambiar por port
+    } else {
+        // Prepare the sockaddr_in structure
+        server_addr.sin_addr.s_addr = inet_addr((const char*)IP);
+        server_addr.sin_family = AF_INET;
+        server_addr.sin_port = htons( atoi(port) );
+        //------------------------
     }
 }
 
@@ -68,24 +75,38 @@ bool Socket::connect() {
         return false;
     }
 
-    int result;
-    struct addrinfo *ptr;
+//    int result;
+//    struct addrinfo *ptr;
+//
+//    for (ptr = addresses; ptr && !_connected; ptr = ptr->ai_next) {
+//        fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
+//        if(fd == -1) {
+//            continue;
+//        }
+//        result = ::connect(fd, ptr->ai_addr, ptr->ai_addrlen);
+//        if (result == -1) { //if the conecction fails, close the skt and seek for another one
+//            close(fd);
+//        } else {
+//            _connected = true;
+//        }
+//    }
+//
+//    freeaddrinfo(addresses);
+//    return _connected;
 
-    for (ptr = addresses; ptr && !_connected; ptr = ptr->ai_next) {
-        fd = socket(ptr->ai_family, ptr->ai_socktype, ptr->ai_protocol);
-        if(fd == -1) {
-            continue;
-        }
-        result = ::connect(fd, ptr->ai_addr, ptr->ai_addrlen);
-        if (result == -1) { //if the conecction fails, close the skt and seek for another one
-            close(fd);
-        } else {
-            _connected = true;
-        }
+    //Connect to remote server
+    // int connect(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
+    // sockfd -> file descriptor that refers to a socket
+    // addr -> pointer to sockaddr_in structure for the SERVER.
+    // addrlen -> size of sockaddr_in structure for the SERVER.
+    // The connect() system call connects the socket referred to by the file descriptor sockfd to the address specified by addr.
+    if (::connect(fd , (struct sockaddr *)&server_addr , sizeof(struct sockaddr_in)) < 0){
+        Logger::getInstance()->error("connect failed. Error");
+        return false;
     }
-
-    freeaddrinfo(addresses);
-    return _connected;
+    Logger::getInstance()->info("Connected socket!");
+    //------------------------
+    return true;
 }
 
 void Socket::release() const {
@@ -116,8 +137,28 @@ int Socket::communication(ssize_t (* fx)(int __fd, void *__buf, size_t __n, int 
     return total;
 }
 
-int Socket::send(const void *msg, size_t len) {
-    return communication(reinterpret_cast<ssize_t (*)(int, void *, size_t, int)>(::send), msg, len);
+int Socket::send(msg_t *msg) {
+//    return communication(reinterpret_cast<ssize_t (*)(int, void *, size_t, int)>(::send), msg, len);
+    int total_bytes_written = 0;
+    int bytes_written = 0;
+    int send_data_size = sizeof(msg_t);
+    bool client_socket_still_open = true;
+
+    while ((send_data_size > total_bytes_written) && client_socket_still_open){
+        bytes_written = ::send(fd, (msg + total_bytes_written), (send_data_size-total_bytes_written), 0);
+
+        if (bytes_written < 0) { // Error
+            return bytes_written;
+        }
+        else if (bytes_written == 0) { // Socket closed
+            client_socket_still_open = false;
+        }
+        else {
+            total_bytes_written += bytes_written;
+        }
+    }
+
+    return 0;
 }
 
 int Socket::receive(const void *msg, size_t len) {
