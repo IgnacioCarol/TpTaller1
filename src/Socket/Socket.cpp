@@ -79,9 +79,11 @@ int Socket::send(msg_t *msg) {
         bytes_written = ::send(fd, (msg + total_bytes_written), (send_data_size-total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
+            Logger::getInstance()->error("[Socket] unexpected error trying to send msg");
             return bytes_written;
         }
         else if (bytes_written == 0) { // Socket closed
+            Logger::getInstance()->error("[Socket] error trying to send msg, socket closed");
             client_socket_still_open = false;
         }
         else {
@@ -110,9 +112,11 @@ int Socket::receive(msg_t *msg, size_t len) {
     while ((receive_data_size > bytes_received) && client_socket_still_open) {
         bytes_received = recv(fd, (msg + total_bytes_receive), (receive_data_size - total_bytes_receive), 0);
         if (bytes_received < 0) { // Error
+            Logger::getInstance()->error("[Socket] unexpected error trying to receive msg");
             return bytes_received;
         }
         else if (bytes_received == 0) { // Socket closed
+            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
             client_socket_still_open = false;
         }
         else {
