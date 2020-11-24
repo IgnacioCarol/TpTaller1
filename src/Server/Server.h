@@ -11,6 +11,7 @@
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
 #include "PlayerClient.h"
+#include <queue>
 
 class Server {
 
@@ -30,7 +31,7 @@ private:
 
     Socket *_socket;
     std::vector<PlayerClient *> clients;
-
+    std::queue<msg_t *> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
     const int MAX_ACCEPT_RETRIES = 10;
 };
 

@@ -3,6 +3,7 @@
 //
 
 #include "Server.h"
+#include <pthread.h>
 
 Server* Server::instance = nullptr;
 
