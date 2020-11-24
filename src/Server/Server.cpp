@@ -94,3 +94,8 @@ bool Server::receive(Socket *client) {
     return true;
 }
 
+// Infinite loop processing PlayerClients commands
+bool Server::run() {
+    return false;
+}
+
