@@ -21,11 +21,11 @@ Server::~Server() {
     for (auto & client : clients) {
         delete client;
     }
-    pthread_mutex_destroy(&this->commandMutex);
+    pthread_mutex_destroy(this->commandMutex);
 }
 
 Server::Server() {
-    pthread_mutex_init(&this->commandMutex, nullptr);
+    pthread_mutex_init(this->commandMutex, nullptr);
 }
 
 bool Server::init(const char *ip, const char *port, int clientNo) {

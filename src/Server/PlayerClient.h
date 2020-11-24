@@ -9,13 +9,13 @@
 
 class PlayerClient {
 public:
-    explicit PlayerClient(Socket * clientSocket);
+    explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex);
     Socket * getSocket();
     virtual ~PlayerClient();
 private:
     Socket * clientSocket;
-    pthread_mutex_t  commandMutex; // Mutex to control command queue
-    pthread_mutex_t  outcomeMutex; // Mutex to control outcome queue
+    pthread_mutex_t  * commandMutex; // Mutex to control command queue
+    pthread_mutex_t  * outcomeMutex; // Mutex to control outcome queue
     std::queue<msg_t *> outcome; //ToDo define msg_t
 };
 
