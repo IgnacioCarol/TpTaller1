@@ -18,13 +18,14 @@ Server *Server::getInstance() {
 Server::~Server() {
     Logger::getInstance()->info("[Server] Destroying server");
     delete _socket;
-    for (int i = 0; i < clients.size(); i++) {
-        delete clients[i];
+    for (auto & client : clients) {
+        delete client;
     }
+    pthread_mutex_destroy(&this->commandMutex);
 }
 
 Server::Server() {
-
+    pthread_mutex_init(&this->commandMutex, nullptr);
 }
 
 bool Server::init(const char *ip, const char *port, int clientNo) {

@@ -5,11 +5,13 @@
 #include "PlayerClient.h"
 
 PlayerClient::PlayerClient(Socket *clientSocket) {
+    pthread_mutex_init(&this->outcomeMutex, nullptr);
     this->clientSocket = clientSocket;
 }
 
 PlayerClient::~PlayerClient() {
     delete this->clientSocket;
+    pthread_mutex_destroy(&this->outcomeMutex);
 }
 
 Socket *PlayerClient::getSocket() {
