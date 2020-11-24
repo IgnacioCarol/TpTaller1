@@ -10,6 +10,7 @@
 #include "../Socket/SocketException.h"
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
+#include "PlayerClient.h"
 
 class Server {
 
@@ -28,7 +29,7 @@ private:
     bool receive(Socket *client);
 
     Socket *_socket;
-    std::vector<Socket *> clients;
+    std::vector<PlayerClient *> clients;
 
     const int MAX_ACCEPT_RETRIES = 10;
 };

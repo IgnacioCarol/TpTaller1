@@ -14,8 +14,8 @@ public:
     virtual ~PlayerClient();
 private:
     Socket * clientSocket;
-    std::queue<msg_t> income; //ToDo define msg_t
-    std::queue<msg_t> outcome; //ToDo define msg_t
+    std::queue<msg_t *> income; //ToDo define msg_t
+    std::queue<msg_t *> outcome; //ToDo define msg_t
 };
 
 

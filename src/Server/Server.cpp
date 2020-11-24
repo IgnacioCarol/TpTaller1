@@ -56,7 +56,8 @@ bool Server::acceptClients(int clientNo) {
 
     for (int i = 0; i < clientNo && retry <= MAX_ACCEPT_RETRIES; i++, retry++) {
         try {
-            clients.push_back(_socket->accept());
+            auto * playerClient = new PlayerClient(_socket->accept());
+            clients.push_back(playerClient);
             Logger::getInstance()->info("[Server] Client number " + std::to_string(i) + " has been accepted");
         } catch (std::exception &ex) {
             Logger::getInstance()->error("[Server] Error accepting client number: " + std::to_string(i));
