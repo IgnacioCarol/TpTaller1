@@ -9,9 +9,12 @@ Client::Client(std::string IP, std::string port) {
 
 int Client::init() {
     _socket->init(_IP, _port, CLIENT);
-    if(_socket->connect()) { //TODO: ver como manejar si el socket falla -> creo que habia preguntas sobre eso en el campus
+    if(!_socket->connect()) { //TODO: ver como manejar si el socket falla -> creo que habia preguntas sobre eso en el campus
+        Logger::getInstance()->error("Failed connection to server");
         _socket->release();
+        return 1;
     }
+
     Logger::getInstance()->info("Client connected");
     return 0;
 }
@@ -28,14 +31,14 @@ void Client::release() {
     Logger::getInstance()->info("Client disconnected");
 }
 
-bool Client::send(msg_t *msg) {
+int Client::send(msg_t *msg) {
     int sent = _socket->send(msg);
     return sent;
 }
 
-bool Client::receive(const void *msg, size_t len) {
+bool Client::receive(msg_t *msg, size_t len) {
     int recv = _socket->receive(msg, len);
-    return (recv == len);
+    return recv;
 }
 
 

@@ -95,14 +95,23 @@ int main(int argc, char * argv[]) {
     if (mode == SERVER) {
         // ToDo launch server
         Server * server = Server::getInstance();
-        return server->run();
+        if(server->run()) {
+            return 0;
+        } else {
+            return 1;
+        }
     } else {
-        Client * client = new Client(ipAddr.c_str(), "8080");
+        auto * client = new Client(ipAddr, "8080");
         client->init();
         msg_t message;
-        message.text = "que onda ";
-        message.value = 10;
-        if (!client->send(&message)) {
+        message.val1 = 10;
+        message.val2 = 9;
+        message.val3 = 8;
+        message.val4 = 7;
+        message.val5 = 6;
+        message.val6 = 5;
+        message.val7 = 4;
+        if (client->send(&message) < 0) {
             Logger::getInstance()->error("send failed");
             return 1;
         }

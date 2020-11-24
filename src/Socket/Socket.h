@@ -12,8 +12,13 @@ enum ConnectionType {
 
 // Struct de test para probar comunicacion de sockets
 typedef struct {
-    int value;
-    std::string text;
+    int val1;
+    int val2;
+    int val3;
+    int val4;
+    int val5;
+    int val6;
+    int val7;
 } msg_t;
 
 class Socket {
@@ -37,7 +42,7 @@ public:
 
     //Returns the amount of bytes received
     //If it returns 0 or a negative number, there was an error
-    int receive(const void *msg, size_t len);
+    int receive(msg_t *msg, size_t len);
 
     //Closes the socket
     void release() const;

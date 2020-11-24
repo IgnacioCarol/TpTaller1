@@ -58,13 +58,14 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
         }; */
         server_addr.sin_family = AF_INET;
         server_addr.sin_addr.s_addr = INADDR_ANY; //Address to accept any incoming messages. INADDR_ANY accepts any.
-        server_addr.sin_port = htons(8080); // The htons() function converts the unsigned short integer hostshort from host byte order to network byte order.
+        server_addr.sin_port = htons((int)8080); // The htons() function converts the unsigned short integer hostshort from host byte order to network byte order.
         //ToDo por el momento hardcodeo 8080, luego cambiar por port
     } else {
         // Prepare the sockaddr_in structure
         server_addr.sin_addr.s_addr = inet_addr((const char*)IP);
         server_addr.sin_family = AF_INET;
-        server_addr.sin_port = htons( atoi(port) );
+        server_addr.sin_port = htons( (int)8080 );
+        //ToDo por el momento hardcodeo 8080, luego cambiar por port
         //------------------------
     }
 }
@@ -161,8 +162,35 @@ int Socket::send(msg_t *msg) {
     return 0;
 }
 
-int Socket::receive(const void *msg, size_t len) {
-    return communication(::recv, msg, len);
+int Socket::receive(msg_t *msg, size_t len) {
+    int total_bytes_receive = 0;
+    int bytes_receive = 0;
+    int receive_data_size = sizeof(msg_t);
+    bool client_socket_still_open = true;
+
+    // Receive
+    // ssize_t recv(int sockfd, void *buf, size_t len, int flags);
+    // sockfd -> file descriptor that refers to a socket
+    // buf -> where the received message into the buffer buf.
+    // len -> The caller must specify the size of the buffer in len.
+    // flags
+    // The recv() call are used to receive messages from a socket.
+    // If no messages are available at the socket, the receive call wait for a message to arrive. (Blocking)
+
+    while ((receive_data_size > bytes_receive) && client_socket_still_open) {
+        bytes_receive = recv(fd, (msg + total_bytes_receive), (receive_data_size - total_bytes_receive), 0);
+        if (bytes_receive < 0) { // Error
+            return bytes_receive;
+        }
+        else if (bytes_receive == 0) { // Socket closed
+            client_socket_still_open = false;
+        }
+        else {
+            total_bytes_receive += bytes_receive;
+        }
+    }
+
+    return 0;
 }
 
 bool Socket::bindAndListen() {
@@ -217,8 +245,9 @@ Socket *Socket::accept() {
         throw SocketException("Fail accepting client connection");
     }
 
-    Socket * client = new Socket();
-    client->setSocketFileDescriptor(client_socket);
+    auto * client = new Socket();
+    close(client->fd);
+    client->fd = client_socket;
     Logger::getInstance()->info("Connection accepted");
 
     return client;

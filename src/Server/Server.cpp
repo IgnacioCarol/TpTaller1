@@ -35,10 +35,17 @@ bool Server::run() {
         Socket * client = serverSocket->accept();
         //ToDo por cada nuevo cliente que se acepta se debe crear un thread
         msg_t message;
+        memset(&message, 0, sizeof(message));
         client->receive(&message, sizeof(message));
 
         std::stringstream ss;
-        ss << "value: " << message.value << " text: " << message.text;
+        ss << "val1: " << message.val1 << std::endl
+           << "val2: " << message.val2 << std::endl
+           << "val3: " << message.val3 << std::endl
+           << "val4: " << message.val4 << std::endl
+           << "val5: " << message.val5 << std::endl
+           << "val6: " << message.val6 << std::endl
+           << "val7: " << message.val7 << std::endl;
         Logger::getInstance()->info(ss.str());
     } catch (std::exception &ex) {
         //ToDo handle error

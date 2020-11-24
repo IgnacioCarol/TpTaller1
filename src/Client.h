@@ -10,8 +10,8 @@ public:
     Client(std::string IP, std::string port);
     int init();
     bool isConnected();
-    bool send(msg_t *msg);
-    bool receive(const void* msg, size_t len);
+    int send(msg_t *msg);
+    bool receive(msg_t *msg, size_t len);
     void release();
 private:
     const char * _IP;
