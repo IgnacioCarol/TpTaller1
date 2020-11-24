@@ -14,7 +14,8 @@ public:
     virtual ~PlayerClient();
 private:
     Socket * clientSocket;
-    std::queue<msg_t *> income; //ToDo define msg_t
+    pthread_mutex_t  commandMutex; // Mutex to control command queue
+    pthread_mutex_t  outcomeMutex; // Mutex to control outcome queue
     std::queue<msg_t *> outcome; //ToDo define msg_t
 };
 

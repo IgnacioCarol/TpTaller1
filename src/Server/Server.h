@@ -12,6 +12,7 @@
 #include "../logger/logger.h"
 #include "PlayerClient.h"
 #include <queue>
+#include <pthread.h>
 
 class Server {
 
@@ -33,6 +34,7 @@ private:
     Socket *_socket;
     std::vector<PlayerClient *> clients;
     std::queue<msg_t *> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
+    pthread_mutex_t  commandMutex; // Mutex to control command queue
     const int MAX_ACCEPT_RETRIES = 10;
 };
 
