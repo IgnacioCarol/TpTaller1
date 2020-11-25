@@ -80,28 +80,6 @@ bool Server::acceptClients() {
     return retry != MAX_ACCEPT_RETRIES;
 }
 
-bool Server::receive(Socket *client) {
-    msg_t message;
-    memset(&message, 0, sizeof(message));
-
-    if (client->receive(&message, sizeof(message)) == 0) {
-        Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
-        return false;
-    }
-
-    //TODO: Borrar, es solo para prueba
-    std::stringstream ss;
-    ss << "val1: " << message.val1 << std::endl
-       << "val2: " << message.val2 << std::endl
-       << "val3: " << message.val3 << std::endl
-       << "val4: " << message.val4 << std::endl
-       << "val5: " << message.val5 << std::endl
-       << "val6: " << message.val6 << std::endl
-       << "val7: " << message.val7 << std::endl;
-    Logger::getInstance()->info(ss.str());
-    return true;
-}
-
 void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
 
@@ -119,6 +97,35 @@ void * Server::handlePlayerClient(void * arg) {
 
 // Infinite loop processing PlayerClients commands
 bool Server::run() {
-    return false;
+
+    //ToDo while (Game->isRunning()) {
+    while (true) {
+        pthread_mutex_t  * mutex = this->commandMutex;
+        msg_t message;
+        memset(&message, 0, sizeof(message));
+
+        pthread_mutex_lock(mutex);
+        message = commands.front();
+        commands.pop();
+        pthread_mutex_unlock(mutex);
+
+        //ToDo change game state with msg
+
+        if (message.val1 == 0) {
+            continue;
+        }
+
+        std::stringstream ss;
+        ss << "val1: " << message.val1 << std::endl
+           << "val2: " << message.val2 << std::endl
+           << "val3: " << message.val3 << std::endl
+           << "val4: " << message.val4 << std::endl
+           << "val5: " << message.val5 << std::endl
+           << "val6: " << message.val6 << std::endl
+           << "val7: " << message.val7 << std::endl;
+        Logger::getInstance()->info(ss.str());
+    }
+
+    return true;
 }
 
