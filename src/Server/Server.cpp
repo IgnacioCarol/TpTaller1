@@ -77,10 +77,7 @@ bool Server::acceptClients() {
         }
     }
 
-    if (retry == MAX_ACCEPT_RETRIES) {
-        return false;
-    }
-    return true;
+    return retry != MAX_ACCEPT_RETRIES;
 }
 
 bool Server::receive(Socket *client) {
