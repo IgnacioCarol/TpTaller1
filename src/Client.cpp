@@ -41,9 +41,9 @@ int Client::send(msg_t *msg) {
     return sent;
 }
 
-bool Client::receive(msg_t *msg, size_t len) {
-    int recv = _socket->receive(msg, len);
-    return recv;
+bool Client::receive(msg_t *msg) {
+    int recv = _socket->receive(msg);
+    return recv > 0;
 }
 
 

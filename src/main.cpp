@@ -4,6 +4,7 @@
 #include "SDL2/SDL.h"
 #endif
 #include <iostream>
+#include <unistd.h>
 #include <arpa/inet.h>
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
@@ -122,6 +123,17 @@ int main(int argc, char * argv[]) {
             delete client;
             return 1;
         }
+
+        client->receive(&message);
+        ss.clear();
+        ss << "val1: " << message.val1 << std::endl
+           << "val2: " << message.val2 << std::endl
+           << "val3: " << message.val3 << std::endl
+           << "val4: " << message.val4 << std::endl
+           << "val5: " << message.val5 << std::endl
+           << "val6: " << message.val6 << std::endl
+           << "val7: " << message.val7 << std::endl;
+        Logger::getInstance()->info(ss.str());
         delete client;
         return 0;
     }

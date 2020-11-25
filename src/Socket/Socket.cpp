@@ -94,7 +94,7 @@ int Socket::send(msg_t *msg) {
     return 0;
 }
 
-int Socket::receive(msg_t *msg, size_t len) {
+int Socket::receive(msg_t *msg) {
     int total_bytes_receive = 0;
     int bytes_received = 0;
     int receive_data_size = sizeof(msg_t);

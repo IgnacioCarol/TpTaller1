@@ -12,7 +12,7 @@ public:
     int init();
     bool isConnected();
     int send(msg_t *msg);
-    bool receive(msg_t *msg, size_t len);
+    bool receive(msg_t *msg);
     void release();
 private:
     const char * _IP;

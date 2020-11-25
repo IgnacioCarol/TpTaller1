@@ -49,7 +49,7 @@ public:
 
     //Returns the amount of bytes received
     //If it returns 0 or a negative number, there was an error
-    int receive(msg_t *msg, size_t len);
+    int receive(msg_t *msg);
 
     //Closes the socket
     void release() const;

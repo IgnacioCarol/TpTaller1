@@ -22,7 +22,8 @@ Server::~Server() {
         delete client;
     }
     pthread_mutex_destroy(&this->commandMutex);
-    free(this->threads);
+    free(this->incomeThreads);
+    free(this->outcomeThreads);
 }
 
 Server::Server() {
@@ -32,8 +33,14 @@ Server::Server() {
 bool Server::init(const char *ip, const char *port, int clientNo) {
     // Init threads
     this->clientNo = clientNo;
-    this->threads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
-    if (!this->threads) {
+    this->incomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
+    if (!this->incomeThreads) {
+        Logger::getInstance()->error("[Server] unable to create threads array, out of memory");
+        return false;
+    }
+
+    this->outcomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
+    if (!this->outcomeThreads) {
         Logger::getInstance()->error("[Server] unable to create threads array, out of memory");
         return false;
     }
@@ -63,7 +70,8 @@ bool Server::acceptClients() {
         try {
             auto * playerClient = new PlayerClient(_socket->accept(), &this->commandMutex, &this->commands);
             clients.push_back(playerClient);
-            pthread_create(&threads[i], nullptr, Server::handlePlayerClient, (void *) playerClient);
+            pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) playerClient);
+            pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
             Logger::getInstance()->info("[Server] Client number " + std::to_string(i) + " has been accepted");
         } catch (std::exception &ex) {
             Logger::getInstance()->error("[Server] Error accepting client number: " + std::to_string(i));
@@ -76,16 +84,50 @@ bool Server::acceptClients() {
 
 void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
+    pthread_mutex_t  * mutex = playerClient->getCommandMutex();
+    msg_t msg;
 
     //ToDo while (playerClient->isConnected()) {
     while (true) {
-        msg_t msg = playerClient->receive();
-        pthread_mutex_t  * mutex = playerClient->getCommandMutex();
+        memset(&msg, 0, sizeof(msg));
+        msg = playerClient->receive(); //ToDo realizar chequeo de si realmente el usuario mando algo y lo recibi, si no mando nada no deberia pushear a la cola de novedades
+        if (msg.val1 == 0) {
+            continue;
+        }
+
         pthread_mutex_lock(mutex);
         playerClient->commandQueue->push(msg);
         pthread_mutex_unlock(mutex);
     }
 
+    return nullptr;
+}
+
+void * Server::broadcastToPlayerClient(void *arg) {
+    PlayerClient * playerClient = (PlayerClient *)arg;
+    std::queue<msg_t> * outcomeQueue = &playerClient->outcome;
+    pthread_mutex_t  * mutex = playerClient->getOutcomeMutex();
+    msg_t msg;
+
+    //ToDo while (playerClient->isConnected()) {
+    while (true) {
+        memset(&msg, 0, sizeof(msg));
+        pthread_mutex_lock(mutex);
+        if (!outcomeQueue->empty()) {
+            msg = outcomeQueue->front();
+            outcomeQueue->pop();
+        } else {
+            pthread_mutex_unlock(mutex);
+            continue;
+        }
+        pthread_mutex_unlock(mutex);
+
+        Logger::getInstance()->debug("envianding mensaje...");
+        if(!playerClient->send(&msg)) {
+            //ToDo handle error
+            Logger::getInstance()->error("[SERVER] Error broadcasting message to client");
+        }
+    }
     return nullptr;
 }
 
@@ -120,6 +162,21 @@ bool Server::run() {
            << "val6: " << message.val6 << std::endl
            << "val7: " << message.val7 << std::endl;
         Logger::getInstance()->info(ss.str());
+
+        message.val1+=10;
+        message.val2+=10;
+        message.val3+=10;
+        message.val4+=10;
+        message.val5+=10;
+        message.val6+=10;
+        message.val7+=10;
+
+        for (auto & client : clients) {
+            pthread_mutex_t * mutex = client->getOutcomeMutex();
+            pthread_mutex_lock(mutex);
+            client->outcome.push(message);
+            pthread_mutex_unlock(mutex);
+        }
     }
 
     return true;
