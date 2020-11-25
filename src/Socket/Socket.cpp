@@ -116,7 +116,8 @@ int Socket::receive(msg_t *msg, size_t len) {
             return bytes_received;
         }
         else if (bytes_received == 0) { // Socket closed
-            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
+//            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
+            //ToDo verificar, pero creo que si no envio ningun byte y llamo al receive, esta bien que lea 0 bytes, lo que estaria mal es que en medio de una transmision reciba 0 bytes, tunear este border case
             client_socket_still_open = false;
         }
         else {
