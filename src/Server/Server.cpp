@@ -69,8 +69,7 @@ bool Server::acceptClients() {
         try {
             auto * playerClient = new PlayerClient(_socket->accept(), this->commandMutex);
             clients.push_back(playerClient);
-            pthread_t *clientThread = nullptr;
-            pthread_create(clientThread, nullptr, Server::handlePlayerClient, nullptr);
+            pthread_create(&threads[i], nullptr, Server::handlePlayerClient, nullptr);
             Logger::getInstance()->info("[Server] Client number " + std::to_string(i) + " has been accepted");
         } catch (std::exception &ex) {
             Logger::getInstance()->error("[Server] Error accepting client number: " + std::to_string(i));
