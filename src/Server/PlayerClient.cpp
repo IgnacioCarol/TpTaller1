@@ -4,7 +4,7 @@
 
 #include "PlayerClient.h"
 
-PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<msg_t *> * commandQueue) {
+PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<msg_t> * commandQueue) {
     pthread_mutex_init(this->outcomeMutex, nullptr);
     this->clientSocket = clientSocket;
     this->commandMutex = commandMutex;

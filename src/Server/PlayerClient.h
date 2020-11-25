@@ -9,7 +9,7 @@
 
 class PlayerClient {
 public:
-    explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<msg_t *> * commandQueue);
+    explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<msg_t> * commandQueue);
     msg_t receive();
     pthread_mutex_t  * getCommandMutex();
     Socket * getSocket();
