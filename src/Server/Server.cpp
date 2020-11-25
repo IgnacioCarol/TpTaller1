@@ -67,9 +67,9 @@ bool Server::acceptClients() {
 
     for (int i = 0; i < clientNo && retry <= MAX_ACCEPT_RETRIES; i++, retry++) {
         try {
-            auto * playerClient = new PlayerClient(_socket->accept(), this->commandMutex);
+            auto * playerClient = new PlayerClient(_socket->accept(), this->commandMutex, &this->commands);
             clients.push_back(playerClient);
-            pthread_create(&threads[i], nullptr, Server::handlePlayerClient, nullptr);
+            pthread_create(&threads[i], nullptr, Server::handlePlayerClient, (void *) playerClient);
             Logger::getInstance()->info("[Server] Client number " + std::to_string(i) + " has been accepted");
         } catch (std::exception &ex) {
             Logger::getInstance()->error("[Server] Error accepting client number: " + std::to_string(i));
@@ -103,7 +103,18 @@ bool Server::receive(Socket *client) {
 }
 
 void * Server::handlePlayerClient(void * arg) {
+    PlayerClient * playerClient = (PlayerClient *)arg;
 
+    //ToDo while (playerClient->isConnected()) {
+    while (true) {
+        msg_t msg = playerClient->receive();
+        pthread_mutex_t  * mutex = playerClient->getCommandMutex();
+        pthread_mutex_lock(mutex);
+        playerClient->commandQueue->push(msg);
+        pthread_mutex_unlock(mutex);
+    }
+
+    return nullptr;
 }
 
 // Infinite loop processing PlayerClients commands
