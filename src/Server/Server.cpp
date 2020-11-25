@@ -22,6 +22,7 @@ Server::~Server() {
         delete client;
     }
     pthread_mutex_destroy(this->commandMutex);
+    free(this->threads);
 }
 
 Server::Server() {
@@ -29,12 +30,20 @@ Server::Server() {
 }
 
 bool Server::init(const char *ip, const char *port, int clientNo) {
+    // Init threads
+    this->clientNo = clientNo;
+    this->threads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
+    if (!this->threads) {
+        Logger::getInstance()->error("[Server] unable to create threads array, out of memory");
+        return false;
+    }
+
     if (!initSocket(ip, port)) {
         return false;
     }
     Logger::getInstance()->info("[Server] Server is up and running");
 
-    if (!acceptClients(clientNo)) {
+    if (!acceptClients()) {
         return false;
     }
     Logger::getInstance()->info("[Server] All clients have been accepted");
@@ -53,13 +62,15 @@ bool Server::initSocket(const char*ip, const char *port) {
     return _socket->bindAndListen();
 }
 
-bool Server::acceptClients(int clientNo) {
+bool Server::acceptClients() {
      int retry = 1;
 
     for (int i = 0; i < clientNo && retry <= MAX_ACCEPT_RETRIES; i++, retry++) {
         try {
-            auto * playerClient = new PlayerClient(_socket->accept());
+            auto * playerClient = new PlayerClient(_socket->accept(), this->commandMutex);
             clients.push_back(playerClient);
+            pthread_t *clientThread = nullptr;
+            pthread_create(clientThread, nullptr, Server::handlePlayerClient, nullptr);
             Logger::getInstance()->info("[Server] Client number " + std::to_string(i) + " has been accepted");
         } catch (std::exception &ex) {
             Logger::getInstance()->error("[Server] Error accepting client number: " + std::to_string(i));
@@ -93,6 +104,10 @@ bool Server::receive(Socket *client) {
        << "val7: " << message.val7 << std::endl;
     Logger::getInstance()->info(ss.str());
     return true;
+}
+
+void * Server::handlePlayerClient(void * arg) {
+
 }
 
 // Infinite loop processing PlayerClients commands

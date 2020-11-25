@@ -28,13 +28,16 @@ private:
     Server();
 
     bool initSocket(const char*ip, const char *port);
-    bool acceptClients(int clientNo);
+    bool acceptClients();
+    static void * handlePlayerClient(void * arg);
     bool receive(Socket *client);
 
     Socket *_socket;
     std::vector<PlayerClient *> clients;
     std::queue<msg_t *> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
-    pthread_mutex_t  * commandMutex; // Mutex to control command queue
+    pthread_mutex_t  * commandMutex{}; // Mutex to control command queue
+    pthread_t        * threads;
+    size_t             clientNo;
     const int MAX_ACCEPT_RETRIES = 10;
 };
 
