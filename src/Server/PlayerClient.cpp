@@ -26,8 +26,11 @@ msg_t PlayerClient::receive() {
 
     if (this->clientSocket->receive(&message, sizeof(message)) == 0) {
         Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
-        return false;
+        //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
+        return msg_t{};
     }
+
+    return message;
 }
 
 pthread_mutex_t *PlayerClient::getCommandMutex() {

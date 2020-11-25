@@ -101,6 +101,8 @@ int main(int argc, char * argv[]) {
             delete server;
             return 0;
         }
+
+        server->run();
         delete server;
         return 1;
     } else {

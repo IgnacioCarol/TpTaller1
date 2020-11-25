@@ -21,12 +21,12 @@ Server::~Server() {
     for (auto & client : clients) {
         delete client;
     }
-    pthread_mutex_destroy(this->commandMutex);
+    pthread_mutex_destroy(&this->commandMutex);
     free(this->threads);
 }
 
 Server::Server() {
-    pthread_mutex_init(this->commandMutex, nullptr);
+    pthread_mutex_init(&this->commandMutex, nullptr);
 }
 
 bool Server::init(const char *ip, const char *port, int clientNo) {
@@ -47,12 +47,6 @@ bool Server::init(const char *ip, const char *port, int clientNo) {
         return false;
     }
     Logger::getInstance()->info("[Server] All clients have been accepted");
-
-    //TODO: Multithreading
-    if(!receive(clients[0]->getSocket())) { //ToDo me parece que queda mejor si el receive es un metodo del client
-        return false;
-    }
-    Logger::getInstance()->info("[Server] Message received");
     return true;
 }
 
@@ -67,7 +61,7 @@ bool Server::acceptClients() {
 
     for (int i = 0; i < clientNo && retry <= MAX_ACCEPT_RETRIES; i++, retry++) {
         try {
-            auto * playerClient = new PlayerClient(_socket->accept(), this->commandMutex, &this->commands);
+            auto * playerClient = new PlayerClient(_socket->accept(), &this->commandMutex, &this->commands);
             clients.push_back(playerClient);
             pthread_create(&threads[i], nullptr, Server::handlePlayerClient, (void *) playerClient);
             Logger::getInstance()->info("[Server] Client number " + std::to_string(i) + " has been accepted");
@@ -100,13 +94,15 @@ bool Server::run() {
 
     //ToDo while (Game->isRunning()) {
     while (true) {
-        pthread_mutex_t  * mutex = this->commandMutex;
+        pthread_mutex_t  * mutex = &this->commandMutex;
         msg_t message;
         memset(&message, 0, sizeof(message));
 
         pthread_mutex_lock(mutex);
-        message = commands.front();
-        commands.pop();
+        if (commands.size() > 0) {
+            message = commands.front();
+            commands.pop();
+        }
         pthread_mutex_unlock(mutex);
 
         //ToDo change game state with msg
