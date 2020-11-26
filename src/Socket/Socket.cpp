@@ -154,8 +154,10 @@ bool Socket::bindAndListen() {
     // sockfd -> file descriptor that refers to a socket,in this case of type SOCK_STREAM
     // backlog-> The backlog argument defines the maximum length to which the queue of pending connections for sockfd may grow.
     // listen() marks the socket referred to by sockfd as a passive socket, that is, as a socket that will be used to accept incoming connection requests using accept();
-    if (listen(fd , 4) < 0) { //ToDo ver que pasa cuando mas usuarios se quieren conectar
-        Logger::getInstance()->error("Listen failed");
+
+    int res = listen(fd , 4); //If the queue is full (4 clients waiting) and another client tries to connect, it will be discarded.
+    if (res < 0) {
+        Logger::getInstance()->error("Listen failed" + std::string(strerror(errno)));
         return false;
     }
     Logger::getInstance()->info("[Socket] Listening on port: " + port + " Waiting for incoming connections...");

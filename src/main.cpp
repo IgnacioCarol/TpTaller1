@@ -107,7 +107,7 @@ int main(int argc, char * argv[]) {
         delete server;
         return 1;
     } else {
-        Logger::getInstance()->info("Initializing in client mode");
+        Logger::getInstance()->info("[Client] Initializing in client mode");
         auto * client = new Client(ipAddr, to_string(port).c_str());
         client->init();
         msg_t message;
@@ -119,7 +119,7 @@ int main(int argc, char * argv[]) {
         message.val6 = 5;
         message.val7 = 4;
         if (client->send(&message, sizeof(msg_t)) < 0) {
-            Logger::getInstance()->error("send failed");
+            Logger::getInstance()->error("[Client] send failed");
             delete client;
             return 1;
         }

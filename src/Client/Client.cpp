@@ -12,16 +12,14 @@ Client::~Client() {
     delete _socket;
 }
 
-int Client::init() {
+void Client::init() {
     _socket->init(_IP, _port, CLIENT);
-    if(!_socket->connect()) { //TODO: ver como manejar si el socket falla -> creo que habia preguntas sobre eso en el campus
-        Logger::getInstance()->error("[Client] Failed connection to server");
+    if(!_socket->connect()) {
         _socket->release();
-        return 1;
+        return;
     }
 
     Logger::getInstance()->info("[Client] Client connected");
-    return 0;
 }
 
 bool Client::isConnected() {
