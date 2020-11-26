@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 24/11/2020.
-//
-
 #include "PlayerClient.h"
 
 PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<msg_t> * commandQueue) {
@@ -20,17 +16,17 @@ Socket *PlayerClient::getSocket() {
     return this->clientSocket;
 }
 
-msg_t PlayerClient::receive() {
-    msg_t message;
-    memset(&message, 0, sizeof(message));
+bool PlayerClient::receive(void* message, size_t len) {
+   // msg_t message;
+    memset(message, 0, len);
 
-    if (this->clientSocket->receive(&message) < 0) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
+    if (this->clientSocket->receive(message, sizeof(msg_t)) < 0) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
         Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
         //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
-        return msg_t{};
+        return false;
     }
 
-    return message;
+    return true;
 }
 
 pthread_mutex_t *PlayerClient::getCommandMutex() {
@@ -41,7 +37,7 @@ pthread_mutex_t *PlayerClient::getOutcomeMutex() {
     return &this->outcomeMutex;
 }
 
-bool PlayerClient::send(msg_t * msg) {
-    int result = this->clientSocket->send(msg);
+bool PlayerClient::send(void * msg, size_t len) {
+    int result = this->clientSocket->send(msg, len);
     return result == 0;
 }

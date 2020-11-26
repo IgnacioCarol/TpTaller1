@@ -1,5 +1,5 @@
 #include "Client.h"
-#include "logger/logger.h"
+#include "src/logger/logger.h"
 
 Client::Client(std::string IP, std::string port) {
     _IP = IP.c_str();
@@ -36,13 +36,13 @@ void Client::release() {
     Logger::getInstance()->info("[Client] Client disconnected");
 }
 
-int Client::send(msg_t *msg) {
-    int sent = _socket->send(msg);
+int Client::send(msg_t *msg, size_t len) {
+    int sent = _socket->send(msg, len);
     return sent;
 }
 
-bool Client::receive(msg_t *msg) {
-    int recv = _socket->receive(msg);
+bool Client::receive(msg_t *msg, size_t len) {
+    int recv = _socket->receive(msg, len);
     return recv > 0;
 }
 

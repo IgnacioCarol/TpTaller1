@@ -69,14 +69,15 @@ bool Socket::isConnected() {
     return _connected;
 }
 
-int Socket::send(msg_t *msg) {
+int Socket::send(void *msg, size_t len) {
     int total_bytes_written = 0;
     int bytes_written = 0;
-    int send_data_size = sizeof(msg_t);
+    //int send_data_size = sizeof(msg_t);
     bool client_socket_still_open = true;
+    auto *msg_to_send = (uint8_t*)msg;
 
-    while ((send_data_size > total_bytes_written) && client_socket_still_open){
-        bytes_written = ::send(fd, (msg + total_bytes_written), (send_data_size-total_bytes_written), 0);
+    while ((len > total_bytes_written) && client_socket_still_open){
+        bytes_written = ::send(fd, (msg_to_send + total_bytes_written), (len - total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
             Logger::getInstance()->error("[Socket] unexpected error trying to send msg");
@@ -94,11 +95,12 @@ int Socket::send(msg_t *msg) {
     return 0;
 }
 
-int Socket::receive(msg_t *msg) {
+int Socket::receive(void *msg, size_t len) {
     int total_bytes_receive = 0;
     int bytes_received = 0;
-    int receive_data_size = sizeof(msg_t);
+    //int receive_data_size = sizeof(msg_t);
     bool client_socket_still_open = true;
+    auto *msg_to_send = (uint8_t*)msg;
 
     // Receive
     // ssize_t recv(int sockfd, void *buf, size_t len, int flags);
@@ -109,8 +111,8 @@ int Socket::receive(msg_t *msg) {
     // The recv() call are used to receive messages from a socket.
     // If no messages are available at the socket, the receive call wait for a message to arrive. (Blocking)
 
-    while ((receive_data_size > bytes_received) && client_socket_still_open) {
-        bytes_received = recv(fd, (msg + total_bytes_receive), (receive_data_size - total_bytes_receive), 0);
+    while ((len > bytes_received) && client_socket_still_open) {
+        bytes_received = recv(fd, (msg_to_send + total_bytes_receive), (len - total_bytes_receive), 0);
         if (bytes_received < 0) { // Error
             Logger::getInstance()->error("[Socket] unexpected error trying to receive msg");
             return bytes_received;

@@ -38,7 +38,7 @@ add_executable(TpTaller1
         test/config_test.cpp
         test/logger_test.cpp src/config/Constants.h src/config/ConfigException.cpp src/config/ConfigException.h
         src/CharacterStates/EnemyMovement.h src/CharacterStates/EnemyMovement.cpp src/gameobjects/Enemy.h src/gameobjects/Enemy.cpp
-        src/BackgroundStages/ThirdStage.cpp src/BackgroundStages/ThirdStage.h src/Client.cpp src/Client.h src/Socket/Socket.cpp src/Socket/Socket.h
+        src/BackgroundStages/ThirdStage.cpp src/BackgroundStages/ThirdStage.h src/Client/Client.cpp src/Client/Client.h src/Socket/Socket.cpp src/Socket/Socket.h
         src/Server/Server.cpp src/Server/Server.h src/Socket/SocketException.cpp src/Socket/SocketException.h src/Server/PlayerClient.cpp src/Server/PlayerClient.h)
 
 if (APPLE)

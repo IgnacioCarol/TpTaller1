@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 24/11/2020.
-//
-
 #ifndef TPTALLER1_PLAYERCLIENT_H
 #define TPTALLER1_PLAYERCLIENT_H
 #include "../Socket/Socket.h"
@@ -10,8 +6,8 @@
 class PlayerClient {
 public:
     explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<msg_t> * commandQueue);
-    msg_t receive();
-    bool send(msg_t * msg);
+    bool receive(void* msg, size_t len);
+    bool send(void * msg, size_t len);
     pthread_mutex_t  * getCommandMutex();
     pthread_mutex_t  * getOutcomeMutex();
     Socket * getSocket();

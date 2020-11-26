@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 23/11/2020.
-//
-
 #ifndef TPTALLER1_SERVER_H
 #define TPTALLER1_SERVER_H
 

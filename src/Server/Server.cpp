@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 23/11/2020.
-//
-
 #include "Server.h"
 #include <pthread.h>
 
@@ -86,12 +82,13 @@ void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
     pthread_mutex_t  * mutex = playerClient->getCommandMutex();
     msg_t msg;
+    bool msg_received;
 
     //ToDo while (playerClient->isConnected()) {
     while (true) {
         memset(&msg, 0, sizeof(msg));
-        msg = playerClient->receive(); //ToDo realizar chequeo de si realmente el usuario mando algo y lo recibi, si no mando nada no deberia pushear a la cola de novedades
-        if (msg.val1 == 0) {
+        msg_received = playerClient->receive(&msg, sizeof(msg_t)); //ToDo realizar chequeo de si realmente el usuario mando algo y lo recibi, si no mando nada no deberia pushear a la cola de novedades
+        if (!msg_received) {
             continue;
         }
 
@@ -123,7 +120,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
         pthread_mutex_unlock(mutex);
 
         Logger::getInstance()->debug("envianding mensaje...");
-        if(!playerClient->send(&msg)) {
+        if(!playerClient->send(&msg, sizeof(msg_t))) {
             //ToDo handle error
             Logger::getInstance()->error("[SERVER] Error broadcasting message to client");
         }

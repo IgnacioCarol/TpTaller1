@@ -3,7 +3,7 @@
 
 
 #include <string>
-#include "Socket/Socket.h"
+#include "src/Socket/Socket.h"
 
 class Client {
 public:
@@ -11,8 +11,8 @@ public:
     ~Client();
     int init();
     bool isConnected();
-    int send(msg_t *msg);
-    bool receive(msg_t *msg);
+    int send(msg_t *msg, size_t len);
+    bool receive(msg_t *msg, size_t len);
     void release();
 private:
     const char * _IP;

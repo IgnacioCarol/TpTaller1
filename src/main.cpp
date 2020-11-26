@@ -11,7 +11,7 @@
 #include "logger/logger.h"
 #include "Game.h"
 #include "Server/Server.h"
-#include "Client.h"
+#include "src/Client/Client.h"
 #include "Socket/Socket.h"
 
 #define FPS 40;
@@ -118,13 +118,13 @@ int main(int argc, char * argv[]) {
         message.val5 = 6;
         message.val6 = 5;
         message.val7 = 4;
-        if (client->send(&message) < 0) {
+        if (client->send(&message, sizeof(msg_t)) < 0) {
             Logger::getInstance()->error("send failed");
             delete client;
             return 1;
         }
 
-        client->receive(&message);
+        client->receive(&message, sizeof(msg_t));
         ss.clear();
         ss << "val1: " << message.val1 << std::endl
            << "val2: " << message.val2 << std::endl

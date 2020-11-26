@@ -45,11 +45,11 @@ public:
 
     //Returns the amount of bytes sent
     //If it returns 0 or a negative number, there was an error
-    int send(msg_t *msg);
+    int send(void *msg, size_t len);
 
     //Returns the amount of bytes received
     //If it returns 0 or a negative number, there was an error
-    int receive(msg_t *msg);
+    int receive(void *msg, size_t len);
 
     //Closes the socket
     void release() const;
