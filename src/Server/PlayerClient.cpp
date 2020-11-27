@@ -17,12 +17,11 @@ Socket *PlayerClient::getSocket() {
 }
 
 bool PlayerClient::receive(void* message, size_t len) {
-   // msg_t message;
     memset(message, 0, len);
+    int received = this->clientSocket->receive(message, sizeof(msg_t));
 
-    if (this->clientSocket->receive(message, sizeof(msg_t)) < 0) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
-        Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
-        //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
+    if (received <= 0) { //< 0 means that there was an error, == 0 means that the socket was closed
+        Logger::getInstance()->error("[Server] Couldn't receive message from client");
         return false;
     }
 

@@ -87,7 +87,7 @@ void * Server::handlePlayerClient(void * arg) {
     //ToDo while (playerClient->isConnected()) {
     while (true) {
         memset(&msg, 0, sizeof(msg));
-        msg_received = playerClient->receive(&msg, sizeof(msg_t)); //ToDo realizar chequeo de si realmente el usuario mando algo y lo recibi, si no mando nada no deberia pushear a la cola de novedades
+        msg_received = playerClient->receive(&msg, sizeof(msg_t));
         if (!msg_received) {
             continue;
         }

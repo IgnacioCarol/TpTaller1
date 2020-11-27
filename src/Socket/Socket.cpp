@@ -80,7 +80,7 @@ int Socket::send(void *msg, size_t len) {
         bytes_written = ::send(fd, (msg_to_send + total_bytes_written), (len - total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
-            Logger::getInstance()->error("[Socket] unexpected error trying to send msg");
+            Logger::getInstance()->error("[Socket] unexpected error trying to send msg. Error: "  + std::string(strerror(errno));
             return bytes_written;
         }
         else if (bytes_written == 0) { // Socket closed
@@ -114,12 +114,11 @@ int Socket::receive(void *msg, size_t len) {
     while ((len > bytes_received) && client_socket_still_open) {
         bytes_received = recv(fd, (msg_to_send + total_bytes_receive), (len - total_bytes_receive), 0);
         if (bytes_received < 0) { // Error
-            Logger::getInstance()->error("[Socket] unexpected error trying to receive msg");
+            Logger::getInstance()->error("[Socket] unexpected error trying to receive msg. Error: " + std::string(strerror(errno)));
             return bytes_received;
         }
         else if (bytes_received == 0) { // Socket closed
-//            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
-            //ToDo verificar, pero creo que si no envio ningun byte y llamo al receive, esta bien que lea 0 bytes, lo que estaria mal es que en medio de una transmision reciba 0 bytes, tunear este border case
+            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
             client_socket_still_open = false;
         }
         else {
