@@ -4,6 +4,8 @@
 #ifndef TPTALLER1_CAMERA_H
 #define TPTALLER1_CAMERA_H
 
+#include "gameobjects/Player.h"
+
 
 class Camera {
 
@@ -12,7 +14,7 @@ public:
     ~Camera() = default;
 
 
-    void render(int playerXPos, int borderLimit);
+    void render(std::vector<Player*> players, int borderLimit);
 
     int lastValue = 0;
 
