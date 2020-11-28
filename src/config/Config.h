@@ -65,6 +65,13 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_STAGE_LEVEL_PLATFORM_COORDY "coordY"
 #define XML_STAGE_LEVEL_PLATFORM_QTY "cantidad"
 
+#define XML_CREDENTIAL_TAG "configuracion.credenciales"
+#define XML_CREDENTIAL_CONNECTIONS "configuracion.credenciales.cantidadJugadores"
+#define XML_CREDENTIAL_USERS_SECTION "configuracion.credenciales.usuarios"
+#define XML_CREDENTIAL_USER "usuario"
+#define XML_CREDENTIAL_USERS_NAME "nombre"
+#define XML_CREDENTIAL_USERS_PASSWORD "contrasenia"
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -119,6 +126,16 @@ struct Log {
     string level;
 };
 
+struct User {
+    string username;
+    string password;
+};
+
+struct Players {
+    int amount;
+    vector<User> users;
+};
+
 class Config {
 public:
     static Config* getInstance() {
@@ -134,6 +151,7 @@ public:
     Stage getStage();
     Log getLog();
     Level getLevel(int level);
+    Players getPlayers();
     bool isDefault();
 
     void load(const std::string &filename);
@@ -142,6 +160,7 @@ private:
     static Config* instance;
     Window window{};
     Stage stage;
+    Players players;
     Log log;
     bool defaultConfig = false;
 
@@ -152,6 +171,7 @@ private:
     void parseEnemies(Level *level, ptree pt);
     void parsePlatforms(Level *level, ptree pt);
     void parseCoins(Level *level, ptree pt);
+    void parsePlayers(ptree pt);
     void validateTags(string xmlLvl, vector<string> validTags, ptree pt);
 
     const vector<string> validGeneralTags = {"configuracion"};
@@ -159,6 +179,8 @@ private:
     const vector<string> validLogTags = {"level"};
     const vector<string> validWindowTags = {"ancho", "alto"};
     const vector<string> validStageTags = {"niveles"};
+    const vector<string> validCredentialTags = {"usuario", "conexiones"};
+    const vector<string> validUserTags = {"nombre", "contrasenia"};
     const vector<string> validLevelTags = {"numero", "fondo", "monedas", "tiempo", "enemigos", "plataformas"};
     const vector<string> validCoinTags = {"imagen", "coordY", "cantidad"};
     const vector<string> validEnemyTags = {"tipo", "imagen", "cantidad"};

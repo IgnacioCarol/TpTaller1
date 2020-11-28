@@ -1,7 +1,3 @@
-//
-// Created by DANIELA CARRERO on 2020-10-15.
-//
-
 #include "Config.h"
 
 Config* Config::instance = nullptr;
@@ -20,6 +16,10 @@ Stage Config::getStage() {
 
 Log Config::getLog() {
     return this->log;
+}
+
+Players Config::getPlayers() {
+    return this->players;
 }
 
 Level Config::getLevel(int levelFilter) {
@@ -234,6 +234,29 @@ void Config::parseCoins(Level *level, ptree pt) {
     }
 }
 
+void Config::parsePlayers(ptree pt) {
+    validateTags(XML_CREDENTIAL_TAG, validCredentialTags, pt.get_child(XML_CREDENTIAL_TAG));
+    this->players.amount = pt.get<int>(XML_CREDENTIAL_CONNECTIONS);
+    this->players.users.clear();
+    for (const auto &u : pt.get_child(XML_CREDENTIAL_USERS_SECTION)) {
+        User user;
+        string credential_user;
+        ptree user_pt;
+        tie(credential_user, user_pt) = u;
+
+        if (credential_user != XML_CREDENTIAL_USER) {
+            throw ConfigException("Invalid user tag, found: " + credential_user);
+        }
+
+        validateTags(XML_CREDENTIAL_USER, validUserTags, user_pt);
+
+        user.username = user_pt.get<string>(XML_CREDENTIAL_USERS_NAME);
+        user.username = user_pt.get<string>(XML_CREDENTIAL_USERS_PASSWORD);
+
+        this->players.users.push_back(user);
+    }
+}
+
 void Config::setDefaults() {
     Logger::getInstance()->info("Setting default config...");
     defaultConfig = true;
@@ -296,6 +319,7 @@ void Config::setDefaults() {
     this->stage = stage;
     this->log = log;
 
+    //TODO default de usuarios
 
 }
 
