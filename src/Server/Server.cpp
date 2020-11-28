@@ -1,4 +1,5 @@
 #include "Server.h"
+#include "ServerMsg.h"
 #include <pthread.h>
 
 Server* Server::instance = nullptr;
@@ -12,7 +13,7 @@ Server *Server::getInstance() {
 }
 
 Server::~Server() {
-    Logger::getInstance()->info("[Server] Destroying server");
+    Logger::getInstance()->info(MSG_DESTROY_SERVER);
     delete _socket;
     for (auto & client : clients) {
         delete client;
@@ -31,25 +32,26 @@ bool Server::init(const char *ip, const char *port, int clientNo) {
     this->clientNo = clientNo;
     this->incomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->incomeThreads) {
-        Logger::getInstance()->error("[Server] unable to create threads array, out of memory");
+        Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
         return false;
     }
 
     this->outcomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->outcomeThreads) {
-        Logger::getInstance()->error("[Server] unable to create threads array, out of memory");
+        Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
         return false;
     }
 
     if (!initSocket(ip, port)) {
+        Logger::getInstance()->info(MSG_NO_ACCEPT_SOCKET);
         return false;
     }
-    Logger::getInstance()->info("[Server] Server is up and running");
-
+    Logger::getInstance()->info(MSG_READY_SERVER);
+    std::cout << MSG_READY_SERVER << std::endl;
     if (!acceptClients()) {
         return false;
     }
-    Logger::getInstance()->info("[Server] All clients have been accepted");
+    Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
     return true;
 }
 
@@ -68,9 +70,9 @@ bool Server::acceptClients() {
             clients.push_back(playerClient);
             pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) playerClient);
             pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
-            Logger::getInstance()->info("[Server] Client number " + std::to_string(i) + " has been accepted");
+            Logger::getInstance()->info(MSG_CLIENT_NUMBER_SERVER + std::to_string(i) + MSG_ACCEPTED_SERVER);
         } catch (std::exception &ex) {
-            Logger::getInstance()->error("[Server] Error accepting client number: " + std::to_string(i));
+            Logger::getInstance()->error(MSG_CLIENT_NOT_ACCEPTED + std::to_string(i));
             i--;
         }
     }
@@ -82,16 +84,18 @@ void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
     pthread_mutex_t  * mutex = playerClient->getCommandMutex();
     msg_t msg;
-    bool msg_received;
+    int msg_received;
 
     //ToDo while (playerClient->isConnected()) {
     while (true) {
         memset(&msg, 0, sizeof(msg));
         msg_received = playerClient->receive(&msg, sizeof(msg_t));
-        if (!msg_received) {
+        if (msg_received < 0) {
             continue;
         }
-
+        if(!msg_received) {
+            //TODO manejar cliente que cerró la conexión -> ¿lo borramos del array del server?
+        }
         pthread_mutex_lock(mutex);
         playerClient->commandQueue->push(msg);
         pthread_mutex_unlock(mutex);
@@ -122,7 +126,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
         Logger::getInstance()->debug("envianding mensaje...");
         if(!playerClient->send(&msg, sizeof(msg_t))) {
             //ToDo handle error
-            Logger::getInstance()->error("[SERVER] Error broadcasting message to client");
+            Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
         }
     }
     return nullptr;

@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "ClientMsg.h"
 #include "src/logger/logger.h"
 
 Client::Client(std::string IP, std::string port) {
@@ -8,18 +9,19 @@ Client::Client(std::string IP, std::string port) {
 }
 
 Client::~Client() {
-    Logger::getInstance()->info("[Client] Destroying client");
+    Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
 }
 
-void Client::init() {
+bool Client::init() {
     _socket->init(_IP, _port, CLIENT);
     if(!_socket->connect()) {
+        Logger::getInstance()->error(MSG_NOT_CONNECT_CLIENT);
         _socket->release();
-        return;
+        return false;
     }
-
-    Logger::getInstance()->info("[Client] Client connected");
+    Logger::getInstance()->info(MSG_CONNECT_CLIENT);
+    return true;
 }
 
 bool Client::isConnected() {
@@ -31,17 +33,15 @@ void Client::release() {
         return;
     }
     _socket->release();
-    Logger::getInstance()->info("[Client] Client disconnected");
+    Logger::getInstance()->info(MSG_DISCONNECT_CLIENT);
 }
 
-int Client::send(msg_t *msg, size_t len) {
-    int sent = _socket->send(msg, len);
-    return sent;
+bool Client::send(msg_t *msg, size_t len) {
+    return _socket->send(msg, len) == len;
 }
 
 bool Client::receive(msg_t *msg, size_t len) {
-    int recv = _socket->receive(msg, len);
-    return recv > 0;
+    return  _socket->receive(msg, len) == len;
 }
 
 

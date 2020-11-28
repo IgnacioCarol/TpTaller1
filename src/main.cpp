@@ -109,7 +109,11 @@ int main(int argc, char * argv[]) {
     } else {
         Logger::getInstance()->info("[Client] Initializing in client mode");
         auto * client = new Client(ipAddr, to_string(port).c_str());
-        client->init();
+        if(!client->init()) {
+            Logger::getInstance()->error("[Client] Error: Could not connect with the server");
+            delete client;
+            return EXIT_FAILURE;
+        }
         msg_t message;
         message.val1 = 10;
         message.val2 = 9;

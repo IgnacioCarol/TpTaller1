@@ -34,7 +34,7 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(atoi(port));
     server_addr.sin_addr.s_addr = (type == SERVER) ? INADDR_ANY : inet_addr(IP);
-    Logger::getInstance()->info("[Socker] Socket initialized");
+    Logger::getInstance()->info("[Socket] Socket initialized");
 }
 
 bool Socket::connect() {
@@ -80,7 +80,7 @@ int Socket::send(void *msg, size_t len) {
         bytes_written = ::send(fd, (msg_to_send + total_bytes_written), (len - total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
-            Logger::getInstance()->error("[Socket] unexpected error trying to send msg. Error: "  + std::string(strerror(errno));
+            Logger::getInstance()->error("[Socket] unexpected error trying to send msg. Error: "  + std::string(strerror(errno)));
             return bytes_written;
         }
         else if (bytes_written == 0) { // Socket closed

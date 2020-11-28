@@ -1,4 +1,5 @@
 #include "PlayerClient.h"
+#include "ServerMsg.h"
 
 PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<msg_t> * commandQueue) {
     pthread_mutex_init(&this->outcomeMutex, nullptr);
@@ -16,16 +17,16 @@ Socket *PlayerClient::getSocket() {
     return this->clientSocket;
 }
 
-bool PlayerClient::receive(void* message, size_t len) {
+int PlayerClient::receive(void* message, size_t len) {
     memset(message, 0, len);
     int received = this->clientSocket->receive(message, sizeof(msg_t));
 
-    if (received <= 0) { //< 0 means that there was an error, == 0 means that the socket was closed
-        Logger::getInstance()->error("[Server] Couldn't receive message from client");
-        return false;
+    if (received < 0) { // There was an error
+        Logger::getInstance()->error(MSG_ERROR_RECV_MSG_SERVER);
+    } else if (!received) { // The client's socket was closed
+        Logger::getInstance()->error(MSG_CLOSED_SOCKET_RECV_MSG_SERVER);
     }
-
-    return true;
+    return received;
 }
 
 pthread_mutex_t *PlayerClient::getCommandMutex() {
@@ -38,5 +39,5 @@ pthread_mutex_t *PlayerClient::getOutcomeMutex() {
 
 bool PlayerClient::send(void * msg, size_t len) {
     int result = this->clientSocket->send(msg, len);
-    return result == 0;
+    return result == len;
 }
