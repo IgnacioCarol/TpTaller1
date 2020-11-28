@@ -14,13 +14,8 @@
                 <monedas>
                     <moneda>
                         <imagen>Sprites/coinsSprites.png</imagen>
-                        <coordY>100</coordY>
-                        <cantidad>13</cantidad>
-                    </moneda>
-                    <moneda>
-                        <imagen>Sprites/coinsSprites.png</imagen>
                         <coordY>200</coordY>
-                        <cantidad>30</cantidad>
+                        <cantidad>4</cantidad>
                     </moneda>
                 </monedas>
                 <tiempo>300</tiempo>
@@ -28,7 +23,7 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/koopaGreen.png</imagen>
-                        <cantidad>15</cantidad>
+                        <cantidad>-15</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
