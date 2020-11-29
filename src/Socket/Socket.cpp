@@ -22,6 +22,7 @@ Socket::Socket(int fd) {
     }
 
     this->fd = fd;
+    this->_connected = true;
     Logger::getInstance()->info("[Socket] Socket created");
 }
 
@@ -95,7 +96,7 @@ int Socket::send(void *msg, size_t len) {
         }
     }
 
-    return 0;
+    return total_bytes_written;
 }
 
 int Socket::receive(void *msg, size_t len) {

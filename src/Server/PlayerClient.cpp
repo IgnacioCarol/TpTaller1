@@ -1,5 +1,6 @@
 #include "PlayerClient.h"
 #include "ServerMsg.h"
+#include <pthread.h>
 
 PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<msg_t> * commandQueue) {
     pthread_mutex_init(&this->outcomeMutex, nullptr);
@@ -40,4 +41,16 @@ pthread_mutex_t *PlayerClient::getOutcomeMutex() {
 bool PlayerClient::send(void * msg, size_t len) {
     int result = this->clientSocket->send(msg, len);
     return result == len;
+}
+
+bool PlayerClient::isConnected() {
+    return  this->clientSocket->isConnected();
+}
+
+void PlayerClient::lock() {
+    pthread_mutex_lock(&this->outcomeMutex);
+}
+
+void PlayerClient::unlock() {
+    pthread_mutex_unlock(&this->outcomeMutex);
 }

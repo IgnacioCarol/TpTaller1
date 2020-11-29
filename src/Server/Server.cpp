@@ -86,8 +86,7 @@ void * Server::handlePlayerClient(void * arg) {
     msg_t msg;
     int msg_received;
 
-    //ToDo while (playerClient->isConnected()) {
-    while (true) {
+    while (playerClient->isConnected()) {
         memset(&msg, 0, sizeof(msg));
         msg_received = playerClient->receive(&msg, sizeof(msg_t));
         if (msg_received < 0) {
@@ -110,8 +109,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
     pthread_mutex_t  * mutex = playerClient->getOutcomeMutex();
     msg_t msg;
 
-    //ToDo while (playerClient->isConnected()) {
-    while (true) {
+    while (playerClient->isConnected()) {
         memset(&msg, 0, sizeof(msg));
         pthread_mutex_lock(mutex);
         if (!outcomeQueue->empty()) {
@@ -129,6 +127,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
         }
     }
+
     return nullptr;
 }
 
@@ -149,6 +148,10 @@ bool Server::run() {
         pthread_mutex_unlock(mutex);
 
         //ToDo change game state with msg
+
+//        std::stringstream log;
+//        log << "[main]" << clients.front()->isConnected();
+//        Logger::getInstance()->debug(log.str());
 
         if (message.val1 == 0) {
             continue;

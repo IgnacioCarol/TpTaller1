@@ -11,7 +11,7 @@
 #include "logger/logger.h"
 #include "Game.h"
 #include "Server/Server.h"
-#include "src/Client/Client.h"
+#include "Client/Client.h"
 #include "Socket/Socket.h"
 
 #define FPS 40;
@@ -122,7 +122,7 @@ int main(int argc, char * argv[]) {
         message.val5 = 6;
         message.val6 = 5;
         message.val7 = 4;
-        if (client->send(&message, sizeof(msg_t)) < 0) {
+        if (!client->send(&message, sizeof(msg_t))) {
             Logger::getInstance()->error("[Client] send failed");
             delete client;
             return 1;

@@ -8,6 +8,9 @@ public:
     explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<msg_t> * commandQueue);
     int receive(void* msg, size_t len);
     bool send(void * msg, size_t len);
+    bool isConnected();
+    void lock();
+    void unlock();
     pthread_mutex_t  * getCommandMutex();
     pthread_mutex_t  * getOutcomeMutex();
     Socket * getSocket();
