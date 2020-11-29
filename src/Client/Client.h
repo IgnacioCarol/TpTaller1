@@ -3,7 +3,7 @@
 
 
 #include <string>
-#include "src/Socket/Socket.h"
+#include "../Socket/Socket.h"
 
 class Client {
 public:
@@ -18,7 +18,7 @@ private:
     const char * _IP;
     const char * _port;
     Socket* _socket;
-    const char * _clientID; //TODO inicializar con el XML? Tal vez el ID pueda ser el nombre de usuario
+    std::string _clientID; //TODO inicializar con el XML? Tal vez el ID pueda ser el nombre de usuario, una vez que se haga el login utilizar username en este campo
 
 };
 
