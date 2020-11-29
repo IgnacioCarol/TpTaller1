@@ -53,6 +53,8 @@ bool Socket::connect() {
         Logger::getInstance()->error("[Socket] Connect failed. Error: " + std::string(strerror(errno)));
         return false;
     }
+
+    _connected = true;
     Logger::getInstance()->info("[Socket] Connected socket!");
     return true;
 }
@@ -86,6 +88,7 @@ int Socket::send(void *msg, size_t len) {
         else if (bytes_written == 0) { // Socket closed
             Logger::getInstance()->error("[Socket] error trying to send msg, socket closed");
             client_socket_still_open = false;
+            _connected = false; //ToDo ojota con esto, consultar con el team si estamos seguros de esta condicion
         }
         else {
             total_bytes_written += bytes_written;
@@ -120,6 +123,7 @@ int Socket::receive(void *msg, size_t len) {
         else if (bytes_received == 0) { // Socket closed
             Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
             client_socket_still_open = false;
+            _connected = false; //ToDo ojota con esto, consultar con el team si estamos seguros de esta condicion
         }
         else {
             total_bytes_receive += bytes_received;
