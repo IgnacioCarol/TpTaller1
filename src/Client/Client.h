@@ -5,11 +5,13 @@
 #include <string>
 #include "Socket/Socket.h"
 using json = nlohmann::json;
+#include "../Socket/Socket.h"
+
 class Client {
 public:
     Client(std::string IP, std::string port);
     ~Client();
-    int init();
+    bool init();
     bool isConnected();
     int send(json *msg);
     bool receive(json *msg);
@@ -18,6 +20,7 @@ private:
     const char * _IP;
     const char * _port;
     Socket* _socket;
+    std::string _clientID; //TODO inicializar con el XML? Tal vez el ID pueda ser el nombre de usuario, una vez que se haga el login utilizar username en este campo
 
 };
 

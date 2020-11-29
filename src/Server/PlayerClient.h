@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 24/11/2020.
-//
-
 #ifndef TPTALLER1_PLAYERCLIENT_H
 #define TPTALLER1_PLAYERCLIENT_H
 #include "../Socket/Socket.h"
@@ -10,15 +6,19 @@ using json = nlohmann::json;
 class PlayerClient {
 public:
     explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<json> *commandQueue);
-    json receive();
+    int receive(json* message);
     bool send(json *msg);
+    bool isConnected();
+    void lock();
+    void unlock();
     pthread_mutex_t  * getCommandMutex();
     pthread_mutex_t  * getOutcomeMutex();
     Socket * getSocket();
     virtual ~PlayerClient();
 
-    std::queue<json> * commandQueue; //ToDo define msg_t
-    std::queue<json> outcome; //ToDo define msg_t
+    std::queue<json> * commandQueue;
+    std::queue<json> outcome;
+    int name;
 private:
     Socket * clientSocket;
     pthread_mutex_t  * commandMutex; // Mutex to control command queue

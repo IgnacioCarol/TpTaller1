@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 23/11/2020.
-//
-
 #ifndef TPTALLER1_SERVER_H
 #define TPTALLER1_SERVER_H
 
@@ -29,6 +25,7 @@ private:
 
     bool initSocket(const char*ip, const char *port);
     bool acceptClients();
+    bool someoneIsConnected();
     static void * handlePlayerClient(void * arg);
     static void * broadcastToPlayerClient(void * arg);
 

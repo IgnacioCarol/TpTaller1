@@ -1,9 +1,8 @@
-//
-// Created by Daniel Bizari on 24/11/2020.
-//
-
 #include "PlayerClient.h"
 #include <lib/nlohmann/json.hpp>
+#include "ServerMsg.h"
+#include <pthread.h>
+
 using json = nlohmann::json;
 PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<json> *commandQueue) {
     pthread_mutex_init(&this->outcomeMutex, nullptr);
@@ -21,14 +20,14 @@ Socket *PlayerClient::getSocket() {
     return this->clientSocket;
 }
 
-json PlayerClient::receive() {
-    json jsonMessage;
-    if (this->clientSocket->receive(&jsonMessage) < 0) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
-        Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
-        //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
-        return {};
+int PlayerClient::receive(json* message) {
+    int received = this->clientSocket->receive(message);
+    if (received < 0) { // There was an error
+        Logger::getInstance()->error(MSG_ERROR_RECV_MSG_SERVER);
+    } else if (!received) { // The client's socket was closed
+        Logger::getInstance()->error(MSG_CLOSED_SOCKET_RECV_MSG_SERVER);
     }
-    return jsonMessage;
+    return received;
 }
 
 pthread_mutex_t *PlayerClient::getCommandMutex() {
@@ -42,4 +41,16 @@ pthread_mutex_t *PlayerClient::getOutcomeMutex() {
 bool PlayerClient::send(json *msg) {
     int result = this->clientSocket->send(msg);
     return result == 0;
+}
+
+bool PlayerClient::isConnected() {
+    return  this->clientSocket->isConnected();
+}
+
+void PlayerClient::lock() {
+    pthread_mutex_lock(&this->outcomeMutex);
+}
+
+void PlayerClient::unlock() {
+    pthread_mutex_unlock(&this->outcomeMutex);
 }

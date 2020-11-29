@@ -23,6 +23,7 @@ Socket::Socket(int fd) {
     }
 
     this->fd = fd;
+    this->_connected = true;
     Logger::getInstance()->info("[Socket] Socket created");
 }
 
@@ -35,7 +36,7 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(atoi(port));
     server_addr.sin_addr.s_addr = (type == SERVER) ? INADDR_ANY : inet_addr(IP);
-    Logger::getInstance()->info("[Socker] Socket initialized");
+    Logger::getInstance()->info("[Socket] Socket initialized");
 }
 
 bool Socket::connect() {
@@ -54,6 +55,8 @@ bool Socket::connect() {
         Logger::getInstance()->error("[Socket] Connect failed. Error: " + std::string(strerror(errno)));
         return false;
     }
+
+    _connected = true;
     Logger::getInstance()->info("[Socket] Connected socket!");
     return true;
 }
@@ -94,12 +97,13 @@ int Socket::send(T* data, int bytesToWrite) {
         bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
-            Logger::getInstance()->error("[Socket] unexpected error trying to send msg");
+            Logger::getInstance()->error("[Socket] unexpected error trying to send msg. Error: "  + std::string(strerror(errno)));
             return bytes_written;
         }
         else if (bytes_written == 0) { // Socket closed
             Logger::getInstance()->error("[Socket] error trying to send msg, socket closed");
             client_socket_still_open = false;
+            _connected = false; //ToDo ojota con esto, consultar con el team si estamos seguros de esta condicion
         }
         else {
             total_bytes_written += bytes_written;
@@ -135,6 +139,7 @@ int Socket::receive(T *msg, int receiveDataSize) {
     int total_bytes_receive = 0;
     int bytes_received = 0;
     bool client_socket_still_open = true;
+    auto *msg_to_send = (uint8_t*)msg;
 
     // Receive
     // ssize_t recv(int sockfd, void *buf, size_t len, int flags);
@@ -148,13 +153,13 @@ int Socket::receive(T *msg, int receiveDataSize) {
     while ((receiveDataSize > bytes_received) && client_socket_still_open) {
         bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive), MSG_NOSIGNAL);
         if (bytes_received < 0) { // Error
-            Logger::getInstance()->error("[Socket] unexpected error trying to receive msg");
+            Logger::getInstance()->error("[Socket] unexpected error trying to receive msg. Error: " + std::string(strerror(errno)));
             return bytes_received;
         }
         else if (bytes_received == 0) { // Socket closed
-//            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
-            //ToDo verificar, pero creo que si no envio ningun byte y llamo al receive, esta bien que lea 0 bytes, lo que estaria mal es que en medio de una transmision reciba 0 bytes, tunear este border case
+            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
             client_socket_still_open = false;
+            _connected = false; //ToDo ojota con esto, consultar con el team si estamos seguros de esta condicion
         }
         else {
             total_bytes_receive += bytes_received;
@@ -188,8 +193,10 @@ bool Socket::bindAndListen() {
     // sockfd -> file descriptor that refers to a socket,in this case of type SOCK_STREAM
     // backlog-> The backlog argument defines the maximum length to which the queue of pending connections for sockfd may grow.
     // listen() marks the socket referred to by sockfd as a passive socket, that is, as a socket that will be used to accept incoming connection requests using accept();
-    if (listen(fd , 4) < 0) { //ToDo ver que pasa cuando mas usuarios se quieren conectar
-        Logger::getInstance()->error("Listen failed");
+
+    int res = listen(fd , 4); //If the queue is full (4 clients waiting) and another client tries to connect, it will be discarded.
+    if (res < 0) {
+        Logger::getInstance()->error("Listen failed" + std::string(strerror(errno)));
         return false;
     }
     Logger::getInstance()->info("[Socket] Listening on port: " + port + " Waiting for incoming connections...");

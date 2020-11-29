@@ -1,6 +1,6 @@
 #include "Client.h"
-#include "logger/logger.h"
-#include <lib/nlohmann/json.hpp>
+#include "ClientMsg.h"
+#include "../logger/logger.h"
 using json = nlohmann::json;
 Client::Client(std::string IP, std::string port) {
     _IP = IP.c_str();
@@ -9,20 +9,19 @@ Client::Client(std::string IP, std::string port) {
 }
 
 Client::~Client() {
-    Logger::getInstance()->info("[Client] Destroying client");
+    Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
 }
 
-int Client::init() {
+bool Client::init() {
     _socket->init(_IP, _port, CLIENT);
-    if(!_socket->connect()) { //TODO: ver como manejar si el socket falla -> creo que habia preguntas sobre eso en el campus
-        Logger::getInstance()->error("[Client] Failed connection to server");
+    if(!_socket->connect()) {
+        Logger::getInstance()->error(MSG_NOT_CONNECT_CLIENT);
         _socket->release();
-        return 1;
+        return false;
     }
-
-    Logger::getInstance()->info("[Client] Client connected");
-    return 0;
+    Logger::getInstance()->info(MSG_CONNECT_CLIENT);
+    return true;
 }
 
 bool Client::isConnected() {
@@ -34,7 +33,7 @@ void Client::release() {
         return;
     }
     _socket->release();
-    Logger::getInstance()->info("[Client] Client disconnected");
+    Logger::getInstance()->info(MSG_DISCONNECT_CLIENT);
 }
 
 int Client::send(json *msg) {
