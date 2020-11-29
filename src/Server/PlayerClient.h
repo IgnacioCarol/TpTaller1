@@ -18,6 +18,7 @@ public:
 
     std::queue<msg_t> * commandQueue; //ToDo define msg_t
     std::queue<msg_t> outcome; //ToDo define msg_t
+    int name;
 private:
     Socket * clientSocket;
     pthread_mutex_t  * commandMutex; // Mutex to control command queue

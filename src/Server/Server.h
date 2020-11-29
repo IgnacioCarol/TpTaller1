@@ -25,6 +25,7 @@ private:
 
     bool initSocket(const char*ip, const char *port);
     bool acceptClients();
+    bool someoneIsConnected();
     static void * handlePlayerClient(void * arg);
     static void * broadcastToPlayerClient(void * arg);
 
