@@ -13,6 +13,8 @@
 #include "Server/Server.h"
 #include "Client.h"
 #include "Socket/Socket.h"
+#include <lib/nlohmann/json.hpp>
+using json = nlohmann::json;
 
 #define FPS 40;
 const int DELAY_TIME = 1000.0f / FPS;
@@ -118,13 +120,15 @@ int main(int argc, char * argv[]) {
         message.val5 = 6;
         message.val6 = 5;
         message.val7 = 4;
-        if (client->send(&message) < 0) {
+        json newJson = {1,2,3};
+
+        if (client->send(&newJson) < 0) {
             Logger::getInstance()->error("send failed");
             delete client;
             return 1;
         }
 
-        client->receive(&message);
+        client->receive(&newJson);
         ss.clear();
         ss << "val1: " << message.val1 << std::endl
            << "val2: " << message.val2 << std::endl

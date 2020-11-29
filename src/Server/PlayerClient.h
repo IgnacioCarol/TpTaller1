@@ -6,19 +6,19 @@
 #define TPTALLER1_PLAYERCLIENT_H
 #include "../Socket/Socket.h"
 #include <queue>
-
+using json = nlohmann::json;
 class PlayerClient {
 public:
-    explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<msg_t> * commandQueue);
-    msg_t receive();
-    bool send(msg_t * msg);
+    explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<json> *commandQueue);
+    json receive();
+    bool send(json *msg);
     pthread_mutex_t  * getCommandMutex();
     pthread_mutex_t  * getOutcomeMutex();
     Socket * getSocket();
     virtual ~PlayerClient();
 
-    std::queue<msg_t> * commandQueue; //ToDo define msg_t
-    std::queue<msg_t> outcome; //ToDo define msg_t
+    std::queue<json> * commandQueue; //ToDo define msg_t
+    std::queue<json> outcome; //ToDo define msg_t
 private:
     Socket * clientSocket;
     pthread_mutex_t  * commandMutex; // Mutex to control command queue

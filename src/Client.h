@@ -4,15 +4,15 @@
 
 #include <string>
 #include "Socket/Socket.h"
-
+using json = nlohmann::json;
 class Client {
 public:
     Client(std::string IP, std::string port);
     ~Client();
     int init();
     bool isConnected();
-    int send(msg_t *msg);
-    bool receive(msg_t *msg);
+    int send(json *msg);
+    bool receive(json *msg);
     void release();
 private:
     const char * _IP;
