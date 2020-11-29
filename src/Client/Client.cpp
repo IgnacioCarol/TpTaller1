@@ -1,6 +1,4 @@
 #include "Client.h"
-#include "ClientMsg.h"
-#include "src/logger/logger.h"
 
 Client::Client(std::string IP, std::string port) {
     _IP = IP.c_str();
@@ -13,15 +11,15 @@ Client::~Client() {
     delete _socket;
 }
 
-bool Client::init() {
-    _socket->init(_IP, _port, CLIENT);
-    if(!_socket->connect()) {
+void Client::init() {
+    try {
+        _socket->init(_IP, _port, CLIENT);
+        _socket->connect();
+        Logger::getInstance()->info(MSG_CONNECT_CLIENT);
+    } catch (std::exception &ex) {
         Logger::getInstance()->error(MSG_NOT_CONNECT_CLIENT);
-        _socket->release();
-        return false;
+        throw ex;
     }
-    Logger::getInstance()->info(MSG_CONNECT_CLIENT);
-    return true;
 }
 
 bool Client::isConnected() {
@@ -36,11 +34,11 @@ void Client::release() {
     Logger::getInstance()->info(MSG_DISCONNECT_CLIENT);
 }
 
-bool Client::send(msg_t *msg, size_t len) {
+int Client::send(msg_t *msg, size_t len) {
     return _socket->send(msg, len) == len;
 }
 
-bool Client::receive(msg_t *msg, size_t len) {
+int Client::receive(msg_t *msg, size_t len) {
     return  _socket->receive(msg, len) == len;
 }
 

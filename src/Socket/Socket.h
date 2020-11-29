@@ -7,9 +7,10 @@
 #include <cstring>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <arpa/inet.h>
 #include "../logger/logger.h"
 #include "SocketException.h"
-#include <arpa/inet.h>
+#include "SocketMsg.h"
 
 enum ConnectionType {
     SERVER = 0,
@@ -38,7 +39,7 @@ public:
 
     //Opens a socket and connects to the server
     //Returns true or false whether the connection was established or not
-    bool connect();
+    void connect();
 
     //Returns true if it is connected, false otherwise
     bool isConnected();
@@ -52,10 +53,10 @@ public:
     int receive(void *msg, size_t len);
 
     //Closes the socket
-    void release() const;
+    void release();
 
-    // Bind server socket to local address and listen news.
-    bool bindAndListen();
+    // Bind server socket to local address and listen news. Throws exception if failed.
+    void bindAndListen();
 
     // Accept incoming connection from a client, this is a blocking method.
     Socket * accept();

@@ -3,17 +3,21 @@
 
 
 #include <string>
-#include "src/Socket/Socket.h"
+#include "../Socket/Socket.h"
+#include "../logger/logger.h"
+#include "ClientMsg.h"
+#include <exception>
 
 class Client {
 public:
     Client(std::string IP, std::string port);
     ~Client();
-    bool init();
+    void init();
     bool isConnected();
-    bool send(msg_t *msg, size_t len);
-    bool receive(msg_t *msg, size_t len);
+    int send(msg_t *msg, size_t len);
+    int receive(msg_t *msg, size_t len);
     void release();
+
 private:
     const char * _IP;
     const char * _port;

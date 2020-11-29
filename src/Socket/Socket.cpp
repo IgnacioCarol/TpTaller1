@@ -8,21 +8,21 @@ Socket::Socket() {
     // Protocol: 0 (chosen automatically)
     fd = socket(AF_INET , SOCK_STREAM , 0);
     if (fd == -1) {
-        Logger::getInstance()->error("[Socket] Could not create socket");
-        throw SocketException("[Socket] Could not create socket");
+        Logger::getInstance()->error(MSG_SOCKET_CREATE_FAILED);
+        throw SocketException(MSG_SOCKET_CREATE_FAILED);
     }
 
-    Logger::getInstance()->info("[Socket] Socket created");
+    Logger::getInstance()->info(MSG_SOCKET_CREATED);
 }
 
 Socket::Socket(int fd) {
     if (fd == -1) {
-        Logger::getInstance()->error("[Socket] Invalid file descriptor, could not create socket");
-        throw SocketException("[Socket] Invalid file descriptor, could not create socket");
+        Logger::getInstance()->error(MSG_SOCKET_INVALID_FILE_DESCRIPTOR);
+        throw SocketException(MSG_SOCKET_INVALID_FILE_DESCRIPTOR);
     }
 
     this->fd = fd;
-    Logger::getInstance()->info("[Socket] Socket created");
+    Logger::getInstance()->info(MSG_SOCKET_CREATED);
 }
 
 void Socket::init(const char *IP, const char *port, ConnectionType type) {
@@ -34,13 +34,13 @@ void Socket::init(const char *IP, const char *port, ConnectionType type) {
     server_addr.sin_family = AF_INET;
     server_addr.sin_port = htons(atoi(port));
     server_addr.sin_addr.s_addr = (type == SERVER) ? INADDR_ANY : inet_addr(IP);
-    Logger::getInstance()->info("[Socket] Socket initialized");
+    Logger::getInstance()->info(MSG_SOCKET_INITIALIZED);
 }
 
-bool Socket::connect() {
+void Socket::connect() {
     if (_type == SERVER) {
-        Logger::getInstance()->error("[Socket] Connect is only available for client side");
-        return false;
+        Logger::getInstance()->error(MSG_SOCKET_CONNECT_SERVER);
+        throw SocketException(MSG_SOCKET_CONNECT_SERVER);
     }
 
     //Connect to remote server
@@ -50,19 +50,21 @@ bool Socket::connect() {
     // addrlen -> size of sockaddr_in structure for the SERVER.
     // The connect() system call connects the socket referred to by the file descriptor sockfd to the address specified by addr.
     if (::connect(fd , (struct sockaddr *)&server_addr , sizeof(struct sockaddr_in)) < 0){
-        Logger::getInstance()->error("[Socket] Connect failed. Error: " + std::string(strerror(errno)));
-        return false;
+        std::string error = MSG_SOCKET_CONNECT_FAILED + std::string(strerror(errno));
+        Logger::getInstance()->error(error);
+        throw SocketException(error);
     }
-    Logger::getInstance()->info("[Socket] Connected socket!");
-    return true;
+    _connected = true;
+    Logger::getInstance()->info(MSG_SOCKET_CONNECTED);
 }
 
-void Socket::release() const {
+void Socket::release() {
     shutdown(fd, SHUT_RDWR);
     if (close(fd) < 0) {
-        Logger::getInstance()->error("[Socket] Close file descriptor failed. Error: " + std::string(strerror(errno)));
+        Logger::getInstance()->error(MSG_SOCKET_CLOSE_FILE_FAILED + std::string(strerror(errno)));
     }
-    Logger::getInstance()->info("[Socket] Socket released");
+    _connected = false;
+    Logger::getInstance()->info(MSG_SOCKET_RELEASED);
 }
 
 bool Socket::isConnected() {
@@ -80,11 +82,11 @@ int Socket::send(void *msg, size_t len) {
         bytes_written = ::send(fd, (msg_to_send + total_bytes_written), (len - total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
-            Logger::getInstance()->error("[Socket] unexpected error trying to send msg. Error: "  + std::string(strerror(errno)));
+            Logger::getInstance()->error(MSG_SOCKET_SEND_FAILED + std::string(strerror(errno)));
             return bytes_written;
         }
         else if (bytes_written == 0) { // Socket closed
-            Logger::getInstance()->error("[Socket] error trying to send msg, socket closed");
+            Logger::getInstance()->error(MSG_SOCKET_CLOSED_SEND);
             client_socket_still_open = false;
         }
         else {
@@ -114,11 +116,11 @@ int Socket::receive(void *msg, size_t len) {
     while ((len > bytes_received) && client_socket_still_open) {
         bytes_received = recv(fd, (msg_to_send + total_bytes_receive), (len - total_bytes_receive), 0);
         if (bytes_received < 0) { // Error
-            Logger::getInstance()->error("[Socket] unexpected error trying to receive msg. Error: " + std::string(strerror(errno)));
+            Logger::getInstance()->error(MSG_SOCKET_RECEIVE_FAILED + std::string(strerror(errno)));
             return bytes_received;
         }
         else if (bytes_received == 0) { // Socket closed
-            Logger::getInstance()->error("[Socket] error trying to receive msg, socket closed");
+            Logger::getInstance()->error(MSG_SOCKET_CLOSED_RECEIVE);
             client_socket_still_open = false;
         }
         else {
@@ -129,10 +131,10 @@ int Socket::receive(void *msg, size_t len) {
     return total_bytes_receive;
 }
 
-bool Socket::bindAndListen() {
+void Socket::bindAndListen() {
     if (_type == CLIENT) {
-        Logger::getInstance()->error("[Socket] Bind And Listen is only available for server side");
-        return false;
+        Logger::getInstance()->error(MSG_SOCKET_BIND_CLIENT_ERR);
+        throw SocketException(MSG_SOCKET_BIND_CLIENT_ERR);
     }
 
     // Bind
@@ -142,11 +144,11 @@ bool Socket::bindAndListen() {
     // addrlen -> size of the sockaddr_in structure
     // bind() assigns the address specified by addr to the socket referred to by the file descriptor sockfd.
     if (bind(fd, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
-        Logger::getInstance()->error("[Socket] Bind failed");
-        return false;
+        Logger::getInstance()->error(MSG_SOCKET_BIND_FAILED);
+        throw SocketException(MSG_SOCKET_BIND_FAILED);
     }
 
-    Logger::getInstance()->info("[Socket] Bind success");
+    Logger::getInstance()->info(MSG_SOCKET_BIND_SUCCESS);
 
     // Listen
     // int listen(int sockfd, int backlog);
@@ -156,15 +158,14 @@ bool Socket::bindAndListen() {
 
     int res = listen(fd , 4); //If the queue is full (4 clients waiting) and another client tries to connect, it will be discarded.
     if (res < 0) {
-        Logger::getInstance()->error("Listen failed" + std::string(strerror(errno)));
-        return false;
+        Logger::getInstance()->error(MSG_SOCKET_BIND_FAILED + std::string(strerror(errno)));
+        throw SocketException(MSG_SOCKET_BIND_FAILED + std::string(strerror(errno)));
     }
-    Logger::getInstance()->info("[Socket] Listening on port: " + port + " Waiting for incoming connections...");
-    return true;
+    Logger::getInstance()->info("[Socket] Listening on port: " + port + ". Waiting for incoming connections...");
 }
 
 Socket::~Socket() {
-    Logger::getInstance()->info("[Socket] Destroying socket");
+    Logger::getInstance()->info(MSG_SOCKET_DESTROY);
     close(fd);
 }
 
@@ -180,12 +181,12 @@ Socket *Socket::accept() {
     // addrlen -> size of sockaddr structure for the CLIENT.
     client_socket = ::accept(fd, (struct sockaddr *) &client_addr, (socklen_t*) &client_addrlen);
     if (client_socket < 0) {
-        Logger::getInstance()->error("[Socket] Accept failed");
-        throw SocketException("[Socket] Fail accepting client connection");
+        Logger::getInstance()->error(MSG_SOCKET_ACCEPT_FAILED);
+        throw SocketException(MSG_SOCKET_ACCEPT_FAILED);
     }
 
     auto * client = new Socket(client_socket);
-    Logger::getInstance()->info("[Socket] Connection accepted");
+    Logger::getInstance()->info(MSG_SOCKET_CONNECTION_ACCEPTED);
 
     return client;
 }

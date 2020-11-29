@@ -27,41 +27,40 @@ Server::Server() {
     pthread_mutex_init(&this->commandMutex, nullptr);
 }
 
-bool Server::init(const char *ip, const char *port, int clientNo) {
+void Server::init(const char *ip, const char *port, int clientNo) {
     // Init threads
     this->clientNo = clientNo;
     this->incomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->incomeThreads) {
         Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        return false;
+        throw ServerException(MSG_NO_MEMORY_THREADS);
     }
 
     this->outcomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->outcomeThreads) {
         Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        return false;
+        throw ServerException(MSG_NO_MEMORY_THREADS);;
     }
 
-    if (!initSocket(ip, port)) {
-        Logger::getInstance()->info(MSG_NO_ACCEPT_SOCKET);
-        return false;
-    }
+    initSocket(ip, port);
     Logger::getInstance()->info(MSG_READY_SERVER);
-    std::cout << MSG_READY_SERVER << std::endl;
-    if (!acceptClients()) {
-        return false;
-    }
+    std::cout << MSG_READY_SERVER << std::endl; //TODO: Borrar
+    acceptClients();
     Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
-    return true;
 }
 
-bool Server::initSocket(const char*ip, const char *port) {
-    _socket = new Socket();
-    _socket->init(ip, port, SERVER);
-    return _socket->bindAndListen();
+void Server::initSocket(const char*ip, const char *port) {
+    try {
+        _socket = new Socket();
+        _socket->init(ip, port, SERVER);
+        return _socket->bindAndListen();
+    } catch (std::exception &ex) {
+        Logger::getInstance()->info(MSG_NO_ACCEPT_SOCKET);
+        throw ex;
+    }
 }
 
-bool Server::acceptClients() {
+void Server::acceptClients() {
      int retry = 1;
 
     for (int i = 0; i < clientNo && retry <= MAX_ACCEPT_RETRIES; i++, retry++) {
@@ -77,7 +76,9 @@ bool Server::acceptClients() {
         }
     }
 
-    return retry != MAX_ACCEPT_RETRIES;
+    if (retry == MAX_ACCEPT_RETRIES && clients.size() < clientNo) {
+        throw ServerException(MSG_ERROR_ACCEPT_CLIENTS);
+    }
 }
 
 void * Server::handlePlayerClient(void * arg) {

@@ -3,10 +3,11 @@
 
 #include <sstream>
 #include <iostream>
-#include "../Socket/SocketException.h"
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
+#include "ServerException.h"
 #include "PlayerClient.h"
+#include <exception>
 #include <queue>
 #include <pthread.h>
 
@@ -16,15 +17,15 @@ public:
     static Server * getInstance();
     virtual ~Server();
 
-    bool init(const char *ip, const char *port, int clientNo);
+    void init(const char *ip, const char *port, int clientNo);
     bool run();
 
 private:
     static Server * instance;
     Server();
 
-    bool initSocket(const char*ip, const char *port);
-    bool acceptClients();
+    void initSocket(const char*ip, const char *port);
+    void acceptClients();
     static void * handlePlayerClient(void * arg);
     static void * broadcastToPlayerClient(void * arg);
 

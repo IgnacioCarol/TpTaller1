@@ -11,7 +11,7 @@
 #include "logger/logger.h"
 #include "Game.h"
 #include "Server/Server.h"
-#include "src/Client/Client.h"
+#include  "Client/Client.h"
 #include "Socket/Socket.h"
 
 #define FPS 40;
@@ -95,51 +95,52 @@ int main(int argc, char * argv[]) {
     Logger::getInstance()->debug(ss.str());
 
     if (mode == SERVER) {
-        // ToDo launch server
         Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
-        if (server->init(ipAddr.c_str(), std::to_string(port).c_str(), 1)) { //TODO: la cantidad de clientes deberia venir del XML
+        try {
+            server->init(ipAddr.c_str(), std::to_string(port).c_str(), 1); //TODO: la cantidad de clientes deberia venir del XML
             server->run();
             delete server;
             return 0;
+        } catch (std::exception &ex) {
+            delete server;
+            return 1;
         }
-
-        delete server;
-        return 1;
     } else {
         Logger::getInstance()->info("[Client] Initializing in client mode");
         auto * client = new Client(ipAddr, to_string(port).c_str());
-        if(!client->init()) {
-            Logger::getInstance()->error("[Client] Error: Could not connect with the server");
+        try {
+            client->init();
+            msg_t message;
+            message.val1 = 10;
+            message.val2 = 9;
+            message.val3 = 8;
+            message.val4 = 7;
+            message.val5 = 6;
+            message.val6 = 5;
+            message.val7 = 4;
+            if (client->send(&message, sizeof(msg_t)) < 0) {
+                Logger::getInstance()->error("[Client] send failed");
+                delete client;
+                return 1;
+            }
+
+            client->receive(&message, sizeof(msg_t));
+            ss.clear();
+            ss << "val1: " << message.val1 << std::endl
+               << "val2: " << message.val2 << std::endl
+               << "val3: " << message.val3 << std::endl
+               << "val4: " << message.val4 << std::endl
+               << "val5: " << message.val5 << std::endl
+               << "val6: " << message.val6 << std::endl
+               << "val7: " << message.val7 << std::endl;
+            Logger::getInstance()->info(ss.str());
+            delete client;
+            return 0;
+        } catch (std::exception &ex) {
             delete client;
             return EXIT_FAILURE;
         }
-        msg_t message;
-        message.val1 = 10;
-        message.val2 = 9;
-        message.val3 = 8;
-        message.val4 = 7;
-        message.val5 = 6;
-        message.val6 = 5;
-        message.val7 = 4;
-        if (client->send(&message, sizeof(msg_t)) < 0) {
-            Logger::getInstance()->error("[Client] send failed");
-            delete client;
-            return 1;
-        }
-
-        client->receive(&message, sizeof(msg_t));
-        ss.clear();
-        ss << "val1: " << message.val1 << std::endl
-           << "val2: " << message.val2 << std::endl
-           << "val3: " << message.val3 << std::endl
-           << "val4: " << message.val4 << std::endl
-           << "val5: " << message.val5 << std::endl
-           << "val6: " << message.val6 << std::endl
-           << "val7: " << message.val7 << std::endl;
-        Logger::getInstance()->info(ss.str());
-        delete client;
-        return 0;
     }
 
     Game* game = Game::Instance();
