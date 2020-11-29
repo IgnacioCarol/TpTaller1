@@ -1,6 +1,6 @@
 #include "Client.h"
 #include "ClientMsg.h"
-#include "src/logger/logger.h"
+#include "../logger/logger.h"
 
 Client::Client(std::string IP, std::string port) {
     _IP = IP.c_str();
