@@ -10,7 +10,7 @@
 #include "../logger/logger.h"
 #include "SocketException.h"
 #include <arpa/inet.h>
-#include <json.hpp>
+#include "json.hpp"
 
 enum ConnectionType {
     SERVER = 0,
