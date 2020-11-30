@@ -3,13 +3,13 @@
 
 #include <sstream>
 #include <iostream>
+#include <exception>
+#include <queue>
+#include <pthread.h>
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
-#include <exception>
-#include <queue>
-#include <pthread.h>
 
 class Server {
 

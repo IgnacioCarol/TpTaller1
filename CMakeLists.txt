@@ -40,10 +40,12 @@ add_executable(TpTaller1
         src/CharacterStates/EnemyMovement.h src/CharacterStates/EnemyMovement.cpp src/gameobjects/Enemy.h src/gameobjects/Enemy.cpp
         src/BackgroundStages/ThirdStage.cpp src/BackgroundStages/ThirdStage.h
         src/Utils/Login.cpp src/Utils/Login.h
+        src/Client/Client.cpp src/Client/Client.h
         src/Server/Server.cpp src/Server/Server.h
+        src/Socket/Socket.cpp src/Socket/Socket.h
         src/Socket/SocketException.cpp src/Socket/SocketException.h
-        src/Server/PlayerClient.cpp src/Server/PlayerClient.h
         src/Server/ServerException.cpp src/Server/ServerException.h
+        src/Server/PlayerClient.cpp src/Server/PlayerClient.h
         src/Client/ClientMsg.h
         src/Server/ServerMsg.h
         src/Socket/SocketMsg.h)

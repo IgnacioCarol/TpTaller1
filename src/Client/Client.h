@@ -3,10 +3,10 @@
 
 
 #include <string>
+#include <exception>
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
 #include "ClientMsg.h"
-#include <exception>
 
 class Client {
 public:

@@ -12,7 +12,6 @@
 #include "Game.h"
 #include "Server/Server.h"
 #include "Client/Client.h"
-#include "Socket/Socket.h"
 
 #define FPS 40;
 const int DELAY_TIME = 1000.0f / FPS;

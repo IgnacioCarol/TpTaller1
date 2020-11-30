@@ -3,7 +3,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
 #include <SDL2/SDL_ttf.h>
-#include <src/logger/logger.h>
+#include "../logger/logger.h"
 #ifdef __APPLE__
 #define FONT_FILE_PATH "../resources/fonts/SuperMario256.ttf"
 #else
