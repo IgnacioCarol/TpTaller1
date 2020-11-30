@@ -46,6 +46,7 @@ void Config::load(const std::string &filename) {
 
         parseWindow(pt);
         parseStage(pt);
+        parsePlayers(pt);
 
         Logger::getInstance()->info("XML: " + filename + " loaded successfully");
 
@@ -251,7 +252,7 @@ void Config::parsePlayers(ptree pt) {
         validateTags(XML_CREDENTIAL_USER, validUserTags, user_pt);
 
         user.username = user_pt.get<string>(XML_CREDENTIAL_USERS_NAME);
-        user.username = user_pt.get<string>(XML_CREDENTIAL_USERS_PASSWORD);
+        user.password = user_pt.get<string>(XML_CREDENTIAL_USERS_PASSWORD);
 
         this->players.users.push_back(user);
     }
@@ -315,9 +316,18 @@ void Config::setDefaults() {
     stage.levels.push_back(level2);
     stage.levels.push_back(level3);
 
+    User user;
+    user.username = DEFAULT_USER_USERNAME;
+    user.password = DEFAULT_USER_PASSWORD;
+
+    Players players;
+    players.amount = 1;
+    players.users.push_back(user);
+
     this->window = window;
     this->stage = stage;
     this->log = log;
+    this->players = players;
 
     //TODO default de usuarios
 

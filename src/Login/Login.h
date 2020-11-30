@@ -21,14 +21,14 @@ public:
     Login();
     ~Login();
     bool init();
-    Authentication* authenticate();
+    Authentication* getAuthentication();
     void showError(std::string error);
 
 private:
     bool areCorrectCredentials();
     static void selectInput();
     SDL_Rect &showSection(SDL_Rect &dest, const SDL_Color &foreground, const string &stringToWrite, int yPosition, int xPosition);
-    Authentication *authentication;
+    Authentication authentication = {"", ""};
     string errorLoginToShow;
     TTF_Font *loadFont();
     int fontSize = 35;

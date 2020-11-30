@@ -18,56 +18,64 @@ Login::Login() {
     }
 }
 
-Authentication* Login::authenticate() {
-	static const unsigned char* keys = SDL_GetKeyboardState( NULL );
+Authentication* Login::getAuthentication() {
+    bool authenticated = false;
+    while (!authenticated) {
+        static const unsigned char* keys = SDL_GetKeyboardState( NULL );
 
-	SDL_Event e;
-	SDL_Rect dest;
+        SDL_Event e;
+        SDL_Rect dest;
 
-	// Clear the window to white
-	SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
-	SDL_RenderClear( renderer );
-	// Event loop
-	while ( SDL_PollEvent( &e ) != 0 ) {
-		switch (e.type) {
-			case SDL_QUIT:
-			    throw exception(); //TODO: no deberia ser una excepcion, deberia haber forma de solo terminar el juego.
-			case SDL_TEXTINPUT:
-                (isWithInput ? authentication->username : authentication->password) += e.text.text;
-				break;
-			case SDL_KEYDOWN:
-				if (e.key.keysym.sym == SDLK_BACKSPACE && !(isWithInput ? authentication->username : authentication->password).empty()) {
-                    (isWithInput ? authentication->username : authentication->password).pop_back();
-				}
-				if (e.key.keysym.sym == SDLK_RETURN) {
-				    return authentication;
-				    //return !areCorrectCredentials();
-				}
-				break;
-		    case SDL_MOUSEBUTTONDOWN:
-                selectInput();
-		}
-	}
+        // Clear the window to white
+        SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+        SDL_RenderClear( renderer );
+        // Event loop
+        while ( SDL_PollEvent( &e ) != 0 ) {
+            switch (e.type) {
+                case SDL_QUIT:
+                    throw exception(); //TODO: no deberia ser una excepcion, deberia haber forma de solo terminar el juego.
+                case SDL_TEXTINPUT:
+                    (isWithInput ? authentication.username : authentication.password) += e.text.text;
+                    break;
+                case SDL_KEYDOWN:
+                    if (e.key.keysym.sym == SDLK_BACKSPACE && !(isWithInput ? authentication.username : authentication.password).empty()) {
+                        (isWithInput ? authentication.username : authentication.password).pop_back();
+                    }
+                    if (e.key.keysym.sym == SDLK_RETURN) {
+                        Logger::getInstance()->debug("Returning authentication with username "
+                                                     + authentication.username + " and password: " + authentication.password);
+                        authenticated = true;
+                        return &authentication;
+                        //return !areCorrectCredentials();
+                    }
+                    break;
+                case SDL_MOUSEBUTTONDOWN:
+                    selectInput();
+                    break;
+            }
+        }
 
 // Render texture
-	SDL_RenderCopy(renderer, texture, NULL, NULL);
+        SDL_RenderCopy(renderer, texture, NULL, NULL);
 
-	SDL_Color foreground = { 0, 0, 0 };
+        SDL_Color foreground = { 0, 0, 0 };
 
-    dest = showSection(dest, foreground, authentication->username, 255, 360);
+        dest = showSection(dest, foreground, authentication.username, 255, 360);
 
-    dest = showSection(dest, foreground, authentication->password, 325, 360);
+        dest = showSection(dest, foreground, authentication.password, 325, 360);
 
-    dest = showSection(dest, {100, 0, 0}, errorLoginToShow, 430, 50);
+        dest = showSection(dest, {100, 0, 0}, errorLoginToShow, 430, 50);
 
-	// Update window
-	SDL_RenderPresent( renderer );
+        // Update window
+        SDL_RenderPresent( renderer );
 
-	return this->authentication;
+        SDL_Delay(10);
+    }
+    return nullptr;
 }
 
 bool Login::areCorrectCredentials() {
-    if (authentication->username != "coso" || authentication->password != "cosito") { //FIXME do a method that will check the credentials
+    if (authentication.username != "coso" || authentication.password != "cosito") { //FIXME do a method that will check the credentials
         errorLoginToShow = "Invalid username or password";
         return false;
     }
@@ -98,6 +106,7 @@ void Login :: selectInput() {
 }
 
 bool Login::init() {
+    Logger::getInstance()->debug("Initializing login view");
 	if ( SDL_Init( SDL_INIT_EVERYTHING ) < 0 ) {
         Logger::getInstance() -> error("Error initializing SDL");
 		return false;
@@ -143,10 +152,11 @@ bool Login::init() {
 	// Start sending SDL_TextInput events
 	SDL_StartTextInput();
 
-    while (authenticate() ) {
+	/*
+    while (getAuthentication() ) {
         // wait before processing the next frame
         SDL_Delay(10);
-    }
+    }*/
     return true;
 }
 

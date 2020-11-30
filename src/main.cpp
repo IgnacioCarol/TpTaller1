@@ -31,7 +31,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
         *xmlPath = "./resources/config.xml";
         *ipAddr = "127.0.0.1";
         *port = 8080;
-        *mode = SERVER;
+        *mode = CLIENT;
         return true;
     }
 
@@ -94,6 +94,8 @@ int main(int argc, char * argv[]) {
     std::stringstream ss;
     ss << "xmlPath: " << xmlPath << " mode: " << mode << " ipAddr: " << ipAddr << " port: " << port;
     Logger::getInstance()->debug(ss.str());
+
+    Config::getInstance()->load(xmlPath);
 
     if (mode == SERVER) {
         Logger::getInstance()->info("Initializing in server mode");

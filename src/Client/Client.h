@@ -9,6 +9,7 @@
 #include "../Login/Login.h"
 #include "../Game.h"
 #include "ClientMsg.h"
+#include "../Protocol.h"
 
 using json = nlohmann::json;
 

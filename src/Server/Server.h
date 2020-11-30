@@ -10,6 +10,8 @@
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
+#include "../Protocol.h"
+#include "../config/Config.h"
 
 class Server {
 
@@ -29,6 +31,8 @@ private:
     bool someoneIsConnected();
     static void * handlePlayerClient(void * arg);
     static void * broadcastToPlayerClient(void * arg);
+
+    static void manageLogin(PlayerClient* player, const json msg); //TODO: Buscar algun lugar para manejar los eventos, quizas tener un login de parte del server
 
     Socket *_socket;
     std::vector<PlayerClient *> clients;

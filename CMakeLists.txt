@@ -49,7 +49,8 @@ add_executable(TpTaller1
         src/Server/PlayerClient.cpp src/Server/PlayerClient.h
         src/Client/ClientMsg.h
         src/Server/ServerMsg.h
-        src/Socket/SocketMsg.h)
+        src/Socket/SocketMsg.h
+        src/Protocol.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

@@ -37,6 +37,9 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_LEVEL_PLATFORM_IMG "Sprites/normalBlock.png"
 #define DEFAULT_STAGE_LEVEL_COIN_IMG "Sprites/coinsSprites.png"
 
+#define DEFAULT_USER_USERNAME "mario"
+#define DEFAULT_USER_PASSWORD "mario"
+
 #define XML_CONFIG_TAG "configuracion"
 #define XML_LOG_TAG "configuracion.log"
 #define XML_WINDOW_TAG "configuracion.ventana"
@@ -175,11 +178,11 @@ private:
     void validateTags(string xmlLvl, vector<string> validTags, ptree pt);
 
     const vector<string> validGeneralTags = {"configuracion"};
-    const vector<string> validConfigTags = {"log", "ventana", "escenario"};
+    const vector<string> validConfigTags = {"log", "ventana", "escenario", "credenciales"};
     const vector<string> validLogTags = {"level"};
     const vector<string> validWindowTags = {"ancho", "alto"};
     const vector<string> validStageTags = {"niveles"};
-    const vector<string> validCredentialTags = {"usuario", "conexiones"};
+    const vector<string> validCredentialTags = {"usuarios", "cantidadJugadores"};
     const vector<string> validUserTags = {"nombre", "contrasenia"};
     const vector<string> validLevelTags = {"numero", "fondo", "monedas", "tiempo", "enemigos", "plataformas"};
     const vector<string> validCoinTags = {"imagen", "coordY", "cantidad"};

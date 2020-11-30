@@ -212,6 +212,10 @@
          <cantidadJugadores> 3 </cantidadJugadores>
          <usuarios>
              <usuario>
+                 <nombre>mario</nombre>
+                 <contrasenia>mario</contrasenia>
+             </usuario>
+             <usuario>
                  <nombre>Licha</nombre>
                  <contrasenia>bebelin123</contrasenia>
              </usuario>

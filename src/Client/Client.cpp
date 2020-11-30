@@ -30,10 +30,10 @@ void Client::init() {
 }
 
 void Client::play() {
+    Logger::getInstance()->debug("Client start playing");
     try {
-        if (this->authenticate()){
-            Game::Instance()->play("./resources/config.xml"); //TODO: Deberia haber comunicacion con server para inicializar game
-        }
+        while(!this->authenticate()) {} //TODO: Mejorar este while
+        Game::Instance()->play("./resources/config.xml"); //TODO: Deberia haber comunicacion con server para inicializar game
     } catch(std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
         throw ex;
@@ -41,12 +41,53 @@ void Client::play() {
 }
 
 bool Client::authenticate() {
-    Authentication* auth = login->authenticate();
+    Logger::getInstance()->debug("Client start authentication");
+    Authentication *auth = login->getAuthentication();
+    Logger::getInstance()->debug("Authentication login returned");
+    std::stringstream ss;
+
+    json authJson = {
+            {"username",     auth->username},
+            {"password",     auth->password},
+            {"message_type", LOGIN_MSG}
+    };
+
+    Logger::getInstance()->debug("Stoped setting json message");
+
+    //TODO: Borrar, es para prueba
+    ss.str("");
+    ss << "authentication: "
+       << "sending auth msg: " << authJson.dump() << std::endl;
+    Logger::getInstance()->debug(ss.str());
+
+    Logger::getInstance()->debug("Will send message");
+    if (send(&authJson) < 0) {
+        Logger::getInstance()->error(MSG_CLIENT_AUTH_SEND_ERROR);
+        login->showError("Unexpected error. Try again.");
+        return false;
+    }
+
+    if (receive(&authJson) < 0) {
+        Logger::getInstance()->error(MSG_CLIENT_AUTH_SEND_ERROR);
+        login->showError("Unexpected error. Try again.");
+        return false;
+    }
+
+    if (authJson["response"] == AUTHORIZED) {
+        Logger::getInstance()->info("Client authorized");
+        return true;
+    } else if (authJson["response"] == UNAUTHORIZED) {
+        Logger::getInstance()->info("Client unauthorized");
+        login->showError("Invalid username or password");
+        return false;
+    }
+    /*
     if (auth->username != "coso" || auth->password != "cosito") { //FIXME do a method that will check the credentials
         login->showError("Invalid username or password");
         return false;
     }
-    return true;
+    */
+    return false;
 }
 
 bool Client::isConnected() {

@@ -122,6 +122,11 @@ void * Server::handlePlayerClient(void * arg) {
         Logger::getInstance()->info(ss.str());
         pthread_mutex_unlock(&logMutex);
 
+        //TODO: Ver si hay un mejor lugar para manejar los tipos de mensajes de entrada
+        if (msg["message_type"] == LOGIN_MSG) {
+            manageLogin(playerClient, msg);
+        }
+
         pthread_mutex_lock(cmdMutex);
         playerClient->commandQueue->push(msg);
         pthread_mutex_unlock(cmdMutex);
@@ -159,7 +164,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
             //ToDo handle error
             pthread_mutex_lock(&logMutex);
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
-            pthread_mutex_lock(&logMutex);
+            pthread_mutex_unlock(&logMutex);
         }
     }
 
@@ -226,5 +231,38 @@ bool Server::someoneIsConnected() {
         }
     }
     return true;
+}
+
+void Server::manageLogin(PlayerClient* player, const json msg) {
+    Players players = Config::getInstance()->getPlayers();
+    pthread_mutex_t  * outMutex = player->getOutcomeMutex();
+    json response = {
+            {"response", UNAUTHORIZED}
+    };
+    std::string username = msg["username"];
+    std::string password = msg["password"];
+
+    //TODO: Validar cantidad de clientes.
+    //if (clients.size() <= players.amount) {
+    pthread_mutex_lock(&logMutex);
+    Logger::getInstance()->info("Will check all users for username: " + username +
+    " and psw: " + password + ". Cantidad de users: " + std::to_string(players.users.size()));
+    pthread_mutex_unlock(&logMutex);
+
+    for (auto & user : players.users) {
+        pthread_mutex_lock(&logMutex);
+        Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
+        pthread_mutex_unlock(&logMutex);
+        if (user.username == username && user.password == password) {
+            response = {
+                    {"response", AUTHORIZED}
+            };
+        }
+    }
+    //}
+
+    pthread_mutex_lock(outMutex);
+    player->outcome.push(response);
+    pthread_mutex_unlock(outMutex);
 }
 
