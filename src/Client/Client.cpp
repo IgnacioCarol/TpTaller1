@@ -4,11 +4,14 @@ Client::Client(std::string IP, std::string port) {
     _IP = IP.c_str();
     _port = port.c_str();
     _socket = new Socket();
+    login = new Login();
 }
 
 Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
+    delete login;
+    delete Game::Instance();
 }
 
 void Client::init() {
@@ -16,8 +19,21 @@ void Client::init() {
         _socket->init(_IP, _port, CLIENT);
         _socket->connect();
         Logger::getInstance()->info(MSG_CONNECT_CLIENT);
+
+        login->init();
     } catch (std::exception &ex) {
-        Logger::getInstance()->error(MSG_NOT_CONNECT_CLIENT);
+        Logger::getInstance()->error(MSG_CLIENT_NOT_INITIALIZED);
+        throw ex;
+    }
+}
+
+void Client::play() {
+    try {
+        if (login->authenticate()){
+            Game::Instance()->play("./resources/config.xml"); //TODO: Deberia haber comunicacion con server para inicializar game
+        }
+    } catch(std::exception &ex) {
+        Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
         throw ex;
     }
 }

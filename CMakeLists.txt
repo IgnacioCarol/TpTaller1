@@ -39,7 +39,7 @@ add_executable(TpTaller1
         test/logger_test.cpp src/config/Constants.h src/config/ConfigException.cpp src/config/ConfigException.h
         src/CharacterStates/EnemyMovement.h src/CharacterStates/EnemyMovement.cpp src/gameobjects/Enemy.h src/gameobjects/Enemy.cpp
         src/BackgroundStages/ThirdStage.cpp src/BackgroundStages/ThirdStage.h
-        src/Utils/Login.cpp src/Utils/Login.h
+        src/Login/Login.cpp src/Login/Login.h
         src/Client/Client.cpp src/Client/Client.h
         src/Server/Server.cpp src/Server/Server.h
         src/Socket/Socket.cpp src/Socket/Socket.h

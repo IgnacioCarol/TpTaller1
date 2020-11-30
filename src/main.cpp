@@ -110,6 +110,8 @@ int main(int argc, char * argv[]) {
         auto * client = new Client(ipAddr, to_string(port).c_str());
         try {
             client->init();
+            client->play();
+            /*
             msg_t message;
             message.val1 = 10;
             message.val2 = 9;
@@ -134,6 +136,7 @@ int main(int argc, char * argv[]) {
                << "val6: " << message.val6 << std::endl
                << "val7: " << message.val7 << std::endl;
             Logger::getInstance()->info(ss.str());
+             */
             delete client;
             return 0;
         } catch (std::exception &ex) {

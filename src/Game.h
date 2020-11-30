@@ -24,8 +24,9 @@ class Game {
 public:
     //Public instance function
     static Game* Instance();
-    bool init(const char *levelName, int width, int height, std::string xmlPath);
     ~Game();
+
+    void play(std::string xmlPath);
 
     bool init(const char *levelName, std::string xmlPath);
     bool loadImages();
