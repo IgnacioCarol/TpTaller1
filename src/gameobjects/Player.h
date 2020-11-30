@@ -8,7 +8,7 @@
 #include "GameObject.h"
 
 #define playerID "mario" //Principal Player
-#define imgPlayer "Sprites/mario.png"
+#define imgPlayer "Sprites/Players/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
 class CharacterState;
