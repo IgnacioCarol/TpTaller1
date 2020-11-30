@@ -29,13 +29,22 @@ void Client::init() {
 
 void Client::play() {
     try {
-        if (login->authenticate()){
+        if (this->authenticate()){
             Game::Instance()->play("./resources/config.xml"); //TODO: Deberia haber comunicacion con server para inicializar game
         }
     } catch(std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
         throw ex;
     }
+}
+
+bool Client::authenticate() {
+    Authentication* auth = login->authenticate();
+    if (auth->username != "coso" || auth->password != "cosito") { //FIXME do a method that will check the credentials
+        login->showError("Invalid username or password");
+        return false;
+    }
+    return true;
 }
 
 bool Client::isConnected() {

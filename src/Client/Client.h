@@ -27,6 +27,8 @@ private:
     Socket* _socket;
     std::string _clientID; //TODO inicializar con el XML? Tal vez el ID pueda ser el nombre de usuario, una vez que se haga el login utilizar username en este campo
     Login* login;
+
+    bool authenticate();
 };
 
 
