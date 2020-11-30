@@ -76,7 +76,7 @@ bool Socket::isConnected() {
 int Socket::send(json *msg) {
     std::string msgToWrite = msg->dump();
     uint32_t sizeOfMessage = msgToWrite.size();
-    if (send(&sizeOfMessage, sizeOfMessage) < 1) {
+    if (send(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
         Logger::getInstance()->error("Error while sending the size of message");
         return 1;
     }

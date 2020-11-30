@@ -126,9 +126,7 @@ int main(int argc, char * argv[]) {
         Logger::getInstance()->info("Se envio el mensaje o algo asi");
         client->receive(&newJson);
         ss.clear();
-        ss << "val1: " << 1<< std::endl
-           << "val2: " << 2 << std::endl
-           << "val7: " << 3 << std::endl;
+        ss << "val1: " << newJson.dump() << std::endl;
         Logger::getInstance()->info(ss.str());
         delete client;
         return 0;
