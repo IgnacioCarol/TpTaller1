@@ -123,7 +123,7 @@ int main(int argc, char * argv[]) {
             delete client;
             return 1;
         }
-
+        Logger::getInstance()->info("Se envio el mensaje o algo asi");
         client->receive(&newJson);
         ss.clear();
         ss << "val1: " << 1<< std::endl

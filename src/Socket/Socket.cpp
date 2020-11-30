@@ -75,7 +75,7 @@ bool Socket::isConnected() {
 
 int Socket::send(json *msg) {
     std::string msgToWrite = msg->dump();
-    uint32_t sizeOfMessage = sizeof(msgToWrite);
+    uint32_t sizeOfMessage = msgToWrite.size();
     if (send(&sizeOfMessage, sizeOfMessage) < 1) {
         Logger::getInstance()->error("Error while sending the size of message");
         return 1;
@@ -94,7 +94,7 @@ int Socket::send(T* data, int bytesToWrite) {
     bool client_socket_still_open = true;
 
     while ((bytesToWrite > total_bytes_written) && client_socket_still_open){
-        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), 0);
+        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), MSG_NOSIGNAL);
 
         if (bytes_written < 0) { // Error
             Logger::getInstance()->error("[Socket] unexpected error trying to send msg. Error: "  + std::string(strerror(errno)));
@@ -139,7 +139,6 @@ int Socket::receive(T *msg, int receiveDataSize) {
     int total_bytes_receive = 0;
     int bytes_received = 0;
     bool client_socket_still_open = true;
-    auto *msg_to_send = (uint8_t*)msg;
 
     // Receive
     // ssize_t recv(int sockfd, void *buf, size_t len, int flags);

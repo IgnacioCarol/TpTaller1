@@ -1,11 +1,10 @@
 #ifndef TPTALLER1_CLIENT_H
 #define TPTALLER1_CLIENT_H
 
-
 #include <string>
-#include "Socket/Socket.h"
-using json = nlohmann::json;
+#include "lib/nlohmann/json.hpp"
 #include "../Socket/Socket.h"
+using json = nlohmann::json;
 
 class Client {
 public:
