@@ -6,8 +6,11 @@
 class PlayerClient {
 public:
     explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<msg_t> * commandQueue);
-    int receive(void* msg, size_t len);
+    int receive(void* msg, size_t len); //ToDo tiene sentido mandar el len en el receive ?
     bool send(void * msg, size_t len);
+    bool isConnected();
+    void lock();
+    void unlock();
     pthread_mutex_t  * getCommandMutex();
     pthread_mutex_t  * getOutcomeMutex();
     Socket * getSocket();
@@ -15,6 +18,7 @@ public:
 
     std::queue<msg_t> * commandQueue; //ToDo define msg_t
     std::queue<msg_t> outcome; //ToDo define msg_t
+    int name;
 private:
     Socket * clientSocket;
     pthread_mutex_t  * commandMutex; // Mutex to control command queue

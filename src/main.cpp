@@ -11,7 +11,7 @@
 #include "logger/logger.h"
 #include "Game.h"
 #include "Server/Server.h"
-#include  "Client/Client.h"
+#include "Client/Client.h"
 #include "Socket/Socket.h"
 
 #define FPS 40;
@@ -98,7 +98,7 @@ int main(int argc, char * argv[]) {
         Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
         try {
-            server->init(ipAddr.c_str(), std::to_string(port).c_str(), 1); //TODO: la cantidad de clientes deberia venir del XML
+            server->init(ipAddr.c_str(), std::to_string(port).c_str(), 4); //TODO: la cantidad de clientes deberia venir del XML
             server->run();
             delete server;
             return 0;

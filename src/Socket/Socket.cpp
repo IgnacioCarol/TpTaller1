@@ -88,13 +88,14 @@ int Socket::send(void *msg, size_t len) {
         else if (bytes_written == 0) { // Socket closed
             Logger::getInstance()->error(MSG_SOCKET_CLOSED_SEND);
             client_socket_still_open = false;
+            _connected = false; //ToDo ojota con esto, consultar con el team si estamos seguros de esta condicion
         }
         else {
             total_bytes_written += bytes_written;
         }
     }
 
-    return 0;
+    return total_bytes_written;
 }
 
 int Socket::receive(void *msg, size_t len) {
@@ -122,6 +123,7 @@ int Socket::receive(void *msg, size_t len) {
         else if (bytes_received == 0) { // Socket closed
             Logger::getInstance()->error(MSG_SOCKET_CLOSED_RECEIVE);
             client_socket_still_open = false;
+            _connected = false; //ToDo ojota con esto, consultar con el team si estamos seguros de esta condicion
         }
         else {
             total_bytes_receive += bytes_received;
