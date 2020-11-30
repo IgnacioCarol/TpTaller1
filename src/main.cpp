@@ -13,7 +13,7 @@
 #include "Server/Server.h"
 #include "Client/Client.h"
 #include "Socket/Socket.h"
-#include <lib/nlohmann/json.hpp>
+#include <json.hpp>
 using json = nlohmann::json;
 
 #define FPS 40;

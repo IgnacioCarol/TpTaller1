@@ -2,7 +2,7 @@
 #define TPTALLER1_CLIENT_H
 
 #include <string>
-#include "lib/nlohmann/json.hpp"
+#include "json.hpp"
 #include "../Socket/Socket.h"
 using json = nlohmann::json;
 

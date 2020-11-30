@@ -1,5 +1,5 @@
 #include "PlayerClient.h"
-#include <lib/nlohmann/json.hpp>
+#include <json.hpp>
 #include "ServerMsg.h"
 #include <pthread.h>
 

@@ -1,4 +1,4 @@
-#include <lib/nlohmann/json.hpp>
+#include <json.hpp>
 #include "Socket.h"
 using json = nlohmann::json;
 Socket::Socket() {
