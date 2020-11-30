@@ -1,5 +1,7 @@
 #include "Client.h"
 
+using json = nlohmann::json;
+
 Client::Client(std::string IP, std::string port) {
     _IP = IP.c_str();
     _port = port.c_str();
@@ -59,12 +61,12 @@ void Client::release() {
     Logger::getInstance()->info(MSG_DISCONNECT_CLIENT);
 }
 
-int Client::send(msg_t *msg, size_t len) {
-    return _socket->send(msg, len) == len;
+int Client::send(json *msg) {
+    return _socket->send(msg);
 }
 
-int Client::receive(msg_t *msg, size_t len) {
-    return  _socket->receive(msg, len) == len;
+int Client::receive(json *msg) {
+    return _socket->receive(msg);
 }
 
 

@@ -12,6 +12,8 @@
 #include "Game.h"
 #include "Server/Server.h"
 #include "Client/Client.h"
+#include <json.hpp>
+using json = nlohmann::json;
 
 #define FPS 40;
 const int DELAY_TIME = 1000.0f / FPS;

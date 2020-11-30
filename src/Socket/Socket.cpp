@@ -1,5 +1,6 @@
+#include <json.hpp>
 #include "Socket.h"
-
+using json = nlohmann::json;
 Socket::Socket() {
     // Create Socket
     // int socket(int domain, int type, int protocol);
@@ -71,15 +72,28 @@ bool Socket::isConnected() {
     return _connected;
 }
 
-int Socket::send(void *msg, size_t len) {
+int Socket::send(json *msg) {
+    std::string msgToWrite = msg->dump();
+    uint32_t sizeOfMessage = msgToWrite.size();
+    if (send(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
+        Logger::getInstance()->error("Error while sending the size of message");
+        return 1;
+    }
+    if (send(&msgToWrite[0], sizeOfMessage) < 1) {
+        Logger::getInstance()->error("Error while sending the message");
+        return 1;
+    }
+    return 0;
+}
+
+template <class T>
+int Socket::send(T* data, int bytesToWrite) {
     int total_bytes_written = 0;
     int bytes_written = 0;
-    //int send_data_size = sizeof(msg_t);
     bool client_socket_still_open = true;
-    auto *msg_to_send = (uint8_t*)msg;
 
-    while ((len > total_bytes_written) && client_socket_still_open){
-        bytes_written = ::send(fd, (msg_to_send + total_bytes_written), (len - total_bytes_written), 0);
+    while ((bytesToWrite > total_bytes_written) && client_socket_still_open){
+        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_SEND_FAILED + std::string(strerror(errno)));
@@ -98,12 +112,32 @@ int Socket::send(void *msg, size_t len) {
     return total_bytes_written;
 }
 
-int Socket::receive(void *msg, size_t len) {
+int Socket::receive(json *msg) {
+    uint32_t sizeOfMessage;
+    if (receive<uint32_t>(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
+        Logger::getInstance()->error("la cagaste pibe");
+        return -1;
+    };
+    std::string message(sizeOfMessage, '\0');
+    if (receive<char>(&message[0], sizeOfMessage) < 1) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
+        Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
+        //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
+        return 0;
+    }
+    if (message.empty()) {
+        Logger::getInstance()->error("Message is empty");
+        return 0;
+    }
+    *msg = json::parse(message);
+    return sizeOfMessage;
+}
+
+
+template <class T>
+int Socket::receive(T *msg, int receiveDataSize) {
     int total_bytes_receive = 0;
     int bytes_received = 0;
-    //int receive_data_size = sizeof(msg_t);
     bool client_socket_still_open = true;
-    auto *msg_to_send = (uint8_t*)msg;
 
     // Receive
     // ssize_t recv(int sockfd, void *buf, size_t len, int flags);
@@ -114,8 +148,8 @@ int Socket::receive(void *msg, size_t len) {
     // The recv() call are used to receive messages from a socket.
     // If no messages are available at the socket, the receive call wait for a message to arrive. (Blocking)
 
-    while ((len > bytes_received) && client_socket_still_open) {
-        bytes_received = recv(fd, (msg_to_send + total_bytes_receive), (len - total_bytes_receive), 0);
+    while ((receiveDataSize > bytes_received) && client_socket_still_open) {
+        bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive), 0);
         if (bytes_received < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_RECEIVE_FAILED + std::string(strerror(errno)));
             return bytes_received;

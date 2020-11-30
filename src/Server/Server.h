@@ -32,7 +32,7 @@ private:
 
     Socket *_socket;
     std::vector<PlayerClient *> clients;
-    std::queue<msg_t> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
+    std::queue<json> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
     pthread_mutex_t commandMutex; // Mutex to control command queue
     pthread_t        * incomeThreads;
     pthread_t        * outcomeThreads;

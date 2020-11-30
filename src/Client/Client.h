@@ -1,14 +1,16 @@
 #ifndef TPTALLER1_CLIENT_H
 #define TPTALLER1_CLIENT_H
 
-
 #include <string>
 #include <exception>
+#include "json.hpp"
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
 #include "../Login/Login.h"
 #include "../Game.h"
 #include "ClientMsg.h"
+
+using json = nlohmann::json;
 
 class Client {
 public:
@@ -17,8 +19,8 @@ public:
     void init();
     void play();
     bool isConnected();
-    int send(msg_t *msg, size_t len);
-    int receive(msg_t *msg, size_t len);
+    int send(json *msg);
+    int receive(json *msg);
     void release();
 
 private:

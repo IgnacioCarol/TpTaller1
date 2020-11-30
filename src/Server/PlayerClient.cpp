@@ -1,8 +1,10 @@
 #include "PlayerClient.h"
+#include <json.hpp>
 #include "ServerMsg.h"
 #include <pthread.h>
 
-PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<msg_t> * commandQueue) {
+using json = nlohmann::json;
+PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<json> *commandQueue) {
     pthread_mutex_init(&this->outcomeMutex, nullptr);
     this->clientSocket = clientSocket;
     this->commandMutex = commandMutex;
@@ -18,10 +20,8 @@ Socket *PlayerClient::getSocket() {
     return this->clientSocket;
 }
 
-int PlayerClient::receive(void* message, size_t len) {
-    memset(message, 0, len);
-    int received = this->clientSocket->receive(message, sizeof(msg_t));
-
+int PlayerClient::receive(json* message) {
+    int received = this->clientSocket->receive(message);
     if (received < 0) { // There was an error
         Logger::getInstance()->error(MSG_ERROR_RECV_MSG_SERVER);
     } else if (!received) { // The client's socket was closed
@@ -38,9 +38,9 @@ pthread_mutex_t *PlayerClient::getOutcomeMutex() {
     return &this->outcomeMutex;
 }
 
-bool PlayerClient::send(void * msg, size_t len) {
-    int result = this->clientSocket->send(msg, len);
-    return result == len;
+bool PlayerClient::send(json *msg) {
+    int result = this->clientSocket->send(msg);
+    return result == 0;
 }
 
 bool PlayerClient::isConnected() {

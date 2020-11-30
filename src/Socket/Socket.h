@@ -11,6 +11,7 @@
 #include "../logger/logger.h"
 #include "SocketException.h"
 #include "SocketMsg.h"
+#include "json.hpp"
 
 enum ConnectionType {
     SERVER = 0,
@@ -46,11 +47,11 @@ public:
 
     //Returns the amount of bytes sent
     //If it returns 0 or a negative number, there was an error
-    int send(void *msg, size_t len);
+    int send(nlohmann::basic_json<> *msg);
 
     //Returns the amount of bytes received
     //If it returns 0 or a negative number, there was an error
-    int receive(void *msg, size_t len);
+    int receive(nlohmann::basic_json<> *msg);
 
     //Closes the socket
     void release();
@@ -70,6 +71,12 @@ private:
     struct addrinfo * addresses;
     struct sockaddr_in server_addr;
     std::string port;
+
+    template<class T>
+    int send(T *data, int bytesToWrite);
+
+    template<class T>
+    int receive(T *msg, int receiveDataSize);
 };
 
 

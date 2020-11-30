@@ -2,12 +2,12 @@
 #define TPTALLER1_PLAYERCLIENT_H
 #include "../Socket/Socket.h"
 #include <queue>
-
+using json = nlohmann::json;
 class PlayerClient {
 public:
-    explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<msg_t> * commandQueue);
-    int receive(void* msg, size_t len); //ToDo tiene sentido mandar el len en el receive ?
-    bool send(void * msg, size_t len);
+    explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<json> *commandQueue);
+    int receive(json* message);
+    bool send(json *msg);
     bool isConnected();
     void lock();
     void unlock();
@@ -16,8 +16,8 @@ public:
     Socket * getSocket();
     virtual ~PlayerClient();
 
-    std::queue<msg_t> * commandQueue; //ToDo define msg_t
-    std::queue<msg_t> outcome; //ToDo define msg_t
+    std::queue<json> * commandQueue;
+    std::queue<json> outcome;
     int name;
 private:
     Socket * clientSocket;

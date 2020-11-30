@@ -102,13 +102,12 @@ void Server::acceptClients() {
 void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
     pthread_mutex_t  * cmdMutex = playerClient->getCommandMutex();
-    msg_t msg;
+    json msg;
     int msg_received;
     std::stringstream ss;
 
     while (playerClient->isConnected()) {
-        memset(&msg, 0, sizeof(msg));
-        msg_received = playerClient->receive(&msg, sizeof(msg_t));
+        msg_received = playerClient->receive(&msg);
         if (msg_received < 0) {
             continue;
         }
@@ -119,13 +118,7 @@ void * Server::handlePlayerClient(void * arg) {
 
         pthread_mutex_lock(&logMutex);
         ss << "received user: " << playerClient->name << " "
-           << "val1: " << msg.val1 << std::endl
-           << "val2: " << msg.val2 << std::endl
-           << "val3: " << msg.val3 << std::endl
-           << "val4: " << msg.val4 << std::endl
-           << "val5: " << msg.val5 << std::endl
-           << "val6: " << msg.val6 << std::endl
-           << "val7: " << msg.val7 << std::endl;
+           << "msg: " << msg.dump() << std::endl;
         Logger::getInstance()->info(ss.str());
         pthread_mutex_unlock(&logMutex);
 
@@ -139,12 +132,11 @@ void * Server::handlePlayerClient(void * arg) {
 
 void * Server::broadcastToPlayerClient(void *arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
-    std::queue<msg_t> * outcomeQueue = &playerClient->outcome;
+    std::queue<json> * outcomeQueue = &playerClient->outcome;
     pthread_mutex_t  * outMutex = playerClient->getOutcomeMutex();
-    msg_t msg;
+    json msg;
 
     while (playerClient->isConnected()) {
-        memset(&msg, 0, sizeof(msg));
         pthread_mutex_lock(outMutex);
         if (!outcomeQueue->empty()) {
             msg = outcomeQueue->front();
@@ -158,18 +150,12 @@ void * Server::broadcastToPlayerClient(void *arg) {
         pthread_mutex_lock(&logMutex);
         std::stringstream ss;
         ss << "envianding a user: " << playerClient->name << " "
-           << std::endl << "val1: " << msg.val1 << std::endl
-           << "val2: " << msg.val2 << std::endl
-           << "val3: " << msg.val3 << std::endl
-           << "val4: " << msg.val4 << std::endl
-           << "val5: " << msg.val5 << std::endl
-           << "val6: " << msg.val6 << std::endl
-           << "val7: " << msg.val7 << std::endl;
+           << std::endl << "val1: " << msg.dump() << std::endl;
         Logger::getInstance()->debug(ss.str());
 
         pthread_mutex_unlock(&logMutex);
 
-        if(!playerClient->send(&msg, sizeof(msg_t))) {
+        if(!playerClient->send(&msg)) {
             //ToDo handle error
             pthread_mutex_lock(&logMutex);
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
@@ -183,16 +169,14 @@ void * Server::broadcastToPlayerClient(void *arg) {
 // Infinite loop processing PlayerClients commands
 bool Server::run() {
     pthread_mutex_t  * cmdMutex = &this->commandMutex;
-    msg_t message;
+    json msg;
     std::stringstream ss;
 
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
-        memset(&message, 0, sizeof(message));
-
         pthread_mutex_lock(cmdMutex);
-        if (commands.size() > 0) {
-            message = commands.front();
+        if (!commands.empty()) {
+            msg = commands.front();
             commands.pop();
         }
         pthread_mutex_unlock(cmdMutex);
@@ -203,35 +187,23 @@ bool Server::run() {
 //        log << "[main]" << clients.front()->isConnected();
 //        Logger::getInstance()->debug(log.str());
 
-        if (message.val1 == 0) {
+        if (!msg.is_structured()) {
             continue;
         }
 
         pthread_mutex_lock(&logMutex);
         ss.str("");
         ss << "main: "
-           << "val1: " << message.val1 << std::endl
-           << "val2: " << message.val2 << std::endl
-           << "val3: " << message.val3 << std::endl
-           << "val4: " << message.val4 << std::endl
-           << "val5: " << message.val5 << std::endl
-           << "val6: " << message.val6 << std::endl
-           << "val7: " << message.val7 << std::endl;
+           << "msg: " << msg.dump() << std::endl;
         Logger::getInstance()->info(ss.str());
         pthread_mutex_unlock(&logMutex);
 
-        message.val1+=10;
-        message.val2+=10;
-        message.val3+=10;
-        message.val4+=10;
-        message.val5+=10;
-        message.val6+=10;
-        message.val7+=10;
+        msg = {4,5,6};
 
         for (auto & client : clients) {
             pthread_mutex_t * outMutex = client->getOutcomeMutex();
             pthread_mutex_lock(outMutex);
-            client->outcome.push(message);
+            client->outcome.push(msg);
             pthread_mutex_unlock(outMutex);
         }
     }
