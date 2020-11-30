@@ -76,7 +76,7 @@ bool Socket::isConnected() {
 int Socket::send(json *msg) {
     std::string msgToWrite = msg->dump();
     uint32_t sizeOfMessage = msgToWrite.size();
-    if (send(&sizeOfMessage, sizeOfMessage) < 1) {
+    if (send(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
         Logger::getInstance()->error("Error while sending the size of message");
         return 1;
     }
@@ -94,7 +94,7 @@ int Socket::send(T* data, int bytesToWrite) {
     bool client_socket_still_open = true;
 
     while ((bytesToWrite > total_bytes_written) && client_socket_still_open){
-        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), MSG_NOSIGNAL);
+        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), 0);
 
         if (bytes_written < 0) { // Error
             Logger::getInstance()->error("[Socket] unexpected error trying to send msg. Error: "  + std::string(strerror(errno)));
@@ -115,12 +115,12 @@ int Socket::send(T* data, int bytesToWrite) {
 
 int Socket::receive(json *msg) {
     uint32_t sizeOfMessage;
-    if (receive(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
+    if (receive<uint32_t>(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
         Logger::getInstance()->error("la cagaste pibe");
         return -1;
     };
     std::string message(sizeOfMessage, '\0');
-    if (receive(&message[0], sizeOfMessage) < 1) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
+    if (receive<char>(&message[0], sizeOfMessage) < 1) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
         Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
         //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
         return 0;
@@ -150,7 +150,7 @@ int Socket::receive(T *msg, int receiveDataSize) {
     // If no messages are available at the socket, the receive call wait for a message to arrive. (Blocking)
 
     while ((receiveDataSize > bytes_received) && client_socket_still_open) {
-        bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive), MSG_NOSIGNAL);
+        bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive), 0);
         if (bytes_received < 0) { // Error
             Logger::getInstance()->error("[Socket] unexpected error trying to receive msg. Error: " + std::string(strerror(errno)));
             return bytes_received;

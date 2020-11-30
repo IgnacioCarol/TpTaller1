@@ -119,7 +119,7 @@ void * Server::handlePlayerClient(void * arg) {
 
         pthread_mutex_lock(&logMutex);
         ss << "received user: " << playerClient->name << " "
-           << "val1: " << msg.dump() << std::endl;
+           << "msg: " << msg.dump() << std::endl;
         Logger::getInstance()->info(ss.str());
         pthread_mutex_unlock(&logMutex);
 
@@ -170,15 +170,14 @@ void * Server::broadcastToPlayerClient(void *arg) {
 // Infinite loop processing PlayerClients commands
 bool Server::run() {
     pthread_mutex_t  * cmdMutex = &this->commandMutex;
-    json message;
+    json msg;
     std::stringstream ss;
 
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
-
         pthread_mutex_lock(cmdMutex);
         if (!commands.empty()) {
-            message = commands.front();
+            msg = commands.front();
             commands.pop();
         }
         pthread_mutex_unlock(cmdMutex);
@@ -189,21 +188,23 @@ bool Server::run() {
 //        log << "[main]" << clients.front()->isConnected();
 //        Logger::getInstance()->debug(log.str());
 
-        if (!message.is_structured()) {
+        if (!msg.is_structured()) {
             continue;
         }
 
         pthread_mutex_lock(&logMutex);
         ss.str("");
         ss << "main: "
-           << "val1: " << message.dump() << std::endl;
+           << "msg: " << msg.dump() << std::endl;
         Logger::getInstance()->info(ss.str());
         pthread_mutex_unlock(&logMutex);
+
+        msg = {4,5,6};
 
         for (auto & client : clients) {
             pthread_mutex_t * outMutex = client->getOutcomeMutex();
             pthread_mutex_lock(outMutex);
-            client->outcome.push(message);
+            client->outcome.push(msg);
             pthread_mutex_unlock(outMutex);
         }
     }

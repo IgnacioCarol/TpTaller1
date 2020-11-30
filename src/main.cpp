@@ -100,7 +100,7 @@ int main(int argc, char * argv[]) {
         // ToDo launch server
         Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
-        if (server->init(ipAddr.c_str(), std::to_string(port).c_str(), 4)) { //TODO: la cantidad de clientes deberia venir del XML
+        if (server->init(ipAddr.c_str(), std::to_string(port).c_str(), 1)) { //TODO: la cantidad de clientes deberia venir del XML
             server->run();
             delete server;
             return 0;
@@ -125,10 +125,8 @@ int main(int argc, char * argv[]) {
         }
         Logger::getInstance()->info("Se envio el mensaje o algo asi");
         client->receive(&newJson);
-        ss.clear();
-        ss << "val1: " << 1<< std::endl
-           << "val2: " << 2 << std::endl
-           << "val7: " << 3 << std::endl;
+        ss.str("");
+        ss << "msg: " << newJson.dump();
         Logger::getInstance()->info(ss.str());
         delete client;
         return 0;
