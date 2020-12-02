@@ -7,6 +7,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
 add_subdirectory(lib/googletest-master)
 include_directories(lib/googletest-master/googletest/include)
 include_directories(lib/googletest-master/googlemock/include)
+include_directories(lib/nlohmann)
 
 add_executable(TpTaller1
         src/main.cpp
@@ -38,7 +39,18 @@ add_executable(TpTaller1
         test/config_test.cpp
         test/logger_test.cpp src/config/Constants.h src/config/ConfigException.cpp src/config/ConfigException.h
         src/CharacterStates/EnemyMovement.h src/CharacterStates/EnemyMovement.cpp src/gameobjects/Enemy.h src/gameobjects/Enemy.cpp
-        src/BackgroundStages/ThirdStage.cpp src/BackgroundStages/ThirdStage.h)
+        src/BackgroundStages/ThirdStage.cpp src/BackgroundStages/ThirdStage.h
+        src/Login/Login.cpp src/Login/Login.h
+        src/Client/Client.cpp src/Client/Client.h
+        src/Server/Server.cpp src/Server/Server.h
+        src/Socket/Socket.cpp src/Socket/Socket.h
+        src/Socket/SocketException.cpp src/Socket/SocketException.h
+        src/Server/ServerException.cpp src/Server/ServerException.h
+        src/Server/PlayerClient.cpp src/Server/PlayerClient.h
+        src/Client/ClientMsg.h
+        src/Server/ServerMsg.h
+        src/Socket/SocketMsg.h
+        src/Protocol.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

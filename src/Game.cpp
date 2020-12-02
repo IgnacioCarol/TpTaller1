@@ -161,5 +161,47 @@ void Game::initializeGameObjects(int level) {
     _gameObjects = factory->createGameObjectsFromLevelConfig(config->getLevel(level));
 }
 
+void Game::play(std::string xmlPath) {
+    if (!init("Level 1", xmlPath)) { //Aca inicializo el background
+        Logger::getInstance() -> error("Error: the game could not be initialized");
+        throw exception();
+    }
+
+    createGameObjects(); //ToDo refactorizar y mover al Factory, factory tiene que ser el unico responsable de instanciar gameObjects
+
+    if (!loadImages()){
+        Logger::getInstance() -> error("Error: Loading the sprites went wrong");
+        throw exception();
+    }
+    if (!loadTexts()) {
+        Logger::getInstance()->error("Error: Loading texts went wrong");
+        throw exception();
+    }
+
+    //Event handler
+    SDL_Event e;
+
+    while(isPlaying()){
+
+        while(SDL_PollEvent(&e) != 0) {
+            if (e.type  == SDL_QUIT ) {
+                Game::Instance()->gameOver();
+            }
+        }
+
+        handleEvents();
+        render();
+        SDL_Delay(4);
+    }
+    Logger::getInstance() -> info("Game over");
+    clean();
+    /*
+    delete game;
+    delete Logger::getInstance();
+
+    SDL_Quit();
+    */
+}
+
 
 
