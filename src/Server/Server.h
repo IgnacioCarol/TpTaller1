@@ -19,7 +19,7 @@ public:
     static Server * getInstance();
     virtual ~Server();
 
-    void init(const char *ip, const char *port, int clientNo);
+    void init(const char *ip, const char *port);
     bool run();
 
 private:
