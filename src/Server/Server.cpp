@@ -39,21 +39,23 @@ void Server::init(const char *ip, const char *port, int clientNo) {
     this->outcomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->outcomeThreads) {
         Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        throw ServerException(MSG_NO_MEMORY_THREADS);;
+        throw ServerException(MSG_NO_MEMORY_THREADS);
     }
 
     initSocket(ip, port);
     Logger::getInstance()->info(MSG_READY_SERVER);
     std::cout << MSG_READY_SERVER << std::endl;
 
-    try {
-        acceptClients();
-    } catch (std::exception &e) {
-        std::string error = e.what();
-        Logger::getInstance()->error("Failed to accept clients, error: " + error);
-    }
+    pthread_create(&this->acceptorThread, nullptr, Server::handleIncomingConnections, (void *) this);
 
-    Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
+//    try {
+//        acceptClients();
+//    } catch (std::exception &e) {
+//        std::string error = e.what();
+//        Logger::getInstance()->error("Failed to accept clients, error: " + error);
+//    }
+//
+//    Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
 }
 
 void Server::initSocket(const char*ip, const char *port) {
@@ -87,6 +89,32 @@ void Server::acceptClients() {
     if (retry == MAX_ACCEPT_RETRIES && clients.size() < clientNo) {
         throw ServerException(MSG_ERROR_ACCEPT_CLIENTS);
     }
+}
+
+
+void *Server::handleIncomingConnections(void *arg) {
+    Server * server = (Server *)arg;
+    int id = 0;
+
+    while(server->someoneIsConnected()) { //ToDo while(server->isUpAndRunning())
+        try {
+            auto * playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
+            playerClient->name = id;
+            server->clients.push_back(playerClient);
+            pthread_create(&server->incomeThreads[id], nullptr, Server::handlePlayerClient, (void *) playerClient);
+            pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
+            Logger::getInstance()->info(MSG_CLIENT_NUMBER_SERVER + std::to_string(i) + MSG_ACCEPTED_SERVER);
+        } catch (std::exception &ex) {
+            Logger::getInstance()->error(MSG_CLIENT_NOT_ACCEPTED + std::to_string(i));
+            i--;
+        }
+
+        id++; //Client accepted
+    }
+
+
+
+    return nullptr;
 }
 
 void * Server::handlePlayerClient(void * arg) {
