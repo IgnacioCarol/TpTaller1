@@ -3,7 +3,6 @@
 #include <pthread.h>
 
 Server* Server::instance = nullptr;
-pthread_mutex_t logMutex;
 
 Server *Server::getInstance() {
     if (Server::instance == nullptr) {
@@ -14,22 +13,18 @@ Server *Server::getInstance() {
 }
 
 Server::~Server() {
-    pthread_mutex_lock(&logMutex);
     Logger::getInstance()->info(MSG_DESTROY_SERVER);
-    pthread_mutex_unlock(&logMutex);
     delete _socket;
     for (auto & client : clients) {
         delete client;
     }
     pthread_mutex_destroy(&this->commandMutex);
-    pthread_mutex_destroy(&logMutex);
     free(this->incomeThreads);
     free(this->outcomeThreads);
 }
 
 Server::Server() {
     pthread_mutex_init(&this->commandMutex, nullptr);
-    pthread_mutex_init(&logMutex, nullptr);
 }
 
 void Server::init(const char *ip, const char *port, int clientNo) {
@@ -37,29 +32,21 @@ void Server::init(const char *ip, const char *port, int clientNo) {
     this->clientNo = clientNo;
     this->incomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->incomeThreads) {
-        pthread_mutex_lock(&logMutex);
         Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        pthread_mutex_unlock(&logMutex);
         throw ServerException(MSG_NO_MEMORY_THREADS);
     }
 
     this->outcomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->outcomeThreads) {
-        pthread_mutex_lock(&logMutex);
         Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        pthread_mutex_unlock(&logMutex);
         throw ServerException(MSG_NO_MEMORY_THREADS);;
     }
 
     initSocket(ip, port);
-    pthread_mutex_lock(&logMutex);
     Logger::getInstance()->info(MSG_READY_SERVER);
-    pthread_mutex_unlock(&logMutex);
     std::cout << MSG_READY_SERVER << std::endl; //TODO: Borrar
     acceptClients();
-    pthread_mutex_lock(&logMutex);
     Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
-    pthread_mutex_unlock(&logMutex);
 }
 
 void Server::initSocket(const char*ip, const char *port) {
@@ -83,13 +70,9 @@ void Server::acceptClients() {
             clients.push_back(playerClient);
             pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) playerClient);
             pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
-            pthread_mutex_lock(&logMutex);
             Logger::getInstance()->info(MSG_CLIENT_NUMBER_SERVER + std::to_string(i) + MSG_ACCEPTED_SERVER);
-            pthread_mutex_unlock(&logMutex);
         } catch (std::exception &ex) {
-            pthread_mutex_lock(&logMutex);
             Logger::getInstance()->error(MSG_CLIENT_NOT_ACCEPTED + std::to_string(i));
-            pthread_mutex_unlock(&logMutex);
             i--;
         }
     }
@@ -116,11 +99,9 @@ void * Server::handlePlayerClient(void * arg) {
             continue;
         }
 
-        pthread_mutex_lock(&logMutex);
         ss << "received user: " << playerClient->name << " "
            << "msg: " << msg.dump() << std::endl;
         Logger::getInstance()->info(ss.str());
-        pthread_mutex_unlock(&logMutex);
 
         //TODO: Ver si hay un mejor lugar para manejar los tipos de mensajes de entrada
         if (msg["message_type"] == LOGIN_MSG) {
@@ -152,19 +133,14 @@ void * Server::broadcastToPlayerClient(void *arg) {
         }
         pthread_mutex_unlock(outMutex);
 
-        pthread_mutex_lock(&logMutex);
         std::stringstream ss;
         ss << "envianding a user: " << playerClient->name << " "
            << std::endl << "val1: " << msg.dump() << std::endl;
         Logger::getInstance()->debug(ss.str());
 
-        pthread_mutex_unlock(&logMutex);
-
         if(!playerClient->send(&msg)) {
             //ToDo handle error
-            pthread_mutex_lock(&logMutex);
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
-            pthread_mutex_unlock(&logMutex);
         }
     }
 
@@ -196,12 +172,10 @@ bool Server::run() {
             continue;
         }
 
-        pthread_mutex_lock(&logMutex);
         ss.str("");
         ss << "main: "
            << "msg: " << msg.dump() << std::endl;
         Logger::getInstance()->info(ss.str());
-        pthread_mutex_unlock(&logMutex);
 
         msg = {4,5,6};
 
@@ -244,15 +218,11 @@ void Server::manageLogin(PlayerClient* player, const json msg) {
 
     //TODO: Validar cantidad de clientes.
     //if (clients.size() <= players.amount) {
-    pthread_mutex_lock(&logMutex);
     Logger::getInstance()->info("Will check all users for username: " + username +
     " and psw: " + password + ". Cantidad de users: " + std::to_string(players.users.size()));
-    pthread_mutex_unlock(&logMutex);
 
     for (auto & user : players.users) {
-        pthread_mutex_lock(&logMutex);
         Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
-        pthread_mutex_unlock(&logMutex);
         if (user.username == username && user.password == password) {
             response = {
                     {"response", AUTHORIZED}
