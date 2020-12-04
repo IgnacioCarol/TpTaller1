@@ -13,7 +13,7 @@ Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
     delete login;
-    delete Game::Instance();
+//    delete Game::Instance();
 }
 
 void Client::init() {
@@ -22,7 +22,7 @@ void Client::init() {
         _socket->connect();
         Logger::getInstance()->info(MSG_CONNECT_CLIENT);
 
-        login->init();
+//        login->init();
     } catch (std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_NOT_INITIALIZED);
         throw ex;

@@ -99,14 +99,14 @@ void * Server::handlePlayerClient(void * arg) {
             continue;
         }
 
-        ss << "received user: " << playerClient->name << " "
-           << "msg: " << msg.dump() << std::endl;
-        Logger::getInstance()->info(ss.str());
+        ss << "[thread:listener]" << "[user:" << playerClient->name << "] "
+           << "msg: " << msg.dump();
+        Logger::getInstance()->debug(ss.str());
 
-        //TODO: Ver si hay un mejor lugar para manejar los tipos de mensajes de entrada
-        if (msg["message_type"] == LOGIN_MSG) {
-            manageLogin(playerClient, msg);
-        }
+//        //TODO: Ver si hay un mejor lugar para manejar los tipos de mensajes de entrada
+//        if (msg["message_type"] == LOGIN_MSG) {
+//            manageLogin(playerClient, msg);
+//        }
 
         pthread_mutex_lock(cmdMutex);
         playerClient->commandQueue->push(msg);
@@ -134,8 +134,9 @@ void * Server::broadcastToPlayerClient(void *arg) {
         pthread_mutex_unlock(outMutex);
 
         std::stringstream ss;
-        ss << "envianding a user: " << playerClient->name << " "
-           << std::endl << "val1: " << msg.dump() << std::endl;
+        ss << "[thread:broadcast] " << "[user:" << playerClient->name << "] "
+           << "msg: " << msg.dump();
+
         Logger::getInstance()->debug(ss.str());
 
         if(!playerClient->send(&msg)) {
@@ -159,6 +160,9 @@ bool Server::run() {
         if (!commands.empty()) {
             msg = commands.front();
             commands.pop();
+        } else {
+            pthread_mutex_unlock(cmdMutex);
+            continue;
         }
         pthread_mutex_unlock(cmdMutex);
 
@@ -173,11 +177,10 @@ bool Server::run() {
         }
 
         ss.str("");
-        ss << "main: "
-           << "msg: " << msg.dump() << std::endl;
+        ss << "[thread:run] " << "msg: " << msg.dump();
         Logger::getInstance()->info(ss.str());
 
-        msg = {4,5,6};
+        msg = {4,5,6,7};
 
         for (auto & client : clients) {
             pthread_mutex_t * outMutex = client->getOutcomeMutex();
@@ -187,6 +190,7 @@ bool Server::run() {
         }
     }
 
+    // Wait for all threads to finish before ending server run
     for(int i=0; i < this->clientNo; i++){
         pthread_join(this->incomeThreads[i], nullptr);
     }
