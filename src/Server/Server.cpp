@@ -44,18 +44,14 @@ void Server::init(const char *ip, const char *port, int clientNo) {
 
     initSocket(ip, port);
     Logger::getInstance()->info(MSG_READY_SERVER);
-    std::cout << MSG_READY_SERVER << std::endl; //TODO: Borrar
+    std::cout << MSG_READY_SERVER << std::endl;
+
     try {
         acceptClients();
     } catch (std::exception &e) {
         std::string error = e.what();
         Logger::getInstance()->error("Failed to accept clients, error: " + error);
     }
-
-    bool status = clients[0]->isConnected();
-    std::stringstream ss;
-    ss << "[user:" << clients[0]->name << "] status: " << (status ? "connected" : "disconnected");
-    Logger::getInstance()->debug(ss.str());
 
     Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
 }
@@ -88,19 +84,9 @@ void Server::acceptClients() {
         }
     }
 
-    bool status = clients[0]->isConnected();
-    std::stringstream ss;
-    ss << "[user:" << clients[0]->name << "] status: " << (status ? "connected" : "disconnected");
-    Logger::getInstance()->debug(ss.str());
-
     if (retry == MAX_ACCEPT_RETRIES && clients.size() < clientNo) {
         throw ServerException(MSG_ERROR_ACCEPT_CLIENTS);
     }
-
-    status = clients[0]->isConnected();
-    ss.str("");
-    ss << "[user:" << clients[0]->name << "] status: " << (status ? "connected" : "disconnected");
-    Logger::getInstance()->debug(ss.str());
 }
 
 void * Server::handlePlayerClient(void * arg) {
@@ -175,10 +161,6 @@ bool Server::run() {
     json msg;
     std::stringstream ss;
 
-    bool status = clients[0]->isConnected();
-    ss << "[user:" << clients[0]->name << "] status: " << (status ? "connected" : "disconnected");
-    Logger::getInstance()->debug(ss.str());
-
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
         pthread_mutex_lock(cmdMutex);
@@ -230,9 +212,9 @@ bool Server::run() {
 bool Server::someoneIsConnected() {
     for(auto & client : clients) {
         bool status = client->isConnected();
-        std::stringstream ss;
-        ss << "[user:" << client->name << "] status: " << (status ? "connected" : "disconnected");
-        Logger::getInstance()->debug(ss.str());
+//        std::stringstream ss;
+//        ss << "[user:" << client->name << "] status: " << (status ? "connected" : "disconnected");
+//        Logger::getInstance()->debug(ss.str());
         if(!status) {
             return false;
         }

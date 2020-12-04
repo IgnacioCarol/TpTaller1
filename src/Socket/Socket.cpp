@@ -72,9 +72,9 @@ void Socket::release() {
 
 bool Socket::isConnected() {
     bool status = _connected;
-    std::stringstream ss;
-    ss << "[Socket] " << "status: " << (status ? "connected" : "disconnected");
-    Logger::getInstance()->debug(ss.str());
+//    std::stringstream ss;
+//    ss << "[Socket] " << "status: " << (status ? "connected" : "disconnected");
+//    Logger::getInstance()->debug(ss.str());
     return status;
 }
 
@@ -229,11 +229,6 @@ Socket *Socket::accept() {
 
     auto * client = new Socket(client_socket);
     Logger::getInstance()->info(MSG_SOCKET_CONNECTION_ACCEPTED);
-
-    bool status = client->isConnected();
-    std::stringstream ss;
-    ss << "[SocketInit]" << " status: " << (status ? "connected" : "disconnected");
-    Logger::getInstance()->debug(ss.str());
 
     return client;
 }
