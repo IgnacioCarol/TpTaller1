@@ -1,4 +1,5 @@
 #include <json.hpp>
+#include <sstream>
 #include "Socket.h"
 using json = nlohmann::json;
 Socket::Socket() {
@@ -23,6 +24,7 @@ Socket::Socket(int fd) {
     }
 
     this->fd = fd;
+    this->_connected = true;
     Logger::getInstance()->info(MSG_SOCKET_CREATED);
 }
 
@@ -69,7 +71,11 @@ void Socket::release() {
 }
 
 bool Socket::isConnected() {
-    return _connected;
+    bool status = _connected;
+    std::stringstream ss;
+    ss << "[Socket] " << "status: " << (status ? "connected" : "disconnected");
+    Logger::getInstance()->debug(ss.str());
+    return status;
 }
 
 int Socket::send(json *msg) {
@@ -223,6 +229,11 @@ Socket *Socket::accept() {
 
     auto * client = new Socket(client_socket);
     Logger::getInstance()->info(MSG_SOCKET_CONNECTION_ACCEPTED);
+
+    bool status = client->isConnected();
+    std::stringstream ss;
+    ss << "[SocketInit]" << " status: " << (status ? "connected" : "disconnected");
+    Logger::getInstance()->debug(ss.str());
 
     return client;
 }

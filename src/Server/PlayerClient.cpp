@@ -2,6 +2,7 @@
 #include <json.hpp>
 #include "ServerMsg.h"
 #include <pthread.h>
+#include <sstream>
 
 using json = nlohmann::json;
 PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<json> *commandQueue) {
@@ -44,7 +45,11 @@ bool PlayerClient::send(json *msg) {
 }
 
 bool PlayerClient::isConnected() {
-    return  this->clientSocket->isConnected();
+    bool status = this->clientSocket->isConnected();
+    std::stringstream ss;
+    ss << "[PlayerClient][user:" << this->name << "] status: " << (status ? "connected" : "disconnected");
+    Logger::getInstance()->debug(ss.str());
+    return  status;
 }
 
 void PlayerClient::lock() {
