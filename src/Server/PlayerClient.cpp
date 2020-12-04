@@ -52,10 +52,33 @@ bool PlayerClient::isConnected() {
     return  status;
 }
 
-void PlayerClient::lock() {
+void PlayerClient::pushOutcome(json msg) {
     pthread_mutex_lock(&this->outcomeMutex);
+    this->outcome.push(msg);
+    pthread_mutex_unlock(&this->outcomeMutex);
 }
 
-void PlayerClient::unlock() {
+json PlayerClient::getNewOutcomeMsg() {
+    pthread_mutex_lock(&this->outcomeMutex);
+    json msg;
+    if (this->outcome.empty()) {
+        pthread_mutex_unlock(&this->outcomeMutex);
+        return json();
+    }
+
+    msg = this->outcome.front();
     pthread_mutex_unlock(&this->outcomeMutex);
+    return msg;
+}
+
+void PlayerClient::popOutcome() {
+    pthread_mutex_lock(&this->outcomeMutex);
+    this->outcome.pop();
+    pthread_mutex_unlock(&this->outcomeMutex);
+}
+
+void PlayerClient::pushCommand(json msg) {
+    pthread_mutex_lock(this->commandMutex);
+    this->commandQueue->push(msg);
+    pthread_mutex_unlock(this->commandMutex);
 }

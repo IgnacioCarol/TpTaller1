@@ -91,21 +91,37 @@ void Server::acceptClients() {
 
 void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
-    pthread_mutex_t  * cmdMutex = playerClient->getCommandMutex();
     json msg;
     int msg_received;
     std::stringstream ss;
+    int tolerance = 0;
 
     while (playerClient->isConnected()) {
         msg_received = playerClient->receive(&msg);
         if (msg_received < 0) {
+            if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
+                //ToDo suponemos que el socket se cerro, realizar tratamiento
+                // 1. Marcar connected como false
+                // 2. Mover player client a listado de conexiones muertas
+                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
+
+                ss.str("");
+                ss << "Fail tolerance exceeded! [thread:listener] " << "[user:" << playerClient->name << "] ";
+                Logger::getInstance()->error(ss.str());
+                throw ServerException(ss.str());
+            }
+            tolerance++;
             continue;
         }
         if(!msg_received) {
-            //TODO manejar cliente que cerró la conexión -> ¿lo borramos del array del server?
+            //ToDo suponemos que el socket se cerro, realizar tratamiento
+            // 1. Marcar connected como false
+            // 2. Mover player client a listado de conexiones muertas
+            // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
             continue;
         }
 
+        ss.str("");
         ss << "[thread:listener]" << "[user:" << playerClient->name << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
@@ -115,9 +131,7 @@ void * Server::handlePlayerClient(void * arg) {
 //            manageLogin(playerClient, msg);
 //        }
 
-        pthread_mutex_lock(cmdMutex);
-        playerClient->commandQueue->push(msg);
-        pthread_mutex_unlock(cmdMutex);
+        playerClient->pushCommand(msg);
     }
 
     return nullptr;
@@ -125,31 +139,39 @@ void * Server::handlePlayerClient(void * arg) {
 
 void * Server::broadcastToPlayerClient(void *arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
-    std::queue<json> * outcomeQueue = &playerClient->outcome;
-    pthread_mutex_t  * outMutex = playerClient->getOutcomeMutex();
+    int tolerance = 0;
     json msg;
 
     while (playerClient->isConnected()) {
-        pthread_mutex_lock(outMutex);
-        if (!outcomeQueue->empty()) {
-            msg = outcomeQueue->front();
-            outcomeQueue->pop();
-        } else {
-            pthread_mutex_unlock(outMutex);
+        msg = playerClient->getNewOutcomeMsg();
+        if (msg.empty()) {
             continue;
         }
-        pthread_mutex_unlock(outMutex);
 
         std::stringstream ss;
         ss << "[thread:broadcast] " << "[user:" << playerClient->name << "] "
            << "msg: " << msg.dump();
-
         Logger::getInstance()->debug(ss.str());
 
         if(!playerClient->send(&msg)) {
-            //ToDo handle error
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+            if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
+                //ToDo suponemos que el socket se cerro, realizar tratamiento
+                // 1. Marcar connected como false
+                // 2. Mover player client a listado de conexiones muertas
+                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
+
+                ss.str("");
+                ss << "Fail tolerance exceeded! [thread:broadcast] " << "[user:" << playerClient->name << "] ";
+                Logger::getInstance()->error(ss.str());
+                throw ServerException(ss.str());
+            }
+
+            tolerance++;
+            continue;
         }
+
+        playerClient->popOutcome();
     }
 
     return nullptr;
@@ -163,16 +185,11 @@ bool Server::run() {
 
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
-        pthread_mutex_lock(cmdMutex);
-        if (!commands.empty()) {
-            msg = commands.front();
-            commands.pop();
-        } else {
-            pthread_mutex_unlock(cmdMutex);
+        msg = this->getNewCommandMsg();
+        if (msg.empty()) {
             continue;
+            //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
-        pthread_mutex_unlock(cmdMutex);
-
         //ToDo change game state with msg
 
 //        std::stringstream log;
@@ -190,11 +207,10 @@ bool Server::run() {
         msg = {4,5,6,7};
 
         for (auto & client : clients) {
-            pthread_mutex_t * outMutex = client->getOutcomeMutex();
-            pthread_mutex_lock(outMutex);
-            client->outcome.push(msg);
-            pthread_mutex_unlock(outMutex);
+            client->pushOutcome(msg);
         }
+
+        this->popCommand();
     }
 
     // Wait for all threads to finish before ending server run
@@ -249,5 +265,24 @@ void Server::manageLogin(PlayerClient* player, const json msg) {
     pthread_mutex_lock(outMutex);
     player->outcome.push(response);
     pthread_mutex_unlock(outMutex);
+}
+
+json Server::getNewCommandMsg() {
+    pthread_mutex_lock(&this->commandMutex);
+    json msg;
+    if (this->commands.empty()) {
+        pthread_mutex_unlock(&this->commandMutex);
+        return json();
+    }
+
+    msg = this->commands.front();
+    pthread_mutex_unlock(&this->commandMutex);
+    return msg;
+}
+
+void Server::popCommand() {
+    pthread_mutex_lock(&this->commandMutex);
+    this->commands.pop();
+    pthread_mutex_unlock(&this->commandMutex);
 }
 

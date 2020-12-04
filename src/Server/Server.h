@@ -27,6 +27,8 @@ private:
     Server();
 
     void initSocket(const char*ip, const char *port);
+    json getNewCommandMsg();
+    void popCommand();
     void acceptClients();
     bool someoneIsConnected();
     static void * handlePlayerClient(void * arg);
