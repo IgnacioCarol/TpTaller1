@@ -32,9 +32,10 @@ Server::Server() {
     pthread_mutex_init(&logMutex, nullptr);
 }
 
-void Server::init(const char *ip, const char *port, int clientNo) {
+void Server::init(const char *ip, const char *port) {
+
+    this->clientNo = Config::getInstance()->getPlayers().amount;
     // Init threads
-    this->clientNo = clientNo;
     this->incomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->incomeThreads) {
         pthread_mutex_lock(&logMutex);

@@ -13,7 +13,6 @@ Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
     delete login;
-    delete Game::Instance();
 }
 
 void Client::init() {
