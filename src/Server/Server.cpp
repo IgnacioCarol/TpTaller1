@@ -305,15 +305,18 @@ bool Server::run() {
 }
 
 bool Server::someoneIsConnected() {
+    pthread_mutex_lock(&this->clientsMutex);
     for(auto & client : clients) {
         bool status = client->isConnected();
 //        std::stringstream ss;
 //        ss << "[user:" << client->name << "] status: " << (status ? "connected" : "disconnected");
 //        Logger::getInstance()->debug(ss.str());
         if(!status) {
+            pthread_mutex_unlock(&this->clientsMutex);
             return false;
         }
     }
+    pthread_mutex_unlock(&this->clientsMutex);
     return true;
 }
 
