@@ -209,23 +209,23 @@
         </niveles>
     </escenario>
     <credenciales>
-         <cantidadJugadores> 3 </cantidadJugadores>
+         <cantidadJugadores>4</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>mario</nombre>
                  <contrasenia>mario</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>Licha</nombre>
-                 <contrasenia>bebelin123</contrasenia>
+                 <nombre>luigi</nombre>
+                 <contrasenia>luigi</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>Nacho</nombre>
-                 <contrasenia>ratatouille</contrasenia>
+                 <nombre>yoshi</nombre>
+                 <contrasenia>yoshi</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>Daniela</nombre>
-                 <contrasenia>9899</contrasenia>
+                 <nombre>toad</nombre>
+                 <contrasenia>toad</contrasenia>
              </usuario>
          </usuarios>
      </credenciales>

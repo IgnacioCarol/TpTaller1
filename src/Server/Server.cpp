@@ -52,14 +52,6 @@ void Server::init(const char *ip, const char *port) {
     std::cout << MSG_READY_SERVER << std::endl;
 
     pthread_create(&this->acceptorThread, nullptr, Server::handleIncomingConnections, (void *) this);
-//    try {
-//        acceptClients();
-//    } catch (std::exception &e) {
-//        std::string error = e.what();
-//        Logger::getInstance()->error("Failed to accept clients, error: " + error);
-//    }
-//
-//    Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
 }
 
 void Server::initSocket(const char*ip, const char *port) {
@@ -153,32 +145,36 @@ void *Server::authenticatePlayerClient(void *arg) {
     json response;
     bool authenticated = false;
 
-    json msg = receive(playerClient);
-    if (!(error = MessageValidator::validLoginMessage(msg)).empty()) {
-        Logger::getInstance()->error("[Server - authenticate] unexpected login message from client: " + error);
-        response = Protocol::buildErrorMsg(error);
-        playerClient->pushOutcome(response);
-        return nullptr;
-    }
+    while (!authenticated && playerClient != nullptr && playerClient->isConnected()) {
+        json msg = receive(playerClient);
+        if (!(error = MessageValidator::validLoginMessage(msg)).empty()) {
+            Logger::getInstance()->error("[Server - authenticate] unexpected login message from client: " + error);
+            response = Protocol::buildErrorMsg(error);
+            playerClient->pushOutcome(response);
+            return nullptr;
+        }
 
-    std::string username = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_USERNAME];
-    std::string password = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_PASSWORD];
+        std::string username = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_USERNAME];
+        std::string password = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_PASSWORD];
 
-    for (auto & user : validPlayers.users) {
-        Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
-        if (user.username == username && user.password == password) {
-            authenticated = true;
-            break;
+        for (auto & user : validPlayers.users) {
+            Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
+            if (user.username == username && user.password == password) {
+                authenticated = true;
+                server->addClient(playerClient);
+                break;
+            }
+        }
+
+        Logger::getInstance()->debug("[Server] will send authentication message: " + std::string(authenticated ? "authorized" : "unauthorized"));
+        response = Protocol::buildLoginMsgResponse(authenticated);
+
+        if (!playerClient->send(&response)) {
+            Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+            //TODO: ver si podemos tener reintentos acá
         }
     }
 
-    Logger::getInstance()->debug("[Server] will send authentication message: " + std::string(authenticated ? "authorized" : "unauthorized"));
-    response = Protocol::buildLoginMsgResponse(authenticated);
-
-    if (!playerClient->send(&response)) {
-        Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
-        //TODO: ver si podemos tener reintentos acá
-    }
     return nullptr;
 }
 
