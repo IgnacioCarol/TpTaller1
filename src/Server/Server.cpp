@@ -20,6 +20,7 @@ Server::~Server() {
     }
     pthread_mutex_destroy(&this->commandMutex);
     pthread_mutex_destroy(&this->clientsMutex);
+    pthread_mutex_destroy(&this->waitingRoomMutex);
     free(this->incomeThreads);
     free(this->outcomeThreads);
 }
@@ -28,6 +29,7 @@ Server::Server() {
     this->running = false;
     pthread_mutex_init(&this->commandMutex, nullptr);
     pthread_mutex_init(&this->clientsMutex, nullptr);
+    pthread_mutex_init(&this->waitingRoomMutex, nullptr);
 }
 
 void Server::init(const char *ip, const char *port, int clientNo) {
@@ -99,21 +101,33 @@ void Server::acceptClients() {
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
     int id = 0;
+    int clientsSize = 0;
     std::stringstream ss;
 
     while(server->isRunning()) {
         try {
 
-            auto * playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
-            if (server->clients.size() >= server->clientNo) {
+            auto *playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
+
+            clientsSize = server->getClientsSize();
+            if (clientsSize >= server->clientNo) {
+                if (clientsSize > server->clientNo) {
+                    ss.str("");
+                    ss << "[thread:acceptor] Fatal error, clients size is above allowed quantity";
+                    Logger::getInstance()->error(ss.str());
+                    throw ServerException(ss.str());
+                }
+
                 //ToDo JSON de rechazo, podria ser un meotodo de playerClient->rejectConnection();
                 ss.str("");
                 ss << "[thread:acceptor] server is full, new client rejected";
                 Logger::getInstance()->info(ss.str());
+                continue;
             }
 
             playerClient->name = id;
-            pthread_create(&server->loginThread, nullptr, Server::authenticatePlayerClient, (void *) playerClient);
+            server->pushToWaitingRoom(playerClient);
+            pthread_create(&server->loginThread, nullptr, Server::authenticatePlayerClient, (void *) server);
 
             ss.str("");
             ss << "[thread:acceptor] Connection accepted with id: " << id << " move to login thread";
@@ -130,9 +144,15 @@ void *Server::handleIncomingConnections(void *arg) {
 }
 
 void *Server::authenticatePlayerClient(void *arg) {
-    PlayerClient * playerClient = (PlayerClient *)arg;
+    Server * server = (Server *)arg;
 
-    //ToDo meter codigo de login de Dani C.
+    while(server->waitingRoomIsEmpty()); //Wait for incoming playerClient, it should process only one playerClient
+    PlayerClient * playerClient = server->popFromWaitingRoom();
+
+    //ToDo meter codigo de login de Dani C. de login
+
+    //Por el momento asumo que se da ok el login
+    server->addToClients(playerClient);
 
     return nullptr;
 }
@@ -231,7 +251,10 @@ bool Server::run() {
     json msg;
     std::stringstream ss;
 
-    //ToDo no empezar partida hasta que todos los jugadores esten conectados y autenticados
+    while(this->getClientsSize() < this->clientNo);
+    ss.str("");
+    ss << "[thread:run] Amount of required clients reached successfully, initializing game...";
+    Logger::getInstance()->info(ss.str());
 
     for(int i=0; i < clients.size(); i++) {
         pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) clients[i]);
@@ -345,5 +368,42 @@ void Server::popCommand() {
 
 bool Server::isRunning() {
     return this->running;
+}
+
+int Server::getClientsSize() {
+    int size = 0;
+    pthread_mutex_lock(&this->clientsMutex);
+    size = this->clients.size();
+    pthread_mutex_unlock(&this->clientsMutex);
+    return size;
+}
+
+void Server::pushToWaitingRoom(PlayerClient *playerClient) {
+    pthread_mutex_lock(&this->waitingRoomMutex);
+    this->waitingRoom.push(playerClient);
+    pthread_mutex_unlock(&this->waitingRoomMutex);
+}
+
+PlayerClient *Server::popFromWaitingRoom() {
+    PlayerClient * pc = nullptr;
+    pthread_mutex_lock(&this->waitingRoomMutex);
+    pc = this->waitingRoom.front();
+    this->waitingRoom.pop();
+    pthread_mutex_unlock(&this->waitingRoomMutex);
+    return pc;
+}
+
+void Server::addToClients(PlayerClient *playerClient) {
+    pthread_mutex_lock(&this->clientsMutex);
+    this->clients.push_back(playerClient);
+    pthread_mutex_unlock(&this->clientsMutex);
+}
+
+bool Server::waitingRoomIsEmpty() {
+    bool result;
+    pthread_mutex_lock(&this->waitingRoomMutex);
+    result = this->waitingRoom.empty();
+    pthread_mutex_unlock(&this->waitingRoomMutex);
+    return result;
 }
 

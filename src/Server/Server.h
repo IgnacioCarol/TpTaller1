@@ -22,6 +22,11 @@ public:
     void init(const char *ip, const char *port, int clientNo);
     bool run();
     bool isRunning();
+    int getClientsSize();
+    void addToClients(PlayerClient * playerClient);
+    void pushToWaitingRoom(PlayerClient * playerClient);
+    PlayerClient * popFromWaitingRoom();
+    bool waitingRoomIsEmpty();
 
 private:
     static Server * instance;
@@ -42,8 +47,10 @@ private:
     Socket *_socket;
     std::vector<PlayerClient *> clients;
     std::queue<json> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
+    std::queue<PlayerClient *> waitingRoom;
+    pthread_mutex_t waitingRoomMutex; // Mutex to control waiting room queue
     pthread_mutex_t commandMutex; // Mutex to control command queue
-    pthread_mutex_t clientsMutex; // Mutex to control waiting room queue
+    pthread_mutex_t clientsMutex; // Mutex to control clients vector
     pthread_t          acceptorThread;
     pthread_t          loginThread;
     pthread_t        * incomeThreads;
