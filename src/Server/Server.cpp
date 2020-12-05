@@ -52,7 +52,6 @@ void Server::init(const char *ip, const char *port) {
     std::cout << MSG_READY_SERVER << std::endl;
 
     pthread_create(&this->acceptorThread, nullptr, Server::handleIncomingConnections, (void *) this);
-
 //    try {
 //        acceptClients();
 //    } catch (std::exception &e) {
@@ -99,7 +98,7 @@ void Server::acceptClients() {
 
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
-    int id = 1;
+    int id = 0;
     int clientsSize = 0;
     std::stringstream ss;
 
@@ -175,7 +174,11 @@ void *Server::authenticatePlayerClient(void *arg) {
 
     Logger::getInstance()->debug("[Server] will send authentication message: " + std::string(authenticated ? "authorized" : "unauthorized"));
     response = Protocol::buildLoginMsgResponse(authenticated);
-    playerClient->pushOutcome(response);
+
+    if (!playerClient->send(&response)) {
+        Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+        //TODO: ver si podemos tener reintentos acá
+    }
     return nullptr;
 }
 
@@ -185,7 +188,9 @@ void * Server::handlePlayerClient(void * arg) {
     std::stringstream ss;
     int tolerance = 0;
 
-    while ((msg = receive(playerClient)) != nullptr) {
+    while (playerClient != nullptr &&
+            playerClient->isConnected() &&
+            (msg = receive(playerClient)) != nullptr) {
         ss.str("");
         ss << "[thread:listener]" << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
@@ -244,7 +249,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
     int tolerance = 0;
     json msg;
 
-    while (playerClient->isConnected()) {
+    while (playerClient != nullptr && playerClient->isConnected()) {
         msg = playerClient->getNewOutcomeMsg();
         if (msg.empty()) {
             continue;
@@ -410,6 +415,7 @@ bool Server::waitingRoomIsEmpty() {
     return result;
 }
 
+
 void Server::initThreads() {
     pthread_mutex_lock(&this->clientsMutex);
     for(int i=0; i < this->clients.size(); i++) {
@@ -418,6 +424,7 @@ void Server::initThreads() {
     }
     pthread_mutex_unlock(&this->clientsMutex);
 }
+
 
 void Server::broadcast(json msg) {
     pthread_mutex_lock(&this->clientsMutex);
