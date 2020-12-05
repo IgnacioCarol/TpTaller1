@@ -102,6 +102,22 @@ int Client::receive(json *msg) {
     return _socket->receive(msg);
 }
 
+void Client::play() {
+
+    json interactionJson;
+    while (true) {
+        if (receive(&interactionJson) < 0) {
+            Logger::getInstance()->error("la cagaste pibe en el play");
+            break;
+        }
+        //Lo que muestra el juego
+        if (send(&interactionJson) < 0) {
+            Logger::getInstance()->error("la cagaste pibe en el play send");
+            break;
+        }
+    }
+}
+
 
 
 
