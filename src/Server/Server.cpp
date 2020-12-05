@@ -25,6 +25,7 @@ Server::~Server() {
 }
 
 Server::Server() {
+    this->running = false;
     pthread_mutex_init(&this->commandMutex, nullptr);
     pthread_mutex_init(&this->waitingRoomMutex, nullptr);
 }
@@ -45,6 +46,7 @@ void Server::init(const char *ip, const char *port, int clientNo) {
     }
 
     initSocket(ip, port);
+    this->running = true;
     Logger::getInstance()->info(MSG_READY_SERVER);
     std::cout << MSG_READY_SERVER << std::endl;
 
@@ -99,7 +101,7 @@ void *Server::handleIncomingConnections(void *arg) {
     int id = 0;
     std::stringstream ss;
 
-    while(server->someoneIsConnected()) { //ToDo eso no va a funcionar, cambiar por algo asi while(server->isUpAndRunning()) o while true
+    while(server->isRunning()) {
         try {
             //ToDo hacer chequeo de cuantos confirmados hay, en caso de ya estar completos rechazar conexion entrante con JSON de rechazo
             auto * playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
@@ -269,6 +271,8 @@ bool Server::run() {
         pthread_join(this->outcomeThreads[i], nullptr);
     }
 
+    this->running = false;
+
     return true;
 }
 
@@ -337,5 +341,9 @@ void Server::pushToWaitingRoom(PlayerClient * playerClient) {
     pthread_mutex_lock(&this->waitingRoomMutex);
     this->waitingRoom.push(playerClient);
     pthread_mutex_lock(&this->waitingRoomMutex);
+}
+
+bool Server::isRunning() {
+    return this->running;
 }
 

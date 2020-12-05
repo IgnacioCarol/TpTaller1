@@ -21,6 +21,7 @@ public:
 
     void init(const char *ip, const char *port, int clientNo);
     bool run();
+    bool isRunning();
 
 private:
     static Server * instance;
@@ -50,6 +51,7 @@ private:
     pthread_t        * incomeThreads;
     pthread_t        * outcomeThreads;
     size_t             clientNo;
+    bool               running;
     const int MAX_ACCEPT_RETRIES = 10;
 };
 
