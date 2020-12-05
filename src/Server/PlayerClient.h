@@ -8,9 +8,12 @@ public:
     explicit PlayerClient(Socket * clientSocket, pthread_mutex_t  * commandMutex, std::queue<json> *commandQueue);
     int receive(json* message);
     bool send(json *msg);
+    void pushOutcome(json msg);
+    json getNewOutcomeMsg();
+    void popOutcome();
+    void pushCommand(json msg);
     bool isConnected();
-    void lock();
-    void unlock();
+
     pthread_mutex_t  * getCommandMutex();
     pthread_mutex_t  * getOutcomeMutex();
     Socket * getSocket();

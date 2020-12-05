@@ -1,4 +1,5 @@
 #include <json.hpp>
+#include <sstream>
 #include "Socket.h"
 using json = nlohmann::json;
 Socket::Socket() {
@@ -23,6 +24,7 @@ Socket::Socket(int fd) {
     }
 
     this->fd = fd;
+    this->_connected = true;
     Logger::getInstance()->info(MSG_SOCKET_CREATED);
 }
 
@@ -69,7 +71,11 @@ void Socket::release() {
 }
 
 bool Socket::isConnected() {
-    return _connected;
+    bool status = _connected;
+//    std::stringstream ss;
+//    ss << "[Socket] " << "status: " << (status ? "connected" : "disconnected");
+//    Logger::getInstance()->debug(ss.str());
+    return status;
 }
 
 int Socket::send(json *msg) {
@@ -119,8 +125,8 @@ int Socket::receive(json *msg) {
         return -1;
     };
     std::string message(sizeOfMessage, '\0');
-    if (receive<char>(&message[0], sizeOfMessage) < 1) { //ToDo aca verificar lo mismo, si recibo 0 bytes no deberia ser un error, ya que el cliente quiza no mando nada... creeeo verificar
-        Logger::getInstance()->error("[Server] Couldn't receive message from client"); //TODO: se puede mejorar el log identificando el cliente
+    if (receive<char>(&message[0], sizeOfMessage) < 1) {
+        Logger::getInstance()->error("[Server] Couldn't receive message from client");
         //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
         return 0;
     }
