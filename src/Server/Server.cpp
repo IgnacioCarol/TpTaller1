@@ -120,8 +120,9 @@ void *Server::handleIncomingConnections(void *arg) {
 
                 //ToDo JSON de rechazo, podria ser un meotodo de playerClient->rejectConnection();
                 ss.str("");
-                ss << "[thread:acceptor] server is full, new client rejected";
+                ss << "[thread:acceptor] server is full, playerClient with id: " << id << " was rejected";
                 Logger::getInstance()->info(ss.str());
+                delete playerClient;
                 continue;
             }
 
