@@ -33,6 +33,8 @@ private:
     Server();
 
     void initSocket(const char*ip, const char *port);
+    void initThreads();
+    void broadcast(json msg);
     json getNewCommandMsg();
     void popCommand();
     void acceptClients();

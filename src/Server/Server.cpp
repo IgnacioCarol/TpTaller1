@@ -100,7 +100,7 @@ void Server::acceptClients() {
 
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
-    int id = 0;
+    int id = 1;
     int clientsSize = 0;
     std::stringstream ss;
 
@@ -145,6 +145,7 @@ void *Server::handleIncomingConnections(void *arg) {
 
 void *Server::authenticatePlayerClient(void *arg) {
     Server * server = (Server *)arg;
+    std::stringstream ss;
 
     while(server->waitingRoomIsEmpty()); //Wait for incoming playerClient, it should process only one playerClient
     PlayerClient * playerClient = server->popFromWaitingRoom();
@@ -153,6 +154,9 @@ void *Server::authenticatePlayerClient(void *arg) {
 
     //Por el momento asumo que se da ok el login
     server->addToClients(playerClient);
+    ss.str("");
+    ss << "[thread:login] User id: " << playerClient->name << " authenticate correctly and move to confirmed clients";
+    Logger::getInstance()->info(ss.str());
 
     return nullptr;
 }
@@ -256,10 +260,7 @@ bool Server::run() {
     ss << "[thread:run] Amount of required clients reached successfully, initializing game...";
     Logger::getInstance()->info(ss.str());
 
-    for(int i=0; i < clients.size(); i++) {
-        pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) clients[i]);
-        pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) clients[i]);
-    }
+    initThreads();
 
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
@@ -284,9 +285,7 @@ bool Server::run() {
 
         msg = {4,5,6,7};
 
-        for (auto & client : clients) {
-            client->pushOutcome(msg);
-        }
+        broadcast(msg);
 
         this->popCommand();
     }
@@ -405,5 +404,22 @@ bool Server::waitingRoomIsEmpty() {
     result = this->waitingRoom.empty();
     pthread_mutex_unlock(&this->waitingRoomMutex);
     return result;
+}
+
+void Server::initThreads() {
+    pthread_mutex_lock(&this->clientsMutex);
+    for(int i=0; i < this->clients.size(); i++) {
+        pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) clients[i]);
+        pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) clients[i]);
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+}
+
+void Server::broadcast(json msg) {
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto & client : clients) {
+        client->pushOutcome(msg);
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
 }
 
