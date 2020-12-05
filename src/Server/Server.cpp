@@ -19,12 +19,14 @@ Server::~Server() {
         delete client;
     }
     pthread_mutex_destroy(&this->commandMutex);
+    pthread_mutex_destroy(&this->waitingRoomMutex);
     free(this->incomeThreads);
     free(this->outcomeThreads);
 }
 
 Server::Server() {
     pthread_mutex_init(&this->commandMutex, nullptr);
+    pthread_mutex_init(&this->waitingRoomMutex, nullptr);
 }
 
 void Server::init(const char *ip, const char *port, int clientNo) {
@@ -95,24 +97,34 @@ void Server::acceptClients() {
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
     int id = 0;
+    std::stringstream ss;
 
-    while(server->someoneIsConnected()) { //ToDo while(server->isUpAndRunning())
+    while(server->someoneIsConnected()) { //ToDo eso no va a funcionar, cambiar por algo asi while(server->isUpAndRunning()) o while true
         try {
+            //ToDo hacer chequeo de cuantos confirmados hay, en caso de ya estar completos rechazar conexion entrante con JSON de rechazo
             auto * playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
             playerClient->name = id;
-            server->clients.push_back(playerClient);
-            pthread_create(&server->incomeThreads[id], nullptr, Server::handlePlayerClient, (void *) playerClient);
-            pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
-            Logger::getInstance()->info(MSG_CLIENT_NUMBER_SERVER + std::to_string(i) + MSG_ACCEPTED_SERVER);
+            server->pushToWaitingRoom(playerClient);
+            pthread_create(&server->loginThread, nullptr, Server::authenticatePlayerClient, (void *) playerClient);
+
+            ss.str("");
+            ss << "[thread:acceptor] Connection accepted with id: " << id << " move to login thread";
+            Logger::getInstance()->info(ss.str());
         } catch (std::exception &ex) {
-            Logger::getInstance()->error(MSG_CLIENT_NOT_ACCEPTED + std::to_string(i));
-            i--;
+            Logger::getInstance()->error("Fatal error, couldn't accept client connection with id: " + std::to_string(id));
+            id--;
         }
 
-        id++; //Client accepted
+        id++; // Connection accepted moved to login thread
     }
 
+    return nullptr;
+}
 
+void *Server::authenticatePlayerClient(void *arg) {
+    PlayerClient * playerClient = (PlayerClient *)arg;
+
+    //ToDo meter codigo de login de Dani C.
 
     return nullptr;
 }
@@ -210,6 +222,13 @@ bool Server::run() {
     pthread_mutex_t  * cmdMutex = &this->commandMutex;
     json msg;
     std::stringstream ss;
+
+    //ToDo no empezar partida hasta que todos los jugadores esten conectados y autenticados
+
+    for(int i=0; i < clients.size(); i++) {
+        pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) clients[i]);
+        pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) clients[i]);
+    }
 
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
@@ -312,5 +331,11 @@ void Server::popCommand() {
     pthread_mutex_lock(&this->commandMutex);
     this->commands.pop();
     pthread_mutex_unlock(&this->commandMutex);
+}
+
+void Server::pushToWaitingRoom(PlayerClient * playerClient) {
+    pthread_mutex_lock(&this->waitingRoomMutex);
+    this->waitingRoom.push(playerClient);
+    pthread_mutex_lock(&this->waitingRoomMutex);
 }
 

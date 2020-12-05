@@ -29,8 +29,10 @@ private:
     void initSocket(const char*ip, const char *port);
     json getNewCommandMsg();
     void popCommand();
+    void pushToWaitingRoom(PlayerClient * playerClient);
     void acceptClients();
     bool someoneIsConnected();
+    static void * authenticatePlayerClient(void * arg);
     static void * handlePlayerClient(void * arg);
     static void * handleIncomingConnections(void * arg);
     static void * broadcastToPlayerClient(void * arg);
@@ -39,11 +41,12 @@ private:
 
     Socket *_socket;
     std::vector<PlayerClient *> clients;
-    std::vector<PlayerClient *> waitingRoom;
+    std::queue<PlayerClient *> waitingRoom;
     std::queue<json> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
     pthread_mutex_t commandMutex; // Mutex to control command queue
+    pthread_mutex_t waitingRoomMutex; // Mutex to control waiting room queue
     pthread_t          acceptorThread;
-    vector<pthread_t>  loginThread;
+    pthread_t          loginThread;
     pthread_t        * incomeThreads;
     pthread_t        * outcomeThreads;
     size_t             clientNo;
