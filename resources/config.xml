@@ -209,7 +209,7 @@
         </niveles>
     </escenario>
     <credenciales>
-         <cantidadJugadores> 3 </cantidadJugadores>
+         <cantidadJugadores>2</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>mario</nombre>
