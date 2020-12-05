@@ -19,7 +19,7 @@ Server::~Server() {
         delete client;
     }
     pthread_mutex_destroy(&this->commandMutex);
-    pthread_mutex_destroy(&this->waitingRoomMutex);
+    pthread_mutex_destroy(&this->clientsMutex);
     free(this->incomeThreads);
     free(this->outcomeThreads);
 }
@@ -27,7 +27,7 @@ Server::~Server() {
 Server::Server() {
     this->running = false;
     pthread_mutex_init(&this->commandMutex, nullptr);
-    pthread_mutex_init(&this->waitingRoomMutex, nullptr);
+    pthread_mutex_init(&this->clientsMutex, nullptr);
 }
 
 void Server::init(const char *ip, const char *port, int clientNo) {
@@ -103,10 +103,16 @@ void *Server::handleIncomingConnections(void *arg) {
 
     while(server->isRunning()) {
         try {
-            //ToDo hacer chequeo de cuantos confirmados hay, en caso de ya estar completos rechazar conexion entrante con JSON de rechazo
+
             auto * playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
+            if (server->clients.size() >= server->clientNo) {
+                //ToDo JSON de rechazo, podria ser un meotodo de playerClient->rejectConnection();
+                ss.str("");
+                ss << "[thread:acceptor] server is full, new client rejected";
+                Logger::getInstance()->info(ss.str());
+            }
+
             playerClient->name = id;
-            server->pushToWaitingRoom(playerClient);
             pthread_create(&server->loginThread, nullptr, Server::authenticatePlayerClient, (void *) playerClient);
 
             ss.str("");
@@ -335,12 +341,6 @@ void Server::popCommand() {
     pthread_mutex_lock(&this->commandMutex);
     this->commands.pop();
     pthread_mutex_unlock(&this->commandMutex);
-}
-
-void Server::pushToWaitingRoom(PlayerClient * playerClient) {
-    pthread_mutex_lock(&this->waitingRoomMutex);
-    this->waitingRoom.push(playerClient);
-    pthread_mutex_lock(&this->waitingRoomMutex);
 }
 
 bool Server::isRunning() {
