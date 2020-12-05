@@ -114,8 +114,9 @@ int main(int argc, char * argv[]) {
         auto * client = new Client(ipAddr, to_string(port).c_str());
         try {
             client->init();
-//            client->play();
+            client->play();
 
+/*
             json message = {1,2,3};
 
             if (client->send(&message) != 0) {
@@ -133,7 +134,7 @@ int main(int argc, char * argv[]) {
             ss.str("");
             ss << "[client] msg: " << message.dump();
             Logger::getInstance()->debug(ss.str());
-
+*/
             delete client;
             return 0;
         } catch (std::exception &ex) {

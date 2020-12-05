@@ -10,8 +10,10 @@
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
-#include "../Protocol.h"
+#include "../Utils/Protocol.h"
 #include "../config/Config.h"
+#include "../Utils/MessageValidator.h"
+#include "ServerMsg.h"
 
 class Server {
 
@@ -38,6 +40,8 @@ private:
     static void * broadcastToPlayerClient(void * arg);
 
     static void manageLogin(PlayerClient* player, const json msg); //TODO: Buscar algun lugar para manejar los eventos, quizas tener un login de parte del server
+    void addClient(PlayerClient* player);
+    json static receive(PlayerClient *playerClient);
 
     Socket *_socket;
     std::vector<PlayerClient *> clients;
@@ -45,6 +49,7 @@ private:
     std::queue<json> commands; //ToDo por el momento puse de tipo msg_t pero deberían ser los comandos que recibe el server, mover arriba, abajo, izquierda, derecha
     pthread_mutex_t commandMutex; // Mutex to control command queue
     pthread_mutex_t waitingRoomMutex; // Mutex to control waiting room queue
+    pthread_mutex_t clientsMutex;
     pthread_t          acceptorThread;
     pthread_t          loginThread;
     pthread_t        * incomeThreads;

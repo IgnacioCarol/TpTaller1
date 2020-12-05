@@ -14,15 +14,13 @@ public:
     void pushCommand(json msg);
     bool isConnected();
 
-    pthread_mutex_t  * getCommandMutex();
-    pthread_mutex_t  * getOutcomeMutex();
     Socket * getSocket();
     virtual ~PlayerClient();
 
+    int id;
+private:
     std::queue<json> * commandQueue;
     std::queue<json> outcome;
-    int name;
-private:
     Socket * clientSocket;
     pthread_mutex_t  * commandMutex; // Mutex to control command queue
     pthread_mutex_t  outcomeMutex; // Mutex to control outcome queue

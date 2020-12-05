@@ -50,7 +50,7 @@ add_executable(TpTaller1
         src/Client/ClientMsg.h
         src/Server/ServerMsg.h
         src/Socket/SocketMsg.h
-        src/Protocol.h)
+        src/Utils/Protocol.h src/Utils/MessageValidator.cpp src/Utils/MessageValidator.h src/Utils/Protocol.cpp)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

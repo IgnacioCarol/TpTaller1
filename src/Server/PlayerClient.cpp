@@ -31,14 +31,6 @@ int PlayerClient::receive(json* message) {
     return received;
 }
 
-pthread_mutex_t *PlayerClient::getCommandMutex() {
-    return this->commandMutex;
-}
-
-pthread_mutex_t *PlayerClient::getOutcomeMutex() {
-    return &this->outcomeMutex;
-}
-
 bool PlayerClient::send(json *msg) {
     int result = this->clientSocket->send(msg);
     return result == 0;

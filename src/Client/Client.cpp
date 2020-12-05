@@ -21,8 +21,7 @@ void Client::init() {
         _socket->init(_IP, _port, CLIENT);
         _socket->connect();
         Logger::getInstance()->info(MSG_CONNECT_CLIENT);
-
-//        login->init();
+        login->init();
     } catch (std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_NOT_INITIALIZED);
         throw ex;
@@ -46,11 +45,7 @@ bool Client::authenticate() {
     Logger::getInstance()->debug("Authentication login returned");
     std::stringstream ss;
 
-    json authJson = {
-            {"username",     auth->username},
-            {"password",     auth->password},
-            {"message_type", LOGIN_MSG}
-    };
+    json authJson = Protocol::buildLoginMsg(auth->username, auth->password);
 
     Logger::getInstance()->debug("Stoped setting json message");
 
@@ -73,12 +68,21 @@ bool Client::authenticate() {
         return false;
     }
 
-    if (authJson["response"] == AUTHORIZED) {
+    //TODO procesar mensaje de login correctamente, validar tipo, etc
+    if (authJson["status"] == 1) {
+        Logger::getInstance()->error("[Client] unexpected response from server login: " + authJson["error"].get<std::string>());
+        login->showError("Unexpected error. Try again.");
+        return false;
+    } else if (authJson["content"]["response"] == MSG_LOGIN_AUTHORIZED) {
         Logger::getInstance()->info("Client authorized");
         return true;
-    } else if (authJson["response"] == UNAUTHORIZED) {
+    } else if (authJson["content"]["response"] == MSG_LOGIN_UNAUTHORIZED) {
         Logger::getInstance()->info("Client unauthorized");
         login->showError("Invalid username or password");
+        return false;
+    } else {
+        Logger::getInstance()->error("[Client] unexpected response from server login");
+        login->showError("Unexpected error. Try again.");
         return false;
     }
     /*
@@ -107,6 +111,7 @@ int Client::send(json *msg) {
 }
 
 int Client::receive(json *msg) {
+    Logger::getInstance()->debug("[Client] waiting to receive message");
     return _socket->receive(msg);
 }
 
