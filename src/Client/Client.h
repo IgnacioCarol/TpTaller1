@@ -23,6 +23,7 @@ public:
     int send(json *msg);
     int receive(json *msg);
     void release();
+    void doLogin();
 
 private:
     const char * _IP;
@@ -32,6 +33,7 @@ private:
     Login* login;
 
     bool authenticate();
+
 };
 
 

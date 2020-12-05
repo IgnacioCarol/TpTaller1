@@ -12,7 +12,6 @@ Client::Client(std::string IP, std::string port) {
 Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
-    delete login;
 }
 
 void Client::init() {
@@ -28,11 +27,11 @@ void Client::init() {
     }
 }
 
-void Client::play() {
+void Client::doLogin() {
     Logger::getInstance()->debug("Client start playing");
     try {
         while(!this->authenticate()) {} //TODO: Mejorar este while
-        Game::Instance()->play("./resources/config.xml"); //TODO: Deberia haber comunicacion con server para inicializar game
+        delete this->login;
     } catch(std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
         throw ex;
@@ -80,12 +79,6 @@ bool Client::authenticate() {
         login->showError("Invalid username or password");
         return false;
     }
-    /*
-    if (auth->username != "coso" || auth->password != "cosito") { //FIXME do a method that will check the credentials
-        login->showError("Invalid username or password");
-        return false;
-    }
-    */
     return false;
 }
 
