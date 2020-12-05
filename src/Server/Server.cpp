@@ -169,48 +169,6 @@ void * Server::handlePlayerClient(void * arg) {
     }
 
     return nullptr;
-
-    /*
-    while (playerClient->isConnected()) {
-        msg_received = playerClient->receive(&msg);
-        if (msg_received < 0) {
-            if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
-                //ToDo suponemos que el socket se cerro, realizar tratamiento
-                // 1. Marcar connected como false
-                // 2. Mover player client a listado de conexiones muertas
-                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-
-                ss.str("");
-                ss << "Fail tolerance exceeded! [thread:listener] " << "[user:" << playerClient->id << "] ";
-                Logger::getInstance()->error(ss.str());
-                throw ServerException(ss.str());
-            }
-            tolerance++;
-            continue;
-        }
-        if(!msg_received) {
-            //ToDo suponemos que el socket se cerro, realizar tratamiento
-            // 1. Marcar connected como false
-            // 2. Mover player client a listado de conexiones muertas
-            // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-            continue;
-        }
-
-        ss.str("");
-        ss << "[thread:listener]" << "[user:" << playerClient->id << "] "
-           << "msg: " << msg.dump();
-        Logger::getInstance()->debug(ss.str());
-
-//        //TODO: Ver si hay un mejor lugar para manejar los tipos de mensajes de entrada
-//        if (msg["message_type"] == LOGIN_MSG) {
-//            manageLogin(playerClient, msg);
-//        }
-
-        playerClient->pushCommand(msg);
-    }
-
-    return nullptr;
-     */
 }
 
 json Server::receive(PlayerClient *playerClient) {
