@@ -152,10 +152,18 @@ void *Server::authenticatePlayerClient(void *arg) {
             break;
         }
 
+        if (server->clientIsLogged(username)) {
+            Logger::getInstance()->error("[Server] Client " + username + " is already logged. Rejecting client");
+            playerClient->rejectConnection(MSG_RESPONSE_ERROR_USER_ALREADY_LOGGED);
+            delete playerClient;
+            break;
+        }
+
         for (auto & user : validPlayers.users) {
             Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
             if (user.username == username && user.password == password) {
                 authenticated = true;
+                playerClient->username = username;
                 server->addClient(playerClient);
                 break;
             }
@@ -377,6 +385,19 @@ int Server::getClientsSize() {
     return size;
 }
 
+bool Server::clientIsLogged(std::string username) {
+    bool isLogged = false;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client: this->clients) {
+        Logger::getInstance()->debug("[Server] checking login for client " + client->username);
+        if (client->username == username && client->isConnected()) {
+            isLogged = true;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return isLogged;
+}
+
 void Server::pushToWaitingRoom(PlayerClient *playerClient) {
     pthread_mutex_lock(&this->waitingRoomMutex);
     this->waitingRoom.push(playerClient);
@@ -430,15 +451,15 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
     std::stringstream ss;
 
     if (clientsSize >= this->clientNo) {
+        playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
+
         if (clientsSize > this->clientNo) {
             ss.str("");
             ss << "[thread:acceptor] Fatal error, clients size is above allowed quantity";
             Logger::getInstance()->error(ss.str());
-            playerClient->rejectConnection();
             throw ServerException(ss.str());
         }
 
-        playerClient->rejectConnection();
         ss.str("");
         ss << "[thread:acceptor] server is full, playerClient with id: " << playerClient->id << " was rejected";
         Logger::getInstance()->info(ss.str());

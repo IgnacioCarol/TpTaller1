@@ -15,7 +15,9 @@
 #define MSG_CLOSED_SOCKET_RECV_MSG_SERVER "[Server] Couldn't receive message from client because the communication was shut down"
 #define MSG_ERROR_ACCEPT_CLIENTS "[Server] Error accepting all clients. Max retry achieved. "
 
-#define MSG_ERROR_SERVER_IS_FULL "Room is full"
+#define MSG_RESPONSE_ERROR_SERVER_IS_FULL "Room is full"
+#define MSG_RESPONSE_ERROR_USER_ALREADY_LOGGED "User already logged"
+
 
 #define MSG_DISCONNECT_SERVER "[Server] Server disconnected"
 

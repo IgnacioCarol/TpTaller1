@@ -43,6 +43,7 @@ private:
     //void acceptClients();
     bool someoneIsConnected();
     bool validClientsMaximum(PlayerClient *playerClient);
+    bool clientIsLogged(std::string username);
     static void * authenticatePlayerClient(void * arg);
     static void * handlePlayerClient(void * arg);
     static void * handleIncomingConnections(void * arg);
