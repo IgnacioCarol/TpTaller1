@@ -185,7 +185,7 @@ void * Server::handlePlayerClient(void * arg) {
     json msg;
     std::stringstream ss;
 
-    while (playerClient != nullptr &&
+    while (playerClient &&
             playerClient->isConnected() &&
             (msg = receive(playerClient)) != nullptr) {
         ss.str("");
@@ -246,7 +246,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
     int tolerance = 0;
     json msg;
 
-    while (playerClient != nullptr && playerClient->isConnected()) {
+    while (playerClient && playerClient->isConnected()) {
         msg = playerClient->getNewOutcomeMsg();
         if (msg.empty()) {
             continue;
