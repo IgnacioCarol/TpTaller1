@@ -19,12 +19,17 @@ Server::~Server() {
         delete client;
     }
     pthread_mutex_destroy(&this->commandMutex);
+    pthread_mutex_destroy(&this->clientsMutex);
+    pthread_mutex_destroy(&this->waitingRoomMutex);
     free(this->incomeThreads);
     free(this->outcomeThreads);
 }
 
 Server::Server() {
+    this->running = false;
     pthread_mutex_init(&this->commandMutex, nullptr);
+    pthread_mutex_init(&this->clientsMutex, nullptr);
+    pthread_mutex_init(&this->waitingRoomMutex, nullptr);
 }
 
 void Server::init(const char *ip, const char *port) {
@@ -40,21 +45,24 @@ void Server::init(const char *ip, const char *port) {
     this->outcomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
     if (!this->outcomeThreads) {
         Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        throw ServerException(MSG_NO_MEMORY_THREADS);;
+        throw ServerException(MSG_NO_MEMORY_THREADS);
     }
 
     initSocket(ip, port);
+    this->running = true;
     Logger::getInstance()->info(MSG_READY_SERVER);
     std::cout << MSG_READY_SERVER << std::endl;
 
-    try {
-        acceptClients();
-    } catch (std::exception &e) {
-        std::string error = e.what();
-        Logger::getInstance()->error("Failed to accept clients, error: " + error);
-    }
+    pthread_create(&this->acceptorThread, nullptr, Server::handleIncomingConnections, (void *) this);
 
-    Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
+//    try {
+//        acceptClients();
+//    } catch (std::exception &e) {
+//        std::string error = e.what();
+//        Logger::getInstance()->error("Failed to accept clients, error: " + error);
+//    }
+//
+//    Logger::getInstance()->info(MSG_ALL_CLIENTS_ACCEPTED_SERVER);
 }
 
 void Server::initSocket(const char*ip, const char *port) {
@@ -88,6 +96,71 @@ void Server::acceptClients() {
     if (retry == MAX_ACCEPT_RETRIES && clients.size() < clientNo) {
         throw ServerException(MSG_ERROR_ACCEPT_CLIENTS);
     }
+}
+
+
+void *Server::handleIncomingConnections(void *arg) {
+    Server * server = (Server *)arg;
+    int id = 1;
+    int clientsSize = 0;
+    std::stringstream ss;
+
+    while(server->isRunning()) {
+        try {
+
+            auto *playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
+
+            clientsSize = server->getClientsSize();
+            if (clientsSize >= server->clientNo) {
+                if (clientsSize > server->clientNo) {
+                    ss.str("");
+                    ss << "[thread:acceptor] Fatal error, clients size is above allowed quantity";
+                    Logger::getInstance()->error(ss.str());
+                    throw ServerException(ss.str());
+                }
+
+                //ToDo JSON de rechazo, podria ser un meotodo de playerClient->rejectConnection();
+                ss.str("");
+                ss << "[thread:acceptor] server is full, playerClient with id: " << id << " was rejected";
+                Logger::getInstance()->info(ss.str());
+                delete playerClient;
+                continue;
+            }
+
+            playerClient->name = id;
+            server->pushToWaitingRoom(playerClient);
+            pthread_create(&server->loginThread, nullptr, Server::authenticatePlayerClient, (void *) server);
+
+            ss.str("");
+            ss << "[thread:acceptor] Connection accepted with id: " << id << " move to login thread";
+            Logger::getInstance()->info(ss.str());
+        } catch (std::exception &ex) {
+            Logger::getInstance()->error("Fatal error, couldn't accept client connection with id: " + std::to_string(id));
+            id--;
+        }
+
+        id++; // Connection accepted moved to login thread
+    }
+
+    return nullptr;
+}
+
+void *Server::authenticatePlayerClient(void *arg) {
+    Server * server = (Server *)arg;
+    std::stringstream ss;
+
+    while(server->waitingRoomIsEmpty()); //Wait for incoming playerClient, it should process only one playerClient
+    PlayerClient * playerClient = server->popFromWaitingRoom();
+
+    //ToDo meter codigo de login de Dani C. de login
+
+    //Por el momento asumo que se da ok el login
+    server->addToClients(playerClient);
+    ss.str("");
+    ss << "[thread:login] User id: " << playerClient->name << " authenticate correctly and move to confirmed clients";
+    Logger::getInstance()->info(ss.str());
+
+    return nullptr;
 }
 
 void * Server::handlePlayerClient(void * arg) {
@@ -184,6 +257,13 @@ bool Server::run() {
     json msg;
     std::stringstream ss;
 
+    while(this->getClientsSize() < this->clientNo);
+    ss.str("");
+    ss << "[thread:run] Amount of required clients reached successfully, initializing game...";
+    Logger::getInstance()->info(ss.str());
+
+    initThreads();
+
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
         msg = this->getNewCommandMsg();
@@ -207,9 +287,7 @@ bool Server::run() {
 
         msg = {4,5,6,7};
 
-        for (auto & client : clients) {
-            client->pushOutcome(msg);
-        }
+        broadcast(msg);
 
         this->popCommand();
     }
@@ -223,19 +301,24 @@ bool Server::run() {
         pthread_join(this->outcomeThreads[i], nullptr);
     }
 
+    this->running = false;
+
     return true;
 }
 
 bool Server::someoneIsConnected() {
+    pthread_mutex_lock(&this->clientsMutex);
     for(auto & client : clients) {
         bool status = client->isConnected();
 //        std::stringstream ss;
 //        ss << "[user:" << client->name << "] status: " << (status ? "connected" : "disconnected");
 //        Logger::getInstance()->debug(ss.str());
         if(!status) {
+            pthread_mutex_unlock(&this->clientsMutex);
             return false;
         }
     }
+    pthread_mutex_unlock(&this->clientsMutex);
     return true;
 }
 
@@ -285,5 +368,63 @@ void Server::popCommand() {
     pthread_mutex_lock(&this->commandMutex);
     this->commands.pop();
     pthread_mutex_unlock(&this->commandMutex);
+}
+
+bool Server::isRunning() {
+    return this->running;
+}
+
+int Server::getClientsSize() {
+    int size = 0;
+    pthread_mutex_lock(&this->clientsMutex);
+    size = this->clients.size();
+    pthread_mutex_unlock(&this->clientsMutex);
+    return size;
+}
+
+void Server::pushToWaitingRoom(PlayerClient *playerClient) {
+    pthread_mutex_lock(&this->waitingRoomMutex);
+    this->waitingRoom.push(playerClient);
+    pthread_mutex_unlock(&this->waitingRoomMutex);
+}
+
+PlayerClient *Server::popFromWaitingRoom() {
+    PlayerClient * pc = nullptr;
+    pthread_mutex_lock(&this->waitingRoomMutex);
+    pc = this->waitingRoom.front();
+    this->waitingRoom.pop();
+    pthread_mutex_unlock(&this->waitingRoomMutex);
+    return pc;
+}
+
+void Server::addToClients(PlayerClient *playerClient) {
+    pthread_mutex_lock(&this->clientsMutex);
+    this->clients.push_back(playerClient);
+    pthread_mutex_unlock(&this->clientsMutex);
+}
+
+bool Server::waitingRoomIsEmpty() {
+    bool result;
+    pthread_mutex_lock(&this->waitingRoomMutex);
+    result = this->waitingRoom.empty();
+    pthread_mutex_unlock(&this->waitingRoomMutex);
+    return result;
+}
+
+void Server::initThreads() {
+    pthread_mutex_lock(&this->clientsMutex);
+    for(int i=0; i < this->clients.size(); i++) {
+        pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) clients[i]);
+        pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) clients[i]);
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+}
+
+void Server::broadcast(json msg) {
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto & client : clients) {
+        client->pushOutcome(msg);
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
 }
 

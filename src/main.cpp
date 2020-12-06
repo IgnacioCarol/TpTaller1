@@ -136,6 +136,8 @@ int main(int argc, char * argv[]) {
             ss << "[client] msg: " << message.dump();
             Logger::getInstance()->debug(ss.str());
 
+            while(true);
+
             delete client;
             return 0;
         } catch (std::exception &ex) {
