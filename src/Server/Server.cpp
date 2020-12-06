@@ -405,9 +405,20 @@ void Server::pushToWaitingRoom(PlayerClient *playerClient) {
 }
 
 void Server::addClient(PlayerClient *player) {
+    bool isAlreadyClient = false;
     pthread_mutex_lock(&this->clientsMutex);
-    this->clients.push_back(player);
+    for (auto& client :this->clients) {
+        if (client->username == player->username) {
+            isAlreadyClient = true;
+        }
+    }
+    if (!isAlreadyClient) {
+        this->clients.push_back(player);
+    }
     pthread_mutex_unlock(&this->clientsMutex);
+    if (isAlreadyClient) {
+        Logger::getInstance()->info("[Server] Client " + player->username + " has lost connection and is loggin again.");
+    }
 }
 
 PlayerClient *Server::popFromWaitingRoom() {
