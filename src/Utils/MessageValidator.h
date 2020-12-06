@@ -12,10 +12,13 @@ using json = nlohmann::json;
 class MessageValidator {
 public:
     static std::string validLoginMessage(json msg);
+    static std::string validLoginMessageResponse(json msg);
 
 private:
     ~MessageValidator() = default;
     MessageValidator() = default;
+
+    static std::string validMessage(json msg, PROTOCOL_COMMAND protocol, const std::vector<std::string>& contentTags);
 };
 
 

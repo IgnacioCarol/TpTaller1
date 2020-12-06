@@ -100,25 +100,13 @@ void *Server::handleIncomingConnections(void *arg) {
         try {
 
             auto *playerClient = new PlayerClient(server->_socket->accept(), &server->commandMutex, &server->commands);
+            playerClient->id = id;
 
-            clientsSize = server->getClientsSize();
-            if (clientsSize >= server->clientNo) {
-                if (clientsSize > server->clientNo) {
-                    ss.str("");
-                    ss << "[thread:acceptor] Fatal error, clients size is above allowed quantity";
-                    Logger::getInstance()->error(ss.str());
-                    throw ServerException(ss.str());
-                }
-
-                playerClient->rejectConnection();
-                ss.str("");
-                ss << "[thread:acceptor] server is full, playerClient with id: " << id << " was rejected";
-                Logger::getInstance()->info(ss.str());
+            if (!server->validClientsMaximum(playerClient)) {
                 delete playerClient;
                 continue;
             }
 
-            playerClient->id = id;
             server->pushToWaitingRoom(playerClient);
             pthread_create(&server->loginThread, nullptr, Server::authenticatePlayerClient, (void *) server);
 
@@ -158,6 +146,11 @@ void *Server::authenticatePlayerClient(void *arg) {
 
         std::string username = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_USERNAME];
         std::string password = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_PASSWORD];
+
+        if (!server->validClientsMaximum(playerClient)) {
+            delete playerClient;
+            break;
+        }
 
         for (auto & user : validPlayers.users) {
             Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
@@ -431,4 +424,28 @@ void Server::broadcast(json msg) {
     }
     pthread_mutex_unlock(&this->clientsMutex);
 }
+
+bool Server::validClientsMaximum(PlayerClient *playerClient) {
+    int clientsSize = getClientsSize();
+    std::stringstream ss;
+
+    if (clientsSize >= this->clientNo) {
+        if (clientsSize > this->clientNo) {
+            ss.str("");
+            ss << "[thread:acceptor] Fatal error, clients size is above allowed quantity";
+            Logger::getInstance()->error(ss.str());
+            playerClient->rejectConnection();
+            throw ServerException(ss.str());
+        }
+
+        playerClient->rejectConnection();
+        ss.str("");
+        ss << "[thread:acceptor] server is full, playerClient with id: " << playerClient->id << " was rejected";
+        Logger::getInstance()->info(ss.str());
+        return false;
+    }
+
+    return true;
+}
+
 
