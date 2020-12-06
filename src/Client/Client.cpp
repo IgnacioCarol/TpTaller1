@@ -1,4 +1,6 @@
+#include <src/Server/ServerMsg.h>
 #include "Client.h"
+#include "ServerClient.h"
 
 using json = nlohmann::json;
 
@@ -23,10 +25,27 @@ void Client::init() {
             Logger::getInstance()->error(MSG_ERROR_INIT_LOGIN);
             throw ClientException(MSG_ERROR_INIT_LOGIN);
         }
+        /*this->incomeThreads = (pthread_t *) malloc(sizeof(pthread_t));
+        if (!this->incomeThreads) {
+            Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
+            throw SocketException(MSG_NO_MEMORY_THREADS);
+        }
+
+        this->outcomeThreads = (pthread_t *) malloc(sizeof(pthread_t));
+        if (!this->outcomeThreads) {
+            Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
+            throw SocketException(MSG_NO_MEMORY_THREADS);
+        }*/
     } catch (std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_NOT_INITIALIZED);
         throw ex;
     }
+}
+
+void Client::listenServer() {
+    ServerClient* server = new ServerClient(this->_socket->accept(), &this->commandMutex, &this->commands);
+    pthread_create(incomeThreads, nullptr, Client::handleServerClient, (void *) server);
+    pthread_create(outcomeThreads, nullptr, Client::broadcastToServerClient, (void *) server);
 }
 
 void Client::login() {
@@ -109,6 +128,103 @@ int Client::receive(json *msg) {
     return _socket->receive(msg);
 }
 
+void Client::play() {
 
+}
 
+void * Client::handleServerClient(void * arg) {
+    auto * serverClient = (ServerClient *)arg;
+    json msg;
+    std::stringstream ss;
+    int tolerance = 0;
 
+    while (serverClient != nullptr &&
+           serverClient->isConnected() &&
+           (msg = receive(serverClient)) != nullptr) {
+        ss.str("");
+        ss << "[thread:server]"
+           << "msg: " << msg.dump();
+        Logger::getInstance()->debug(ss.str());
+
+        serverClient->pushCommand(msg);
+    }
+
+    return nullptr;
+}
+
+json Client::receive(ServerClient *serverClient) {
+    Logger::getInstance()->debug("Receiving message from server.");
+    json msg;
+    int msg_received;
+    std::stringstream ss;
+    int tolerance = 0;
+
+    while (serverClient->isConnected()) {
+        msg_received = serverClient->receive(&msg);
+        if (msg_received < 0) {
+            if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
+                //ToDo suponemos que el socket se cerro, realizar tratamiento
+                // 1. Marcar connected como false
+                // 2. Mover player client a listado de conexiones muertas
+                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
+
+                ss.str("");
+                ss << "Fail tolerance exceeded! [thread:listener]";
+                Logger::getInstance()->error(ss.str());
+                throw SocketException(ss.str());
+            }
+            tolerance++;
+            continue;
+        }
+        if (!msg_received) {
+            //ToDo suponemos que el socket se cerro, realizar tratamiento
+            // 1. Marcar connected como false
+            // 2. Mover player client a listado de conexiones muertas
+            // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
+            ss.str("");
+            ss << "Connection has been lost with server [thread:listener]";
+            Logger::getInstance()->error(ss.str());
+            throw SocketException(ss.str());
+            //continue;
+        }
+
+        return msg;
+    }
+
+    return nullptr;
+}
+
+void * Client::broadcastToServerClient(void *arg) {
+    ServerClient * serverClient = (ServerClient *)arg;
+    int tolerance = 0;
+    json msg;
+
+    while (serverClient != nullptr && serverClient->isConnected()) {
+        msg = serverClient->getNewOutcomeMsg();
+        if (msg.empty()) {
+            continue;
+        }
+
+        std::stringstream ss;
+        ss << "[thread:broadcast]"
+           << "msg: " << msg.dump();
+        Logger::getInstance()->debug(ss.str());
+
+        if(!serverClient->send(&msg)) {
+            Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+            if (tolerance > 3) {
+                ss.str("");
+                ss << "Fail tolerance exceeded! [thread:broadcast]";
+                Logger::getInstance()->error(ss.str());
+                throw SocketException(ss.str());
+            }
+
+            tolerance++;
+            continue;
+        }
+
+        serverClient->popOutcome();
+    }
+
+    return nullptr;
+}

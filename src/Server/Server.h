@@ -62,6 +62,7 @@ private:
     size_t             clientNo;
     bool               running;
     const int MAX_ACCEPT_RETRIES = 10;
+
 };
 
 

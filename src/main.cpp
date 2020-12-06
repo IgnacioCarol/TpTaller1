@@ -100,8 +100,6 @@ int main(int argc, char * argv[]) {
     if (mode == SERVER) {
         Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
-        Config* config = Config::getInstance();
-        config->load(xmlPath);
         try {
             server->init(ipAddr.c_str(), std::to_string(port).c_str());
             server->run();
@@ -120,6 +118,10 @@ int main(int argc, char * argv[]) {
             //TODO: Al estar todos los clientes conectados (hay que procesar el aviso del server),
             // se debe salir del waiting room de los clientes
 
+            json msg;
+            if (client->receive(&msg) && msg["startGame"]) {
+                client->play();
+            }
             delete client;
             return 0;
         } catch (std::exception &ex) {

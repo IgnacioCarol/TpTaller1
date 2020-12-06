@@ -99,7 +99,7 @@ int Socket::send(T* data, int bytesToWrite) {
     bool client_socket_still_open = true;
 
     while ((bytesToWrite > total_bytes_written) && client_socket_still_open){
-        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), 0);
+        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), MSG_NOSIGNAL);
 
         if (bytes_written < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_SEND_FAILED + std::string(strerror(errno)));
@@ -155,7 +155,7 @@ int Socket::receive(T *msg, int receiveDataSize) {
     // If no messages are available at the socket, the receive call wait for a message to arrive. (Blocking)
 
     while ((receiveDataSize > bytes_received) && client_socket_still_open) {
-        bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive), 0);
+        bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive), MSG_NOSIGNAL);
         if (bytes_received < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_RECEIVE_FAILED + std::string(strerror(errno)));
             return bytes_received;

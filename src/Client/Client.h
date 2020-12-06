@@ -13,6 +13,7 @@
 #include "ClientException.h"
 #include "../Utils/Protocol.h"
 #include "../Utils/MessageValidator.h"
+#include "ServerClient.h"
 
 using json = nlohmann::json;
 
@@ -27,6 +28,8 @@ public:
     int receive(json *msg);
     void release();
 
+    void play();
+
 private:
     const char * _IP;
     const char * _port;
@@ -35,6 +38,17 @@ private:
     Login* _login;
 
     bool authenticate();
+    pthread_t        * incomeThreads;
+    pthread_t        * outcomeThreads;
+    pthread_mutex_t commandMutex;
+    std::queue<json> commands;
+    static void *handleServerClient(void *arg);
+
+    static json receive(ServerClient *playerClient);
+
+    static void *broadcastToServerClient(void *arg);
+
+    void listenServer();
 };
 
 
