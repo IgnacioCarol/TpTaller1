@@ -12,8 +12,6 @@ Client::Client(std::string IP, std::string port) {
 Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
-//    delete login;
-//    delete Game::Instance();
 }
 
 void Client::init() {
@@ -37,7 +35,6 @@ void Client::login() {
         while(!this->authenticate()) {} //TODO: Mejorar este while
         _login->showWaitingRoom();
         delete _login;
-        // Game::Instance()->play("./resources/config.xml"); //TODO: Deberia haber comunicacion con server para inicializar game
     } catch(std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
         throw ex;
@@ -53,13 +50,7 @@ bool Client::authenticate() {
 
     json authJson = Protocol::buildLoginMsg(auth->username, auth->password);
 
-    //TODO: Borrar, es para prueba
-    ss.str("");
-    ss << "authentication: "
-       << "sending auth msg: " << authJson.dump() << std::endl;
-    Logger::getInstance()->debug(ss.str());
-
-    Logger::getInstance()->debug("Will send message");
+    Logger::getInstance()->debug("[Client] Will send authentication message");
     if (send(&authJson) < 0) {
         Logger::getInstance()->error(MSG_CLIENT_AUTH_SEND_ERROR);
         _login->showError("Unexpected error. Try again.");
