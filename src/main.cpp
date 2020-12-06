@@ -116,8 +116,10 @@ int main(int argc, char * argv[]) {
         auto * client = new Client(ipAddr, to_string(port).c_str());
         try {
             client->init();
-            client->play();
+            client->login();
 
+            //TODO: Al estar todos los clientes conectados (hay que procesar el aviso del server),
+            // se debe salir del waiting room de los clientes
 /*
             json message = {1,2,3};
 
@@ -138,7 +140,7 @@ int main(int argc, char * argv[]) {
             Logger::getInstance()->debug(ss.str());
 */
 
-            while(true);
+            // while(true);
 
             delete client;
             return 0;
