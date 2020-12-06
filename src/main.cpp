@@ -117,30 +117,8 @@ int main(int argc, char * argv[]) {
         try {
             client->init();
             client->login();
-
             //TODO: Al estar todos los clientes conectados (hay que procesar el aviso del server),
             // se debe salir del waiting room de los clientes
-/*
-            json message = {1,2,3};
-
-            if (client->send(&message) != 0) {
-                Logger::getInstance()->error("[Client] send failed");
-                delete client;
-                return 1;
-            }
-
-            if(client->receive(&message) <= 0) {
-                Logger::getInstance()->error("[Client] receive failed");
-                delete client;
-                return 1;
-            }
-
-            ss.str("");
-            ss << "[client] msg: " << message.dump();
-            Logger::getInstance()->debug(ss.str());
-*/
-
-            // while(true);
 
             delete client;
             return 0;
