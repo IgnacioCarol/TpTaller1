@@ -1,6 +1,7 @@
 #ifndef TPTALLER1_PLAYERCLIENT_H
 #define TPTALLER1_PLAYERCLIENT_H
 #include "../Socket/Socket.h"
+#include "../Utils/Protocol.h"
 #include <queue>
 using json = nlohmann::json;
 class PlayerClient {
@@ -13,6 +14,7 @@ public:
     void popOutcome();
     void pushCommand(json msg);
     bool isConnected();
+    void rejectConnection();
 
     Socket * getSocket();
     virtual ~PlayerClient();

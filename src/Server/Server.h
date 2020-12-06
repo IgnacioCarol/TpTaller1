@@ -40,7 +40,7 @@ private:
     void broadcast(json msg);
     json getNewCommandMsg();
     void popCommand();
-    void acceptClients();
+    //void acceptClients();
     bool someoneIsConnected();
     static void * authenticatePlayerClient(void * arg);
     static void * handlePlayerClient(void * arg);

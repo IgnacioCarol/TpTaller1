@@ -65,6 +65,8 @@ void Server::initSocket(const char*ip, const char *port) {
     }
 }
 
+//TODO: Consultar con DaniB si se puede borrar
+/*
 void Server::acceptClients() {
      int retry = 1;
 
@@ -86,7 +88,7 @@ void Server::acceptClients() {
         throw ServerException(MSG_ERROR_ACCEPT_CLIENTS);
     }
 }
-
+*/
 
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
@@ -108,7 +110,7 @@ void *Server::handleIncomingConnections(void *arg) {
                     throw ServerException(ss.str());
                 }
 
-                //ToDo JSON de rechazo, podria ser un meotodo de playerClient->rejectConnection();
+                playerClient->rejectConnection();
                 ss.str("");
                 ss << "[thread:acceptor] server is full, playerClient with id: " << id << " was rejected";
                 Logger::getInstance()->info(ss.str());

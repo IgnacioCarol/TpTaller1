@@ -47,8 +47,6 @@ bool Client::authenticate() {
 
     json authJson = Protocol::buildLoginMsg(auth->username, auth->password);
 
-    Logger::getInstance()->debug("Stoped setting json message");
-
     //TODO: Borrar, es para prueba
     ss.str("");
     ss << "authentication: "
@@ -85,13 +83,6 @@ bool Client::authenticate() {
         login->showError("Unexpected error. Try again.");
         return false;
     }
-    /*
-    if (auth->username != "coso" || auth->password != "cosito") { //FIXME do a method that will check the credentials
-        login->showError("Invalid username or password");
-        return false;
-    }
-    */
-    return false;
 }
 
 bool Client::isConnected() {
