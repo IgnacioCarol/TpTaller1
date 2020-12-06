@@ -2,6 +2,7 @@
 #include <json.hpp>
 #include "ServerMsg.h"
 #include <pthread.h>
+#include <sstream>
 
 using json = nlohmann::json;
 PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex, std::queue<json> *commandQueue) {
@@ -30,27 +31,53 @@ int PlayerClient::receive(json* message) {
     return received;
 }
 
-pthread_mutex_t *PlayerClient::getCommandMutex() {
-    return this->commandMutex;
-}
-
-pthread_mutex_t *PlayerClient::getOutcomeMutex() {
-    return &this->outcomeMutex;
-}
-
 bool PlayerClient::send(json *msg) {
     int result = this->clientSocket->send(msg);
     return result == 0;
 }
 
 bool PlayerClient::isConnected() {
-    return  this->clientSocket->isConnected();
+    bool status = this->clientSocket->isConnected();
+//    std::stringstream ss;
+//    ss << "[PlayerClient][user:" << this->name << "] status: " << (status ? "connected" : "disconnected");
+//    Logger::getInstance()->debug(ss.str());
+    return  status;
 }
 
-void PlayerClient::lock() {
+void PlayerClient::pushOutcome(json msg) {
     pthread_mutex_lock(&this->outcomeMutex);
+    this->outcome.push(msg);
+    pthread_mutex_unlock(&this->outcomeMutex);
 }
 
-void PlayerClient::unlock() {
+json PlayerClient::getNewOutcomeMsg() {
+    pthread_mutex_lock(&this->outcomeMutex);
+    json msg;
+    if (this->outcome.empty()) {
+        pthread_mutex_unlock(&this->outcomeMutex);
+        return json();
+    }
+
+    msg = this->outcome.front();
     pthread_mutex_unlock(&this->outcomeMutex);
+    return msg;
+}
+
+void PlayerClient::popOutcome() {
+    pthread_mutex_lock(&this->outcomeMutex);
+    this->outcome.pop();
+    pthread_mutex_unlock(&this->outcomeMutex);
+}
+
+void PlayerClient::pushCommand(json msg) {
+    pthread_mutex_lock(this->commandMutex);
+    this->commandQueue->push(msg);
+    pthread_mutex_unlock(this->commandMutex);
+}
+
+void PlayerClient::rejectConnection(std::string error) {
+    json msg = Protocol::buildErrorMsg(error);
+    if (!send(&msg)) {
+        Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+    }
 }

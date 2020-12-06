@@ -100,8 +100,6 @@ int main(int argc, char * argv[]) {
     if (mode == SERVER) {
         Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
-        Config* config = Config::getInstance();
-        config->load(xmlPath);
         try {
             server->init(ipAddr.c_str(), std::to_string(port).c_str());
             server->run();
@@ -116,37 +114,19 @@ int main(int argc, char * argv[]) {
         auto * client = new Client(ipAddr, to_string(port).c_str());
         try {
             client->init();
-            client->play();
-            /*
-            msg_t message;
-            message.val1 = 10;
-            message.val2 = 9;
-            message.val3 = 8;
-            message.val4 = 7;
-            message.val5 = 6;
-            message.val6 = 5;
-            message.val7 = 4;
-            if (client->send(&message, sizeof(msg_t)) < 0) {
-                Logger::getInstance()->error("[Client] send failed");
-                delete client;
-                return 1;
-            }
+            client->login();
+            //TODO: Al estar todos los clientes conectados (hay que procesar el aviso del server),
+            // se debe salir del waiting room de los clientes
 
-            client->receive(&message, sizeof(msg_t));
-            ss.clear();
-            ss << "val1: " << message.val1 << std::endl
-               << "val2: " << message.val2 << std::endl
-               << "val3: " << message.val3 << std::endl
-               << "val4: " << message.val4 << std::endl
-               << "val5: " << message.val5 << std::endl
-               << "val6: " << message.val6 << std::endl
-               << "val7: " << message.val7 << std::endl;
-            Logger::getInstance()->info(ss.str());
-             */
+            json msg;
+            if (client->receive(&msg) && msg["startGame"]) {
+                client->play();
+            }
             delete client;
             return 0;
         } catch (std::exception &ex) {
             delete client;
+            Logger::getInstance()->error("Algo fallo en el client");
             return EXIT_FAILURE;
         }
     }
