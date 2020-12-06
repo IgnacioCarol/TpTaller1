@@ -75,8 +75,8 @@ void PlayerClient::pushCommand(json msg) {
     pthread_mutex_unlock(this->commandMutex);
 }
 
-void PlayerClient::rejectConnection() {
-    json msg = Protocol::buildErrorMsg(MSG_ERROR_SERVER_IS_FULL);
+void PlayerClient::rejectConnection(std::string error) {
+    json msg = Protocol::buildErrorMsg(error);
     if (!send(&msg)) {
         Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
     }

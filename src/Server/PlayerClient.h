@@ -14,12 +14,13 @@ public:
     void popOutcome();
     void pushCommand(json msg);
     bool isConnected();
-    void rejectConnection();
+    void rejectConnection(std::string error);
 
     Socket * getSocket();
     virtual ~PlayerClient();
 
     int id;
+    std::string username;
 private:
     std::queue<json> * commandQueue;
     std::queue<json> outcome;

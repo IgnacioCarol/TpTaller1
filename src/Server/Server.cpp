@@ -68,7 +68,6 @@ void Server::initSocket(const char*ip, const char *port) {
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
     int id = 0;
-    int clientsSize = 0;
     std::stringstream ss;
 
     while(server->isRunning()) {
@@ -127,10 +126,18 @@ void *Server::authenticatePlayerClient(void *arg) {
             break;
         }
 
+        if (server->clientIsLogged(username)) {
+            Logger::getInstance()->error("[Server] Client " + username + " is already logged. Rejecting client");
+            playerClient->rejectConnection(MSG_RESPONSE_ERROR_USER_ALREADY_LOGGED);
+            delete playerClient;
+            break;
+        }
+
         for (auto & user : validPlayers.users) {
             Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
             if (user.username == username && user.password == password) {
                 authenticated = true;
+                playerClient->username = username;
                 server->addClient(playerClient);
                 break;
             }
@@ -152,9 +159,8 @@ void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
     json msg;
     std::stringstream ss;
-    int tolerance = 0;
 
-    while (playerClient != nullptr &&
+    while (playerClient &&
             playerClient->isConnected() &&
             (msg = receive(playerClient)) != nullptr) {
         ss.str("");
@@ -215,7 +221,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
     int tolerance = 0;
     json msg;
 
-    while (playerClient != nullptr && playerClient->isConnected()) {
+    while (playerClient && playerClient->isConnected()) {
         msg = playerClient->getNewOutcomeMsg();
         if (msg.empty()) {
             continue;
@@ -345,6 +351,19 @@ int Server::getClientsSize() {
     return size;
 }
 
+bool Server::clientIsLogged(std::string username) {
+    bool isLogged = false;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client: this->clients) {
+        Logger::getInstance()->debug("[Server] checking login for client " + client->username);
+        if (client->username == username && client->isConnected()) {
+            isLogged = true;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return isLogged;
+}
+
 void Server::pushToWaitingRoom(PlayerClient *playerClient) {
     pthread_mutex_lock(&this->waitingRoomMutex);
     this->waitingRoom.push(playerClient);
@@ -352,9 +371,23 @@ void Server::pushToWaitingRoom(PlayerClient *playerClient) {
 }
 
 void Server::addClient(PlayerClient *player) {
+    bool isAlreadyClient = false;
+    int playerLoggedPos = 0;
     pthread_mutex_lock(&this->clientsMutex);
+    for (int i = 0; i < clients.size(); i++) {
+        if (clients[i]->username == player->username) {
+            isAlreadyClient = true;
+            playerLoggedPos = i;
+        }
+    }
+    if (isAlreadyClient) {
+        clients.erase(clients.begin() + playerLoggedPos);
+    }
     this->clients.push_back(player);
     pthread_mutex_unlock(&this->clientsMutex);
+    if (isAlreadyClient) {
+        Logger::getInstance()->info("[Server] Client " + player->username + " has lost connection and is loggin again.");
+    }
 }
 
 PlayerClient *Server::popFromWaitingRoom() {
@@ -398,15 +431,15 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
     std::stringstream ss;
 
     if (clientsSize >= this->clientNo) {
+        playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
+
         if (clientsSize > this->clientNo) {
             ss.str("");
             ss << "[thread:acceptor] Fatal error, clients size is above allowed quantity";
             Logger::getInstance()->error(ss.str());
-            playerClient->rejectConnection();
             throw ServerException(ss.str());
         }
 
-        playerClient->rejectConnection();
         ss.str("");
         ss << "[thread:acceptor] server is full, playerClient with id: " << playerClient->id << " was rejected";
         Logger::getInstance()->info(ss.str());

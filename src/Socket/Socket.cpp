@@ -71,11 +71,9 @@ void Socket::release() {
 }
 
 bool Socket::isConnected() {
-    bool status = _connected;
-//    std::stringstream ss;
-//    ss << "[Socket] " << "status: " << (status ? "connected" : "disconnected");
-//    Logger::getInstance()->debug(ss.str());
-    return status;
+    char buffer[32];
+    _connected = recv(fd, buffer, sizeof(buffer), MSG_PEEK | MSG_DONTWAIT) != 0;
+    return _connected;
 }
 
 int Socket::send(json *msg) {
