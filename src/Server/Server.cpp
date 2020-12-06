@@ -93,7 +93,6 @@ void Server::acceptClients() {
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
     int id = 0;
-    int clientsSize = 0;
     std::stringstream ss;
 
     while(server->isRunning()) {
@@ -185,7 +184,6 @@ void * Server::handlePlayerClient(void * arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
     json msg;
     std::stringstream ss;
-    int tolerance = 0;
 
     while (playerClient != nullptr &&
             playerClient->isConnected() &&
@@ -406,15 +404,18 @@ void Server::pushToWaitingRoom(PlayerClient *playerClient) {
 
 void Server::addClient(PlayerClient *player) {
     bool isAlreadyClient = false;
+    int playerLoggedPos = 0;
     pthread_mutex_lock(&this->clientsMutex);
-    for (auto& client :this->clients) {
-        if (client->username == player->username) {
+    for (int i = 0; i < clients.size(); i++) {
+        if (clients[i]->username == player->username) {
             isAlreadyClient = true;
+            playerLoggedPos = i;
         }
     }
-    if (!isAlreadyClient) {
-        this->clients.push_back(player);
+    if (isAlreadyClient) {
+        clients.erase(clients.begin() + playerLoggedPos);
     }
+    this->clients.push_back(player);
     pthread_mutex_unlock(&this->clientsMutex);
     if (isAlreadyClient) {
         Logger::getInstance()->info("[Server] Client " + player->username + " has lost connection and is loggin again.");
