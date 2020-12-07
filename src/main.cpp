@@ -95,10 +95,10 @@ int main(int argc, char * argv[]) {
     ss << "xmlPath: " << xmlPath << " mode: " << mode << " ipAddr: " << ipAddr << " port: " << port;
     Logger::getInstance()->debug(ss.str());
 
-    Config::getInstance()->load(xmlPath);
 
     if (mode == SERVER) {
         Logger::getInstance()->info("Initializing in server mode");
+        Config::getInstance()->load(xmlPath);
         Server * server = Server::getInstance();
         try {
             server->init(ipAddr.c_str(), std::to_string(port).c_str());
