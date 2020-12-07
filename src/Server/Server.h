@@ -10,8 +10,10 @@
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
-#include "../Protocol.h"
+#include "../Utils/Protocol.h"
 #include "../config/Config.h"
+#include "../Utils/MessageValidator.h"
+#include "ServerMsg.h"
 
 class Server {
 
@@ -23,28 +25,29 @@ public:
     bool run();
     bool isRunning();
     int getClientsSize();
-    void addToClients(PlayerClient * playerClient);
     void pushToWaitingRoom(PlayerClient * playerClient);
     PlayerClient * popFromWaitingRoom();
     bool waitingRoomIsEmpty();
+    void addClient(PlayerClient* player);
 
 private:
     static Server * instance;
     Server();
 
     void initSocket(const char*ip, const char *port);
+    json static receive(PlayerClient *playerClient);
     void initThreads();
     void broadcast(json msg);
     json getNewCommandMsg();
     void popCommand();
-    void acceptClients();
+    //void acceptClients();
     bool someoneIsConnected();
+    bool validClientsMaximum(PlayerClient *playerClient);
+    bool clientIsLogged(std::string username);
     static void * authenticatePlayerClient(void * arg);
     static void * handlePlayerClient(void * arg);
     static void * handleIncomingConnections(void * arg);
     static void * broadcastToPlayerClient(void * arg);
-
-    static void manageLogin(PlayerClient* player, const json msg); //TODO: Buscar algun lugar para manejar los eventos, quizas tener un login de parte del server
 
     Socket *_socket;
     std::vector<PlayerClient *> clients;
