@@ -1,7 +1,3 @@
-//
-// Created by DANIELA CARRERO on 2020-10-27.
-//
-
 #ifndef TPTALLER1_CONSTANTS_H
 #define TPTALLER1_CONSTANTS_H
 

@@ -72,7 +72,7 @@ Game::~Game() {
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    camera->render(player->getXPosition(), stage->getWidth());
+    camera->update(player->getXPosition(), stage->getWidth());
     textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
 
@@ -195,12 +195,6 @@ void Game::play(std::string xmlPath) {
     }
     Logger::getInstance() -> info("Game over");
     clean();
-    /*
-    delete game;
-    delete Logger::getInstance();
-
-    SDL_Quit();
-    */
 }
 
 

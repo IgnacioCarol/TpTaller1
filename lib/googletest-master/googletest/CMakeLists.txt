@@ -63,7 +63,7 @@ if (COMMAND set_up_hermetic_build)
   set_up_hermetic_build()
 endif()
 
-# These commands only run if this is the main project
+# These events only run if this is the main project
 if(CMAKE_PROJECT_NAME STREQUAL "gtest" OR CMAKE_PROJECT_NAME STREQUAL "googletest-distribution")
 
   # BUILD_SHARED_LIBS is a standard CMake variable, but we declare it here to

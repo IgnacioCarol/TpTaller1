@@ -95,13 +95,11 @@ int main(int argc, char * argv[]) {
     ss << "xmlPath: " << xmlPath << " mode: " << mode << " ipAddr: " << ipAddr << " port: " << port;
     Logger::getInstance()->debug(ss.str());
 
-    Config::getInstance()->load(xmlPath);
 
     if (mode == SERVER) {
         Logger::getInstance()->info("Initializing in server mode");
+        Config::getInstance()->load(xmlPath);
         Server * server = Server::getInstance();
-        Config* config = Config::getInstance();
-        config->load(xmlPath);
         try {
             server->init(ipAddr.c_str(), std::to_string(port).c_str());
             server->run();
@@ -116,26 +114,10 @@ int main(int argc, char * argv[]) {
         auto * client = new Client(ipAddr, to_string(port).c_str());
         try {
             client->init();
-//            client->play();
-
-            json message = {1,2,3};
-
-            if (client->send(&message) != 0) {
-                Logger::getInstance()->error("[Client] send failed");
-                delete client;
-                return 1;
-            }
-
-            if(client->receive(&message) <= 0) {
-                Logger::getInstance()->error("[Client] receive failed");
-                delete client;
-                return 1;
-            }
-
-            ss.str("");
-            ss << "[client] msg: " << message.dump();
-            Logger::getInstance()->debug(ss.str());
-
+            client->login();
+            //TODO: Al estar todos los clientes conectados (hay que procesar el aviso del server),
+            // se debe salir del waiting room de los clientes
+            client->run();
             delete client;
             return 0;
         } catch (std::exception &ex) {

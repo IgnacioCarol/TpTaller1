@@ -71,11 +71,9 @@ void Socket::release() {
 }
 
 bool Socket::isConnected() {
-    bool status = _connected;
-//    std::stringstream ss;
-//    ss << "[Socket] " << "status: " << (status ? "connected" : "disconnected");
-//    Logger::getInstance()->debug(ss.str());
-    return status;
+    char buffer[32];
+    _connected = recv(fd, buffer, sizeof(buffer), MSG_PEEK | MSG_DONTWAIT) != 0;
+    return _connected;
 }
 
 int Socket::send(json *msg) {
@@ -99,7 +97,7 @@ int Socket::send(T* data, int bytesToWrite) {
     bool client_socket_still_open = true;
 
     while ((bytesToWrite > total_bytes_written) && client_socket_still_open){
-        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), 0);
+        bytes_written = ::send(fd, (data + total_bytes_written), (bytesToWrite-total_bytes_written), FLAG_DATA_TRANSFER);
 
         if (bytes_written < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_SEND_FAILED + std::string(strerror(errno)));
@@ -155,7 +153,8 @@ int Socket::receive(T *msg, int receiveDataSize) {
     // If no messages are available at the socket, the receive call wait for a message to arrive. (Blocking)
 
     while ((receiveDataSize > bytes_received) && client_socket_still_open) {
-        bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive), 0);
+        bytes_received = recv(fd, (msg + total_bytes_receive), (receiveDataSize - total_bytes_receive),
+                              FLAG_DATA_TRANSFER);
         if (bytes_received < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_RECEIVE_FAILED + std::string(strerror(errno)));
             return bytes_received;
