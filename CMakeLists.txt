@@ -20,7 +20,7 @@ add_executable(TpTaller1
         src/Game.cpp src/Game.h
         src/GameMap.cpp src/GameMap.h test/gamemap_test.cpp
         src/TextureManager.cpp src/TextureManager.h
-        src/Camera.cpp src/Camera.h
+        src/Server/Camera.cpp src/Server/Camera.h
         src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/BackgroundStage.h
         src/BackgroundStages/FirstStage.cpp src/BackgroundStages/FirstStage.h
         src/BackgroundStages/SecondStage.cpp src/BackgroundStages/SecondStage.h
@@ -50,7 +50,7 @@ add_executable(TpTaller1
         src/Client/ClientMsg.h
         src/Server/ServerMsg.h
         src/Socket/SocketMsg.h
-        src/Protocol.h)
+        src/Protocol.h src/Server/GameServer.cpp src/Server/GameServer.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

@@ -2,6 +2,7 @@
 #define TPTALLER1_FACTORY_H
 
 #include <vector>
+#include <src/gameobjects/Player.h>
 #include "../gameobjects/GameObject.h"
 #include "../config/Config.h"
 
@@ -18,16 +19,24 @@ static const std::string GOOMBA_DARK_ID = "goombaDark";
 static const std::string COIN_ID = "coinsSprites";
 
 //Default images paths
-static const std::string DEFAULT_MARIO_PATH = "Sprites/Default/defaultPlayer.png";
+static const std::string DEFAULT_PLAYER_PATH = "Sprites/Default/defaultPlayer.png";
 static const std::string DEFAULT_TURTLE_PATH = "Sprites/Default/defaultKoopa.png";
 static const std::string DEFAULT_MUSHROOM_PATH = "Sprites/Default/defaultGoomba.png";
 static const std::string DEFAULT_PLATFORM_PATH = "Sprites/Default/defaultBlock.png";
 static const std::string DEFAULT_COIN_PATH = "Sprites/Default/defaultCoins.png";
 
+
+//TODO refactor, donde ponemos esta definicion de types?
+enum ConnectionType {
+    SERVER = 0,
+    CLIENT = 1
+};
+
 class Factory {
 public:
     static Factory * getInstance();
-    std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig);
+    std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig, ConnectionType mode);
+    std::map<std::string, Player*>  createPlayersFromConfig(ConnectionType mode);
     virtual ~Factory();
 
 private:

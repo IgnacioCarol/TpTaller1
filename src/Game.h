@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <vector>
 #include <string>
-#include "Camera.h"
+#include "src/Server/Camera.h"
 #include "TextureManager.h"
 #include "BackgroundStages/BackgroundStage.h"
 #include "BackgroundStages/FirstStage.h"
