@@ -1,4 +1,4 @@
-#include "src/Server/Camera.h"
+#include "Camera.h"
 
 Camera::Camera(int x, int y, int width, int height) {
     camera = {x, y , width, height};

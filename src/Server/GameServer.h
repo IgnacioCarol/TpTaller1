@@ -4,7 +4,7 @@
 
 #include <string>
 #include <src/config/Config.h>
-#include "Camera.h"
+#include "src/Camera.h"
 #include "src/config/Constants.h"
 
 
@@ -13,9 +13,14 @@ public:
     static GameServer* Instance();
     bool init(const char *levelName, std::string xmlPath);
 
-    //Getters
+    //Getters to GameServer purpose
     SDL_Rect *  getCamera();
     std::vector<std::string>  getPlayerPaths();
+
+    //Getters to send info to the client
+    std::map<std::string, std::vector<std::string>> getImagePaths();
+    std::vector <GameObject*> getGameObjects();
+    std::map<std::string, Player*> getPlayers();
 
     //Methods to control images/level flow
     void addPath(std::string ID, std::string imagePath, std::string defaultImagePath);
@@ -25,7 +30,7 @@ public:
     //Methods to control game flow
     bool isPlaying() const;
     void cleanGameObjects();
-    void handleEvents();
+    void handleEvents(); //TODO: ver qué debería devolver (porque puede cambiar de escena/terminar juego)
 
     ~GameServer();
 

@@ -102,3 +102,15 @@ void GameServer::restartCharacters() {
 bool GameServer::isPlaying() const {
     return this->playing && !this->stage->isTimeOver();
 }
+
+std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
+    return imagePaths;
+}
+
+std::vector<GameObject *> GameServer::getGameObjects() {
+    return gameObjects;
+}
+
+std::map<std::string, Player *> GameServer::getPlayers() {
+    return players;
+}

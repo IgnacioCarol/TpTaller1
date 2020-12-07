@@ -20,7 +20,7 @@ add_executable(TpTaller1
         src/Game.cpp src/Game.h
         src/GameMap.cpp src/GameMap.h test/gamemap_test.cpp
         src/TextureManager.cpp src/TextureManager.h
-        src/Server/Camera.cpp src/Server/Camera.h
+        src/Camera.cpp src/Camera.h
         src/BackgroundStages/BackgroundStage.cpp src/BackgroundStages/BackgroundStage.h
         src/BackgroundStages/FirstStage.cpp src/BackgroundStages/FirstStage.h
         src/BackgroundStages/SecondStage.cpp src/BackgroundStages/SecondStage.h
