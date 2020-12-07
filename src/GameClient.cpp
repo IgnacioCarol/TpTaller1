@@ -23,7 +23,8 @@ GameClient *GameClient::Instance() {
 }
 
 //esto se hace antes de entrar al loop del run
-bool GameClient::init(nlohmann::json message) { //aca el cliente lo que hace es llamar al init y le pasa lo que recibio el cliente
+bool GameClient::init() { //aca el cliente lo que hace es llamar al init y le pasa lo que recibio el cliente
+    std::map<std::string, std::vector<std::string>> message;
     this -> textureManager = TextureManager::Instance();
     int windowWidth = 800;  //TODO por ahora hardcodeado despues sacarlo del json
     int windowHeight = 600;
@@ -33,7 +34,7 @@ bool GameClient::init(nlohmann::json message) { //aca el cliente lo que hace es 
         logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs
         return false;
     }
-    if(!this -> createGameObjects(message)){ //aca se crean todos los gameObjects y se los pone en el diccionario
+    if(!this -> createGameObjects()){ //aca se crean todos los gameObjects y se los pone en el diccionario
         logger -> error("Cannot create the objects in the client");
         return false;
     }
@@ -84,9 +85,14 @@ void GameClient::render() {
     }
 }
 
-void GameClient::update(nlohmann::json message) { //esto se hace dentro del loop del run
-    //Recibo por parametro la info para updatear las posiciones de todas las cosas
-    //faltan hacer los sets para todos los objetos, solo voy a recibir los que cambian de posicion (creo)
+void GameClient::update() { //esto se hace dentro del loop del run
+    //Aca solo recibo las cosas que cambian de posicion
+    //si no recibo nada de la tortuga 23 asumo que se movio normalmente
+    /* Cosas que hay que updatear:
+     * Todos los objetos de los diccionarios
+     * camera
+     * textos ?? */
+
 
 }
 
@@ -94,80 +100,11 @@ GameClient::~GameClient() {
 
 }
 
-bool GameClient::createGameObjects(nlohmann::json message) {
-    Enemy* tmpEnemy;
-    Player* tmpPlayer;
-    GameObject * tmp;
-
-    if (message.contains("enemyTurtle")){
-        for(auto element: message["enemyTurtle"].get<std::map<std::string, std::vector<std::string>>>()){
-            tmpEnemy = new EnemyTurtle();
-
-            tmpEnemy->init(std::stoi(element.second[0]), std::stoi(element.second[1]),
-                           element.second[2], camera ->getCamera(),
-                           new EnemyMovement(0, std::stoi(element.second[3])));
-
-            gameObjectsMap[element.first] = tmpEnemy;
-        }
-    }
-
-    if (message.contains("enemyMushroom")){
-        for(auto element: message["enemyMushroom"].get<std::map<std::string, std::vector<std::string>>>()){
-            tmpEnemy = new EnemyMushroom();
-
-            tmpEnemy->init(std::stoi(element.second[0]), std::stoi(element.second[1]),
-                           element.second[2], camera ->getCamera(),
-                           new EnemyMovement(0, std::stoi(element.second[3])));
-
-            gameObjectsMap[element.first] = tmpEnemy;
-        }
-    }
-
-    if (message.contains("players")){
-        for(auto element: message["players"].get<std::map<std::string, std::vector<std::string>>>()){
-            tmpPlayer = new Player(camera -> getCamera());
-
-            tmpPlayer->init(std::stoi(element.second[0]), std::stoi(element.second[1]),
-                           element.second[2], camera ->getCamera(), std::stoi(element.second[3]));
-
-            playersMap[element.first] = tmpPlayer;
-        }
-    }
-
-    if (message.contains("platformSurprise")){
-        for(auto element: message["platformSurprise"].get<std::map<std::string, std::vector<std::string>>>()){
-            tmp = new PlatformSurprise();
-
-            tmp->init(std::stoi(element.second[0]), std::stoi(element.second[1]), element.second[2]);
-
-            gameObjectsMap[element.first] = tmp;
-        }
-    }
-
-    if (message.contains("normalPlatform")){
-        for(auto element: message["normalPlatform"].get<std::map<std::string, std::vector<std::string>>>()){
-            tmp = new PlatformNormal();
-
-            tmp->init(std::stoi(element.second[0]), std::stoi(element.second[1]), element.second[2]);
-
-            gameObjectsMap[element.first] = tmp;
-        }
-    }
-
-    if (message.contains("Coins")){
-        for(auto element: message["Coins"].get<std::map<std::string, std::vector<std::string>>>()){
-            tmp = new Coin();
-
-            tmp->init(std::stoi(element.second[0]), std::stoi(element.second[1]), element.second[2]);
-
-            gameObjectsMap[element.first] = tmp;
-        }
-    }
+bool GameClient::createGameObjects() {
 
 }
 
-bool GameClient::loadImages(nlohmann::json message) {//aca ya se cargaron los ids y toda la bola, por id me refiero a mario
-    std::map<std::string, std::vector<std::string>> imagePaths = message["paths"].get<std::map<std::string, std::vector<std::string>>>();
+bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imagePaths) {
     for (std::pair<std::string, std::vector<std::string>> element : imagePaths){
         textureManager -> addPath(element.first, element.second[0], element.second[1]);
     }

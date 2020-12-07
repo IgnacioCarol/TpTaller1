@@ -16,18 +16,21 @@
 
 class GameClient {
 public:
-    static GameClient* Instance(); //no se si hace falta que sea singleton
-    bool init(nlohmann::json message); //se le pasa por primera vez todos los ids y esas cosas asi crea los objetos
+    static GameClient* Instance();
+    bool init(); //
     ~GameClient();
-    void render(); //aca haremos el draw
-    void update(nlohmann::json message); //que se encargue de recibir el json y updatear a todos los objetos
+    void render(); //para hacer el draw, no recibe nada
+    void update(); //Recibe las actualizaciones de los objetos
+    bool createGameObjects(); //recibe la lista del init de game objects
+    bool loadImages(std::map<std::string, std::vector<std::string>> imagePaths);
 
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
     static GameClient* instance; //Here will be the instance stored.
-    bool createGameObjects(nlohmann::json message);
-    bool loadImages(nlohmann::json message);
+    /*void createEnemies(nlohmann::json message, std::string enemyType);
+    void createPlayers(nlohmann::json message);
+    void createStaticObjects(nlohmann::json message, std::string objectType);*/
 
 
     SDL_Window* window;
