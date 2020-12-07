@@ -125,6 +125,8 @@ std::map<std::string, Player*>  Factory::createPlayersFromConfig() {
 
         }
     }
+
+    return players;
 }
 
 Factory::~Factory() = default;

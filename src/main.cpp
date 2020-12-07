@@ -95,9 +95,8 @@ int main(int argc, char * argv[]) {
     ss << "xmlPath: " << xmlPath << " mode: " << mode << " ipAddr: " << ipAddr << " port: " << port;
     Logger::getInstance()->debug(ss.str());
 
-    Config::getInstance()->load(xmlPath);
-
     if (mode == SERVER) {
+        Config::getInstance()->load(xmlPath);
         Logger::getInstance()->info("Initializing in server mode");
         Server * server = Server::getInstance();
         try {

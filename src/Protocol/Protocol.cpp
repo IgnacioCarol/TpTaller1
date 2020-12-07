@@ -4,6 +4,8 @@ std::string Protocol::protocolToString(PROTOCOL_COMMAND protocol) {
     switch (protocol) {
         case LOGIN_CMD:
             return std::string("login");
+        case GAME_INITIALIZE_CMD:
+            return std::string("game_initialize");
         case GAME_VIEW_CMD:
             return std::string("game_view");
         default:

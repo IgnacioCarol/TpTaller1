@@ -12,8 +12,8 @@
 #include "../Game.h"
 #include "ClientMsg.h"
 #include "ClientException.h"
-#include "../Utils/Protocol.h"
-#include "../Utils/MessageValidator.h"
+#include "../Protocol/Protocol.h"
+#include "../Protocol/MessageValidator.h"
 
 using json = nlohmann::json;
 

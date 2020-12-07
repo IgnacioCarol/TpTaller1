@@ -10,9 +10,9 @@
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
-#include "../Utils/Protocol.h"
+#include "../Protocol/Protocol.h"
 #include "../config/Config.h"
-#include "../Utils/MessageValidator.h"
+#include "../Protocol/MessageValidator.h"
 #include "ServerMsg.h"
 
 class Server {

@@ -33,8 +33,6 @@ void GameServer::initializeAllElementsOfGameServer() {
 }
 
 bool GameServer::init(const char *levelName, std::string xmlPath) {
-    config->load(xmlPath);
-
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     initializeAllElementsOfGameServer();

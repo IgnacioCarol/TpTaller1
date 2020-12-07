@@ -19,6 +19,7 @@ using json = nlohmann::json;
 
 typedef enum {
     LOGIN_CMD,
+    GAME_INITIALIZE_CMD,
     GAME_VIEW_CMD
 } PROTOCOL_COMMAND;
 
