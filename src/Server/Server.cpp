@@ -65,31 +65,6 @@ void Server::initSocket(const char*ip, const char *port) {
     }
 }
 
-//TODO: Consultar con DaniB si se puede borrar
-/*
-void Server::acceptClients() {
-     int retry = 1;
-
-    for (int i = 0; i < clientNo && retry <= MAX_ACCEPT_RETRIES; i++, retry++) {
-        try {
-            auto * playerClient = new PlayerClient(_socket->accept(), &this->commandMutex, &this->commands);
-            playerClient->id = i;
-            addClient(playerClient);
-            pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) playerClient);
-            pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
-            Logger::getInstance()->info(MSG_CLIENT_NUMBER_SERVER + std::to_string(i) + MSG_ACCEPTED_SERVER);
-        } catch (std::exception &ex) {
-            Logger::getInstance()->error(MSG_CLIENT_NOT_ACCEPTED + std::to_string(i));
-            i--;
-        }
-    }
-
-    if (retry == MAX_ACCEPT_RETRIES && clients.size() < clientNo) {
-        throw ServerException(MSG_ERROR_ACCEPT_CLIENTS);
-    }
-}
-*/
-
 void *Server::handleIncomingConnections(void *arg) {
     Server * server = (Server *)arg;
     int id = 0;
@@ -293,7 +268,8 @@ bool Server::run() {
     Logger::getInstance()->info(ss.str());
 
     initThreads();
-
+    json message = {{"startGame", true}};
+    broadcast(message);
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
         msg = this->getNewCommandMsg();
@@ -302,10 +278,6 @@ bool Server::run() {
             //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
         //ToDo change game state with msg
-
-//        std::stringstream log;
-//        log << "[main]" << clients.front()->isConnected();
-//        Logger::getInstance()->debug(log.str());
 
         if (!msg.is_structured()) {
             continue;
@@ -340,9 +312,6 @@ bool Server::someoneIsConnected() {
     pthread_mutex_lock(&this->clientsMutex);
     for(auto & client : clients) {
         bool status = client->isConnected();
-//        std::stringstream ss;
-//        ss << "[user:" << client->name << "] status: " << (status ? "connected" : "disconnected");
-//        Logger::getInstance()->debug(ss.str());
         if(!status) {
             pthread_mutex_unlock(&this->clientsMutex);
             return false;
@@ -480,5 +449,4 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
 
     return true;
 }
-
 

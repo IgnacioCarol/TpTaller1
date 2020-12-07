@@ -185,38 +185,34 @@ Login::~Login() {
 
 	TTF_Quit();
 	IMG_Quit();
-	SDL_Quit();
+//	SDL_Quit();
 }
 
 void Login::showError(std::string error) {
     this->errorLoginToShow = error;
 }
 
-void Login::showWaitingRoom() {
-    SDL_Event e;
-    isWaitingRoom = true;
 
-    while(isWaitingRoom) {
-        while(SDL_PollEvent(&e) != 0) {
-            if (e.type  == SDL_QUIT ) {
-                return;
-            }
+void Login::showWaitingRoom(SDL_Event e) {
+    while(SDL_PollEvent(&e) != 0) {
+        if (e.type  == SDL_QUIT ) {
+            return;
         }
-
-        SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
-        SDL_RenderClear( renderer );
-
-        SDL_RenderCopy(renderer, waitingRoomTexture, NULL, NULL);
-
-        SDL_Rect dest;
-
-        SDL_Color foreground = { 255, 255, 255 };
-
-        dest = showSection(dest, foreground, WAITING_ROOM_MESSAGE, 280, 100);
-
-        // Update window
-        SDL_RenderPresent( renderer );
-
-        SDL_Delay(10);
     }
+
+    SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+    SDL_RenderClear( renderer );
+
+    SDL_RenderCopy(renderer, waitingRoomTexture, NULL, NULL);
+
+    SDL_Rect dest;
+
+    SDL_Color foreground = { 255, 255, 255 };
+
+    dest = showSection(dest, foreground, WAITING_ROOM_MESSAGE, 280, 100);
+
+    // Update window
+    SDL_RenderPresent( renderer );
+
+    SDL_Delay(10);
 }

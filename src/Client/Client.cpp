@@ -7,11 +7,16 @@ Client::Client(std::string IP, std::string port) {
     _port = port.c_str();
     _socket = new Socket();
     _login = new Login();
+    pthread_mutex_init(&this->eventsMutex, nullptr);
+    pthread_mutex_init(&this->commandsOutMutex, nullptr);
+
 }
 
 Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
+    pthread_mutex_destroy(&this->eventsMutex);
+    pthread_mutex_destroy(&this->commandsOutMutex);
 }
 
 void Client::init() {
@@ -29,11 +34,28 @@ void Client::init() {
     }
 }
 
+void Client::initThreads() {
+    pthread_create(&incomeThread, nullptr, Client::handleServerEvents, (void *) this);
+    pthread_create(&outcomeThread, nullptr, Client::broadcastToServer, (void *) this);
+}
+
 void Client::login() {
     Logger::getInstance()->debug("Client start playing");
     try {
         while(!this->authenticate()) {} //TODO: Mejorar este while
-        _login->showWaitingRoom();
+        initThreads();
+        SDL_Event e;
+        _login->isWaitingRoom = true;
+        while(_login->isWaitingRoom) {
+            while (!this->eventsQueueIsEmpty()) {
+                json receivedMessage = this->getMessageFromQueue();
+                std::stringstream ss;
+                ss <<"[Client] Message obtained at waiting stage:" << receivedMessage.dump();
+                Logger::getInstance()->debug(ss.str());
+                _login->isWaitingRoom = !receivedMessage["startGame"];
+            }
+            _login->showWaitingRoom(e);
+        }
         delete _login;
     } catch(std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
@@ -70,7 +92,7 @@ bool Client::authenticate() {
     }
 
     if (authJson[MSG_STATUS_PROTOCOL] == 1) {
-        std::string error = authJson[MSG_ERROR_PROTOCOL].get<std::string>();
+        error = authJson[MSG_ERROR_PROTOCOL].get<std::string>();
         Logger::getInstance()->error("[Client] unexpected response from server login: " + error);
         _login->showError(error);
         return false;
@@ -109,6 +131,174 @@ int Client::receive(json *msg) {
     return _socket->receive(msg);
 }
 
+void * Client::handleServerEvents(void * arg) {
+    auto * client = (Client *)arg;
+    json msg;
+    std::stringstream ss;
+    while (client != nullptr &&
+           client->isConnected() &&
+           (msg = receive(client)) != nullptr) {
+        ss.str("");
+        ss << "[thread:Client]"
+           << "msg: " << msg.dump();
+        Logger::getInstance()->debug(ss.str());
+        client->pushEvent(msg);
+    }
 
+    return nullptr;
+}
 
+json Client::receive(Client *client) {
+    Logger::getInstance()->debug("Receiving message from server.");
+    json msg;
+    int msg_received;
+    std::stringstream ss;
+    int tolerance = 0;
 
+    while (client->isConnected()) {
+        msg_received = client->receive(&msg);
+        if (msg_received < 0) {
+            if (tolerance > 3) {
+                ss.str("");
+                ss << "Fail tolerance exceeded! [thread:listener]";
+                Logger::getInstance()->error(ss.str());
+                throw SocketException(ss.str());
+            }
+            tolerance++;
+            continue;
+        }
+        if (!msg_received) {
+            ss.str("");
+            ss << "Connection has been lost with server [thread:listener]";
+            Logger::getInstance()->error(ss.str());
+            throw SocketException(ss.str());
+            //continue;
+        }
+
+        return msg;
+    }
+
+    return nullptr;
+}
+
+json Client::getNewCommandMsg() {
+    pthread_mutex_lock(&this->commandsOutMutex);
+    json msg;
+    if (this->commandsOut.empty()) {
+        pthread_mutex_unlock(&this->commandsOutMutex);
+        return json();
+    }
+
+    msg = this->commandsOut.front();
+    pthread_mutex_unlock(&this->commandsOutMutex);
+    return msg;
+}
+
+void Client::popCommandsOut() {
+    pthread_mutex_lock(&this->commandsOutMutex);
+    this->commandsOut.pop();
+    pthread_mutex_unlock(&this->commandsOutMutex);
+}
+
+void * Client::broadcastToServer(void *arg) {
+    auto * client = (Client *) arg;
+    int tolerance = 0;
+    json msg;
+    while (client != nullptr && client->isConnected()) {
+        msg = client->getNewCommandMsg();
+        if (msg.empty()) {
+            continue;
+        }
+
+        std::stringstream ss;
+        ss << "[thread:broadcast]"
+           << "msg: " << msg.dump();
+        Logger::getInstance()->debug(ss.str());
+
+        if(client->send(&msg)) {
+            Logger::getInstance()->error("[Client] Error broadcasting msg to server");
+            if (tolerance > 3) {
+                ss.str("");
+                ss << "Fail tolerance exceeded! [thread:broadcastClient]";
+                Logger::getInstance()->error(ss.str());
+                throw SocketException(ss.str());
+            }
+
+            tolerance++;
+            continue;
+        }
+        client->popCommandsOut();
+    }
+
+    return nullptr;
+}
+
+void Client::run() {
+    while (true || Game::Instance()->isPlaying()) { //Fixme condition is true because game->isplaying
+        if (!this->eventsQueueIsEmpty()) {
+            json receivedMessage = this->getMessageFromQueue();
+            updateScreen(receivedMessage);
+        }
+        this->render();
+        this->handleUserEvents();
+    }
+    pthread_join(incomeThread, nullptr);
+    pthread_join(outcomeThread, nullptr);
+}
+
+bool Client::eventsQueueIsEmpty() {
+    bool result;
+    pthread_mutex_lock(&this->eventsMutex);
+    result = this->events.empty();
+    pthread_mutex_unlock(&this->eventsMutex);
+    return result;
+}
+
+json Client::getMessageFromQueue() {
+    pthread_mutex_lock(&this->eventsMutex);
+    json msg = events.front();
+    events.pop();
+    pthread_mutex_unlock(&this->eventsMutex);
+    return msg;
+}
+
+void Client::pushEvent(json msg) {
+    pthread_mutex_lock(&this->eventsMutex);
+    this->events.push(msg);
+    pthread_mutex_unlock(&this->eventsMutex);
+}
+
+void Client::pushCommand(json msg) {
+    pthread_mutex_lock(&this->commandsOutMutex);
+    this->commandsOut.push(msg);
+    pthread_mutex_unlock(&this->commandsOutMutex);
+}
+
+void Client::handleUserEvents() {
+    json msg;
+    SDL_Event e;
+    bool up, down, right, left;
+    up = down = right = left = false;
+    while( SDL_PollEvent( &e ) != 0 ) {
+        up = up || e.key.keysym.sym == SDLK_UP;
+        left = left || e.key.keysym.sym == SDLK_LEFT;
+        right = right || e.key.keysym.sym == SDLK_RIGHT;
+        down = down || e.key.keysym.sym == SDLK_DOWN;
+    }
+    if (!(up || left || down || right)) {
+        return;
+    }
+    msg["up"] = up;
+    msg["down"] = down;
+    msg["left"] = left;
+    msg["right"] = right;
+    pushCommand(msg);
+}
+
+void Client::updateScreen(json json) {
+
+}
+
+void Client::render() {
+
+}

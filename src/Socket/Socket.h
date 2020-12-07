@@ -13,11 +13,16 @@
 #include "SocketMsg.h"
 #include "json.hpp"
 
+
+#ifdef __APPLE__
+static const int FLAG_DATA_TRANSFER = 0;
+#else
+static const int FLAG_DATA_TRANSFER = MSG_NOSIGNAL;
+#endif
 enum ConnectionType {
     SERVER = 0,
     CLIENT = 1
 };
-
 // Struct de test para probar comunicacion de sockets
 typedef struct {
     int val1;

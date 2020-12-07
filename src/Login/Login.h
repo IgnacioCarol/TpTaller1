@@ -27,9 +27,8 @@ public:
     bool init();
     Authentication* getAuthentication();
     void showError(std::string error);
-    void showWaitingRoom();
+    void showWaitingRoom(SDL_Event e);
     bool isWaitingRoom = false;
-
 private:
     static void selectInput();
     SDL_Rect &showSection(SDL_Rect &dest, const SDL_Color &foreground, const string &stringToWrite, int yPosition, int xPosition);
