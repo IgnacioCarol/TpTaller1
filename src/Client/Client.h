@@ -4,6 +4,7 @@
 #include <string>
 #include <exception>
 #include <pthread.h>
+#include <queue>
 #include "json.hpp"
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
@@ -13,7 +14,6 @@
 #include "ClientException.h"
 #include "../Utils/Protocol.h"
 #include "../Utils/MessageValidator.h"
-#include "ServerClient.h"
 
 using json = nlohmann::json;
 
@@ -29,7 +29,8 @@ public:
     void release();
     void doLogin();
 
-    void play();
+
+    void run();
 
 private:
     const char * _IP;
@@ -39,17 +40,30 @@ private:
     Login* _login;
 
     bool authenticate();
-    pthread_t        * incomeThreads;
-    pthread_t        * outcomeThreads;
-    pthread_mutex_t commandMutex;
-    std::queue<json> commands;
-    static void *handleServerClient(void *arg);
+    pthread_t         incomeThreads;
+    pthread_t         outcomeThreads;
+    pthread_mutex_t eventsMutex;
+    std::queue<json> events;
+    static void *handleServerEvents(void *arg);
+    static json receive(Client *client);
 
-    static json receive(ServerClient *playerClient);
+    static void *handleAndBroadcast(void *arg);
 
-    static void *broadcastToServerClient(void *arg);
+    void initThreads();
 
-    void listenServer();
+    bool eventsQueueIsEmpty();
+
+    json getMessageFromQueue();
+
+    void pushCommand(json json);
+
+    static json handleUserEvents();
+
+    void popOutcome();
+
+    void updateScreen(json json);
+
+    void render();
 };
 
 

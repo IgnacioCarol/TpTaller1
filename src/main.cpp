@@ -117,11 +117,7 @@ int main(int argc, char * argv[]) {
             client->login();
             //TODO: Al estar todos los clientes conectados (hay que procesar el aviso del server),
             // se debe salir del waiting room de los clientes
-
-            json msg;
-            if (client->receive(&msg) && msg["startGame"]) {
-                client->play();
-            }
+            client->run();
             delete client;
             return 0;
         } catch (std::exception &ex) {

@@ -1,6 +1,4 @@
-#include <src/Server/ServerMsg.h>
 #include "Client.h"
-#include "ServerClient.h"
 
 using json = nlohmann::json;
 
@@ -9,11 +7,13 @@ Client::Client(std::string IP, std::string port) {
     _port = port.c_str();
     _socket = new Socket();
     _login = new Login();
+    pthread_mutex_init(&this->eventsMutex, nullptr);
 }
 
 Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
+    pthread_mutex_destroy(&this->eventsMutex);
 }
 
 void Client::init() {
@@ -25,27 +25,15 @@ void Client::init() {
             Logger::getInstance()->error(MSG_ERROR_INIT_LOGIN);
             throw ClientException(MSG_ERROR_INIT_LOGIN);
         }
-        /*this->incomeThreads = (pthread_t *) malloc(sizeof(pthread_t));
-        if (!this->incomeThreads) {
-            Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-            throw SocketException(MSG_NO_MEMORY_THREADS);
-        }
-
-        this->outcomeThreads = (pthread_t *) malloc(sizeof(pthread_t));
-        if (!this->outcomeThreads) {
-            Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-            throw SocketException(MSG_NO_MEMORY_THREADS);
-        }*/
     } catch (std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_NOT_INITIALIZED);
         throw ex;
     }
 }
 
-void Client::listenServer() {
-    ServerClient* server = new ServerClient(this->_socket->accept(), &this->commandMutex, &this->commands);
-    pthread_create(incomeThreads, nullptr, Client::handleServerClient, (void *) server);
-    pthread_create(outcomeThreads, nullptr, Client::broadcastToServerClient, (void *) server);
+void Client::initThreads() {
+    pthread_create(&incomeThreads, nullptr, Client::handleServerEvents, (void *) this);
+    pthread_create(&outcomeThreads, nullptr, Client::handleAndBroadcast, (void *) this);
 }
 
 void Client::login() {
@@ -89,7 +77,7 @@ bool Client::authenticate() {
     }
 
     if (authJson[MSG_STATUS_PROTOCOL] == 1) {
-        std::string error = authJson[MSG_ERROR_PROTOCOL].get<std::string>();
+        error = authJson[MSG_ERROR_PROTOCOL].get<std::string>();
         Logger::getInstance()->error("[Client] unexpected response from server login: " + error);
         _login->showError(error);
         return false;
@@ -128,46 +116,35 @@ int Client::receive(json *msg) {
     return _socket->receive(msg);
 }
 
-void Client::play() {
-
-}
-
-void * Client::handleServerClient(void * arg) {
-    auto * serverClient = (ServerClient *)arg;
+void * Client::handleServerEvents(void * arg) {
+    auto * client = (Client *)arg;
     json msg;
     std::stringstream ss;
-    int tolerance = 0;
-
-    while (serverClient != nullptr &&
-           serverClient->isConnected() &&
-           (msg = receive(serverClient)) != nullptr) {
+    while (client != nullptr &&
+           client->isConnected() &&
+           (msg = receive(client)) != nullptr) {
         ss.str("");
         ss << "[thread:server]"
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
 
-        serverClient->pushCommand(msg);
+        client->pushCommand(msg);
     }
 
     return nullptr;
 }
 
-json Client::receive(ServerClient *serverClient) {
+json Client::receive(Client *client) {
     Logger::getInstance()->debug("Receiving message from server.");
     json msg;
     int msg_received;
     std::stringstream ss;
     int tolerance = 0;
 
-    while (serverClient->isConnected()) {
-        msg_received = serverClient->receive(&msg);
+    while (client->isConnected()) {
+        msg_received = client->receive(&msg);
         if (msg_received < 0) {
-            if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
-                //ToDo suponemos que el socket se cerro, realizar tratamiento
-                // 1. Marcar connected como false
-                // 2. Mover player client a listado de conexiones muertas
-                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-
+            if (tolerance > 3) {
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:listener]";
                 Logger::getInstance()->error(ss.str());
@@ -177,10 +154,6 @@ json Client::receive(ServerClient *serverClient) {
             continue;
         }
         if (!msg_received) {
-            //ToDo suponemos que el socket se cerro, realizar tratamiento
-            // 1. Marcar connected como false
-            // 2. Mover player client a listado de conexiones muertas
-            // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
             ss.str("");
             ss << "Connection has been lost with server [thread:listener]";
             Logger::getInstance()->error(ss.str());
@@ -194,13 +167,12 @@ json Client::receive(ServerClient *serverClient) {
     return nullptr;
 }
 
-void * Client::broadcastToServerClient(void *arg) {
-    ServerClient * serverClient = (ServerClient *)arg;
+void * Client::handleAndBroadcast(void *arg) {
+    auto * client = (Client *) arg;
     int tolerance = 0;
     json msg;
-
-    while (serverClient != nullptr && serverClient->isConnected()) {
-        msg = serverClient->getNewOutcomeMsg();
+    while (client != nullptr && client->isConnected()) {
+        msg = handleUserEvents();
         if (msg.empty()) {
             continue;
         }
@@ -210,8 +182,8 @@ void * Client::broadcastToServerClient(void *arg) {
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
 
-        if(!serverClient->send(&msg)) {
-            Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+        if(client->send(&msg)) {
+            Logger::getInstance()->error("[Client] Error broadcasting msg to client");
             if (tolerance > 3) {
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:broadcast]";
@@ -223,8 +195,75 @@ void * Client::broadcastToServerClient(void *arg) {
             continue;
         }
 
-        serverClient->popOutcome();
     }
 
     return nullptr;
+}
+
+void Client::run() {
+    initThreads();
+    while (true || Game::Instance()->isPlaying()) { //Fixme condition is true because game->isplaying
+        while (!this->eventsQueueIsEmpty()) {
+            json receivedMessage = this->getMessageFromQueue();
+            updateScreen(receivedMessage);
+        }
+        this->render();
+    }
+}
+
+bool Client::eventsQueueIsEmpty() {
+    bool result;
+    pthread_mutex_lock(&this->eventsMutex);
+    result = this->events.empty();
+    pthread_mutex_unlock(&this->eventsMutex);
+    return result;
+}
+
+json Client::getMessageFromQueue() {
+    pthread_mutex_lock(&this->eventsMutex);
+    json msg = events.front();
+    events.pop();
+    pthread_mutex_unlock(&this->eventsMutex);
+    return msg;
+}
+
+void Client::pushCommand(json msg) {
+    pthread_mutex_lock(&this->eventsMutex);
+    this->events.push(msg);
+    pthread_mutex_unlock(&this->eventsMutex);
+}
+
+json Client::handleUserEvents() {
+    json msg;
+    SDL_Event e;
+    bool up, down, right, left;
+    up = down = right = left = false;
+    while( SDL_PollEvent( &e ) != 0 ) {
+        up = up || e.key.keysym.sym == SDLK_UP;
+        left = left || e.key.keysym.sym == SDLK_LEFT;
+        right = right || e.key.keysym.sym == SDLK_RIGHT;
+        down = down || e.key.keysym.sym == SDLK_DOWN;
+    }
+    if (!(up || left || down || right)) {
+        return json();
+    }
+    msg["up"] = up;
+    msg["down"] = down;
+    msg["left"] = left;
+    msg["right"] = right;
+    return msg;
+}
+
+void Client::popOutcome() {
+    pthread_mutex_lock(&this->eventsMutex);
+    this->events.pop();
+    pthread_mutex_unlock(&this->eventsMutex);
+}
+
+void Client::updateScreen(json json) {
+
+}
+
+void Client::render() {
+
 }
