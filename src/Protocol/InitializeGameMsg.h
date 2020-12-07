@@ -3,32 +3,41 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
+
+enum ObjectType {
+    COIN,
+    MUSHROOM,
+    TURTLE,
+    NORMAL_PLATFORM,
+    SURPRISE_PLATFORM,
+    PLAYER
+};
 
 struct CameraInit {
     int xPos;
-    int yPos;
+    int yPos; // Puede que no haga falta
     int width;
     int height;
 };
 
 struct StageInit {
-    std::string path;
     int level;
     int timer;
-    int width;
 };
 
 struct GameObjectInit {
     int id;
-    std::string type;
-    std::string path;
-    std::string defaultPath;
+    ObjectType type;
+    std::string imageId;
     int xPos;
     int yPos;
+    int frameAmount;
 };
 
 struct PlayerInit : GameObjectInit {
     std::string username;
+    std::string idImage;
 };
 
 struct GameObjectsInit {
@@ -36,6 +45,7 @@ struct GameObjectsInit {
 };
 
 struct InitializeGameMsg {
+    std::map<std::string, std::vector<std::string>> paths;
     CameraInit camera;
     StageInit stage;
     GameObjectsInit gameObjects;
