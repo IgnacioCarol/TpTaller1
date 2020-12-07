@@ -11,17 +11,30 @@
 class GameServer {
 public:
     static GameServer* Instance();
-    ~GameServer();
     bool init(const char *levelName, std::string xmlPath);
+
+    //Getters
     SDL_Rect *  getCamera();
-    void addPath(std::string ID, std::string imagePath, std::string defaultImagePath);
     std::vector<std::string>  getPlayerPaths();
+
+    //Methods to control images/level flow
+    void addPath(std::string ID, std::string imagePath, std::string defaultImagePath);
+    void nextStage();
+    void restartCharacters();
+
+    //Methods to control game flow
+    bool isPlaying() const;
+    void cleanGameObjects();
+    void handleEvents();
+
+    ~GameServer();
 
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
     void initializeGameObjects(int level);
-    void createGameObjects();
+    void initializeAllElementsOfGameServer();
+
 
     //Utils
     Logger* logger = Logger::getInstance();
@@ -36,7 +49,7 @@ private:
                                              PLAYER_2_IMG_PATH,
                                              PLAYER_3_IMG_PATH};
     std::map<std::string, std::vector<std::string>> imagePaths;
-
+    BackgroundStage* stage;
 
     //Elements of the game
     std::vector <GameObject*> gameObjects;

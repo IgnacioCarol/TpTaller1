@@ -21,7 +21,7 @@ Factory * Factory::getInstance() {
 
 Factory::Factory() = default;
 
-std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig, ConnectionType mode) {
+std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
     std::vector<GameObject*> actors;
     GameObject * tmp;
     Enemy* tmpEnemy;
@@ -52,8 +52,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             }
 
             if (tmp != nullptr){
-                if(mode == SERVER) GameServer::Instance() ->addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
-                else TextureManager::Instance() -> addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
+                GameServer::Instance() ->addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
                 tmp->init(platform.coordX + i * platformHeight, platform.coordY, textureID);
 
                 actors.push_back(tmp);
@@ -66,8 +65,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         for(long i = 0; i < coin.quantity; i++) {
             tmp = new Coin();
             if (tmp != nullptr){ //TODO we can initialice the Y position randomly too
-                if(mode == SERVER) GameServer::Instance() ->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
-                else  TextureManager::Instance()->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
+                GameServer::Instance() ->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
 
                 tmp->init(0, coin.coordY, COIN_ID);
 
@@ -83,15 +81,9 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
-                    if(mode == SERVER){
-                        GameServer::Instance() ->addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
-                        tmpEnemy->init(900, 435, KOOPA_GREEN_ID, GameServer::Instance()->getCamera(),
+                    GameServer::Instance() ->addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
+                    tmpEnemy->init(900, 435, KOOPA_GREEN_ID, GameServer::Instance()->getCamera(),
                                        new EnemyMovement(0, 3));
-                    }
-                    else{
-                        //TODO: VER CON LICHA COMO MANEJAR CREACION DE GAMEOBJECT -> CLIENT DEBERIA TENER SU PROPIA CAMARA CON ESTADO ACTUAL SOLAMENTE
-                        TextureManager::Instance() -> addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
-                    }
 
                     Logger::getInstance()->debug("Turtle enemy created correctly");
                 }
@@ -100,15 +92,8 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             } else {
                 tmpEnemy = new EnemyMushroom();
                 if (tmpEnemy != nullptr){
-                    if(mode == SERVER){
-                        GameServer::Instance() ->addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
-                        tmpEnemy->init(900, 425, GOOMBA_ID, Game::Instance()->getCamera(), new EnemyMovement(0, 5));
-                    }
-                    else{
-                        //TODO: VER CON LICHA COMO MANEJAR CREACION DE GAMEOBJECT -> CLIENT DEBERIA TENER SU PROPIA CAMARA CON ESTADO ACTUAL SOLAMENTE
-                        TextureManager::Instance() -> addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
-                    }
-
+                    GameServer::Instance() ->addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
+                    tmpEnemy->init(900, 425, GOOMBA_ID, Game::Instance()->getCamera(), new EnemyMovement(0, 5));
 
                     Logger::getInstance()->debug("Mushroom enemy created correctly");
                 }
@@ -125,26 +110,21 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     return actors;
 }
 
-std::map<std::string, Player*>  Factory::createPlayersFromConfig(ConnectionType mode) {
+std::map<std::string, Player*>  Factory::createPlayersFromConfig() {
     Config * config = Config::getInstance();
     Player * tmp;
     std::map<std::string, Player*>  players;
-    std::vector<std::string> imgPaths = GameServer::Instance()->getPlayerPaths(); //TODO ver esto con modo client
+    std::vector<std::string> imgPaths = GameServer::Instance()->getPlayerPaths();
 
     for(auto user : config->getPlayers().users) {
         for(long i = 0; i < config->getPlayers().amount; i++) {
             tmp = new Player(GameServer::Instance()->getCamera());
-            if (tmp != nullptr){
-                if(mode == SERVER) GameServer::Instance() ->addPath(user.username, imgPaths[i], DEFAULT_PLAYER_PATH);
-                else  TextureManager::Instance()->addPath(user.username, imgPaths[i], DEFAULT_PLAYER_PATH);
+            GameServer::Instance() ->addPath(user.username, imgPaths[i], DEFAULT_PLAYER_PATH);
+            players[user.username] = tmp;
+            Logger::getInstance()->debug("Player created correctly");
 
-                players[user.username] = tmp;
-                Logger::getInstance()->debug("Player created correctly");
-            }
-            else Logger::getInstance()->error("Error: couldn't create a Player");
         }
     }
 }
 
 Factory::~Factory() = default;
-

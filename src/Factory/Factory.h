@@ -18,6 +18,12 @@ static const std::string GOOMBA_ID = "goomba";
 static const std::string GOOMBA_DARK_ID = "goombaDark";
 static const std::string COIN_ID = "coinsSprites";
 
+//Players images paths
+static const std::string PLAYER_0_IMG_PATH = "Sprites/Players/mario.png";
+static const std::string PLAYER_1_IMG_PATH = "Sprites/Players/luigi.png";
+static const std::string PLAYER_2_IMG_PATH = "Sprites/Players/wario.png";
+static const std::string PLAYER_3_IMG_PATH = "Sprites/Players/waluigi.png";
+
 //Default images paths
 static const std::string DEFAULT_PLAYER_PATH = "Sprites/Default/defaultPlayer.png";
 static const std::string DEFAULT_TURTLE_PATH = "Sprites/Default/defaultKoopa.png";
@@ -26,17 +32,11 @@ static const std::string DEFAULT_PLATFORM_PATH = "Sprites/Default/defaultBlock.p
 static const std::string DEFAULT_COIN_PATH = "Sprites/Default/defaultCoins.png";
 
 
-//TODO refactor, donde ponemos esta definicion de types?
-enum ConnectionType {
-    SERVER = 0,
-    CLIENT = 1
-};
-
 class Factory {
 public:
     static Factory * getInstance();
-    std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig, ConnectionType mode);
-    std::map<std::string, Player*>  createPlayersFromConfig(ConnectionType mode);
+    std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig);
+    std::map<std::string, Player*>  createPlayersFromConfig();
     virtual ~Factory();
 
 private:

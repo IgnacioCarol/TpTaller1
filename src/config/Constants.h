@@ -20,11 +20,6 @@
 #define TEXT_DEFAULT_BACKGROUND_XPOS 30
 #define TEXT_DEFAULT_BACKGROUND_YPOS 10
 
-#define PLAYER_0_IMG_PATH "Sprites/Players/mario.png"
-#define PLAYER_1_IMG_PATH "Sprites/Players/luigi.png"
-#define PLAYER_2_IMG_PATH "Sprites/Players/wario.png"
-#define PLAYER_3_IMG_PATH "Sprites/Players/waluigi.png"
-
 #define WHITE_COLOR {255,255,255}
 
 #endif //TPTALLER1_CONSTANTS_H
