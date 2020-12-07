@@ -4,7 +4,7 @@ Camera::Camera(int x, int y, int width, int height) {
     camera = {x, y , width, height};
 }
 
-void Camera::render(int playerXPos, int borderLimit) {
+void Camera::update(int playerXPos, int borderLimit) {
     camera.x = ( playerXPos  + 200) - camera.w;
     lastValue = camera.x > lastValue ? camera.x : lastValue;
     if( camera.x < lastValue )
@@ -13,7 +13,7 @@ void Camera::render(int playerXPos, int borderLimit) {
     }
     if( camera.x > borderLimit - camera.w )
     {
-        Game::Instance() -> nextStage();
+        //TODO ver como manejar next stage
     }
 }
 

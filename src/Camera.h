@@ -1,8 +1,9 @@
-#include <iostream>
-#include <SDL2/SDL.h>
-#include "Game.h"
 #ifndef TPTALLER1_CAMERA_H
 #define TPTALLER1_CAMERA_H
+
+#include <iostream>
+#include <SDL2/SDL.h>
+// #include "Game.h"
 
 
 class Camera {
@@ -12,7 +13,7 @@ public:
     ~Camera() = default;
 
 
-    void render(int playerXPos, int borderLimit);
+    void update(int playerXPos, int borderLimit);
 
     int lastValue = 0;
 

@@ -2,6 +2,7 @@
 #define TPTALLER1_FACTORY_H
 
 #include <vector>
+#include "../gameobjects/Player.h"
 #include "../gameobjects/GameObject.h"
 #include "../config/Config.h"
 
@@ -17,17 +18,25 @@ static const std::string GOOMBA_ID = "goomba";
 static const std::string GOOMBA_DARK_ID = "goombaDark";
 static const std::string COIN_ID = "coinsSprites";
 
+//Players images paths
+static const std::string PLAYER_0_IMG_PATH = "Sprites/Players/mario.png";
+static const std::string PLAYER_1_IMG_PATH = "Sprites/Players/luigi.png";
+static const std::string PLAYER_2_IMG_PATH = "Sprites/Players/wario.png";
+static const std::string PLAYER_3_IMG_PATH = "Sprites/Players/waluigi.png";
+
 //Default images paths
-static const std::string DEFAULT_MARIO_PATH = "Sprites/Default/defaultPlayer.png";
+static const std::string DEFAULT_PLAYER_PATH = "Sprites/Default/defaultPlayer.png";
 static const std::string DEFAULT_TURTLE_PATH = "Sprites/Default/defaultKoopa.png";
 static const std::string DEFAULT_MUSHROOM_PATH = "Sprites/Default/defaultGoomba.png";
 static const std::string DEFAULT_PLATFORM_PATH = "Sprites/Default/defaultBlock.png";
 static const std::string DEFAULT_COIN_PATH = "Sprites/Default/defaultCoins.png";
 
+
 class Factory {
 public:
     static Factory * getInstance();
     std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig);
+    std::map<std::string, Player*>  createPlayersFromConfig();
     virtual ~Factory();
 
 private:
