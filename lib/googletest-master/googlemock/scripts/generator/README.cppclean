@@ -49,7 +49,7 @@ How to Run:
 
       /cppclean/run.sh functions.py file1.h file2.h ...
 
-  All the commands take multiple files on the command line.  Other programs
+  All the events take multiple files on the command line.  Other programs
   include: find_warnings, headers, methods, and types.  Some other programs
   are available, but used primarily for debugging.
 
