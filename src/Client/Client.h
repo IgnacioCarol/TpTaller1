@@ -49,7 +49,7 @@ private:
     static void *handleServerEvents(void *arg);
     static json receive(Client *client);
 
-    static void *handleAndBroadcast(void *arg);
+    static void *broadcastToServer(void *arg);
 
     void initThreads();
 

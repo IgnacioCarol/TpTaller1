@@ -36,7 +36,7 @@ void Client::init() {
 
 void Client::initThreads() {
     pthread_create(&incomeThread, nullptr, Client::handleServerEvents, (void *) this);
-    pthread_create(&outcomeThread, nullptr, Client::handleAndBroadcast, (void *) this);
+    pthread_create(&outcomeThread, nullptr, Client::broadcastToServer, (void *) this);
 }
 
 void Client::login() {
@@ -200,7 +200,7 @@ void Client::popCommandsOut() {
     pthread_mutex_unlock(&this->commandsOutMutex);
 }
 
-void * Client::handleAndBroadcast(void *arg) {
+void * Client::broadcastToServer(void *arg) {
     auto * client = (Client *) arg;
     int tolerance = 0;
     json msg;
@@ -235,7 +235,7 @@ void * Client::handleAndBroadcast(void *arg) {
 
 void Client::run() {
     while (true || Game::Instance()->isPlaying()) { //Fixme condition is true because game->isplaying
-        while (!this->eventsQueueIsEmpty()) {
+        if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
             updateScreen(receivedMessage);
         }
