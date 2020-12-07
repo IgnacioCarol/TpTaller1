@@ -40,8 +40,8 @@ private:
     Login* _login;
 
     bool authenticate();
-    pthread_t         incomeThreads;
-    pthread_t         outcomeThreads;
+    pthread_t         incomeThread;
+    pthread_t         outcomeThread;
     pthread_mutex_t eventsMutex;
     std::queue<json> events;
     static void *handleServerEvents(void *arg);

@@ -32,8 +32,8 @@ void Client::init() {
 }
 
 void Client::initThreads() {
-    pthread_create(&incomeThreads, nullptr, Client::handleServerEvents, (void *) this);
-    pthread_create(&outcomeThreads, nullptr, Client::handleAndBroadcast, (void *) this);
+    pthread_create(&incomeThread, nullptr, Client::handleServerEvents, (void *) this);
+    pthread_create(&outcomeThread, nullptr, Client::handleAndBroadcast, (void *) this);
 }
 
 void Client::login() {
