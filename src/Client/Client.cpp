@@ -40,7 +40,19 @@ void Client::login() {
     Logger::getInstance()->debug("Client start playing");
     try {
         while(!this->authenticate()) {} //TODO: Mejorar este while
-        _login->showWaitingRoom();
+        initThreads();
+        SDL_Event e;
+        _login->isWaitingRoom = true;
+        while(_login->isWaitingRoom) {
+            while (!this->eventsQueueIsEmpty()) {
+                json receivedMessage = this->getMessageFromQueue();
+                std::stringstream ss;
+                ss <<"[Client] Message obtained at waiting stage:" << receivedMessage.dump();
+                Logger::getInstance()->debug(ss.str());
+                _login->isWaitingRoom = !receivedMessage["startGame"];
+            }
+            _login->showWaitingRoom(e);
+        }
         delete _login;
     } catch(std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
@@ -127,7 +139,6 @@ void * Client::handleServerEvents(void * arg) {
         ss << "[thread:server]"
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
-
         client->pushCommand(msg);
     }
 
@@ -201,7 +212,6 @@ void * Client::handleAndBroadcast(void *arg) {
 }
 
 void Client::run() {
-    initThreads();
     while (true || Game::Instance()->isPlaying()) { //Fixme condition is true because game->isplaying
         while (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();

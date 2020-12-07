@@ -268,7 +268,8 @@ bool Server::run() {
     Logger::getInstance()->info(ss.str());
 
     initThreads();
-
+    json message = {{"startGame", true}};
+    broadcast(message);
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
         msg = this->getNewCommandMsg();
