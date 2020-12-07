@@ -8,12 +8,15 @@ Client::Client(std::string IP, std::string port) {
     _socket = new Socket();
     _login = new Login();
     pthread_mutex_init(&this->eventsMutex, nullptr);
+    pthread_mutex_init(&this->commandsOutMutex, nullptr);
+
 }
 
 Client::~Client() {
     Logger::getInstance()->info(MSG_DESTROY_CLIENT);
     delete _socket;
     pthread_mutex_destroy(&this->eventsMutex);
+    pthread_mutex_destroy(&this->commandsOutMutex);
 }
 
 void Client::init() {
@@ -136,10 +139,10 @@ void * Client::handleServerEvents(void * arg) {
            client->isConnected() &&
            (msg = receive(client)) != nullptr) {
         ss.str("");
-        ss << "[thread:server]"
+        ss << "[thread:Client]"
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
-        client->pushCommand(msg);
+        client->pushEvent(msg);
     }
 
     return nullptr;
@@ -178,12 +181,31 @@ json Client::receive(Client *client) {
     return nullptr;
 }
 
+json Client::getNewCommandMsg() {
+    pthread_mutex_lock(&this->commandsOutMutex);
+    json msg;
+    if (this->commandsOut.empty()) {
+        pthread_mutex_unlock(&this->commandsOutMutex);
+        return json();
+    }
+
+    msg = this->commandsOut.front();
+    pthread_mutex_unlock(&this->commandsOutMutex);
+    return msg;
+}
+
+void Client::popCommandsOut() {
+    pthread_mutex_lock(&this->commandsOutMutex);
+    this->commandsOut.pop();
+    pthread_mutex_unlock(&this->commandsOutMutex);
+}
+
 void * Client::handleAndBroadcast(void *arg) {
     auto * client = (Client *) arg;
     int tolerance = 0;
     json msg;
     while (client != nullptr && client->isConnected()) {
-        msg = handleUserEvents();
+        msg = client->getNewCommandMsg();
         if (msg.empty()) {
             continue;
         }
@@ -194,10 +216,10 @@ void * Client::handleAndBroadcast(void *arg) {
         Logger::getInstance()->debug(ss.str());
 
         if(client->send(&msg)) {
-            Logger::getInstance()->error("[Client] Error broadcasting msg to client");
+            Logger::getInstance()->error("[Client] Error broadcasting msg to server");
             if (tolerance > 3) {
                 ss.str("");
-                ss << "Fail tolerance exceeded! [thread:broadcast]";
+                ss << "Fail tolerance exceeded! [thread:broadcastClient]";
                 Logger::getInstance()->error(ss.str());
                 throw SocketException(ss.str());
             }
@@ -205,7 +227,7 @@ void * Client::handleAndBroadcast(void *arg) {
             tolerance++;
             continue;
         }
-
+        client->popCommandsOut();
     }
 
     return nullptr;
@@ -218,7 +240,10 @@ void Client::run() {
             updateScreen(receivedMessage);
         }
         this->render();
+        this->handleUserEvents();
     }
+    pthread_join(incomeThread, nullptr);
+    pthread_join(outcomeThread, nullptr);
 }
 
 bool Client::eventsQueueIsEmpty() {
@@ -237,13 +262,19 @@ json Client::getMessageFromQueue() {
     return msg;
 }
 
-void Client::pushCommand(json msg) {
+void Client::pushEvent(json msg) {
     pthread_mutex_lock(&this->eventsMutex);
     this->events.push(msg);
     pthread_mutex_unlock(&this->eventsMutex);
 }
 
-json Client::handleUserEvents() {
+void Client::pushCommand(json msg) {
+    pthread_mutex_lock(&this->commandsOutMutex);
+    this->commandsOut.push(msg);
+    pthread_mutex_unlock(&this->commandsOutMutex);
+}
+
+void Client::handleUserEvents() {
     json msg;
     SDL_Event e;
     bool up, down, right, left;
@@ -255,19 +286,13 @@ json Client::handleUserEvents() {
         down = down || e.key.keysym.sym == SDLK_DOWN;
     }
     if (!(up || left || down || right)) {
-        return json();
+        return;
     }
     msg["up"] = up;
     msg["down"] = down;
     msg["left"] = left;
     msg["right"] = right;
-    return msg;
-}
-
-void Client::popOutcome() {
-    pthread_mutex_lock(&this->eventsMutex);
-    this->events.pop();
-    pthread_mutex_unlock(&this->eventsMutex);
+    pushCommand(msg);
 }
 
 void Client::updateScreen(json json) {
