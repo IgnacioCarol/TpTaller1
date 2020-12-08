@@ -20,6 +20,7 @@ public:
     void renderDefaultBackground();
     bool isTimeOver();
     int getLevel();
+    Timer* getTimer();
     std::string getLevelBackground();
 
 protected:

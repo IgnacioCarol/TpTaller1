@@ -29,6 +29,8 @@ protected:
     TextureManager* textureManager = TextureManager::Instance();
     std::string _textureID;
     int _currentFrame;
+
+    int id;
 };
 
 

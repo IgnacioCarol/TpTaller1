@@ -11,6 +11,25 @@ json ServerParser::buildErrorMsg(std::string error) {
 }
 
 json ServerParser::buildGameInitMsg(Camera *camera, BackgroundStage *stage, std::vector<GameObject *> gameObjects) {
+    CameraInit cameraInit = {
+            camera->getCamera()->x,
+            camera->getCamera()->y,
+            camera->getCamera()->w,
+            camera->getCamera()->h
+    };
+
+    StageInit stageInit = {
+            stage->getLevel(),
+            stage->getTimer()->getTimeSecond(),
+            Config::getInstance()->isDefault()
+    };
+
+    WindowInit windowInit = {
+            Config::getInstance()->getWindow().width,
+            Config::getInstance()->getWindow().height
+    };
+
+
 
     return json();
 }
