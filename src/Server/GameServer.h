@@ -43,6 +43,10 @@ public:
 
     ~GameServer();
 
+    void unpausePlayer(PlayerClient *player);
+
+    void pausePlayer(PlayerClient *player);
+
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.

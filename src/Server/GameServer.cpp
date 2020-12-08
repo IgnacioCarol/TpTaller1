@@ -1,4 +1,5 @@
 #include "GameServer.h"
+#include "../CharacterStates/Normal.h"
 
 GameServer* GameServer::instance = 0;
 
@@ -117,4 +118,20 @@ std::vector<GameObject *> GameServer::getGameObjects() {
 
 std::vector<Player *> GameServer::getPlayers() {
     return players;
+}
+
+void GameServer::unpausePlayer(PlayerClient *playerClient) {
+    for (Player *player: getPlayers()) {
+        if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
+            player->changeState(new Normal());
+        }
+    }
+}
+
+void GameServer::pausePlayer(PlayerClient *playerClient) {
+    for (Player * player: getPlayers()) {
+        if (player->getUsername() == playerClient->username) {
+            player->changeState(new Paused());
+        }
+    }
 }

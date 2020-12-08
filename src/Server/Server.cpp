@@ -286,12 +286,14 @@ bool Server::run() {
             ss << "[thread:run] " << "msg: " << msg.dump();
             Logger::getInstance()->info(ss.str());
             std::string username = msg["username"].get<std::string>();
-            for (Player* player : game->getPlayers()) {
+            for (Player* player : game->getPlayers()) { //TODO: Debería estar dentro del Game Server este loop
                 if (player->getUsername() == username) {
                     std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
                     player->move(positions);
                 }
             }
+            checkPlayersConnection();
+
             this->popCommand();
             //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
@@ -326,6 +328,18 @@ bool Server::someoneIsConnected() {
     }
     pthread_mutex_unlock(&this->clientsMutex);
     return true;
+}
+
+void Server::checkPlayersConnection() {
+    pthread_mutex_lock(&this->clientsMutex);
+    for (PlayerClient* client : clients) {
+        if (client->isConnected()) {
+            GameServer::Instance()->unpausePlayer(client);
+        } else {
+            GameServer::Instance()->pausePlayer(client);
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
 }
 
 json Server::getNewCommandMsg() {
