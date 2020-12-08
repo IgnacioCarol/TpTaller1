@@ -237,16 +237,24 @@ void * Client::broadcastToServer(void *arg) {
 }
 
 void Client::run() {
-    while (true || Game::Instance()->isPlaying()) { //Fixme condition is true because game->isplaying
+    //Parser magico
+    /*gameClient = GameClient::Instance();
+    gameClient->init() le paso el resultado del parser magico
+
+    while (gameClient->isPlaying()) {
         if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
-            updateScreen(receivedMessage);
+            //parser magico
+            gameClient->update(); le paso el resultado del parsermagico
         }
-        this->render();
+        gameClient -> render();
         this->handleUserEvents();
     }
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
+    gameClient -> clean();
+    delete gameClient;
+    */
 }
 
 bool Client::eventsQueueIsEmpty() {
