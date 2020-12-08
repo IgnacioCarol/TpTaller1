@@ -48,6 +48,8 @@ public:
     void setState(std::string state) override;
     std::string getState();
 
+    bool getDirection();
+
 private:
     //Image related
     std::string username;

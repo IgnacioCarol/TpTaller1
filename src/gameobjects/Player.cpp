@@ -121,3 +121,7 @@ void Player::setState(std::string state) {
 std::string Player::getState() {
     return characterState->getStateType();
 }
+
+bool Player::getDirection() {
+    return xDirection;
+}

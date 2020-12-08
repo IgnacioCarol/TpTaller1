@@ -259,7 +259,7 @@ void Client::run() {
             }
         }
         gameClient -> render();
-        //this->handleUserEvents();
+        this->handleUserEvents();
     }
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);

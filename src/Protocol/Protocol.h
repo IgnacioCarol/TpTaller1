@@ -38,7 +38,7 @@ public:
     static json buildContentMsg(int status, ProtocolCommand commnad, json content);
 
     static json gameInitMsgToJson(GameMsgParams params);
-
+    static json gameViewMsgToJson(GameMsgPlaying params);
 private:
     Protocol() = default;
     ~Protocol() = default;
