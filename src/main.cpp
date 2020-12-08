@@ -114,10 +114,9 @@ int main(int argc, char * argv[]) {
         auto * client = new Client(ipAddr, to_string(port).c_str());
         try {
             client->init();
-            client->login();
-            //TODO: Al estar todos los clientes conectados (hay que procesar el aviso del server),
-            // se debe salir del waiting room de los clientes
-            client->run();
+            if (client->login()) {
+                client->run();
+            }
             delete client;
             return 0;
         } catch (std::exception &ex) {

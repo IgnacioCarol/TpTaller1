@@ -39,7 +39,8 @@ void Client::initThreads() {
     pthread_create(&outcomeThread, nullptr, Client::broadcastToServer, (void *) this);
 }
 
-void Client::login() {
+bool Client::login() {
+    bool gamesIsInitiated = false;
     Logger::getInstance()->debug("Client start playing");
     try {
         while(!this->authenticate()) {} //TODO: Mejorar este while
@@ -52,7 +53,7 @@ void Client::login() {
                 std::stringstream ss;
                 ss <<"[Client] Message obtained at waiting stage:" << receivedMessage.dump();
                 Logger::getInstance()->debug(ss.str());
-                _login->isWaitingRoom = !receivedMessage["startGame"];
+                _login->isWaitingRoom = !(gamesIsInitiated |= receivedMessage["startGame"].get<bool>());
             }
             _login->showWaitingRoom(e);
         }
@@ -61,6 +62,7 @@ void Client::login() {
         Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
         throw ex;
     }
+    return gamesIsInitiated;
 }
 
 bool Client::authenticate() {

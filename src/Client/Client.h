@@ -22,7 +22,7 @@ public:
     Client(std::string IP, std::string port);
     ~Client();
     void init();
-    void login();
+    bool login();
     bool isConnected();
     int send(json *msg);
     int receive(json *msg);
