@@ -67,7 +67,6 @@ struct GamePlayerPlaying {
 struct CameraDuringGame {
     int xPos;
     int yPos;
-    int id;
 };
 
 struct GameMsgPlaying {

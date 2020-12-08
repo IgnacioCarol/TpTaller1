@@ -12,7 +12,7 @@ public:
     static json buildLoginMsg(std::string username, std::string password);
     static ProtocolCommand getCommand(json msg);
     static GameMsgParams parseInitParams(json json);
-    static GameMsgParams parseUpdateParams(json json);
+    static GameMsgPlaying parseUpdateParams(json json);
 };
 
 

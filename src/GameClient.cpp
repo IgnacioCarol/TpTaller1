@@ -89,12 +89,12 @@ void GameClient::render() {
     SDL_RenderPresent(renderer);
 }
 
-void GameClient::update(GameMsgParams initialize) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
+void GameClient::update(GameMsgPlaying initialize) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
     //Aca solo recibo las cosas que cambian de posicion
     /*if (initialize.stage.changeLevel){
         //codigo para hacer el cambio de level, no ejecuto lo que sigue
     }*/
-    updatePlayers(initialize.gameObjectsInit);
+    updatePlayers(initialize.players);
 
 
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){ //Muevo todos los objetos distintos a player

@@ -18,7 +18,7 @@ public:
     bool init(GameMsgParams initialize); //
     ~GameClient();
     void render();
-    void update(GameMsgParams initialize); //ToDo por ahora digo que recibe esto para orientarme despues poner estructura correcta
+    void update(GameMsgPlaying initialize); //ToDo por ahora digo que recibe esto para orientarme despues poner estructura correcta
     bool createGameObjects(GameObjectsInit gameObjectsInit); //recibe la lista del init de game objects
     bool isPlaying();
     void clean();

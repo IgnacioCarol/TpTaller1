@@ -56,6 +56,30 @@ GameMsgParams ClientParser::parseInitParams(json msg) {
     };
 }
 
-GameMsgParams ClientParser::parseUpdateParams(json json) {
-    return GameMsgParams();
+GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
+    Logger::getInstance()->debug("Parsing update params...");
+    json contentJson = msg[MSG_CONTENT_PROTOCOL];
+
+    CameraDuringGame camera = {
+            contentJson["camera"]["xPos"],
+            contentJson["camera"]["yPos"]
+    };
+
+    std::vector<GamePlayerPlaying> gamePlayers;
+    for (auto&player : contentJson["players"]) {
+        GamePlayerPlaying gamePlayer = {
+                player["id"],
+                player["xPos"],
+                player["yPos"],
+                player["state"],
+                player["direction"]
+        };
+        gamePlayers.push_back(gamePlayer);
+    }
+
+    return GameMsgPlaying {
+        camera,
+        gamePlayers,
+        contentJson["timer"]
+    };
 }

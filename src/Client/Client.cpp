@@ -252,8 +252,8 @@ void Client::run() {
                     throw ClientException("Error trying to init gameClient");
                 }
             } else if (protocol == GAME_VIEW_CMD) {
-                GameMsgParams updateParams = ClientParser::parseUpdateParams(receivedMessage);
-                //gameClient->update(updateParams); //le paso el resultado del parsermagico
+                GameMsgPlaying updateParams = ClientParser::parseUpdateParams(receivedMessage);
+                gameClient->update(updateParams); //le paso el resultado del parsermagico
             } else {
                 Logger::getInstance()->error("[Client] unexpected protocol command.");
             }
