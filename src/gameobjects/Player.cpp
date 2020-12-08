@@ -1,6 +1,6 @@
 #include <cstdio>
 #include <utility>
-#include <src/CharacterStates/Paused.h>
+#include "../CharacterStates/Paused.h"
 #include "../CharacterStates/Normal.h"
 #include "../CharacterStates/Jumping.h"
 #include "../CharacterStates/Crouched.h"
@@ -44,7 +44,7 @@ bool Player::canJump() const {
 }
 
 Player::Player(SDL_Rect *camera, std::string username) : GameObject() {
-    this->init(0, 380, playerID, camera, 6);
+    this->init(0, 380, username, camera, 6);
     this->username = username;
 }
 
