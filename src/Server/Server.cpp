@@ -113,7 +113,7 @@ void *Server::authenticatePlayerClient(void *arg) {
         json msg = receive(playerClient);
         if (!(error = MessageValidator::validLoginMessage(msg)).empty()) {
             Logger::getInstance()->error("[Server - authenticate] unexpected login message from client: " + error);
-            response = Protocol::buildErrorMsg(error);
+            response = ServerParser::buildErrorMsg(error);
             playerClient->pushOutcome(response);
             return nullptr;
         }
@@ -144,7 +144,7 @@ void *Server::authenticatePlayerClient(void *arg) {
         }
 
         Logger::getInstance()->debug("[Server] will send authentication message: " + std::string(authenticated ? "authorized" : "unauthorized"));
-        response = Protocol::buildLoginMsgResponse(authenticated);
+        response = ServerParser::buildLoginMsgResponse(authenticated);
 
         if (!playerClient->send(&response)) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);

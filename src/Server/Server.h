@@ -10,7 +10,7 @@
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
-#include "../Protocol/Protocol.h"
+#include "ServerParser.h"
 #include "../config/Config.h"
 #include "../Protocol/MessageValidator.h"
 #include "ServerMsg.h"

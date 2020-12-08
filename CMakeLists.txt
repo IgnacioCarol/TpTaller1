@@ -53,7 +53,7 @@ add_executable(TpTaller1
         src/Protocol/Protocol.cpp src/Protocol/Protocol.h
         src/Protocol/MessageValidator.cpp src/Protocol/MessageValidator.h
         src/Client/ClientException.cpp src/Client/ClientException.h
-        src/Server/GameServer.cpp src/Server/GameServer.h src/Protocol/InitializeGameMsg.h)
+        src/Server/GameServer.cpp src/Server/GameServer.h src/Protocol/GameMsgParams.h src/Server/ServerParser.cpp src/Server/ServerParser.h src/Client/ClientParser.cpp src/Client/ClientParser.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

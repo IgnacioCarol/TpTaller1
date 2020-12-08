@@ -32,7 +32,7 @@ void GameServer::initializeAllElementsOfGameServer() {
     initializeGameObjects(1);
 }
 
-bool GameServer::init(const char *levelName, std::string xmlPath) {
+bool GameServer::init() {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     initializeAllElementsOfGameServer();

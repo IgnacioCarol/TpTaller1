@@ -16,7 +16,7 @@
 class GameServer {
 public:
     static GameServer* Instance();
-    bool init(const char *levelName, std::string xmlPath);
+    bool init();
 
     //Getters to GameServer purpose
     SDL_Rect *  getCamera();
