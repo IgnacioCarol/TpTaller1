@@ -277,6 +277,7 @@ bool Server::run() {
         Logger::getInstance()->error(error);
         throw ServerException(error);
     }
+
     clock_t t2, t1 = clock();
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
@@ -284,7 +285,7 @@ bool Server::run() {
         if ((t2 - t1) < 1000 * 1000 / 60) {
             continue;
         }
-        bool msgIsEmpty = true;
+
         msg = this->getNewCommandMsg();
         if (!msg.empty()) {
             ss.str("");

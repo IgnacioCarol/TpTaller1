@@ -57,7 +57,7 @@ void Player::changeState(CharacterState *newState) {
 }
 
 void Player::move(std::vector<int> vector) {
-    Uint8* keyStates;
+    Uint8 keyStates[83];
     std::vector<int> arrows = {SDL_SCANCODE_UP, SDL_SCANCODE_LEFT, SDL_SCANCODE_DOWN, SDL_SCANCODE_RIGHT};
     for (int i = 0; i < vector.size() && i < arrows.size(); i++) {
         keyStates[arrows[i]] = vector[i];
