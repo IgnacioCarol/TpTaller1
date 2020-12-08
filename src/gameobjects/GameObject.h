@@ -36,6 +36,9 @@ public:
     std::string getTextureId();
     int getXPosition();
     int getYPosition();
+    virtual void setPosition(int x, int y);
+    virtual void setDirection(int direction);
+    virtual void setState(std::string state);
 
 protected:
     //To manage the movement

@@ -13,6 +13,9 @@ public:
     void move() override;
     virtual void walk();  //If we have to implement the turtle that can fly we must add a new function fly()
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height);
+    void setPosition(int x, int y) override;
+    void setDirection(int direction) override;
+    virtual void setState(std::string state) override;
 
     int getFrameAmount() override;
 

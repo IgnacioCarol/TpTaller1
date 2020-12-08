@@ -49,7 +49,7 @@ json Protocol::gameMsgToJson(GameMsgParams params) {
     };
 
     json gameObjects = json::array();
-    for (auto& gameObject : params.gameObjects) {
+    for (auto& gameObject : params.gameObjectsInit.gameObjects) {
         json gameObjectJson = {
                 gameObject.id,
                 gameObject.type,

@@ -41,6 +41,12 @@ public:
 
     int getFrameAmount() override;
 
+    void setPosition(int x, int y) override;
+
+    void setDirection(int direction) override;
+
+    void setState(std::string state) override;
+
 private:
     //Image related
     std::string username;

@@ -73,7 +73,7 @@ Game::~Game() {
 void Game::render() {
     SDL_RenderClear(renderer);
     camera->update(players, stage->getWidth());
-    textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
+    textureManager->drawBackgroundWithCamera(800, 600, "BG", renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
 
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {

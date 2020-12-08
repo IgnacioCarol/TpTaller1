@@ -44,12 +44,16 @@ struct GameObjectInit {
     int frameAmount;
 };
 
+struct GameObjectsInit {
+    std::vector<GameObjectInit> gameObjects;
+};
+
 struct GameMsgParams {
     std::map<std::string, std::vector<std::string>> paths;
     WindowInit window;
     CameraInit camera;
     StageInit stage;
-    std::vector<GameObjectInit> gameObjects;
+    GameObjectsInit gameObjectsInit;
 };
 
 #endif //TPTALLER1_GAMEMSGPARAMS_H

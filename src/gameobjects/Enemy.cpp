@@ -36,3 +36,18 @@ Enemy::~Enemy() {
 int Enemy::getFrameAmount() {
     return enemyState->getFramesAmount();
 }
+
+void Enemy::setPosition(int x, int y) {
+    xPosition = x;
+    yPosition = y;
+}
+
+void Enemy::setDirection(int direction) {
+    this -> direction = direction;
+}
+
+void Enemy::setState(std::string state) {
+    GameObject::setState(state); //ToDo implementar esto para la prox fase
+}
+
+

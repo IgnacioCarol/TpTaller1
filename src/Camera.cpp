@@ -39,3 +39,7 @@ void Camera::restartPos() {
     camera = {0, 0, camera.w, camera.h};
     lastValue = 0;
 }
+
+void Camera::setXPos(int newX) {
+    camera.x = newX;
+}

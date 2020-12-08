@@ -33,4 +33,8 @@ int CharacterState::getFramesAmount() {
     return framesAmount;
 }
 
+std::string CharacterState::getStateType() {
+    return stateType;
+}
+
 

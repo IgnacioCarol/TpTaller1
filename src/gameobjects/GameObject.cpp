@@ -19,6 +19,18 @@ int GameObject::getHeight() {
     return 0;
 }
 
+void GameObject::setPosition(int x, int y) {
+
+}
+
+void GameObject::setDirection(int direction) {
+
+}
+
+void GameObject::setState(std::string state) {
+
+}
+
 int GameObject::getId() {
     return id;
 }
