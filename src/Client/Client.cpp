@@ -10,6 +10,7 @@ Client::Client(std::string IP, std::string port) {
     _login = new Login();
     pthread_mutex_init(&this->eventsMutex, nullptr);
     pthread_mutex_init(&this->commandsOutMutex, nullptr);
+    keepConnection = true;
 
 }
 
@@ -140,7 +141,7 @@ void * Client::handleServerEvents(void * arg) {
     std::stringstream ss;
     while (client != nullptr &&
            client->isConnected() &&
-           (msg = receive(client)) != nullptr) {
+           (msg = receive(client)) != nullptr && client->keepConnection) {
         ss.str("");
         ss << "[thread:Client]"
            << "msg: " << msg.dump();
@@ -207,7 +208,7 @@ void * Client::broadcastToServer(void *arg) {
     auto * client = (Client *) arg;
     int tolerance = 0;
     json msg;
-    while (client != nullptr && client->isConnected()) {
+    while (client != nullptr && client->isConnected() && client->keepConnection) {
         msg = client->getNewCommandMsg();
         if (msg.empty()) {
             continue;
@@ -241,7 +242,7 @@ void Client::run() {
     //Parser magico
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
-    while (true || gameClient->isPlaying()) { //TODO: Ver que onda el "isPlaying" porque necesitamos recibir el mensaje de init.
+    while (gameClient->isPlaying()) { //TODO: Ver que onda el "isPlaying" porque necesitamos recibir el mensaje de init.
         if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
             Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
@@ -264,6 +265,7 @@ void Client::run() {
         }
         this->handleUserEvents();
     }
+    keepConnection = false;
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
     gameClient -> clean();
@@ -301,15 +303,24 @@ void Client::pushCommand(json msg) {
 void Client::handleUserEvents() {
     json msg;
     SDL_Event e;
-    bool up, down, right, left;
+    const Uint8 * keyboardState = SDL_GetKeyboardState( NULL );
+    bool keysAssigned = false;
+    int up, down, right, left;
     up = down = right = left = false;
     while( SDL_PollEvent( &e ) != 0 ) {
-        up = up || e.key.keysym.sym == SDLK_UP;
-        left = left || e.key.keysym.sym == SDLK_LEFT;
-        right = right || e.key.keysym.sym == SDLK_RIGHT;
-        down = down || e.key.keysym.sym == SDLK_DOWN;
+        if (e.type  == SDL_QUIT ) {
+            GameClient::Instance()->gameOver();
+            return;
+        }
+        if (!keysAssigned) {
+            up = keyboardState[SDL_SCANCODE_UP];
+            left = keyboardState[SDL_SCANCODE_LEFT];
+            right = keyboardState[SDL_SCANCODE_RIGHT];
+            down = keyboardState[SDL_SCANCODE_DOWN];
+            keysAssigned = true;
+        }
     }
-    if (!(up || left || down || right)) {
+    if (!keysAssigned) {
         return;
     }
     msg["up"] = up;
@@ -317,10 +328,6 @@ void Client::handleUserEvents() {
     msg["left"] = left;
     msg["right"] = right;
     pushCommand(msg);
-}
-
-void Client::updateScreen(json json) {
-
 }
 
 void Client::render() {

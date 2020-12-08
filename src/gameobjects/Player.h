@@ -63,6 +63,8 @@ private:
     int initialJumpingPosition;
     int maxYPosition;
     SDL_Rect *cam;
+    int ticks;
+    bool leftOrRightPressed;
 };
 
 
