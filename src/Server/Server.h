@@ -14,6 +14,7 @@
 #include "../config/Config.h"
 #include "../Protocol/MessageValidator.h"
 #include "ServerMsg.h"
+#include "GameServer.h"
 
 class Server {
 

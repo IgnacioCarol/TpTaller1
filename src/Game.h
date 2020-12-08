@@ -14,6 +14,7 @@
 #include "config/Constants.h"
 #include "config/Config.h"
 #include "logger/logger.h"
+#include "CharacterStates/Paused.h"
 
 #include "gameobjects/Player.h"
 

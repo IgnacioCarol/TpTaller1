@@ -5,23 +5,15 @@
 #include <vector>
 #include <map>
 #include "json.hpp"
+#include "../gameobjects/GameObject.h"
 
-enum ObjectType {
-    OT_COIN,
-    OT_MUSHROOM,
-    OT_TURTLE,
-    OT_NORMAL_PLATFORM,
-    OT_SURPRISE_PLATFORM,
-    OT_PLAYER
-};
-
-NLOHMANN_JSON_SERIALIZE_ENUM(ObjectType, {
-    { OT_COIN, "coin" },
-    { OT_MUSHROOM, "mushroom" },
-    { OT_TURTLE, "turtle" },
-    { OT_NORMAL_PLATFORM, "normal_platform" },
-    { OT_SURPRISE_PLATFORM, "surprise_platform" },
-    { OT_PLAYER, "player" },
+NLOHMANN_JSON_SERIALIZE_ENUM(GameObjectType, {
+    { GOT_COIN, "coin" },
+    { GOT_ENEMY_MUSHROOM, "mushroom" },
+    { GOT_ENEMY_TURTLE, "turtle" },
+    { GOT_PLATFORM_NORMAL, "normal_platform" },
+    { GOT_PLATFORM_SURPRISE, "surprise_platform" },
+    { GOT_PLAYER, "player" },
 })
 
 struct WindowInit {
@@ -44,7 +36,7 @@ struct StageInit {
 
 struct GameObjectInit {
     int id;
-    ObjectType type;
+    GameObjectType type;
     std::string imageId;
     std::string username;
     int xPos;

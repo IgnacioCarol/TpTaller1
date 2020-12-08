@@ -1,4 +1,3 @@
-#include <src/CharacterStates/Paused.h>
 #include "Game.h"
 
 Game* Game::instance = 0;
@@ -120,7 +119,7 @@ bool Game::loadTexts() {
 }
 
 void Game::createGameObjects() {
-    player = new Player(camera->getCamera());
+    player = new Player(camera->getCamera(), "mario");
     players.push_back(player);
     TextureManager::Instance() -> addPath("mario", imgPlayer, defaultPlayer); //ToDo ver como hacer para conseguir los paths de mario sin usar los define que tiene
     initializeGameObjects(1);

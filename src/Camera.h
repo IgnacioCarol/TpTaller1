@@ -15,7 +15,7 @@ public:
     ~Camera() = default;
 
 
-    void update(int std::vector<Player*> players, int borderLimit);
+    void update(std::vector<Player*> players, int borderLimit);
 
     int lastValue = 0;
 

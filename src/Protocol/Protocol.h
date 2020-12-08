@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <json.hpp>
+#include "GameMsgParams.h"
+
 using json = nlohmann::json;
 
 #define MSG_ERROR_PROTOCOL "error"
@@ -34,6 +36,8 @@ public:
     static std::string protocolToString(ProtocolCommand command);
     static json buildErrorMsg(std::string error);
     static json buildContentMsg(int status, ProtocolCommand commnad, json content);
+
+    static json gameMsgToJson(GameMsgParams params);
 
 private:
     Protocol() = default;

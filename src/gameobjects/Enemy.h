@@ -14,6 +14,8 @@ public:
     virtual void walk();  //If we have to implement the turtle that can fly we must add a new function fly()
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height);
 
+    int getFrameAmount() override;
+
 protected:
     static const int enemyVelocity = 1;
     CharacterState* enemyState{};

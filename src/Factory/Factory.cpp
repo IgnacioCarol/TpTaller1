@@ -82,7 +82,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
                     GameServer::Instance() ->addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
-                    tmpEnemy->init(900, 435, KOOPA_GREEN_ID, GameServer::Instance()->getCamera(),
+                    tmpEnemy->init(900, 435, KOOPA_GREEN_ID, GameServer::Instance()->getCamera()->getCamera(),
                                        new EnemyMovement(0, 3));
 
                     Logger::getInstance()->debug("Turtle enemy created correctly");
@@ -110,19 +110,17 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     return actors;
 }
 
-std::map<std::string, Player*>  Factory::createPlayersFromConfig() {
+std::vector<Player*>  Factory::createPlayers() {
     Config * config = Config::getInstance();
     Player * tmp;
-    std::map<std::string, Player*>  players;
+    std::vector<Player*>  players;
     std::vector<std::string> imgPaths = GameServer::Instance()->getPlayerPaths();
 
     for(auto user : config->getPlayers().users) {
         for(long i = 0; i < config->getPlayers().amount; i++) {
-            tmp = new Player(GameServer::Instance()->getCamera());
+            players.push_back(new Player(GameServer::Instance()->getCamera()->getCamera(), user.username));
             GameServer::Instance() ->addPath(user.username, imgPaths[i], DEFAULT_PLAYER_PATH);
-            players[user.username] = tmp;
             Logger::getInstance()->debug("Player created correctly");
-
         }
     }
 

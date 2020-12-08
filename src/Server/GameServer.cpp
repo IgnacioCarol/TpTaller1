@@ -23,12 +23,12 @@ void GameServer::initializeGameObjects(int level) {
     gameObjects = factory->createGameObjectsFromLevelConfig(config->getLevel(level));
 }
 
-SDL_Rect *  GameServer::getCamera() {
-    return camera -> getCamera();
+Camera *  GameServer::getCamera() {
+    return camera;
 }
 
 void GameServer::initializeAllElementsOfGameServer() {
-    players = factory->createPlayersFromConfig();
+    players = factory->createPlayers();
     initializeGameObjects(1);
 }
 
@@ -39,7 +39,14 @@ bool GameServer::init() {
 
     logger -> info("Server init game success");
     playing = true;
+
+    sendInitializationMsg();
+
     return true;
+}
+
+void GameServer::sendInitializationMsg() {
+    json msg = ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
 }
 
 std::vector<std::string> GameServer::getPlayerPaths() {
@@ -55,9 +62,8 @@ void GameServer::cleanGameObjects() {
 
 GameServer::~GameServer() {
     map<string, Player*>::iterator it;
-    for (it = players.begin(); it != players.end(); it++ )
-    {
-        delete it->second;
+    for (auto& player: players) {
+        delete player;
     }
     cleanGameObjects(); //TODO: OJO, ACA USO CLEANOBJECTS PERO EN EL ORIGINAL USAN CICLO -> PREGUNTAR
     Logger::getInstance()->info("All Game Objects were deleted");
@@ -70,9 +76,8 @@ GameServer::~GameServer() {
 }
 
 void GameServer::handleEvents() {
-    for (auto & player : players)
-    {
-        player.second->move(); //TODO: acá debería recibir los mensajes del client
+    for (auto & player : players) {
+        player->move(); //TODO: acá debería recibir los mensajes del client
     }
 }
 
@@ -89,9 +94,8 @@ void GameServer::nextStage() {
 
 void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
-    for (auto & player : players)
-    {
-        player.second->restartPos(0, 380);
+    for (auto & player : players) {
+        player->restartPos(0, 380);
     }
     camera->restartPos();
 }
@@ -108,6 +112,6 @@ std::vector<GameObject *> GameServer::getGameObjects() {
     return gameObjects;
 }
 
-std::map<std::string, Player *> GameServer::getPlayers() {
+std::vector<Player *> GameServer::getPlayers() {
     return players;
 }

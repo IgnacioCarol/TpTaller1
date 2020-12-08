@@ -32,3 +32,7 @@ void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width,
 Enemy::~Enemy() {
     delete this->enemyState;
 }
+
+int Enemy::getFrameAmount() {
+    return enemyState->getFramesAmount();
+}

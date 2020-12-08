@@ -4,7 +4,6 @@
 
 class PlatformNormal : public GameObject {
 public:
-    PlatformNormal();
     ~PlatformNormal() override = default;
     void init(int x, int y, std::string textureID) override;
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;

@@ -10,7 +10,8 @@ json ServerParser::buildErrorMsg(std::string error) {
     return Protocol::buildErrorMsg(error);
 }
 
-json ServerParser::buildGameInitMsg(Camera *camera, BackgroundStage *stage, std::vector<GameObject *> gameObjects) {
+json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::string>> imagePaths, Camera *camera,
+        BackgroundStage *stage, std::vector<GameObject *> gameObjects, std::vector<Player *> players) {
     CameraInit cameraInit = {
             camera->getCamera()->x,
             camera->getCamera()->y,
@@ -29,7 +30,40 @@ json ServerParser::buildGameInitMsg(Camera *camera, BackgroundStage *stage, std:
             Config::getInstance()->getWindow().height
     };
 
+    std::vector<GameObjectInit> gameObjectsInit;
+    for (auto& gameObject: gameObjects) {
+        GameObjectInit gameObjectInit = {
+                gameObject->getId(),
+                gameObject->getType(),
+                gameObject->getTextureId(),
+                "",
+                gameObject->getXPosition(),
+                gameObject->getYPosition(),
+                gameObject->getFrameAmount()
+        };
+        gameObjectsInit.push_back(gameObjectInit);
+    }
 
+    for (auto& player: players) {
+        GameObjectInit gameObjectInit = {
+                player->getId(),
+                player->getType(),
+                player->getTextureId(),
+                player->getUsername(),
+                player->getXPosition(),
+                player->getYPosition(),
+                player->getFrameAmount()
+        };
+        gameObjectsInit.push_back(gameObjectInit);
+    }
 
-    return json();
+    GameMsgParams gameMsgParams = {
+        imagePaths,
+        windowInit,
+        cameraInit,
+        stageInit,
+        gameObjectsInit
+    };
+
+    return Protocol::gameMsgToJson(gameMsgParams);
 }

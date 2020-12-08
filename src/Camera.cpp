@@ -23,7 +23,7 @@ void Camera::update(std::vector<Player*> players, int borderLimit) {
     }
     if( camera.x > borderLimit - camera.w )
     {
-        Game::Instance() -> nextStage();
+        //Game::Instance() -> nextStage();
     }
 }
 

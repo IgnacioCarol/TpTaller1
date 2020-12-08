@@ -15,7 +15,7 @@ class CharacterState;
 
 class Player : public GameObject {
 public:
-    Player(SDL_Rect *camera);
+    Player(SDL_Rect *camera, std::string username);
     ~Player();
     void init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
@@ -35,8 +35,15 @@ public:
 
     void move() override;
 
+    std::string getUsername();
+
+    void setUsername(std::string username);
+
+    int getFrameAmount() override;
+
 private:
     //Image related
+    std::string username;
     static const int pWidth = 600;
     static const int pHeight = 600;
     static const int playerVelocity = 2;
