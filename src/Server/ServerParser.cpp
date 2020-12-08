@@ -10,6 +10,7 @@ json ServerParser::buildErrorMsg(std::string error) {
     return Protocol::buildErrorMsg(error);
 }
 
-json ServerParser::buildGameInitMsg() {
+json ServerParser::buildGameInitMsg(Camera *camera, BackgroundStage *stage, std::vector<GameObject *> gameObjects) {
+
     return json();
 }

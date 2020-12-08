@@ -3,13 +3,16 @@
 
 #include "json.hpp"
 #include "../Protocol/Protocol.h"
+#include "../Camera.h"
+#include "../BackgroundStages/BackgroundStage.h"
+#include "../Protocol/GameMsgParams.h"
 
 using json = nlohmann::json;
 
 class ServerParser {
 public:
     static json buildLoginMsgResponse(bool authenticated);
-    static json buildGameInitMsg();
+    static json buildGameInitMsg(Camera *camera, BackgroundStage *stage, std::vector<GameObject *> gameObjects);
     static json buildErrorMsg(std::string error);
 };
 

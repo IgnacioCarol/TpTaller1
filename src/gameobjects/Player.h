@@ -40,7 +40,6 @@ private:
     static const int pWidth = 600;
     static const int pHeight = 600;
     static const int playerVelocity = 2;
-
     bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
     CharacterState* characterState;
     bool jumping;

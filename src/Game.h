@@ -62,6 +62,7 @@ private:
     //Elements of the game
     Player* player;
 
+    std::vector <Player*> players;
     std::vector <GameObject*> _gameObjects;
 
     bool playing = false;

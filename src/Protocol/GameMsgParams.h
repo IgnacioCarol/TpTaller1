@@ -46,14 +46,10 @@ struct GameObjectInit {
     int id;
     ObjectType type;
     std::string imageId;
+    std::string username;
     int xPos;
     int yPos;
     int frameAmount;
-};
-
-struct PlayerInit : GameObjectInit {
-    std::string username;
-    std::string idImage;
 };
 
 struct GameMsgParams {
