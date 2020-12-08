@@ -5,20 +5,18 @@
 #ifndef TPTALLER1_TIMER_H
 #define TPTALLER1_TIMER_H
 
-
-#include <SDL2/SDL.h>
-#include <tiff.h>
+#include <ctime>
 
 class Timer {
 public:
-    explicit Timer(int32 stopTime);
+    explicit Timer(int stopTime);
     void start();
-    int32 getTimeSecond();
+    int getTimeSecond();
     bool isTimeOver();
 
 private:
-    int32 startTime = 0;
-    int32 stopTime;
+    clock_t startTime = 0;
+    int stopTime;
 };
 
 
