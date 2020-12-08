@@ -70,7 +70,7 @@ bool GameClient::init(GameMsgParams initialize) {
 
     initBackground(renderer, initialize.stage);
     logger -> info("Init success");
-    playing = true; //Ver que onda esto despues, como carajo te avisa el back que termino
+    playing = true;
     return true;
 }
 
@@ -226,4 +226,8 @@ void GameClient::clean() {
 
 bool GameClient::isPlaying() {
     return playing;
+}
+
+void GameClient::gameOver() {
+    playing = false;
 }

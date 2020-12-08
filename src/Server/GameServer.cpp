@@ -48,6 +48,7 @@ void GameServer::sendInitializationMsg() {
     addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
     addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
+    addPath("paused", "Sprites/Players/pausedPlayer","Sprites/Players/pausedPlayer");
     json msg = ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
     Server::getInstance()->broadcast(msg);
 }

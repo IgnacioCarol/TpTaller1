@@ -21,6 +21,7 @@ public:
     void update(GameMsgPlaying initialize); //ToDo por ahora digo que recibe esto para orientarme despues poner estructura correcta
     bool createGameObjects(GameObjectsInit gameObjectsInit); //recibe la lista del init de game objects
     bool isPlaying();
+    void gameOver();
     void clean();
 
 private:
