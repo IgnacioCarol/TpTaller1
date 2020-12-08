@@ -30,3 +30,31 @@ void GameObject::setDirection(int direction) {
 void GameObject::setState(std::string state) {
 
 }
+
+int GameObject::getId() {
+    return id;
+}
+
+GameObjectType GameObject::getType() {
+    return type;
+}
+
+std::string GameObject::getTextureId() {
+    return _textureID;
+}
+
+int GameObject::getXPosition() {
+    return xPosition;
+}
+
+int GameObject::getYPosition() {
+    return yPosition;
+}
+
+int GameObject::getFrameAmount() {
+    return 0;
+}
+
+GameObject::GameObject() {
+    id = IdGenerator::getInstance()->getNextId();
+}

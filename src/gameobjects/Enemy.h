@@ -17,6 +17,8 @@ public:
     void setDirection(int direction) override;
     virtual void setState(std::string state) override;
 
+    int getFrameAmount() override;
+
 protected:
     static const int enemyVelocity = 1;
     CharacterState* enemyState{};

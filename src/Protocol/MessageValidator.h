@@ -18,7 +18,7 @@ private:
     ~MessageValidator() = default;
     MessageValidator() = default;
 
-    static std::string validMessage(json msg, PROTOCOL_COMMAND protocol, const std::vector<std::string>& contentTags);
+    static std::string validMessage(json msg, ProtocolCommand protocol, const std::vector<std::string>& contentTags);
 };
 
 

@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "ClientParser.h"
 
 using json = nlohmann::json;
 
@@ -72,7 +73,7 @@ bool Client::authenticate() {
     std::stringstream ss;
     std::string error;
 
-    json authJson = Protocol::buildLoginMsg(auth->username, auth->password);
+    json authJson = ClientParser::buildLoginMsg(auth->username, auth->password);
 
     Logger::getInstance()->debug("[Client] Will send authentication message");
     if (send(&authJson) < 0) {

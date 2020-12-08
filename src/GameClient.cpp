@@ -1,9 +1,9 @@
-#include <src/gameobjects/EnemyTurtle.h>
-#include <src/gameobjects/PlatformNormal.h>
-#include <src/gameobjects/PlatformSurprise.h>
-#include <src/gameobjects/Coin.h>
-#include <src/gameobjects/EnemyMushroom.h>
-#include <src/BackgroundStages/FirstStage.h>
+#include "gameobjects/EnemyTurtle.h"
+#include "gameobjects/PlatformNormal.h"
+#include "gameobjects/PlatformSurprise.h"
+#include "gameobjects/Coin.h"
+#include "gameobjects/EnemyMushroom.h"
+#include "BackgroundStages/FirstStage.h"
 #include "GameClient.h"
 #include "CharacterStates/EnemyMovement.h"
 #include "CharacterStates/Normal.h"
@@ -19,7 +19,7 @@ GameClient *GameClient::Instance() {
     return instance;
 }
 
-bool GameClient::init(InitializeGameMsg initialize) {
+bool GameClient::init(GameMsgParams initialize) {
     this -> textureManager = TextureManager::Instance();
     int cameraWidth = initialize.camera.width;
     int cameraHeight = initialize.camera.height;
@@ -35,7 +35,7 @@ bool GameClient::init(InitializeGameMsg initialize) {
         return false;
     }
 
-    if(!this -> createGameObjects(initialize.gameObjects)){ //ToDo volar despues estos ifs
+    if(!this -> createGameObjects(initialize.gameObjectsInit)){ //ToDo volar despues estos ifs
         logger -> error("Cannot create the objects in the client");
         return false;
     }
@@ -88,12 +88,12 @@ void GameClient::render() {
 
 }
 
-void GameClient::update(InitializeGameMsg initialize) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
+void GameClient::update(GameMsgParams initialize) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
     //Aca solo recibo las cosas que cambian de posicion
     /*if (initialize.stage.changeLevel){
         //codigo para hacer el cambio de level, no ejecuto lo que sigue
     }*/
-    updatePlayers(initialize.gameObjects);
+    updatePlayers(initialize.gameObjectsInit);
 
 
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){ //Muevo todos los objetos distintos a player
@@ -106,11 +106,11 @@ void GameClient::update(InitializeGameMsg initialize) { //ToDo por ahora solo ac
 
 bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
     for (GameObjectInit gameObject: gameObjectsInit.gameObjects){
-        ObjectType type = gameObject.type;
-        if (type == TURTLE || type == MUSHROOM){
+        GameObjectType type = gameObject.type;
+        if (type == GOT_ENEMY_TURTLE || type == GOT_ENEMY_MUSHROOM){
             createEnemy(gameObject, type);
         }
-        else if (type == PLAYER){ //ToDo agregar algo aca para guardar los usernames
+        else if (type == GOT_PLAYER){ //ToDo agregar algo aca para guardar los usernames
             createPlayer(gameObject);
         }
         else{
@@ -136,9 +136,9 @@ bool GameClient::loadTexts() {
     return success;
 }
 
-void GameClient::createEnemy(GameObjectInit enemy, ObjectType enemyType) {
+void GameClient::createEnemy(GameObjectInit enemy, GameObjectType enemyType) {
     Enemy* tmpEnemy;
-    if (enemyType == TURTLE) {
+    if (enemyType == GOT_ENEMY_TURTLE) {
         tmpEnemy = new EnemyTurtle();
     }
     else {
@@ -152,17 +152,17 @@ void GameClient::createEnemy(GameObjectInit enemy, ObjectType enemyType) {
 }
 
 void GameClient::createPlayer(GameObjectInit player) {
-    Player* tmpPlayer = new Player(camera -> getCamera());
+    Player* tmpPlayer = new Player(camera -> getCamera(), player.username);
     tmpPlayer->init(player.xPos, player.yPos, player.imageId, camera->getCamera(), player.frameAmount);
     playersMap[player.id] = tmpPlayer;
 }
 
-void GameClient::createStaticObject(GameObjectInit gameObject, ObjectType objectType) {
+void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType) {
     GameObject* tmp;
-    if (gameObject.type == COIN){
+    if (gameObject.type == GOT_COIN){
         tmp = new Coin();
     }
-    else if (gameObject.type == NORMAL_PLATFORM){
+    else if (gameObject.type == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
     }
     else{

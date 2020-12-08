@@ -71,6 +71,10 @@ std::string BackgroundStage::getLevelBackground() {
     return background;
 }
 
+Timer* BackgroundStage::getTimer() {
+    return timer;
+}
+
 bool BackgroundStage::setBackground() {
     bool success =  textureManager-> load(backgroundPath, BACKGROUND, renderer);
     if (!success) {

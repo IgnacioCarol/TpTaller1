@@ -1,9 +1,11 @@
 #ifndef TPTALLER1_CAMERA_H
 #define TPTALLER1_CAMERA_H
 
+#include "gameobjects/Player.h"
+
 #include <iostream>
+#include <vector>
 #include <SDL2/SDL.h>
-// #include "Game.h"
 
 
 class Camera {
@@ -13,7 +15,7 @@ public:
     ~Camera() = default;
 
 
-    void update(int playerXPos, int borderLimit);
+    void update(std::vector<Player*> players, int borderLimit);
 
     int lastValue = 0;
 

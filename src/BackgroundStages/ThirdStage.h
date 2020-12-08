@@ -11,10 +11,9 @@
 
 
 class ThirdStage : public BackgroundStage {
-private:
-    ThirdStage() : BackgroundStage(nullptr, nullptr) {}
-
 public:
+    ThirdStage();
+
     ThirdStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 
     BackgroundStage *nextStage() override;

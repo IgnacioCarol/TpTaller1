@@ -17,11 +17,14 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     maxYPosition = yPosition - 100;
     cam =  camera;
     characterState = new Normal(0, framesAmount);
+    type = GOT_PLAYER;
 }
 
 void Player::run(int direction) {
-    xDirection = direction ? direction > 0 : xDirection;
-    xPosition += cam->x < xPosition || direction > 0 ? playerVelocity * direction : 0;
+    if (xPosition < (cam->x + 700) || direction < 0){
+        xDirection = direction ? direction > 0 : xDirection;
+        xPosition += cam->x < xPosition || direction > 0 ? playerVelocity * direction : 0;
+    }
 }
 
 void Player::jump(int yMovement) {
@@ -37,8 +40,9 @@ bool Player::canJump() const {
     return ((jumping && yPosition > maxYPosition) || (!jumping && yPosition == initialJumpingPosition));
 }
 
-Player::Player(SDL_Rect *camera) {
+Player::Player(SDL_Rect *camera, std::string username) : GameObject() {
     this->init(0, 380, playerID, camera, 6);
+    this->username = username;
 }
 
 void Player::restartPos(int x, int y) {
@@ -73,6 +77,18 @@ bool Player::finishJump() {
 
 Player::~Player() {
     delete characterState;
+}
+
+std::string Player::getUsername() {
+    return username;
+}
+
+void Player::setUsername(std::string username) {
+    this->username = username;
+}
+
+int Player::getFrameAmount() {
+    return characterState->getFramesAmount();
 }
 
 void Player::setPosition(int x, int y) {

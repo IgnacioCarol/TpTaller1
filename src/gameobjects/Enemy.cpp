@@ -33,6 +33,10 @@ Enemy::~Enemy() {
     delete this->enemyState;
 }
 
+int Enemy::getFrameAmount() {
+    return enemyState->getFramesAmount();
+}
+
 void Enemy::setPosition(int x, int y) {
     xPosition = x;
     yPosition = y;

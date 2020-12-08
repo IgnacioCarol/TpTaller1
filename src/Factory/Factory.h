@@ -8,6 +8,9 @@
 
 //Images ID
 static const std::string MARIO_ID = "mario";
+static const std::string LUIGI_ID = "luigi";
+static const std::string WARIO_ID = "wario";
+static const std::string WALUIGI_ID = "waluigi";
 static const std::string SURPRISE_BLOCK_ID = "surpriseBlockSprites";
 static const std::string NORMAL_BLOCK_ID = "normalBlock";
 static const std::string KOOPA_GREEN_ID = "koopaGreen";
@@ -36,7 +39,7 @@ class Factory {
 public:
     static Factory * getInstance();
     std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig);
-    std::map<std::string, Player*>  createPlayersFromConfig();
+    std::vector<Player*>  createPlayers();
     virtual ~Factory();
 
 private:

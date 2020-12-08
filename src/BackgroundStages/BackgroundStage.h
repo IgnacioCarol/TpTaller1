@@ -11,6 +11,7 @@
 
 class BackgroundStage {
 public:
+    BackgroundStage() = default;
     explicit BackgroundStage(TextureManager *pManager, SDL_Renderer *pRenderer);
     ~BackgroundStage();
     virtual BackgroundStage* nextStage();
@@ -25,6 +26,7 @@ public:
     void setBackgroundID(std::string bgID);
     void isDefaultBackground(bool defaultBackground);
     void renderBackground(SDL_Rect *camera);
+    Timer* getTimer();
     std::string getLevelBackground();
 
 protected:

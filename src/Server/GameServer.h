@@ -11,21 +11,24 @@
 #include "../Factory/Factory.h"
 #include "../BackgroundStages/BackgroundStage.h"
 #include "../logger/logger.h"
+#include "ServerParser.h"
+#include "Server.h"
+#include "../BackgroundStages/FirstStage.h"
 
 
 class GameServer {
 public:
     static GameServer* Instance();
-    bool init(const char *levelName, std::string xmlPath);
+    bool init();
 
     //Getters to GameServer purpose
-    SDL_Rect *  getCamera();
+    Camera *  getCamera();
     std::vector<std::string>  getPlayerPaths();
 
     //Getters to send info to the client
     std::map<std::string, std::vector<std::string>> getImagePaths();
     std::vector <GameObject*> getGameObjects();
-    std::map<std::string, Player*> getPlayers();
+    std::vector <Player*> getPlayers();
 
     //Methods to control images/level flow
     void addPath(std::string ID, std::string imagePath, std::string defaultImagePath);
@@ -33,6 +36,7 @@ public:
     void restartCharacters();
 
     //Methods to control game flow
+    void sendInitializationMsg();
     bool isPlaying() const;
     void cleanGameObjects();
     void handleEvents(); //TODO: ver qué debería devolver (porque puede cambiar de escena/terminar juego)
@@ -63,7 +67,7 @@ private:
 
     //Elements of the game
     std::vector <GameObject*> gameObjects;
-    std::map<std::string, Player*>  players;
+    std::vector <Player*>  players;
 
     bool playing = false;
 };

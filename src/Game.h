@@ -14,6 +14,7 @@
 #include "config/Constants.h"
 #include "config/Config.h"
 #include "logger/logger.h"
+#include "CharacterStates/Paused.h"
 
 #include "gameobjects/Player.h"
 
@@ -62,6 +63,7 @@ private:
     //Elements of the game
     Player* player;
 
+    std::vector <Player*> players;
     std::vector <GameObject*> _gameObjects;
 
     bool playing = false;

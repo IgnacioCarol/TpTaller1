@@ -53,7 +53,12 @@ add_executable(TpTaller1
         src/Protocol/Protocol.cpp src/Protocol/Protocol.h
         src/Protocol/MessageValidator.cpp src/Protocol/MessageValidator.h
         src/Client/ClientException.cpp src/Client/ClientException.h
-        src/Server/GameServer.cpp src/Server/GameServer.h src/Protocol/InitializeGameMsg.h
+        src/Server/GameServer.cpp src/Server/GameServer.h
+        src/Protocol/GameMsgParams.h
+        src/Server/ServerParser.cpp src/Server/ServerParser.h
+        src/Client/ClientParser.cpp src/Client/ClientParser.h
+        src/CharacterStates/Paused.cpp src/CharacterStates/Paused.h
+        src/Utils/IdGenerator.cpp src/Utils/IdGenerator.h
         src/GameClient.cpp src/GameClient.h)
 
 if (APPLE)

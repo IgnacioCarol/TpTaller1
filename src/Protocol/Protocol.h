@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <json.hpp>
+#include "GameMsgParams.h"
+
 using json = nlohmann::json;
 
 #define MSG_ERROR_PROTOCOL "error"
@@ -21,14 +23,21 @@ typedef enum {
     LOGIN_CMD,
     GAME_INITIALIZE_CMD,
     GAME_VIEW_CMD
-} PROTOCOL_COMMAND;
+} ProtocolCommand;
+
+NLOHMANN_JSON_SERIALIZE_ENUM(ProtocolCommand, {
+    { LOGIN_CMD, "login" },
+    { GAME_INITIALIZE_CMD, "game_initialize" },
+    { GAME_VIEW_CMD, "game_view" }
+})
 
 class Protocol {
 public:
-    static std::string protocolToString(PROTOCOL_COMMAND);
+    static std::string protocolToString(ProtocolCommand command);
     static json buildErrorMsg(std::string error);
-    static json buildLoginMsgResponse(bool authenticated);
-    static json buildLoginMsg(std::string username, std::string password);
+    static json buildContentMsg(int status, ProtocolCommand commnad, json content);
+
+    static json gameMsgToJson(GameMsgParams params);
 
 private:
     Protocol() = default;

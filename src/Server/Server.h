@@ -10,10 +10,11 @@
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
-#include "../Protocol/Protocol.h"
+#include "ServerParser.h"
 #include "../config/Config.h"
 #include "../Protocol/MessageValidator.h"
 #include "ServerMsg.h"
+#include "GameServer.h"
 
 class Server {
 
@@ -29,15 +30,15 @@ public:
     PlayerClient * popFromWaitingRoom();
     bool waitingRoomIsEmpty();
     void addClient(PlayerClient* player);
+    void broadcast(json msg);
 
 private:
     static Server * instance;
-    Server();
 
+    Server();
     void initSocket(const char*ip, const char *port);
     json static receive(PlayerClient *playerClient);
     void initThreads();
-    void broadcast(json msg);
     json getNewCommandMsg();
     void popCommand();
     //void acceptClients();
