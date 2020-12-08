@@ -246,17 +246,26 @@ void Client::run() {
             json receivedMessage = this->getMessageFromQueue();
             Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
             ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
-            if (protocol == GAME_INITIALIZE_CMD) {
-                GameMsgParams initParams = ClientParser::parseInitParams(receivedMessage);
-                if (!gameClient->init(initParams)) { //le paso el resultado del parser magico
-                    Logger::getInstance()->error("Error trying to init gameClient");
-                    throw ClientException("Error trying to init gameClient");
-                }
-            } else if (protocol == GAME_VIEW_CMD) {
-                GameMsgPlaying updateParams = ClientParser::parseUpdateParams(receivedMessage);
-                gameClient->update(updateParams); //le paso el resultado del parsermagico
-            } else {
-                Logger::getInstance()->error("[Client] unexpected protocol command.");
+            GameMsgParams initParams;
+            GameMsgPlaying updateParams;
+
+            switch(protocol) {
+                case GAME_INITIALIZE_CMD:
+                    initParams = ClientParser::parseInitParams(receivedMessage);
+                    if (!gameClient->init(initParams)) { //le paso el resultado del parser magico
+                        Logger::getInstance()->error("Error trying to init gameClient");
+                        throw ClientException("Error trying to init gameClient");
+                    }
+                    break;
+                case GAME_VIEW_CMD:
+                    updateParams = ClientParser::parseUpdateParams(receivedMessage);
+                    gameClient->update(updateParams); //le paso el resultado del parsermagico
+                    break;
+                case GAME_OVER_CMD:
+                    // gameClient->gameOver();
+                    break;
+                default:
+                    Logger::getInstance()->error("[Client] unexpected protocol command.");
             }
         }
         if (gameClient->isPlaying()) {

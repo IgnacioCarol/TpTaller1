@@ -91,3 +91,7 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, Camera
     };
     return Protocol::gameViewMsgToJson(gameMsgPlaying);
 }
+
+json ServerParser::buildGameOverMsg() {
+    return Protocol::buildContentMsg(0, GAME_OVER_CMD, {});
+}

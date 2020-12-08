@@ -279,7 +279,7 @@ bool Server::run() {
     }
     clock_t t2, t1 = clock();
     //ToDo while (Game->isRunning()) {
-    while (someoneIsConnected()) {
+    while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
         if ((t2 - t1) < 1000 * 1000 / 60) {
             continue;
@@ -306,6 +306,11 @@ bool Server::run() {
         broadcast(msg);
         t1 = clock();
 
+    }
+
+    if (!game->isPlaying()) {
+        json msg = ServerParser::buildGameOverMsg();
+        broadcast(msg);
     }
 
     // Wait for all threads to finish before ending server run
