@@ -22,13 +22,15 @@ using json = nlohmann::json;
 typedef enum {
     LOGIN_CMD,
     GAME_INITIALIZE_CMD,
-    GAME_VIEW_CMD
+    GAME_VIEW_CMD,
+    GAME_OVER_CMD
 } ProtocolCommand;
 
 NLOHMANN_JSON_SERIALIZE_ENUM(ProtocolCommand, {
     { LOGIN_CMD, "login" },
     { GAME_INITIALIZE_CMD, "game_initialize" },
-    { GAME_VIEW_CMD, "game_view" }
+    { GAME_VIEW_CMD, "game_view" },
+    { GAME_OVER_CMD, "game_over" }
 })
 
 class Protocol {

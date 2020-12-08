@@ -17,6 +17,8 @@ public:
     static json buildErrorMsg(std::string error);
 
     static json buildPlayingGameMessage(std::vector<Player *> players, Camera *camera, int timer);
+
+    static json buildGameOverMsg();
 };
 
 

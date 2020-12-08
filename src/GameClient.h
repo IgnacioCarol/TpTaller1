@@ -41,7 +41,7 @@ private:
     SDL_Renderer* renderer;
     BackgroundStage* background;
 
-    bool playing = false;
+    bool playing = true;
     Camera* camera;
     Logger* logger = Logger::getInstance();
     TextureManager* textureManager;

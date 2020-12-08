@@ -70,7 +70,6 @@ bool GameClient::init(GameMsgParams initialize) {
 
     initBackground(renderer, initialize.stage);
     logger -> info("Init success");
-    playing = true;
     return true;
 }
 
