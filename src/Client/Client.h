@@ -22,7 +22,7 @@ public:
     Client(std::string IP, std::string port);
     ~Client();
     void init();
-    void login();
+    bool login();
     bool isConnected();
     int send(json *msg);
     int receive(json *msg);
@@ -49,7 +49,7 @@ private:
     static void *handleServerEvents(void *arg);
     static json receive(Client *client);
 
-    static void *handleAndBroadcast(void *arg);
+    static void *broadcastToServer(void *arg);
 
     void initThreads();
 

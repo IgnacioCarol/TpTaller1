@@ -185,7 +185,7 @@ Login::~Login() {
 
 	TTF_Quit();
 	IMG_Quit();
-//	SDL_Quit();
+	SDL_Quit();
 }
 
 void Login::showError(std::string error) {
@@ -196,6 +196,7 @@ void Login::showError(std::string error) {
 void Login::showWaitingRoom(SDL_Event e) {
     while(SDL_PollEvent(&e) != 0) {
         if (e.type  == SDL_QUIT ) {
+            isWaitingRoom = false;
             return;
         }
     }
