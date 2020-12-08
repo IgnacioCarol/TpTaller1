@@ -23,6 +23,8 @@ public:
 
     void restartPos();
 
+    void setXPos(int newX);
+
 private:
     SDL_Rect camera{};
 };

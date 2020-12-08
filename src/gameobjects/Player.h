@@ -35,6 +35,12 @@ public:
 
     void move() override;
 
+    void setPosition(int x, int y) override;
+
+    void setDirection(int direction) override;
+
+    void setState(std::string state) override;
+
 private:
     //Image related
     static const int pWidth = 600;

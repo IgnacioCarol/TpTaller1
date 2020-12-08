@@ -26,7 +26,12 @@ bool GameClient::init(InitializeGameMsg initialize) {
     camera = new Camera(initialize.camera.xPos, initialize.camera.yPos, cameraWidth, cameraHeight);
 
     if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
-        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs
+        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs o volarlos
+        return false;
+    }
+
+    if (!this -> loadTexts()){
+        logger -> error("Error: Loading the sprites went wrong");
         return false;
     }
 
@@ -63,13 +68,7 @@ bool GameClient::init(InitializeGameMsg initialize) {
         return false;
     }
 
-    //Setting the background
-    background = new BackgroundStage(textureManager, renderer);
-    background -> isDefaultBackground(false); //ToDo despues poner el valor que viene en el StageInit
-    background -> setBackgroundID("BG1");
-    background -> setLevel(initialize.stage.level);
-    background -> setCurrentTime(initialize.stage.timer);
-
+    initBackground(renderer, initialize.stage);
     logger -> info("Init success");
     playing = true; //Ver que onda esto despues, como carajo te avisa el back que termino
     return true;
@@ -77,7 +76,7 @@ bool GameClient::init(InitializeGameMsg initialize) {
 
 void GameClient::render() {
     SDL_RenderClear(renderer);
-    background -> renderBackground(camera -> getCamera());
+    background -> renderBackground(camera -> getCamera()); //ToDo que imprima los usernames
     //Drawing the players
     for (std::pair<int, Player*> element: playersMap){
         element.second -> draw(renderer, camera->getXpos(), 0);
@@ -89,24 +88,29 @@ void GameClient::render() {
 
 }
 
-void GameClient::update() { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
+void GameClient::update(InitializeGameMsg initialize) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
     //Aca solo recibo las cosas que cambian de posicion
+    /*if (initialize.stage.changeLevel){
+        //codigo para hacer el cambio de level, no ejecuto lo que sigue
+    }*/
+    updatePlayers(initialize.gameObjects);
 
 
+    for (std::pair<int, GameObject*> gameObject: gameObjectsMap){ //Muevo todos los objetos distintos a player
+        gameObject.second -> move();
+    }
 
-}
-
-GameClient::~GameClient() {
-
+    //Update camera position
+    camera -> setXPos(initialize.camera.xPos);
 }
 
 bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
     for (GameObjectInit gameObject: gameObjectsInit.gameObjects){
         ObjectType type = gameObject.type;
         if (type == TURTLE || type == MUSHROOM){
-            createEnemie(gameObject, type);
+            createEnemy(gameObject, type);
         }
-        else if (type == PLAYER){
+        else if (type == PLAYER){ //ToDo agregar algo aca para guardar los usernames
             createPlayer(gameObject);
         }
         else{
@@ -119,15 +123,11 @@ bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imag
     for (std::pair<std::string, std::vector<std::string>> element : imagePaths){
         textureManager -> addPath(element.first, element.second[0], element.second[1]);
     }
-
     if (!textureManager -> loadImages(renderer)) return false;
-
-    //ToDo deberian cargarse los textos tmb
-
     return true;
 }
 
-bool GameClient::loadTexts(StageInit stageInit) {
+bool GameClient::loadTexts() {
     bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_VALUE, WHITE_COLOR, renderer);
     /*if (stageInit.defaultConfig) { Todo lo mismo de arriba de poner el coso que viene en initialize
@@ -136,7 +136,7 @@ bool GameClient::loadTexts(StageInit stageInit) {
     return success;
 }
 
-void GameClient::createEnemie(GameObjectInit enemy, ObjectType enemyType) {
+void GameClient::createEnemy(GameObjectInit enemy, ObjectType enemyType) {
     Enemy* tmpEnemy;
     if (enemyType == TURTLE) {
         tmpEnemy = new EnemyTurtle();
@@ -157,7 +157,6 @@ void GameClient::createPlayer(GameObjectInit player) {
     playersMap[player.id] = tmpPlayer;
 }
 
-
 void GameClient::createStaticObject(GameObjectInit gameObject, ObjectType objectType) {
     GameObject* tmp;
     if (gameObject.type == COIN){
@@ -176,4 +175,23 @@ void GameClient::createStaticObject(GameObjectInit gameObject, ObjectType object
     }
 }
 
+void GameClient::initBackground(SDL_Renderer* renderer, StageInit stage) {
+    background = new BackgroundStage(textureManager, renderer);
+    background -> isDefaultBackground(false); //ToDo despues poner el valor que viene en el StageInit
+    background -> setBackgroundID("BG1");
+    background -> setLevel(stage.level);
+    background -> setCurrentTime(stage.timer);
+}
 
+void GameClient::updatePlayers(GameObjectsInit initialize) {
+    for (GameObjectInit gameObject: initialize.gameObjects){
+        Player* player = playersMap[gameObject.id];
+        player -> setPosition(gameObject.xPos, gameObject.yPos);
+        //player -> setDirection(gameObject.direction);
+        //player -> setState(gameObject.state); //ToDo una vez que se agreguen estas cosas sacarlo
+    }
+}
+
+GameClient::~GameClient() {
+
+}

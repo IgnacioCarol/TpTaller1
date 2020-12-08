@@ -17,19 +17,20 @@ public:
     bool init(InitializeGameMsg initialize); //
     ~GameClient();
     void render();
-    void update();
+    void update(InitializeGameMsg initialize); //ToDo por ahora digo que recibe esto para orientarme despues poner estructura correcta
     bool createGameObjects(GameObjectsInit gameObjectsInit); //recibe la lista del init de game objects
-
 
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
     static GameClient* instance; //Here will be the instance stored.
     bool loadImages(std::map<std::string, std::vector<std::string>> imagePaths);
-    bool loadTexts(StageInit stageInit);
-    void createEnemie(GameObjectInit enemy, ObjectType enemyType);
+    bool loadTexts();
+    void createEnemy(GameObjectInit enemy, ObjectType enemyType);
     void createPlayer(GameObjectInit player);
     void createStaticObject(GameObjectInit gameObject, ObjectType objectType);
+    void initBackground(SDL_Renderer* renderer, StageInit stage);
+    void updatePlayers(GameObjectsInit initialize);
 
 
     SDL_Window* window;

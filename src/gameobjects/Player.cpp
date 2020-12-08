@@ -1,6 +1,10 @@
 #include <cstdio>
 #include <utility>
 #include "../CharacterStates/Normal.h"
+#include "../CharacterStates/Jumping.h"
+#include "../CharacterStates/Crouched.h"
+#include "../CharacterStates/Running.h"
+
 #include "Player.h"
 
 static const int GRAVITY = 2;
@@ -69,4 +73,31 @@ bool Player::finishJump() {
 
 Player::~Player() {
     delete characterState;
+}
+
+void Player::setPosition(int x, int y) {
+    xPosition = x;
+    yPosition = y;
+}
+
+void Player::setDirection(int direction) {
+    this -> xDirection = direction;
+}
+
+void Player::setState(std::string state) {
+    if ( state != characterState->getStateType()){
+        int framesAmount = characterState->getFramesAmount();
+        if (state == "JUMPING"){
+            changeState(new Jumping(4, framesAmount));
+        }
+        else if (state == "NORMAL"){
+            changeState(new Normal(0, framesAmount));
+        }
+        else if (state == "RUNNING"){
+            changeState(new Running(0, framesAmount));
+        }
+        else if (state == "CROUCHED"){
+            changeState(new Crouched(5, framesAmount));
+        }
+    }
 }
