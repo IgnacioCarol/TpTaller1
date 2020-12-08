@@ -25,21 +25,6 @@ bool GameClient::init(GameMsgParams initialize) {
     int cameraHeight = initialize.camera.height;
     camera = new Camera(initialize.camera.xPos, initialize.camera.yPos, cameraWidth, cameraHeight);
 
-    if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
-        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs o volarlos
-        return false;
-    }
-
-    if (!this -> loadTexts()){
-        logger -> error("Error: Loading the sprites went wrong");
-        return false;
-    }
-
-    if(!this -> createGameObjects(initialize.gameObjectsInit)){ //ToDo volar despues estos ifs
-        logger -> error("Cannot create the objects in the client");
-        return false;
-    }
-
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
@@ -65,6 +50,21 @@ bool GameClient::init(GameMsgParams initialize) {
     }
     else{
         logger -> error("SDL init fail");
+        return false;
+    }
+
+    if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
+        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs o volarlos
+        return false;
+    }
+
+    if (!this -> loadTexts()){
+        logger -> error("Error: Loading the sprites went wrong");
+        return false;
+    }
+
+    if(!this -> createGameObjects(initialize.gameObjectsInit)){ //ToDo volar despues estos ifs
+        logger -> error("Cannot create the objects in the client");
         return false;
     }
 

@@ -243,10 +243,14 @@ void Client::run() {
     while (true || gameClient->isPlaying()) { //TODO: Ver que onda el "isPlaying" porque necesitamos recibir el mensaje de init.
         if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
+            Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
             ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
             if (protocol == GAME_INITIALIZE_CMD) {
                 GameMsgParams initParams = ClientParser::parseInitParams(receivedMessage);
-                gameClient->init(initParams); //le paso el resultado del parser magico
+                if (!gameClient->init(initParams)) { //le paso el resultado del parser magico
+                    Logger::getInstance()->error("Error trying to init gameClient");
+                    throw ClientException("Error trying to init gameClient");
+                }
             } else if (protocol == GAME_VIEW_CMD) {
                 GameMsgParams updateParams = ClientParser::parseUpdateParams(receivedMessage);
                 //gameClient->update(updateParams); //le paso el resultado del parsermagico
