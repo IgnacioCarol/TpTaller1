@@ -121,7 +121,9 @@ void *Server::authenticatePlayerClient(void *arg) {
         std::string username = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_USERNAME];
         std::string password = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_PASSWORD];
 
-        if (!server->validClientsMaximum(playerClient)) {
+        if (server->getClientsSize() >= server->clientNo) {
+            playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
+            Logger::getInstance()->error("[Server] Client " + username + " rejected because rooom is full");
             delete playerClient;
             break;
         }
@@ -352,6 +354,18 @@ int Server::getClientsSize() {
     return size;
 }
 
+int Server::getConnectedClientsSize() {
+    int size = 0;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client : clients) {
+        if (client->isConnected()) {
+            size++;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return size;
+}
+
 bool Server::clientIsLogged(std::string username) {
     bool isLogged = false;
     pthread_mutex_lock(&this->clientsMutex);
@@ -400,6 +414,7 @@ PlayerClient *Server::popFromWaitingRoom() {
     return pc;
 }
 
+
 bool Server::waitingRoomIsEmpty() {
     bool result;
     pthread_mutex_lock(&this->waitingRoomMutex);
@@ -418,7 +433,6 @@ void Server::initThreads() {
     pthread_mutex_unlock(&this->clientsMutex);
 }
 
-
 void Server::broadcast(json msg) {
     pthread_mutex_lock(&this->clientsMutex);
     for (auto & client : clients) {
@@ -428,7 +442,7 @@ void Server::broadcast(json msg) {
 }
 
 bool Server::validClientsMaximum(PlayerClient *playerClient) {
-    int clientsSize = getClientsSize();
+    int clientsSize = getConnectedClientsSize();
     std::stringstream ss;
 
     if (clientsSize >= this->clientNo) {

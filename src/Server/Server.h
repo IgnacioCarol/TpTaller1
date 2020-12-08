@@ -25,6 +25,7 @@ public:
     bool run();
     bool isRunning();
     int getClientsSize();
+    int getConnectedClientsSize();
     void pushToWaitingRoom(PlayerClient * playerClient);
     PlayerClient * popFromWaitingRoom();
     bool waitingRoomIsEmpty();
