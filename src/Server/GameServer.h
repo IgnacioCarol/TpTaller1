@@ -12,6 +12,7 @@
 #include "../BackgroundStages/BackgroundStage.h"
 #include "../logger/logger.h"
 #include "ServerParser.h"
+#include "Server.h"
 
 
 class GameServer {

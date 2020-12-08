@@ -47,6 +47,7 @@ bool GameServer::init() {
 
 void GameServer::sendInitializationMsg() {
     json msg = ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
+    Server::getInstance()->broadcast(msg);
 }
 
 std::vector<std::string> GameServer::getPlayerPaths() {
