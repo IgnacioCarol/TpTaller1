@@ -89,20 +89,21 @@ void GameClient::render() {
     SDL_RenderPresent(renderer);
 }
 
-void GameClient::update(GameMsgPlaying initialize) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
+void GameClient::update(GameMsgPlaying updateObjects) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
     //Aca solo recibo las cosas que cambian de posicion
     /*if (initialize.stage.changeLevel){
         //codigo para hacer el cambio de level, no ejecuto lo que sigue
     }*/
-    updatePlayers(initialize.players);
+    updatePlayers(updateObjects.players);
 
 
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){ //Muevo todos los objetos distintos a player
         gameObject.second -> move();
     }
 
-    //Update camera position
-    camera -> setXPos(initialize.camera.xPos);
+    //Update camera position and timer
+    camera -> setXPos(updateObjects.camera.xPos);
+    background->setCurrentTime(updateObjects.timer);
 }
 
 bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
@@ -185,12 +186,12 @@ void GameClient::initBackground(SDL_Renderer* renderer, StageInit stage) {
     background -> setCurrentTime(stage.timer);
 }
 
-void GameClient::updatePlayers(GameObjectsInit initialize) {
-    for (GameObjectInit gameObject: initialize.gameObjects){
-        Player* player = playersMap[gameObject.id];
-        player -> setPosition(gameObject.xPos, gameObject.yPos);
-        //player -> setDirection(gameObject.direction);
-        //player -> setState(gameObject.state); //ToDo una vez que se agreguen estas cosas sacarlo
+void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
+    for (GamePlayerPlaying playerUpdate: players){
+        Player* player = playersMap[playerUpdate.id];
+        player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
+        player -> setDirection(playerUpdate.direction);
+        player -> setState(playerUpdate.state);
     }
 }
 

@@ -100,7 +100,7 @@ void Player::setPosition(int x, int y) {
     yPosition = y;
 }
 
-void Player::setDirection(int direction) {
+void Player::setDirection(bool direction) {
     this -> xDirection = direction;
 }
 

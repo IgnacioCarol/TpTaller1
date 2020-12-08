@@ -23,7 +23,7 @@ void GameObject::setPosition(int x, int y) {
 
 }
 
-void GameObject::setDirection(int direction) {
+void GameObject::setDirection(bool direction) {
 
 }
 

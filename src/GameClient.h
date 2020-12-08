@@ -33,7 +33,7 @@ private:
     void createPlayer(GameObjectInit player);
     void createStaticObject(GameObjectInit gameObject, GameObjectType objectType);
     void initBackground(SDL_Renderer* renderer, StageInit stage);
-    void updatePlayers(GameObjectsInit initialize);
+    void updatePlayers(std::vector<GamePlayerPlaying>);
 
 
     SDL_Window* window;

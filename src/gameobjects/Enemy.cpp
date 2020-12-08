@@ -42,8 +42,8 @@ void Enemy::setPosition(int x, int y) {
     yPosition = y;
 }
 
-void Enemy::setDirection(int direction) {
-    this -> direction = direction;
+void Enemy::setDirection(bool direction) {
+    this -> flipFlag = !direction; //false: der a izq true: izq a der
 }
 
 void Enemy::setState(std::string state) {
