@@ -195,12 +195,6 @@ void Game::play(std::string xmlPath) {
     }
     Logger::getInstance() -> info("Game over");
     clean();
-    /*
-    delete game;
-    delete Logger::getInstance();
-
-    SDL_Quit();
-    */
 }
 
 

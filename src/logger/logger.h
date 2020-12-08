@@ -3,6 +3,7 @@
 //
 #include <iostream>
 #include <fstream>
+#include <pthread.h>
 
 #ifndef TPTALLER1_LOGGER_H
 #define TPTALLER1_LOGGER_H
@@ -23,6 +24,7 @@ class Logger {
         static Logger * instance;
         log_level       logLevel;
         std::ofstream   myFile;
+        pthread_mutex_t logMutex;
 
         Logger();
         std::string getTimestamp();

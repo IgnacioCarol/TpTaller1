@@ -10,6 +10,10 @@
 #define FONT_FILE_PATH "resources/fonts/SuperMario256.ttf"
 #endif
 
+#define LOGIN_BACKGROUND_PATH "Sprites/loginBackground.png"
+#define WAITING_ROOM_BACKGROUND_PATH "Sprites/waitingRoomBackground.png"
+#define WAITING_ROOM_MESSAGE "Waiting for all players..."
+
 struct Authentication {
     std::string username;
     std::string password;
@@ -23,9 +27,9 @@ public:
     bool init();
     Authentication* getAuthentication();
     void showError(std::string error);
-
+    void showWaitingRoom(SDL_Event e);
+    bool isWaitingRoom = false;
 private:
-    bool areCorrectCredentials();
     static void selectInput();
     SDL_Rect &showSection(SDL_Rect &dest, const SDL_Color &foreground, const string &stringToWrite, int yPosition, int xPosition);
     Authentication authentication = {"", ""};

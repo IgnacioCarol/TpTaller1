@@ -4,7 +4,7 @@
 // Pointers to our window, renderer, texture, music, and sound
 SDL_Window* window;
 SDL_Renderer* renderer;
-SDL_Texture *texture, *text;
+SDL_Texture *loginTexture, *text, *waitingRoomTexture;
 bool isWithInput = true;
 
 Login::Login() {
@@ -44,9 +44,7 @@ Authentication* Login::getAuthentication() {
                     if (e.key.keysym.sym == SDLK_RETURN) {
                         Logger::getInstance()->debug("Returning authentication with username "
                                                      + authentication.username + " and password: " + authentication.password);
-                        authenticated = true;
                         return &authentication;
-                        //return !areCorrectCredentials();
                     }
                     break;
                 case SDL_MOUSEBUTTONDOWN:
@@ -56,7 +54,7 @@ Authentication* Login::getAuthentication() {
         }
 
 // Render texture
-        SDL_RenderCopy(renderer, texture, NULL, NULL);
+        SDL_RenderCopy(renderer, loginTexture, NULL, NULL);
 
         SDL_Color foreground = { 0, 0, 0 };
 
@@ -72,14 +70,6 @@ Authentication* Login::getAuthentication() {
         SDL_Delay(10);
     }
     return nullptr;
-}
-
-bool Login::areCorrectCredentials() {
-    if (authentication.username != "coso" || authentication.password != "cosito") { //FIXME do a method that will check the credentials
-        errorLoginToShow = "Invalid username or password";
-        return false;
-    }
-    return true;
 }
 
 SDL_Rect & Login :: showSection(SDL_Rect &dest, const SDL_Color &foreground, const string &stringToWrite, int yPosition, int xPosition) {
@@ -135,19 +125,33 @@ bool Login::init() {
 		return false;
 	}
 
-	SDL_Surface* buffer = IMG_Load("Sprites/loginBackground.png");
-	if ( !buffer ) {
-        Logger::getInstance() -> error("Error loading image backgoundImage");
+	SDL_Surface* loginBuffer = IMG_Load(LOGIN_BACKGROUND_PATH);
+	if ( !loginBuffer ) {
+        Logger::getInstance() -> error("Error loading login background image ");
 		return false;
 	}
 
-	texture = SDL_CreateTextureFromSurface( renderer, buffer );
-	SDL_FreeSurface( buffer );
-	buffer = NULL;
-	if ( !texture ) {
-        Logger::getInstance() -> error("Error creating texture");
-		return false;
-	}
+    loginTexture = SDL_CreateTextureFromSurface(renderer, loginBuffer );
+    SDL_FreeSurface( loginBuffer );
+    loginBuffer = NULL;
+    if ( !loginTexture ) {
+        Logger::getInstance() -> error("Error creating login texture");
+        return false;
+    }
+
+    SDL_Surface* waitingRoomBuffer = IMG_Load(WAITING_ROOM_BACKGROUND_PATH);
+    if (!waitingRoomBuffer){
+        Logger::getInstance() -> error("Error loading waiting room image");
+        return false;
+    }
+
+    waitingRoomTexture = SDL_CreateTextureFromSurface(renderer, waitingRoomBuffer );
+    SDL_FreeSurface( waitingRoomBuffer );
+    waitingRoomBuffer = NULL;
+    if ( !loginTexture ) {
+        Logger::getInstance() -> error("Error creating waiting room texture");
+        return false;
+    }
 
 	// Start sending SDL_TextInput events
 	SDL_StartTextInput();
@@ -169,10 +173,12 @@ Login::~Login() {
 	SDL_StopTextInput();
 
 	TTF_CloseFont( font );
-	SDL_DestroyTexture( texture );
-	texture = NULL;
+	SDL_DestroyTexture(loginTexture);
+    loginTexture = NULL;
+    SDL_DestroyTexture(waitingRoomTexture);
+    waitingRoomTexture = NULL;
 
-	SDL_DestroyRenderer( renderer );
+    SDL_DestroyRenderer( renderer );
 	SDL_DestroyWindow( window );
 	window = NULL;
 	renderer = NULL;
@@ -184,4 +190,30 @@ Login::~Login() {
 
 void Login::showError(std::string error) {
     this->errorLoginToShow = error;
+}
+
+
+void Login::showWaitingRoom(SDL_Event e) {
+    while(SDL_PollEvent(&e) != 0) {
+        if (e.type  == SDL_QUIT ) {
+            isWaitingRoom = false;
+            return;
+        }
+    }
+
+    SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255 );
+    SDL_RenderClear( renderer );
+
+    SDL_RenderCopy(renderer, waitingRoomTexture, NULL, NULL);
+
+    SDL_Rect dest;
+
+    SDL_Color foreground = { 255, 255, 255 };
+
+    dest = showSection(dest, foreground, WAITING_ROOM_MESSAGE, 280, 100);
+
+    // Update window
+    SDL_RenderPresent( renderer );
+
+    SDL_Delay(10);
 }

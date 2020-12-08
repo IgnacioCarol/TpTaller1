@@ -17,6 +17,8 @@ Logger::Logger() {
         throw loggerException("unable to create log file");
     }
 
+    pthread_mutex_init(&logMutex, nullptr);
+
     this->logLevel = DEBUG; //Default level
 };
 
@@ -58,26 +60,36 @@ log_level Logger::getLogLevel() {
 }
 
 Logger::~Logger() {
+    pthread_mutex_destroy(&logMutex);
     this->myFile.flush();
     this->myFile.close();
 }
 
 std::string Logger::info(std::string msg) {
     if(this->logLevel >= INFO) {
-        return writeMsg(msg, "INFO");
+        pthread_mutex_lock(&logMutex);
+        std::string tmp = writeMsg(msg, "INFO");
+        pthread_mutex_unlock(&logMutex);
+        return tmp;
     }
     return "";
 }
 
 std::string Logger::debug(std::string msg) {
     if(this->logLevel >= DEBUG) {
-        return writeMsg(msg, "DEBUG");
+        pthread_mutex_lock(&logMutex);
+        std::string tmp = writeMsg(msg, "DEBUG");
+        pthread_mutex_unlock(&logMutex);
+        return tmp;
     }
     return "";
 }
 
 std::string Logger::error(std::string msg) {
-    return writeMsg(msg, "ERROR");
+    pthread_mutex_lock(&logMutex);
+    std::string tmp = writeMsg(msg, "ERROR");
+    pthread_mutex_unlock(&logMutex);
+    return tmp;
 }
 
 std::string Logger::writeMsg(std::string msg, std::string logLevel) {
