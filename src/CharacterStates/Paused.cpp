@@ -24,6 +24,5 @@ void Paused::changeState(const Uint8 *currentKeyStates, Player *player) {
 
 void Paused::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth, SDL_Renderer *renderer,
                   SDL_RendererFlip flip) {
-    CharacterState::draw(ID, xPosition, yPosition, imageWidth, imageHeigth, renderer, flip);
-    //+ "Paused" TODO cuando tengamos las imagenes griseadas agregar esto al parametro ID
+    CharacterState::draw("paused", xPosition, yPosition, imageWidth, imageHeigth, renderer, flip);
 }

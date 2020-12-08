@@ -120,4 +120,3 @@ void BackgroundStage::renderBackground(SDL_Rect* camera) {
 void BackgroundStage::isDefaultBackground(bool defaultBackground) {
     this -> defaultBackground = defaultBackground;
 }
-
