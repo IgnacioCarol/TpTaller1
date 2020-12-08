@@ -193,5 +193,34 @@ void GameClient::updatePlayers(GameObjectsInit initialize) {
 }
 
 GameClient::~GameClient() {
+    for (std::pair<int, Player*> players: playersMap){
+        delete players.second;
+    }
+    Logger::getInstance()->info("All Players were deleted");
 
+    for(std::pair<int, GameObject*> gameObjects: gameObjectsMap) {
+        delete gameObjects.second;
+    }
+    Logger::getInstance()->info("All Game Objects were deleted");
+
+    delete background;
+    Logger::getInstance()->info("The background was deleted");
+
+    delete this->camera;
+    Logger::getInstance()->info("The camera was deleted");
+
+    delete this->textureManager;
+    Logger::getInstance()->info("Texture Manager was deleted");
+}
+
+void GameClient::clean() {
+    logger ->info("Cleaning game\n");
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    textureManager->clearTextureMap();
+    SDL_Quit();
+}
+
+bool GameClient::isPlaying() {
+    return playing;
 }
