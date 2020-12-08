@@ -109,12 +109,12 @@ void BackgroundStage::setBackgroundID(std::string bgID) {
 
 
 void BackgroundStage::renderBackground(SDL_Rect* camera) {
+    textureManager -> drawBackgroundWithCamera(800, 600, bgID, renderer, camera);
     renderTime();
     renderLevel();
     if (defaultBackground){
         renderDefaultBackground();
     }
-    textureManager -> drawBackgroundWithCamera(800, 600, bgID, renderer, camera);
 }
 
 void BackgroundStage::isDefaultBackground(bool defaultBackground) {
