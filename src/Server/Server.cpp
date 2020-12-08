@@ -296,7 +296,7 @@ bool Server::run() {
             //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
         //ToDo change game state with msg
-        //Fixme obtain a parser that when you call it will return a json with the arguments to broadcast (ask licha what it needs, and how)
+        msg = getPlayersPositionMessage();
         broadcast(msg);
 
     }
@@ -455,5 +455,9 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
     }
 
     return true;
+}
+
+json Server::getPlayersPositionMessage() {
+    return json();
 }
 

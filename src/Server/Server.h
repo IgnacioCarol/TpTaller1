@@ -65,6 +65,7 @@ private:
     bool               running;
     const int MAX_ACCEPT_RETRIES = 10;
 
+    json getPlayersPositionMessage();
 };
 
 
