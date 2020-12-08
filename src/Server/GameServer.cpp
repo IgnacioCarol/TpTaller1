@@ -27,16 +27,16 @@ Camera *  GameServer::getCamera() {
     return camera;
 }
 
-void GameServer::initializeAllElementsOfGameServer() {
-    players = factory->createPlayers();
+void GameServer::initializeAllElementsOfGameServer(std::vector<PlayerClient*> clients) {
+    players = factory->createPlayers(clients);
     initializeGameObjects(1);
 }
 
-bool GameServer::init() {
+bool GameServer::init(std::vector<PlayerClient*> clients) {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
-    initializeAllElementsOfGameServer();
+    initializeAllElementsOfGameServer(clients);
     sendInitializationMsg();
 
     logger -> info("Server init game success");

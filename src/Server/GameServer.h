@@ -19,7 +19,7 @@
 class GameServer {
 public:
     static GameServer* Instance();
-    bool init();
+    bool init(std::vector<PlayerClient*> clients);
 
     //Getters to GameServer purpose
     Camera *  getCamera();
@@ -49,7 +49,7 @@ private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
     void initializeGameObjects(int level);
-    void initializeAllElementsOfGameServer();
+    void initializeAllElementsOfGameServer(std::vector<PlayerClient*> clients);
 
 
     //Utils

@@ -272,7 +272,7 @@ bool Server::run() {
     json message = {{"startGame", true}};
     broadcast(message);
     GameServer* game = GameServer::Instance();
-    if (!game->init()) {
+    if (!game->init(getClients())) {
         std::string error = "[Server] Couldnt initialize game server";
         Logger::getInstance()->error(error);
         throw ServerException(error);
@@ -365,6 +365,14 @@ int Server::getClientsSize() {
     return size;
 }
 
+std::vector<PlayerClient *> Server::getClients() {
+    std::vector<PlayerClient *> clients;
+    pthread_mutex_lock(&this->clientsMutex);
+    clients = this->clients;
+    pthread_mutex_unlock(&this->clientsMutex);
+    return clients;
+}
+
 bool Server::clientIsLogged(std::string username) {
     bool isLogged = false;
     pthread_mutex_lock(&this->clientsMutex);
@@ -413,6 +421,7 @@ PlayerClient *Server::popFromWaitingRoom() {
     return pc;
 }
 
+
 bool Server::waitingRoomIsEmpty() {
     bool result;
     pthread_mutex_lock(&this->waitingRoomMutex);
@@ -430,7 +439,6 @@ void Server::initThreads() {
     }
     pthread_mutex_unlock(&this->clientsMutex);
 }
-
 
 void Server::broadcast(json msg) {
     pthread_mutex_lock(&this->clientsMutex);

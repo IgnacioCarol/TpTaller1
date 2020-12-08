@@ -26,6 +26,7 @@ public:
     bool run();
     bool isRunning();
     int getClientsSize();
+    std::vector<PlayerClient*> getClients();
     void pushToWaitingRoom(PlayerClient * playerClient);
     PlayerClient * popFromWaitingRoom();
     bool waitingRoomIsEmpty();

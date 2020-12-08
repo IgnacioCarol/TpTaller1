@@ -5,6 +5,7 @@
 #include "../gameobjects/Player.h"
 #include "../gameobjects/GameObject.h"
 #include "../config/Config.h"
+#include "../Server/PlayerClient.h"
 
 //Images ID
 static const std::string MARIO_ID = "mario";
@@ -39,7 +40,7 @@ class Factory {
 public:
     static Factory * getInstance();
     std::vector<GameObject*> createGameObjectsFromLevelConfig(Level levelConfig);
-    std::vector<Player*>  createPlayers();
+    std::vector<Player*>  createPlayers(std::vector<PlayerClient*> clients);
     virtual ~Factory();
 
 private:

@@ -258,8 +258,10 @@ void Client::run() {
                 Logger::getInstance()->error("[Client] unexpected protocol command.");
             }
         }
-        gameClient -> render();
-        this->handleUserEvents();
+        if (gameClient->isPlaying()) {
+            gameClient -> render();
+            this->handleUserEvents();
+        }
     }
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
