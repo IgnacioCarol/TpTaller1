@@ -86,6 +86,7 @@ void GameClient::render() {
         element.second -> draw(renderer, camera->getXpos(), 0);
     }
 
+    SDL_RenderPresent(renderer);
 }
 
 void GameClient::update(GameMsgParams initialize) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
