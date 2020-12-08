@@ -1,3 +1,4 @@
+#include <src/Game.h>
 #include "Server.h"
 
 Server* Server::instance = nullptr;
@@ -152,6 +153,12 @@ void *Server::authenticatePlayerClient(void *arg) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
             //TODO: ver si podemos tener reintentos acá
         }
+        if (authenticated && Game::Instance()->isPlaying()) {
+            json startGame = {{"startGame", true}};
+            if (!playerClient->send(&startGame)) {
+                Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+            }
+        }
     }
 
     return nullptr;
@@ -271,6 +278,7 @@ bool Server::run() {
 
     initThreads();
     json message = {{"startGame", true}};
+    Game::Instance()->playing = true; //Fixme when game init is implemented at the server (or when game init is used) deleted this line
     broadcast(message);
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
