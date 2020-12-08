@@ -238,23 +238,29 @@ void * Client::broadcastToServer(void *arg) {
 
 void Client::run() {
     //Parser magico
-    /*gameClient = GameClient::Instance();
-    gameClient->init() le paso el resultado del parser magico
-
-    while (gameClient->isPlaying()) {
+    gameClient = GameClient::Instance();
+    Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
+    while (true || gameClient->isPlaying()) { //TODO: Ver que onda el "isPlaying" porque necesitamos recibir el mensaje de init.
         if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
-            //parser magico
-            gameClient->update(); le paso el resultado del parsermagico
+            ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
+            if (protocol == GAME_INITIALIZE_CMD) {
+                GameMsgParams initParams = ClientParser::parseInitParams(receivedMessage);
+                gameClient->init(initParams); //le paso el resultado del parser magico
+            } else if (protocol == GAME_VIEW_CMD) {
+                GameMsgParams updateParams = ClientParser::parseUpdateParams(receivedMessage);
+                //gameClient->update(updateParams); //le paso el resultado del parsermagico
+            } else {
+                Logger::getInstance()->error("[Client] unexpected protocol command.");
+            }
         }
         gameClient -> render();
-        this->handleUserEvents();
+        //this->handleUserEvents();
     }
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
     gameClient -> clean();
     delete gameClient;
-    */
 }
 
 bool Client::eventsQueueIsEmpty() {

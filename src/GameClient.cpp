@@ -117,6 +117,7 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createStaticObject(gameObject, type);
         }
     }
+    return true;
 }
 
 bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imagePaths) {

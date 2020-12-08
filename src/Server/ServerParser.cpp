@@ -65,5 +65,5 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
         gameObjectsInit
     };
 
-    return Protocol::gameMsgToJson(gameMsgParams);
+    return Protocol::gameInitMsgToJson(gameMsgParams);
 }

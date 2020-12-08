@@ -37,7 +37,7 @@ public:
     static json buildErrorMsg(std::string error);
     static json buildContentMsg(int status, ProtocolCommand commnad, json content);
 
-    static json gameMsgToJson(GameMsgParams params);
+    static json gameInitMsgToJson(GameMsgParams params);
 
 private:
     Protocol() = default;
