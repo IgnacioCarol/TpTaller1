@@ -303,6 +303,7 @@ bool Server::run() {
         }
         //ToDo change game state with msg
         game->updatePlayers();
+        game -> getCamera() -> update(game -> getPlayers(), 3000); //ToDo esta hardcodeado, el stage deberia decirme su width (guiarse por lo que esta en game.cpp)
         msg = getPlayersPositionMessage();
         broadcast(msg);
         t1 = clock();

@@ -4,16 +4,16 @@
 
 #include "Paused.h"
 #include "../gameobjects/Player.h"
-#include "../Game.h"
+#include "../Server/GameServer.h"
 
 
 Paused::Paused(int currentFrame, int frameAmount) : CharacterState(currentFrame, frameAmount) {
-
+    stateType = "PAUSED";
 }
 
 void Paused::move(const Uint8 *currentKeyStates, Player *player) {
 
-    if (player -> getXPosition() <= Game::Instance()->getCamera()->x){
+    if (player -> getXPosition() <= GameServer::Instance()->getCamera()->getXpos()){
         player -> run (1);
     }
 }

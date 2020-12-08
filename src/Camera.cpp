@@ -8,9 +8,11 @@ void Camera::update(std::vector<Player*> players, int borderLimit) {
     int maxPos = 0;
     int minPos = 4000;
     for (Player* player: players){
-        int playerPos = player -> getXPosition();
-        maxPos = (playerPos > maxPos) ? playerPos : maxPos;
-        minPos = (playerPos < minPos) ? playerPos : minPos;
+        if (player->getState() != "PAUSED"){
+            int playerPos = player -> getXPosition();
+            maxPos = (playerPos > maxPos) ? playerPos : maxPos;
+            minPos = (playerPos < minPos) ? playerPos : minPos;
+        }
     }
     if (maxPos - minPos < 600){
         camera.x = ( maxPos  + 200) - camera.w;

@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <utility>
+#include <src/CharacterStates/Paused.h>
 #include "../CharacterStates/Normal.h"
 #include "../CharacterStates/Jumping.h"
 #include "../CharacterStates/Crouched.h"
@@ -115,6 +116,9 @@ void Player::setState(std::string state) {
             changeState(new Running(0, framesAmount));
         } else if (state == "CROUCHED") {
             changeState(new Crouched(5, framesAmount));
+        }
+        else if (state == "PAUSED"){
+            changeState(new Paused(0, framesAmount));
         }
     }
 }
