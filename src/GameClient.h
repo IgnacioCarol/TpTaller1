@@ -28,7 +28,7 @@ private:
     GameClient(); //Private constructor to prevent instancing.
     static GameClient* instance; //Here will be the instance stored.
     bool loadImages(std::map<std::string, std::vector<std::string>> imagePaths);
-    bool loadTexts();
+    bool loadTexts(bool isDefault);
     void createEnemy(GameObjectInit enemy, GameObjectType enemyType);
     void createPlayer(GameObjectInit player);
     void createStaticObject(GameObjectInit gameObject, GameObjectType objectType);

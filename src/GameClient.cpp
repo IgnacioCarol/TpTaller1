@@ -58,7 +58,7 @@ bool GameClient::init(GameMsgParams initialize) {
         return false;
     }
 
-    if (!this -> loadTexts()){
+    if (!this -> loadTexts(initialize.stage.isDefault)){
         logger -> error("Error: Loading the sprites went wrong");
         return false;
     }
@@ -129,12 +129,12 @@ bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imag
     return true;
 }
 
-bool GameClient::loadTexts() {
+bool GameClient::loadTexts(bool isDefault) {
     bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_VALUE, WHITE_COLOR, renderer);
-    /*if (stageInit.defaultConfig) { Todo lo mismo de arriba de poner el coso que viene en initialize
+    if (isDefault) {
         success = success && textureManager->loadText(TEXT_DEFAULT_BACKGROUND_KEY, TEXT_DEFAULT_BACKGROUND_VALUE, WHITE_COLOR, renderer);
-    }*/
+    }
     return success;
 }
 
@@ -179,7 +179,7 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
 
 void GameClient::initBackground(SDL_Renderer* renderer, StageInit stage) {
     background = new BackgroundStage(textureManager, renderer);
-    background -> isDefaultBackground(false); //ToDo despues poner el valor que viene en el StageInit
+    background -> isDefaultBackground(stage.isDefault);
     background -> setBackgroundID("BG1");
     background -> setLevel(stage.level);
     background -> setCurrentTime(stage.timer);
