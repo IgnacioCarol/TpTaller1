@@ -63,8 +63,6 @@ private:
 
     void handleUserEvents();
 
-    void updateScreen(json json);
-
     void render();
 
     void pushCommand(json msg);
@@ -72,6 +70,8 @@ private:
     json getNewCommandMsg();
 
     void popCommandsOut();
+
+    bool keepConnection;
 };
 
 

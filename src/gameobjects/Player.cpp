@@ -19,6 +19,8 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     cam =  camera;
     characterState = new Normal(0, framesAmount);
     type = GOT_PLAYER;
+    ticks = 0;
+    leftOrRightPressed = false;
 }
 
 void Player::run(int direction) {
@@ -59,10 +61,12 @@ void Player::changeState(CharacterState *newState) {
 
 void Player::move(std::vector<int> vector) {
     Uint8 keyStates[83];
+    ticks = 0;
     std::vector<int> arrows = {SDL_SCANCODE_UP, SDL_SCANCODE_LEFT, SDL_SCANCODE_DOWN, SDL_SCANCODE_RIGHT};
     for (int i = 0; i < vector.size() && i < arrows.size(); i++) {
         keyStates[arrows[i]] = vector[i];
     }
+    leftOrRightPressed = vector[1] || vector[3];
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
 }
@@ -132,11 +136,16 @@ bool Player::getDirection() {
 
 void Player::move() {
     Uint8 keyStates[83];
-    keyStates[SDL_SCANCODE_UP] = isJumping();
-    bool isMoving = characterState->getStateType() == "JUMPING"|| characterState->getStateType() == "RUNNING";
-    keyStates[SDL_SCANCODE_LEFT] = isMoving && !xDirection;
-    keyStates[SDL_SCANCODE_RIGHT] = isMoving && xDirection;
-    keyStates[SDL_SCANCODE_DOWN] = characterState->getStateType() == "CROUCHED";
+    if (ticks < 50) {
+        keyStates[SDL_SCANCODE_UP] = isJumping();
+        bool isMoving = leftOrRightPressed && (characterState->getStateType() == "JUMPING" || characterState->getStateType() == "RUNNING");
+        keyStates[SDL_SCANCODE_LEFT] =  isMoving && !xDirection;
+        keyStates[SDL_SCANCODE_RIGHT] = isMoving && xDirection;
+        keyStates[SDL_SCANCODE_DOWN] = characterState->getStateType() == "CROUCHED";
+        ticks++;
+    } else {
+        keyStates[SDL_SCANCODE_UP] = keyStates[SDL_SCANCODE_LEFT] = keyStates[SDL_SCANCODE_RIGHT] = keyStates[SDL_SCANCODE_DOWN] = 0;
+    }
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
 }
