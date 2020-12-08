@@ -56,4 +56,23 @@ struct GameMsgParams {
     GameObjectsInit gameObjectsInit;
 };
 
+struct GamePlayerPlaying {
+    int id;
+    int xPos;
+    int yPos;
+    std::string state;
+    bool direction;
+};
+
+struct CameraDuringGame {
+    int xPos;
+    int yPos;
+    int id;
+};
+
+struct GameMsgPlaying {
+    CameraDuringGame camera;
+    std::vector<GamePlayerPlaying> players;
+    int timer;
+};
 #endif //TPTALLER1_GAMEMSGPARAMS_H

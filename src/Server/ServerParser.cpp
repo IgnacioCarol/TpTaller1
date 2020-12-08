@@ -67,3 +67,27 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
 
     return Protocol::gameInitMsgToJson(gameMsgParams);
 }
+json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, Camera *camera, int timer) {
+    CameraDuringGame cameraDuringGame = {
+            camera->getCamera()->x,
+            camera->getCamera()->y,
+    };
+    std::vector<GamePlayerPlaying> gamePlayers;
+    for (auto& player: players) {
+        GamePlayerPlaying gamePlayer = {
+                player->getId(),
+                player->getXPosition(),
+                player->getYPosition(),
+                player->getState(),
+                player->getDirection()
+        };
+        gamePlayers.push_back(gamePlayer);
+    }
+    GameMsgPlaying gameMsgPlaying = {
+            cameraDuringGame,
+            gamePlayers,
+            timer
+
+    };
+    return Protocol::gameViewMsgToJson(gameMsgPlaying);
+}
