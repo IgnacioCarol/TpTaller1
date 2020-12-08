@@ -9,6 +9,7 @@ using json = nlohmann::json;
 class ClientParser {
 public:
     static json buildLoginMsg(std::string username, std::string password);
+    static ProtocolCommand getCommand(json msg);
 };
 
 

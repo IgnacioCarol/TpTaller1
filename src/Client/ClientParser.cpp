@@ -6,3 +6,7 @@ json ClientParser::buildLoginMsg(std::string username, std::string password) {
             {MSG_LOGIN_PASSWORD, password}
     });
 }
+
+ProtocolCommand ClientParser::getCommand(json msg) {
+    return msg[MSG_COMMAND_PROTOCOL].get<ProtocolCommand>();
+}
