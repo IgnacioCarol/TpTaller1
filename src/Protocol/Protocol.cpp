@@ -85,7 +85,7 @@ json Protocol::gameViewMsgToJson(GameMsgPlaying params) {
                 {"xPos", gameObject.xPos},
                 {"yPos", gameObject.yPos},
                 {"state", gameObject.state},
-                {"direction", gameObject.state}
+                {"direction", gameObject.direction}
         };
         gameObjects.push_back(gameObjectJson);
     }

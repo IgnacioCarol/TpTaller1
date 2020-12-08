@@ -16,7 +16,7 @@ public:
             BackgroundStage *stage, std::vector<GameObject *> gameObjects, std::vector<Player *> players);
     static json buildErrorMsg(std::string error);
 
-    json buildPlayingGameMessage(std::vector<Player *> players, Camera *camera, int timer);
+    static json buildPlayingGameMessage(std::vector<Player *> players, Camera *camera, int timer);
 };
 
 

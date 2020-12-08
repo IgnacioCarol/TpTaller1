@@ -277,8 +277,13 @@ bool Server::run() {
         Logger::getInstance()->error(error);
         throw ServerException(error);
     }
+    clock_t t2, t1 = clock();
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
+        t2 = clock();
+        if ((t2 - t1) < 1000 * 1000 / 60) {
+            continue;
+        }
         bool msgIsEmpty = true;
         msg = this->getNewCommandMsg();
         if (!msg.empty()) {
@@ -298,6 +303,7 @@ bool Server::run() {
         //ToDo change game state with msg
         msg = getPlayersPositionMessage();
         broadcast(msg);
+        t1 = clock();
 
     }
 
@@ -458,6 +464,7 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
 }
 
 json Server::getPlayersPositionMessage() {
-    return json();
+    GameServer* game = GameServer::Instance();
+    return ServerParser::buildPlayingGameMessage(game->getPlayers(), game->getCamera(), game->getTimer());
 }
 

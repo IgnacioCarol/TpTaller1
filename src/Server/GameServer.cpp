@@ -52,6 +52,10 @@ void GameServer::sendInitializationMsg() {
     Server::getInstance()->broadcast(msg);
 }
 
+int GameServer::getTimer() {
+    return stage->getTimer()->getTimeSecond();
+}
+
 std::vector<std::string> GameServer::getPlayerPaths() {
     return playersPaths;
 }
