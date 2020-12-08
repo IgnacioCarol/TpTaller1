@@ -3,12 +3,16 @@
 
 #include "json.hpp"
 #include "../Protocol/Protocol.h"
+#include "../logger/logger.h"
 
 using json = nlohmann::json;
 
 class ClientParser {
 public:
     static json buildLoginMsg(std::string username, std::string password);
+    static ProtocolCommand getCommand(json msg);
+    static GameMsgParams parseInitParams(json json);
+    static GameMsgParams parseUpdateParams(json json);
 };
 
 

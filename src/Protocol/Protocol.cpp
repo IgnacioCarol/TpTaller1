@@ -29,7 +29,7 @@ json Protocol::buildContentMsg(int status, ProtocolCommand command, json content
     };
 }
 
-json Protocol::gameMsgToJson(GameMsgParams params) {
+json Protocol::gameInitMsgToJson(GameMsgParams params) {
     json window = {
             {"width", params.window.width},
             {"height", params.window.height}
@@ -51,24 +51,25 @@ json Protocol::gameMsgToJson(GameMsgParams params) {
     json gameObjects = json::array();
     for (auto& gameObject : params.gameObjectsInit.gameObjects) {
         json gameObjectJson = {
-                gameObject.id,
-                gameObject.type,
-                gameObject.imageId,
-                gameObject.username,
-                gameObject.xPos,
-                gameObject.yPos,
-                gameObject.frameAmount
+                {"id", gameObject.id},
+                {"type", gameObject.type},
+                {"imageId", gameObject.imageId},
+                {"username", gameObject.username},
+                {"xPos", gameObject.xPos},
+                {"yPos", gameObject.yPos},
+                {"frameAmount", gameObject.frameAmount}
         };
         gameObjects.push_back(gameObjectJson);
     }
 
     json msg = {
+            {"paths", params.paths},
             {"camera",      camera},
             {"window",      window},
             {"stage",       stage},
             {"gameObjects", gameObjects}
     };
 
-    return msg;
+    return buildContentMsg(0, GAME_INITIALIZE_CMD, msg);
 }
 

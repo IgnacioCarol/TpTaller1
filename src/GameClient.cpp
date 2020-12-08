@@ -25,21 +25,6 @@ bool GameClient::init(GameMsgParams initialize) {
     int cameraHeight = initialize.camera.height;
     camera = new Camera(initialize.camera.xPos, initialize.camera.yPos, cameraWidth, cameraHeight);
 
-    if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
-        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs o volarlos
-        return false;
-    }
-
-    if (!this -> loadTexts()){
-        logger -> error("Error: Loading the sprites went wrong");
-        return false;
-    }
-
-    if(!this -> createGameObjects(initialize.gameObjectsInit)){ //ToDo volar despues estos ifs
-        logger -> error("Cannot create the objects in the client");
-        return false;
-    }
-
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
@@ -65,6 +50,21 @@ bool GameClient::init(GameMsgParams initialize) {
     }
     else{
         logger -> error("SDL init fail");
+        return false;
+    }
+
+    if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
+        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs o volarlos
+        return false;
+    }
+
+    if (!this -> loadTexts()){
+        logger -> error("Error: Loading the sprites went wrong");
+        return false;
+    }
+
+    if(!this -> createGameObjects(initialize.gameObjectsInit)){ //ToDo volar despues estos ifs
+        logger -> error("Cannot create the objects in the client");
         return false;
     }
 
@@ -117,6 +117,7 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createStaticObject(gameObject, type);
         }
     }
+    return true;
 }
 
 bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imagePaths) {
@@ -193,5 +194,34 @@ void GameClient::updatePlayers(GameObjectsInit initialize) {
 }
 
 GameClient::~GameClient() {
+    for (std::pair<int, Player*> players: playersMap){
+        delete players.second;
+    }
+    Logger::getInstance()->info("All Players were deleted");
 
+    for(std::pair<int, GameObject*> gameObjects: gameObjectsMap) {
+        delete gameObjects.second;
+    }
+    Logger::getInstance()->info("All Game Objects were deleted");
+
+    delete background;
+    Logger::getInstance()->info("The background was deleted");
+
+    delete this->camera;
+    Logger::getInstance()->info("The camera was deleted");
+
+    delete this->textureManager;
+    Logger::getInstance()->info("Texture Manager was deleted");
+}
+
+void GameClient::clean() {
+    logger ->info("Cleaning game\n");
+    SDL_DestroyWindow(window);
+    SDL_DestroyRenderer(renderer);
+    textureManager->clearTextureMap();
+    SDL_Quit();
+}
+
+bool GameClient::isPlaying() {
+    return playing;
 }
