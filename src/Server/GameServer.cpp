@@ -45,6 +45,7 @@ bool GameServer::init() {
 }
 
 void GameServer::sendInitializationMsg() {
+    addPath("BG1", stage->getLevelBackground(), stage->getLevelBackground());
     json msg = ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
     Server::getInstance()->broadcast(msg);
 }

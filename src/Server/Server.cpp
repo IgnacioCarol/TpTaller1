@@ -279,34 +279,26 @@ bool Server::run() {
     }
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
+        bool msgIsEmpty = true;
         msg = this->getNewCommandMsg();
-        if (msg.empty() || !msg.is_structured()) {
-            continue;
+        if (!msg.empty()) {
+            ss.str("");
+            ss << "[thread:run] " << "msg: " << msg.dump();
+            Logger::getInstance()->info(ss.str());
+            std::string username = msg["username"].get<std::string>();
+            for (Player* player : game->getPlayers()) {
+                if (player->getUsername() == username) {
+                    std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
+                    player->move(positions);
+                }
+            }
+            this->popCommand();
             //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
         //ToDo change game state with msg
-
-        ss.str("");
-        ss << "[thread:run] " << "msg: " << msg.dump();
-        Logger::getInstance()->info(ss.str());
-        std::string username = msg["username"].get<std::string>();
-        Player* playerToUse = nullptr;
-        for (Player* player : game->getPlayers()) {
-            if (player->getUsername() == username) {
-                playerToUse = player;
-                std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
-                player->move(positions);
-            }
-        }
-        if (playerToUse) {
-            msg = {{"id",    playerToUse->getId()},
-                   {"state", playerToUse->getState()},
-                   {"xPos",  playerToUse->getXPosition()},
-                   {"yPos",  playerToUse->getYPosition()}};
-        }
+        //Fixme obtain a parser that when you call it will return a json with the arguments to broadcast (ask licha what it needs, and how)
         broadcast(msg);
 
-        this->popCommand();
     }
 
     // Wait for all threads to finish before ending server run
