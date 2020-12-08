@@ -122,3 +122,9 @@ std::vector<GameObject *> GameServer::getGameObjects() {
 std::vector<Player *> GameServer::getPlayers() {
     return players;
 }
+
+void GameServer::updatePlayers() {
+    for (Player* player: players) {
+        player->move();
+    }
+}

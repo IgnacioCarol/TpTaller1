@@ -301,6 +301,7 @@ bool Server::run() {
             //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
         //ToDo change game state with msg
+        game->updatePlayers();
         msg = getPlayersPositionMessage();
         broadcast(msg);
         t1 = clock();

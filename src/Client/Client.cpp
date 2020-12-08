@@ -237,6 +237,7 @@ void * Client::broadcastToServer(void *arg) {
 }
 
 void Client::run() {
+    bool didMove = false;
     //Parser magico
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
@@ -259,9 +260,9 @@ void Client::run() {
             }
         }
         if (gameClient->isPlaying()) {
-            gameClient -> render();
-            this->handleUserEvents();
+            gameClient->render();
         }
+        this->handleUserEvents();
     }
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
