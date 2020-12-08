@@ -125,3 +125,14 @@ std::string Player::getState() {
 bool Player::getDirection() {
     return xDirection;
 }
+
+void Player::move() {
+    Uint8 keyStates[83];
+    keyStates[SDL_SCANCODE_UP] = isJumping();
+    bool isMoving = characterState->getStateType() == "JUMPING"|| characterState->getStateType() == "RUNNING";
+    keyStates[SDL_SCANCODE_LEFT] = isMoving && !xDirection;
+    keyStates[SDL_SCANCODE_RIGHT] = isMoving && xDirection;
+    keyStates[SDL_SCANCODE_DOWN] = characterState->getStateType() == "CROUCHED";
+    characterState->changeState(keyStates, this);
+    characterState->move(keyStates, this);
+}

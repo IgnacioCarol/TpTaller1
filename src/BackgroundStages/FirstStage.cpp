@@ -4,6 +4,7 @@
 #include "FirstStage.h"
 
 FirstStage::FirstStage() {
+    Logger::getInstance()->debug("Initializing first stage...");
     this->level = 1;
     this->backgroundPath = this->getLevelBackground().empty() ? DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND : this->getLevelBackground();
     this->timer = new Timer(this->getLevelTime());

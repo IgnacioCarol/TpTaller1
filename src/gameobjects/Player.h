@@ -34,7 +34,7 @@ public:
     void changeState(CharacterState* newState);
 
     void move(std::vector<int> vector);
-
+    void move() override;
     std::string getUsername();
 
     void setUsername(std::string username);

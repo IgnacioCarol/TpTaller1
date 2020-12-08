@@ -3,18 +3,21 @@
 //
 
 #include "Timer.h"
+#include "../logger/logger.h"
 
-Timer::Timer(int32 stopTime) {
+Timer::Timer(int stopTime) {
     this->stopTime = stopTime;
 }
 
 void Timer::start() {
-    this->startTime = SDL_GetTicks();
+    int time = clock();
+    Logger::getInstance()->info("Starting timer with: " + std::to_string(time));
+    this->startTime = time;
 }
 
-int32 Timer::getTimeSecond() {
+int Timer::getTimeSecond() {
     if (startTime > 0) {
-        return this->stopTime - ((SDL_GetTicks() - startTime) / 1000);
+        return this->stopTime - ((clock() - startTime) / CLOCKS_PER_SEC);
     }
     return this->stopTime;
 }
