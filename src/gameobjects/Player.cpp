@@ -56,10 +56,14 @@ void Player::changeState(CharacterState *newState) {
     characterState = newState;
 }
 
-void Player::move() {
-    const Uint8* currentKeyStates = SDL_GetKeyboardState( NULL );
-    characterState->changeState(currentKeyStates, this);
-    characterState->move(currentKeyStates, this);
+void Player::move(std::vector<int> vector) {
+    Uint8* keyStates;
+    std::vector<int> arrows = {SDL_SCANCODE_UP, SDL_SCANCODE_LEFT, SDL_SCANCODE_DOWN, SDL_SCANCODE_RIGHT};
+    for (int i = 0; i < vector.size() && i < arrows.size(); i++) {
+        keyStates[arrows[i]] = vector[i];
+    }
+    characterState->changeState(keyStates, this);
+    characterState->move(keyStates, this);
 }
 
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
@@ -101,19 +105,19 @@ void Player::setDirection(int direction) {
 }
 
 void Player::setState(std::string state) {
-    if ( state != characterState->getStateType()){
+    if (state != characterState->getStateType()) {
         int framesAmount = characterState->getFramesAmount();
-        if (state == "JUMPING"){
+        if (state == "JUMPING") {
             changeState(new Jumping(4, framesAmount));
-        }
-        else if (state == "NORMAL"){
+        } else if (state == "NORMAL") {
             changeState(new Normal(0, framesAmount));
-        }
-        else if (state == "RUNNING"){
+        } else if (state == "RUNNING") {
             changeState(new Running(0, framesAmount));
-        }
-        else if (state == "CROUCHED"){
+        } else if (state == "CROUCHED") {
             changeState(new Crouched(5, framesAmount));
         }
     }
+}
+std::string Player::getState() {
+    return characterState->getStateType();
 }

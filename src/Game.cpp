@@ -97,7 +97,7 @@ void Game::clean() {
 
 void Game::handleEvents() {
     for (Player* element : players){
-       element -> move();
+        element->move(std::vector<int>());
     }
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->move();

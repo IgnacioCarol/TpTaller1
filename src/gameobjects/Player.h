@@ -16,7 +16,7 @@ class CharacterState;
 class Player : public GameObject {
 public:
     Player(SDL_Rect *camera, std::string username);
-    ~Player();
+    ~Player() override;
     void init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
@@ -33,7 +33,7 @@ public:
 
     void changeState(CharacterState* newState);
 
-    void move() override;
+    void move(std::vector<int> vector);
 
     std::string getUsername();
 
@@ -46,6 +46,7 @@ public:
     void setDirection(int direction) override;
 
     void setState(std::string state) override;
+    std::string getState();
 
 private:
     //Image related

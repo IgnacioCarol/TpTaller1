@@ -77,7 +77,7 @@ GameServer::~GameServer() {
 
 void GameServer::handleEvents() {
     for (auto & player : players) {
-        player->move(); //TODO: acá debería recibir los mensajes del client
+        player->move(std::vector<int>()); //TODO: acá debería recibir los mensajes del client
     }
 }
 
