@@ -34,6 +34,7 @@ private:
 
     SDL_Window* window;
     SDL_Renderer* renderer;
+    BackgroundStage* background;
 
     bool playing = false;
     Camera* camera;

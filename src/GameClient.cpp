@@ -25,11 +25,6 @@ bool GameClient::init(InitializeGameMsg initialize) {
     int cameraHeight = initialize.camera.height;
     camera = new Camera(initialize.camera.xPos, initialize.camera.yPos, cameraWidth, cameraHeight);
 
-    /*std::map<std::string, std::vector<std::string>> paths;
-    CameraInit camera;
-    StageInit stage;
-    GameObjectsInit gameObjects;*/
-
     if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
         logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs
         return false;
@@ -50,7 +45,6 @@ bool GameClient::init(InitializeGameMsg initialize) {
             logger -> info("Window init success");
             renderer = SDL_CreateRenderer(window, -1, 0);
             if (renderer){
-                //ToDo aca tengo que dibujar la cosa
                 logger -> info("Renderer init success");
             }
 
@@ -69,12 +63,21 @@ bool GameClient::init(InitializeGameMsg initialize) {
         return false;
     }
 
+    //Setting the background
+    background = new BackgroundStage(textureManager, renderer);
+    background -> isDefaultBackground(false); //ToDo despues poner el valor que viene en el StageInit
+    background -> setBackgroundID("BG1");
+    background -> setLevel(initialize.stage.level);
+    background -> setCurrentTime(initialize.stage.timer);
+
     logger -> info("Init success");
     playing = true; //Ver que onda esto despues, como carajo te avisa el back que termino
     return true;
 }
 
 void GameClient::render() {
+    SDL_RenderClear(renderer);
+    background -> renderBackground(camera -> getCamera());
     //Drawing the players
     for (std::pair<int, Player*> element: playersMap){
         element.second -> draw(renderer, camera->getXpos(), 0);
@@ -84,7 +87,6 @@ void GameClient::render() {
         element.second -> draw(renderer, camera->getXpos(), 0);
     }
 
-    //ToDo falta dibujar los textos
 }
 
 void GameClient::update() { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
@@ -128,7 +130,7 @@ bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imag
 bool GameClient::loadTexts(StageInit stageInit) {
     bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_VALUE, WHITE_COLOR, renderer);
-    /*if (stageInit.default) {
+    /*if (stageInit.defaultConfig) { Todo lo mismo de arriba de poner el coso que viene en initialize
         success = success && textureManager->loadText(TEXT_DEFAULT_BACKGROUND_KEY, TEXT_DEFAULT_BACKGROUND_VALUE, WHITE_COLOR, renderer);
     }*/
     return success;
