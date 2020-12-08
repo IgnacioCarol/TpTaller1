@@ -121,7 +121,7 @@ void *Server::authenticatePlayerClient(void *arg) {
         std::string username = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_USERNAME];
         std::string password = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_PASSWORD];
 
-        if (server->getClientsSize() >= server->clientNo) {
+        if (server->getClientsSize() >= server->clientNo && !server->clientHasLogged(username)) {
             playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
             Logger::getInstance()->error("[Server] Client " + username + " rejected because rooom is full");
             delete playerClient;
@@ -366,11 +366,22 @@ int Server::getConnectedClientsSize() {
     return size;
 }
 
+bool Server::clientHasLogged(std::string username) {
+    bool hasLogged = false;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client: this->clients) {
+        if (client->username == username) {
+            hasLogged = true;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return hasLogged;
+}
+
 bool Server::clientIsLogged(std::string username) {
     bool isLogged = false;
     pthread_mutex_lock(&this->clientsMutex);
     for (auto& client: this->clients) {
-        Logger::getInstance()->debug("[Server] checking login for client " + client->username);
         if (client->username == username && client->isConnected()) {
             isLogged = true;
         }
