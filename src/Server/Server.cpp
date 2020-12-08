@@ -269,14 +269,13 @@ bool Server::run() {
 
     initThreads();
     json message = {{"startGame", true}};
+    broadcast(message);
 
     if (!GameServer::Instance()->init()) {
         std::string error = "[Server] Couldnt initialize game server";
         Logger::getInstance()->error(error);
         throw ServerException(error);
     }
-
-    broadcast(message);
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected()) {
         msg = this->getNewCommandMsg();

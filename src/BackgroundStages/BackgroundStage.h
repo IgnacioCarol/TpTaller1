@@ -11,6 +11,7 @@
 
 class BackgroundStage {
 public:
+    BackgroundStage() = default;
     explicit BackgroundStage(TextureManager *pManager, SDL_Renderer *pRenderer);
     ~BackgroundStage();
     virtual BackgroundStage* nextStage();

@@ -35,13 +35,12 @@ void GameServer::initializeAllElementsOfGameServer() {
 bool GameServer::init() {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
+    stage = new FirstStage();
     initializeAllElementsOfGameServer();
+    sendInitializationMsg();
 
     logger -> info("Server init game success");
     playing = true;
-
-    sendInitializationMsg();
-
     return true;
 }
 
