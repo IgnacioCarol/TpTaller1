@@ -12,6 +12,7 @@
 #include "SocketException.h"
 #include "SocketMsg.h"
 #include "json.hpp"
+#include <csignal>
 
 
 #ifdef __APPLE__

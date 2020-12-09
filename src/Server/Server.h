@@ -48,6 +48,7 @@ private:
     bool validClientsMaximum(PlayerClient *playerClient);
     bool clientIsLogged(std::string username);
     bool clientHasLogged(std::string username);
+    void checkPlayersConnection();
     static void * authenticatePlayerClient(void * arg);
     static void * handlePlayerClient(void * arg);
     static void * handleIncomingConnections(void * arg);
@@ -62,8 +63,8 @@ private:
     pthread_mutex_t clientsMutex; // Mutex to control clients vector
     pthread_t          acceptorThread;
     pthread_t          loginThread;
-    pthread_t        * incomeThreads;
-    pthread_t        * outcomeThreads;
+    std::map<std::string, pthread_t> incomeThreads;
+    std::map<std::string, pthread_t> outcomeThreads;
     size_t             clientNo;
     bool               running;
     const int MAX_ACCEPT_RETRIES = 10;

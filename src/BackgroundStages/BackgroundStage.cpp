@@ -31,15 +31,13 @@ bool BackgroundStage::renderLevel() {
 }
 
 bool BackgroundStage::renderTime() {
-    if (timer != nullptr) {
-        textureManager->printText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_XPOS, TEXT_TIMER_LABEL_YPOS, renderer);
-        bool success = textureManager->loadText(TEXT_TIMER_VALUE_KEY, std::to_string(currentTime), WHITE_COLOR, renderer);
-        if (!success) {
-            logger->error("Error loading timer value in level: " + std::to_string(level));
-            return false;
-        }
-        textureManager->printText(TEXT_TIMER_VALUE_KEY, TEXT_TIMER_VALUE_XPOS, TEXT_TIMER_VALUE_YPOS, renderer);
+    textureManager->printText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_XPOS, TEXT_TIMER_LABEL_YPOS, renderer);
+    bool success = textureManager->loadText(TEXT_TIMER_VALUE_KEY, std::to_string(currentTime), WHITE_COLOR, renderer);
+    if (!success) {
+        logger->error("Error loading timer value in level: " + std::to_string(level));
+        return false;
     }
+    textureManager->printText(TEXT_TIMER_VALUE_KEY, TEXT_TIMER_VALUE_XPOS, TEXT_TIMER_VALUE_YPOS, renderer);
     return true;
 }
 

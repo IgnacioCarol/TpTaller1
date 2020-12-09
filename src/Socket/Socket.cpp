@@ -1,6 +1,7 @@
 #include <json.hpp>
 #include <sstream>
 #include "Socket.h"
+
 using json = nlohmann::json;
 Socket::Socket() {
     // Create Socket
@@ -15,6 +16,7 @@ Socket::Socket() {
     }
 
     Logger::getInstance()->info(MSG_SOCKET_CREATED);
+    signal(SIGPIPE, SIG_IGN);
 }
 
 Socket::Socket(int fd) {

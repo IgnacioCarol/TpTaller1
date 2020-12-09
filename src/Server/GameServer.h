@@ -36,12 +36,16 @@ public:
     void restartCharacters();
 
     //Methods to control game flow
-    void sendInitializationMsg();
+    json getInitializationMsg();
     bool isPlaying() const;
     void cleanGameObjects();
     void handleEvents(); //TODO: ver qué debería devolver (porque puede cambiar de escena/terminar juego)
 
     ~GameServer();
+
+    void unpausePlayer(PlayerClient *player);
+
+    void pausePlayer(PlayerClient *player);
 
     int getTimer();
 
