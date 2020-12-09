@@ -50,7 +50,7 @@ bool Client::login() {
         SDL_Event e;
         _login->isWaitingRoom = true;
         while(_login->isWaitingRoom) {
-            while (!this->eventsQueueIsEmpty()) {
+            if (!this->eventsQueueIsEmpty()) {
                 json receivedMessage = this->getMessageFromQueue();
                 std::stringstream ss;
                 ss <<"[Client] Message obtained at waiting stage:" << receivedMessage.dump();

@@ -146,7 +146,7 @@ void Game::restartCharacters() {
 void Game::update() {
 }
 bool Game::isPlaying() const {
-    return this->playing && !this->stage->isTimeOver();
+    return this->playing /*&& !this->stage->isTimeOver()*/; //Fixme remove the commented line when we implement the game
 }
 
 SDL_Rect *Game::getCamera() {

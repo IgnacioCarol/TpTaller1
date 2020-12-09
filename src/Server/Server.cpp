@@ -121,7 +121,9 @@ void *Server::authenticatePlayerClient(void *arg) {
         std::string username = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_USERNAME];
         std::string password = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_PASSWORD];
 
-        if (!server->validClientsMaximum(playerClient)) {
+        if (server->getClientsSize() >= server->clientNo && !server->clientHasLogged(username)) {
+            playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
+            Logger::getInstance()->error("[Server] Client " + username + " rejected because rooom is full");
             delete playerClient;
             break;
         }
@@ -149,6 +151,12 @@ void *Server::authenticatePlayerClient(void *arg) {
         if (!playerClient->send(&response)) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
             //TODO: ver si podemos tener reintentos acá
+        }
+        if (authenticated && Game::Instance()->isPlaying()) {
+            json startGame = {{"startGame", true}};
+            if (!playerClient->send(&startGame)) {
+                Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+            }
         }
     }
 
@@ -381,11 +389,34 @@ std::vector<PlayerClient *> Server::getClients() {
     return clients;
 }
 
+int Server::getConnectedClientsSize() {
+    int size = 0;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client : clients) {
+        if (client->isConnected()) {
+            size++;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return size;
+}
+
+bool Server::clientHasLogged(std::string username) {
+    bool hasLogged = false;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client: this->clients) {
+        if (client->username == username) {
+            hasLogged = true;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return hasLogged;
+}
+
 bool Server::clientIsLogged(std::string username) {
     bool isLogged = false;
     pthread_mutex_lock(&this->clientsMutex);
     for (auto& client: this->clients) {
-        Logger::getInstance()->debug("[Server] checking login for client " + client->username);
         if (client->username == username && client->isConnected()) {
             isLogged = true;
         }
@@ -457,7 +488,7 @@ void Server::broadcast(json msg) {
 }
 
 bool Server::validClientsMaximum(PlayerClient *playerClient) {
-    int clientsSize = getClientsSize();
+    int clientsSize = getConnectedClientsSize();
     std::stringstream ss;
 
     if (clientsSize >= this->clientNo) {
