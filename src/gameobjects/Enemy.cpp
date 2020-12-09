@@ -32,3 +32,22 @@ void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width,
 Enemy::~Enemy() {
     delete this->enemyState;
 }
+
+int Enemy::getFrameAmount() {
+    return enemyState->getFramesAmount();
+}
+
+void Enemy::setPosition(int x, int y) {
+    xPosition = x;
+    yPosition = y;
+}
+
+void Enemy::setDirection(bool direction) {
+    this -> flipFlag = !direction; //false: der a izq true: izq a der
+}
+
+void Enemy::setState(std::string state) {
+    GameObject::setState(state); //ToDo implementar esto para la prox fase
+}
+
+

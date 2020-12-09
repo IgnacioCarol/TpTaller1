@@ -26,10 +26,13 @@ public:
     int getCurrentFrame();
     int getFramesAmount();
 
+    std::string getStateType();
+
 protected:
     static const int ITER_TIMES = 8;
     static const int RUNNING_FRAME = 2;
     static const int CROUCHED_FRAME = 1;
+    std::string stateType;
     int currentFrame;
     int framesAmount; //Amount of pictures in the sprite sheet
     int contAux = 0;

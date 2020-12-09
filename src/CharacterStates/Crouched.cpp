@@ -8,7 +8,7 @@
 #include "Crouched.h"
 
 Crouched::Crouched(int currentFrame, int frameAmount) : CharacterState(currentFrame, frameAmount) {
-
+    stateType = "CROUCHED";
 }
 
 void Crouched::changeState(const Uint8 *currentKeyStates, Player *player) {

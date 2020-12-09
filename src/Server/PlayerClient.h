@@ -1,7 +1,7 @@
 #ifndef TPTALLER1_PLAYERCLIENT_H
 #define TPTALLER1_PLAYERCLIENT_H
 #include "../Socket/Socket.h"
-#include "../Utils/Protocol.h"
+#include "../Protocol/Protocol.h"
 #include <queue>
 using json = nlohmann::json;
 class PlayerClient {

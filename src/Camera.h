@@ -1,8 +1,11 @@
-#include <iostream>
-#include <SDL2/SDL.h>
-#include "Game.h"
 #ifndef TPTALLER1_CAMERA_H
 #define TPTALLER1_CAMERA_H
+
+#include "gameobjects/Player.h"
+
+#include <iostream>
+#include <vector>
+#include <SDL2/SDL.h>
 
 
 class Camera {
@@ -12,7 +15,7 @@ public:
     ~Camera() = default;
 
 
-    void render(int playerXPos, int borderLimit);
+    void update(std::vector<Player*> players, int borderLimit);
 
     int lastValue = 0;
 
@@ -21,6 +24,8 @@ public:
     int getXpos();
 
     void restartPos();
+
+    void setXPos(int newX);
 
 private:
     SDL_Rect camera{};

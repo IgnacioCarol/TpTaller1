@@ -238,6 +238,10 @@ void Config::parseCoins(Level *level, ptree pt) {
 void Config::parsePlayers(ptree pt) {
     validateTags(XML_CREDENTIAL_TAG, validCredentialTags, pt.get_child(XML_CREDENTIAL_TAG));
     this->players.amount = pt.get<int>(XML_CREDENTIAL_CONNECTIONS);
+    if (players.amount< 1) {
+        Logger::getInstance()->error("Invalid amount of players " + to_string(players.amount) + ". Expected greater than 0, setting default to 1");
+        players.amount = 1;
+    }
     this->players.users.clear();
     for (const auto &u : pt.get_child(XML_CREDENTIAL_USERS_SECTION)) {
         User user;

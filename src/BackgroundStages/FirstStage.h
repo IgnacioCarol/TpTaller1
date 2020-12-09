@@ -10,14 +10,12 @@
 #include "../Game.h"
 
 class FirstStage: public BackgroundStage {
-
-    FirstStage() : BackgroundStage(nullptr, nullptr) {}
-
 public:
+    FirstStage();
+
     FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 
     BackgroundStage *nextStage() override;
-
 };
 
 

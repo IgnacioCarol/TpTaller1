@@ -9,7 +9,7 @@
 #include "Crouched.h"
 
 Running::Running(int currentFrame, int frameAmount) : CharacterState(currentFrame, frameAmount) {
-
+    stateType = "RUNNING";
 }
 
 void Running::move(const Uint8 *currentKeyStates, Player* player) {

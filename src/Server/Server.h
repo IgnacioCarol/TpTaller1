@@ -10,10 +10,11 @@
 #include "../logger/logger.h"
 #include "ServerException.h"
 #include "PlayerClient.h"
-#include "../Utils/Protocol.h"
+#include "ServerParser.h"
 #include "../config/Config.h"
-#include "../Utils/MessageValidator.h"
+#include "../Protocol/MessageValidator.h"
 #include "ServerMsg.h"
+#include "GameServer.h"
 
 class Server {
 
@@ -25,25 +26,29 @@ public:
     bool run();
     bool isRunning();
     int getClientsSize();
+    int getConnectedClientsSize();
+    std::vector<PlayerClient*> getClients();
     void pushToWaitingRoom(PlayerClient * playerClient);
     PlayerClient * popFromWaitingRoom();
     bool waitingRoomIsEmpty();
     void addClient(PlayerClient* player);
+    void broadcast(json msg);
 
 private:
     static Server * instance;
-    Server();
 
+    Server();
     void initSocket(const char*ip, const char *port);
     json static receive(PlayerClient *playerClient);
     void initThreads();
-    void broadcast(json msg);
     json getNewCommandMsg();
     void popCommand();
     //void acceptClients();
     bool someoneIsConnected();
     bool validClientsMaximum(PlayerClient *playerClient);
     bool clientIsLogged(std::string username);
+    bool clientHasLogged(std::string username);
+    void checkPlayersConnection();
     static void * authenticatePlayerClient(void * arg);
     static void * handlePlayerClient(void * arg);
     static void * handleIncomingConnections(void * arg);
@@ -58,12 +63,13 @@ private:
     pthread_mutex_t clientsMutex; // Mutex to control clients vector
     pthread_t          acceptorThread;
     pthread_t          loginThread;
-    pthread_t        * incomeThreads;
-    pthread_t        * outcomeThreads;
+    std::map<std::string, pthread_t> incomeThreads;
+    std::map<std::string, pthread_t> outcomeThreads;
     size_t             clientNo;
     bool               running;
     const int MAX_ACCEPT_RETRIES = 10;
 
+    json getPlayersPositionMessage();
 };
 
 

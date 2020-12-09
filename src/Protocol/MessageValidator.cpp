@@ -8,7 +8,7 @@ std::string MessageValidator::validLoginMessageResponse(json msg) {
     return validMessage(msg, LOGIN_CMD, {MSG_RESPONSE_PROTOCOL});
 }
 
-std::string MessageValidator::validMessage(json msg, PROTOCOL_COMMAND protocol, const std::vector<std::string>& contentTags) {
+std::string MessageValidator::validMessage(json msg, ProtocolCommand protocol, const std::vector<std::string>& contentTags) {
     if (msg == nullptr) {
         return std::string("No message received");
     }
@@ -26,10 +26,9 @@ std::string MessageValidator::validMessage(json msg, PROTOCOL_COMMAND protocol, 
             return std::string("Command is required.");
         }
 
-        std::string commandProtocol = msg[MSG_COMMAND_PROTOCOL];
-        std::string expectedProtocol = Protocol::protocolToString(protocol);
-        if (commandProtocol != expectedProtocol) {
-            return std::string("Message is not " + expectedProtocol + " type");
+        ProtocolCommand commandProtocol = msg[MSG_COMMAND_PROTOCOL].get<ProtocolCommand>();
+        if (commandProtocol != protocol) {
+            return std::string("Message protocol is not expected type " + std::string(json(commandProtocol))); //unchecked
         }
 
         if (!msg.contains(MSG_CONTENT_PROTOCOL)) {

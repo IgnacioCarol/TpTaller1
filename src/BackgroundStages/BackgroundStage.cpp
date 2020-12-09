@@ -31,15 +31,13 @@ bool BackgroundStage::renderLevel() {
 }
 
 bool BackgroundStage::renderTime() {
-    if (timer != nullptr) {
-        textureManager->printText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_XPOS, TEXT_TIMER_LABEL_YPOS, renderer);
-        bool success = textureManager->loadText(TEXT_TIMER_VALUE_KEY, std::to_string(timer->getTimeSecond()), WHITE_COLOR, renderer);
-        if (!success) {
-            logger->error("Error loading timer value in level: " + std::to_string(level));
-            return false;
-        }
-        textureManager->printText(TEXT_TIMER_VALUE_KEY, TEXT_TIMER_VALUE_XPOS, TEXT_TIMER_VALUE_YPOS, renderer);
+    textureManager->printText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_XPOS, TEXT_TIMER_LABEL_YPOS, renderer);
+    bool success = textureManager->loadText(TEXT_TIMER_VALUE_KEY, std::to_string(currentTime), WHITE_COLOR, renderer);
+    if (!success) {
+        logger->error("Error loading timer value in level: " + std::to_string(level));
+        return false;
     }
+    textureManager->printText(TEXT_TIMER_VALUE_KEY, TEXT_TIMER_VALUE_XPOS, TEXT_TIMER_VALUE_YPOS, renderer);
     return true;
 }
 
@@ -71,6 +69,10 @@ std::string BackgroundStage::getLevelBackground() {
     return background;
 }
 
+Timer* BackgroundStage::getTimer() {
+    return timer;
+}
+
 bool BackgroundStage::setBackground() {
     bool success =  textureManager-> load(backgroundPath, BACKGROUND, renderer);
     if (!success) {
@@ -91,3 +93,28 @@ int BackgroundStage::getLevel() {
     return level;
 }
 
+void BackgroundStage::setCurrentTime(int currentTime) {
+    this -> currentTime = currentTime;
+}
+
+void BackgroundStage::setLevel(int level) {
+    this -> level = level;
+}
+
+void BackgroundStage::setBackgroundID(std::string bgID) {
+    this -> bgID = bgID;
+}
+
+
+void BackgroundStage::renderBackground(SDL_Rect* camera) {
+    textureManager -> drawBackgroundWithCamera(800, 600, bgID, renderer, camera);
+    renderTime();
+    renderLevel();
+    if (defaultBackground){
+        renderDefaultBackground();
+    }
+}
+
+void BackgroundStage::isDefaultBackground(bool defaultBackground) {
+    this -> defaultBackground = defaultBackground;
+}

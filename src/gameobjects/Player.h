@@ -15,8 +15,8 @@ class CharacterState;
 
 class Player : public GameObject {
 public:
-    Player(SDL_Rect *camera);
-    ~Player();
+    Player(SDL_Rect *camera, std::string username, std::string textureID);
+    ~Player() override;
     void init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);
     void run(int direction);
@@ -29,25 +29,42 @@ public:
 
     bool finishJump();
 
-    void restartPos(int i, int i1);
+    void restartPos(int x, int y);
 
     void changeState(CharacterState* newState);
 
+    void move(std::vector<int> vector);
     void move() override;
+    std::string getUsername();
+
+    void setUsername(std::string username);
+
+    int getFrameAmount() override;
+
+    void setPosition(int x, int y) override;
+
+    void setDirection(bool direction) override;
+
+    void setState(std::string state) override;
+    std::string getState();
+
+    bool getDirection();
 
 private:
     //Image related
+    std::string username;
     static const int pWidth = 600;
     static const int pHeight = 600;
     static const int playerVelocity = 2;
-
-    bool xDirection; //Despues hay que guiarse por otra cosa, bien hardcodeado. True = +x False = -x
+    bool xDirection; //True = +x False = -x
     CharacterState* characterState;
     bool jumping;
     bool canJump() const;
     int initialJumpingPosition;
     int maxYPosition;
     SDL_Rect *cam;
+    int ticks;
+    bool leftOrRightPressed;
 };
 
 

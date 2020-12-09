@@ -33,7 +33,7 @@ public:
 
     std::map<std::string, SDL_Texture*> getTextureMap() { return textureMap; }
 
-    void drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect *clip);
+    void drawBackgroundWithCamera(int width, int height, std::string bgID, SDL_Renderer *renderer, SDL_Rect *clip);
 
     void printText(std::string id, int x, int y, SDL_Renderer* pRenderer);
 

@@ -14,6 +14,7 @@
 #include "config/Constants.h"
 #include "config/Config.h"
 #include "logger/logger.h"
+#include "CharacterStates/Paused.h"
 
 #include "gameobjects/Player.h"
 
@@ -49,6 +50,7 @@ public:
 
     SDL_Rect * getCamera();
 
+    bool playing = false;
 private:
     Game(); //Private constructor to prevent instancing.
     static Game* instance; //Here will be the instance stored.
@@ -62,9 +64,9 @@ private:
     //Elements of the game
     Player* player;
 
+    std::vector <Player*> players;
     std::vector <GameObject*> _gameObjects;
 
-    bool playing = false;
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager;
