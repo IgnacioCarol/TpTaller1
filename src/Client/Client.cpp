@@ -244,7 +244,7 @@ void Client::run() {
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
     bool clientInitialized = false;
-    while (gameClient->isPlaying()) {
+    while (gameClient->isPlaying() && isConnected()) {
         if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
             Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
@@ -347,8 +347,4 @@ void Client::handleUserEvents() {
     msg["left"] = left;
     msg["right"] = right;
     pushCommand(msg);
-}
-
-void Client::render() {
-
 }

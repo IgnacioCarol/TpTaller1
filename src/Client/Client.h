@@ -28,7 +28,6 @@ public:
     int send(json *msg);
     int receive(json *msg);
     void release();
-    void doLogin();
 
 
     void run();
@@ -62,8 +61,6 @@ private:
     void pushEvent(json msg);
 
     void handleUserEvents();
-
-    void render();
 
     void pushCommand(json msg);
 
