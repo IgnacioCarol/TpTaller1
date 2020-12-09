@@ -61,7 +61,7 @@ bool Client::login() {
         }
         delete _login;
     } catch(std::exception &ex) {
-        Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
+        Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING + std::string(". Error: ") + ex.what());
         throw ex;
     }
     return gamesIsInitiated;

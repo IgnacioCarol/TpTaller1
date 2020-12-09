@@ -63,8 +63,8 @@ private:
     pthread_mutex_t clientsMutex; // Mutex to control clients vector
     pthread_t          acceptorThread;
     pthread_t          loginThread;
-    pthread_t        * incomeThreads;
-    pthread_t        * outcomeThreads;
+    std::map<std::string, pthread_t> incomeThreads;
+    std::map<std::string, pthread_t> outcomeThreads;
     size_t             clientNo;
     bool               running;
     const int MAX_ACCEPT_RETRIES = 10;

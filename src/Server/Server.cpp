@@ -19,8 +19,6 @@ Server::~Server() {
     pthread_mutex_destroy(&this->commandMutex);
     pthread_mutex_destroy(&this->clientsMutex);
     pthread_mutex_destroy(&this->waitingRoomMutex);
-    free(this->incomeThreads);
-    free(this->outcomeThreads);
 }
 
 Server::Server() {
@@ -33,18 +31,6 @@ Server::Server() {
 void Server::init(const char *ip, const char *port) {
 
     this->clientNo = Config::getInstance()->getPlayers().amount;
-    // Init threads
-    this->incomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
-    if (!this->incomeThreads) {
-        Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        throw ServerException(MSG_NO_MEMORY_THREADS);
-    }
-
-    this->outcomeThreads = (pthread_t *) (malloc(sizeof(pthread_t) * clientNo));
-    if (!this->outcomeThreads) {
-        Logger::getInstance()->error(MSG_NO_MEMORY_THREADS);
-        throw ServerException(MSG_NO_MEMORY_THREADS);
-    }
 
     initSocket(ip, port);
     this->running = true;
@@ -152,11 +138,19 @@ void *Server::authenticatePlayerClient(void *arg) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
             //TODO: ver si podemos tener reintentos acá
         }
-        if (authenticated && Game::Instance()->isPlaying()) {
+        if (authenticated && GameServer::Instance()->isPlaying()) {
             json startGame = {{"startGame", true}};
             if (!playerClient->send(&startGame)) {
                 Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
             }
+
+            json initMsg = GameServer::Instance()->getInitializationMsg();
+            if (!playerClient->send(&initMsg)) {
+                Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+            }
+
+            pthread_create(&server->incomeThreads[playerClient->username], nullptr, Server::handlePlayerClient, (void *) playerClient);
+            pthread_create(&server->outcomeThreads[playerClient->username], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
         }
     }
 
@@ -330,12 +324,12 @@ bool Server::run() {
     Logger::getInstance()->info("Finished run loop");
 
     // Wait for all threads to finish before ending server run
-    for(int i=0; i < this->clientNo; i++){
-        pthread_join(this->incomeThreads[i], nullptr);
+    for(auto const& thread : incomeThreads) {
+        pthread_join(thread.second, nullptr);
     }
 
-    for(int i=0; i < this->clientNo; i++){
-        pthread_join(this->outcomeThreads[i], nullptr);
+    for(auto const& thread : outcomeThreads){
+        pthread_join(thread.second, nullptr);
     }
 
     this->running = false;
@@ -489,9 +483,9 @@ bool Server::waitingRoomIsEmpty() {
 
 void Server::initThreads() {
     pthread_mutex_lock(&this->clientsMutex);
-    for(int i=0; i < this->clients.size(); i++) {
-        pthread_create(&incomeThreads[i], nullptr, Server::handlePlayerClient, (void *) clients[i]);
-        pthread_create(&outcomeThreads[i], nullptr, Server::broadcastToPlayerClient, (void *) clients[i]);
+    for(auto& client: clients) {
+        pthread_create(&incomeThreads[client->username], nullptr, Server::handlePlayerClient, (void *) client);
+        pthread_create(&outcomeThreads[client->username], nullptr, Server::broadcastToPlayerClient, (void *) client);
     }
     pthread_mutex_unlock(&this->clientsMutex);
 }
