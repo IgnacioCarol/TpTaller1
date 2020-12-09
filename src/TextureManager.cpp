@@ -93,11 +93,12 @@ void TextureManager::draw(std::string ID, int x, int y, int width, int height, S
 }
 
 
-void TextureManager::drawBackgroundWithCamera(int width, int height, SDL_Renderer *renderer, SDL_Rect* clip) {
+void TextureManager::drawBackgroundWithCamera(int width, int height, std::string bgID, SDL_Renderer *renderer,
+                                              SDL_Rect *clip) {
     {
         //Set rendering space and render to screen
         SDL_Rect renderQuad = { 0, 0, width, height };
-        SDL_Texture* texture = textureMap[BACKGROUND];
+        SDL_Texture* texture = textureMap[bgID];
         //Set clip rendering dimensions
         if( clip != nullptr )
         {

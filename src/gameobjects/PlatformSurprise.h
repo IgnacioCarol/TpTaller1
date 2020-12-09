@@ -4,7 +4,6 @@
 
 class PlatformSurprise : public GameObject {
 public:
-    PlatformSurprise();
     ~PlatformSurprise() override = default;
     void init(int x, int y, std::string textureID) override;
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;

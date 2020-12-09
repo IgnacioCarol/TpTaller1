@@ -4,10 +4,9 @@
 
 #include "PlatformNormal.h"
 
-PlatformNormal::PlatformNormal() = default;
-
 void PlatformNormal::init(int x, int y, std::string textureID) {
     GameObject::init(x, y, textureID);
+    type = GOT_PLATFORM_NORMAL;
 }
 
 void PlatformNormal::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {

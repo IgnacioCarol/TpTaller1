@@ -1,4 +1,5 @@
 #include "Client.h"
+#include "ClientParser.h"
 
 using json = nlohmann::json;
 
@@ -9,6 +10,7 @@ Client::Client(std::string IP, std::string port) {
     _login = new Login();
     pthread_mutex_init(&this->eventsMutex, nullptr);
     pthread_mutex_init(&this->commandsOutMutex, nullptr);
+    keepConnection = true;
 
 }
 
@@ -48,7 +50,7 @@ bool Client::login() {
         SDL_Event e;
         _login->isWaitingRoom = true;
         while(_login->isWaitingRoom) {
-            while (!this->eventsQueueIsEmpty()) {
+            if (!this->eventsQueueIsEmpty()) {
                 json receivedMessage = this->getMessageFromQueue();
                 std::stringstream ss;
                 ss <<"[Client] Message obtained at waiting stage:" << receivedMessage.dump();
@@ -59,7 +61,7 @@ bool Client::login() {
         }
         delete _login;
     } catch(std::exception &ex) {
-        Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING);
+        Logger::getInstance()->error(MSG_CLIENT_ERROR_PLAYING + std::string(". Error: ") + ex.what());
         throw ex;
     }
     return gamesIsInitiated;
@@ -72,7 +74,7 @@ bool Client::authenticate() {
     std::stringstream ss;
     std::string error;
 
-    json authJson = Protocol::buildLoginMsg(auth->username, auth->password);
+    json authJson = ClientParser::buildLoginMsg(auth->username, auth->password);
 
     Logger::getInstance()->debug("[Client] Will send authentication message");
     if (send(&authJson) < 0) {
@@ -139,7 +141,7 @@ void * Client::handleServerEvents(void * arg) {
     std::stringstream ss;
     while (client != nullptr &&
            client->isConnected() &&
-           (msg = receive(client)) != nullptr) {
+           (msg = receive(client)) != nullptr && client->keepConnection) {
         ss.str("");
         ss << "[thread:Client]"
            << "msg: " << msg.dump();
@@ -151,7 +153,7 @@ void * Client::handleServerEvents(void * arg) {
 }
 
 json Client::receive(Client *client) {
-    Logger::getInstance()->debug("Receiving message from server.");
+    //Logger::getInstance()->debug("Receiving message from server.");
     json msg;
     int msg_received;
     std::stringstream ss;
@@ -206,11 +208,12 @@ void * Client::broadcastToServer(void *arg) {
     auto * client = (Client *) arg;
     int tolerance = 0;
     json msg;
-    while (client != nullptr && client->isConnected()) {
+    while (client != nullptr && client->isConnected() && client->keepConnection) {
         msg = client->getNewCommandMsg();
         if (msg.empty()) {
             continue;
         }
+
 
         std::stringstream ss;
         ss << "[thread:broadcast]"
@@ -236,16 +239,56 @@ void * Client::broadcastToServer(void *arg) {
 }
 
 void Client::run() {
-    while (true || Game::Instance()->isPlaying()) { //Fixme condition is true because game->isplaying
+    bool didMove = false;
+    //Parser magico
+    gameClient = GameClient::Instance();
+    Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
+    bool clientInitialized = false;
+    while (gameClient->isPlaying()) {
         if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
-            updateScreen(receivedMessage);
+            Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
+            ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
+            GameMsgParams initParams;
+            GameMsgPlaying updateParams;
+            GameMsgLevelChange updateLevel;
+
+            switch(protocol) {
+                case GAME_INITIALIZE_CMD:
+                    initParams = ClientParser::parseInitParams(receivedMessage);
+                    clientInitialized = gameClient->init(initParams);
+                    if (!clientInitialized) { //le paso el resultado del parser magico
+                        Logger::getInstance()->error("Error trying to init gameClient");
+                        throw ClientException("Error trying to init gameClient");
+                    }
+                    break;
+                case GAME_VIEW_CMD:
+                    updateParams = ClientParser::parseUpdateParams(receivedMessage);
+                    gameClient->update(updateParams); //le paso el resultado del parsermagico
+                    break;
+                case GAME_OVER_CMD:
+                    gameClient->gameOver();
+                    break;
+                case GAME_CHANGE_LEVEL_CMD:
+                    updateLevel = ClientParser::parseChangeLevelParams(receivedMessage);
+                    gameClient -> changeLevel(updateLevel);
+                    break;
+                default:
+                    std::stringstream ss;
+                    ss << "[Client] unexpected protocol command. Protocol:" << protocol << " With received message" << receivedMessage.dump();
+                    Logger::getInstance()->error(ss.str());
+            }
         }
-        this->render();
-        this->handleUserEvents();
+        if (clientInitialized) {
+            gameClient->render();
+            this->handleUserEvents();
+        }
     }
+    keepConnection = false;
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
+    gameClient -> clean();
+    delete gameClient;
 }
 
 bool Client::eventsQueueIsEmpty() {
@@ -279,15 +322,24 @@ void Client::pushCommand(json msg) {
 void Client::handleUserEvents() {
     json msg;
     SDL_Event e;
-    bool up, down, right, left;
+    const Uint8 * keyboardState = SDL_GetKeyboardState( NULL );
+    bool keysAssigned = false;
+    int up, down, right, left;
     up = down = right = left = false;
     while( SDL_PollEvent( &e ) != 0 ) {
-        up = up || e.key.keysym.sym == SDLK_UP;
-        left = left || e.key.keysym.sym == SDLK_LEFT;
-        right = right || e.key.keysym.sym == SDLK_RIGHT;
-        down = down || e.key.keysym.sym == SDLK_DOWN;
+        if (e.type  == SDL_QUIT ) {
+            GameClient::Instance()->gameOver();
+            return;
+        }
+        if (!keysAssigned) {
+            up = keyboardState[SDL_SCANCODE_UP];
+            left = keyboardState[SDL_SCANCODE_LEFT];
+            right = keyboardState[SDL_SCANCODE_RIGHT];
+            down = keyboardState[SDL_SCANCODE_DOWN];
+            keysAssigned = true;
+        }
     }
-    if (!(up || left || down || right)) {
+    if (!keysAssigned) {
         return;
     }
     msg["up"] = up;
@@ -295,10 +347,6 @@ void Client::handleUserEvents() {
     msg["left"] = left;
     msg["right"] = right;
     pushCommand(msg);
-}
-
-void Client::updateScreen(json json) {
-
 }
 
 void Client::render() {

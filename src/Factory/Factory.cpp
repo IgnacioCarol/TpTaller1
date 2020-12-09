@@ -7,6 +7,7 @@
 #include "../gameobjects/EnemyTurtle.h"
 #include "../CharacterStates/EnemyMovement.h"
 #include "../Game.h"
+#include "../Server/GameServer.h"
 
 Factory* Factory::instance = nullptr;
 
@@ -26,6 +27,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     Enemy* tmpEnemy;
     int platformHeight;
     std::string textureID;
+
 
     // Init Platforms
     for(auto platform : levelConfig.platforms) {
@@ -50,7 +52,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             }
 
             if (tmp != nullptr){
-                TextureManager::Instance() -> addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
+                GameServer::Instance() ->addPath(textureID, platform.image, DEFAULT_PLATFORM_PATH);
                 tmp->init(platform.coordX + i * platformHeight, platform.coordY, textureID);
 
                 actors.push_back(tmp);
@@ -63,7 +65,8 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         for(long i = 0; i < coin.quantity; i++) {
             tmp = new Coin();
             if (tmp != nullptr){ //TODO we can initialice the Y position randomly too
-                TextureManager::Instance()->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
+                GameServer::Instance() ->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
+
                 tmp->init(0, coin.coordY, COIN_ID);
 
                 actors.push_back(tmp);
@@ -78,9 +81,10 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
-                    TextureManager::Instance() -> addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
-                    tmpEnemy->init(900, 435, KOOPA_GREEN_ID, Game::Instance()->getCamera(),
-                                   new EnemyMovement(0, 3));
+                    GameServer::Instance() ->addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
+                    tmpEnemy->init(900, 435, KOOPA_GREEN_ID, GameServer::Instance()->getCamera()->getCamera(),
+                                       new EnemyMovement(0, 3));
+
                     Logger::getInstance()->debug("Turtle enemy created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Turtle Enemy");
@@ -88,8 +92,9 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             } else {
                 tmpEnemy = new EnemyMushroom();
                 if (tmpEnemy != nullptr){
-                    TextureManager::Instance() -> addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
+                    GameServer::Instance() ->addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
                     tmpEnemy->init(900, 425, GOOMBA_ID, Game::Instance()->getCamera(), new EnemyMovement(0, 5));
+
                     Logger::getInstance()->debug("Mushroom enemy created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Mushroom Enemy");
@@ -105,5 +110,18 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
     return actors;
 }
 
-Factory::~Factory() = default;
+std::vector<Player*>  Factory::createPlayers(std::vector<PlayerClient*> clients) {
+    std::vector<Player*>  players;
+    std::map<std::string, std::string> imgPaths = GameServer::Instance()->getPlayerPaths();
+    auto it = imgPaths.begin();
 
+    for(int i = 0; i < clients.size() && it != imgPaths.end(); i++, it++) {
+        players.push_back(new Player(GameServer::Instance()->getCamera()->getCamera(), clients[i]->username, it->first));
+        GameServer::Instance() ->addPath(it->first, it->second, DEFAULT_PLAYER_PATH);
+        Logger::getInstance()->debug("Player " + clients[i]->username + " created correctly");
+    }
+
+    return players;
+}
+
+Factory::~Factory() = default;

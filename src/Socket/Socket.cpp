@@ -1,6 +1,7 @@
 #include <json.hpp>
 #include <sstream>
 #include "Socket.h"
+
 using json = nlohmann::json;
 Socket::Socket() {
     // Create Socket
@@ -15,6 +16,7 @@ Socket::Socket() {
     }
 
     Logger::getInstance()->info(MSG_SOCKET_CREATED);
+    signal(SIGPIPE, SIG_IGN);
 }
 
 Socket::Socket(int fd) {
@@ -222,7 +224,7 @@ Socket *Socket::accept() {
     // addrlen -> size of sockaddr structure for the CLIENT.
     client_socket = ::accept(fd, (struct sockaddr *) &client_addr, (socklen_t*) &client_addrlen);
     if (client_socket < 0) {
-        Logger::getInstance()->error(MSG_SOCKET_ACCEPT_FAILED);
+        Logger::getInstance()->error(MSG_SOCKET_ACCEPT_FAILED + std::string("Error: ") + std::string(strerror(errno)));
         throw SocketException(MSG_SOCKET_ACCEPT_FAILED);
     }
 

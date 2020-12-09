@@ -1,10 +1,9 @@
 #include "PlatformSurprise.h"
 
-PlatformSurprise::PlatformSurprise() = default;
-
 void PlatformSurprise::init(int x, int y, std::string textureID) {
     GameObject::init(x, y, textureID);
     _currentFrame = 0;
+    type = GOT_PLATFORM_SURPRISE;
 }
 
 void PlatformSurprise::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {

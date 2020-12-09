@@ -9,16 +9,36 @@
 #endif
 
 #include "../TextureManager.h"
+#include "../Utils/IdGenerator.h"
 #include <cstdio>
 #include <string>
 
+enum GameObjectType {
+    GOT_COIN,
+    GOT_ENEMY_MUSHROOM,
+    GOT_ENEMY_TURTLE,
+    GOT_PLATFORM_NORMAL,
+    GOT_PLATFORM_SURPRISE,
+    GOT_PLAYER
+};
+
 class GameObject {
 public:
+    GameObject();
     virtual ~GameObject() = default;
     virtual void init(int x, int y, std::string textureID);
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
     virtual void move();
     virtual int getHeight();
+    virtual int getFrameAmount();
+    int getId();
+    GameObjectType getType();
+    std::string getTextureId();
+    int getXPosition();
+    int getYPosition();
+    virtual void setPosition(int x, int y);
+    virtual void setDirection(bool direction);
+    virtual void setState(std::string state);
 
 protected:
     //To manage the movement
@@ -29,7 +49,9 @@ protected:
     TextureManager* textureManager = TextureManager::Instance();
     std::string _textureID;
     int _currentFrame;
-};
 
+    int id;
+    GameObjectType type;
+};
 
 #endif //TPTALLER1_GAMEOBJECT_H

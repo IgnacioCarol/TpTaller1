@@ -72,8 +72,8 @@ Game::~Game() {
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    camera->render(player->getXPosition(), stage->getWidth());
-    textureManager->drawBackgroundWithCamera(800, 600, renderer, camera->getCamera());
+    camera->update(players, stage->getWidth());
+    textureManager->drawBackgroundWithCamera(800, 600, "BG", renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
 
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
@@ -96,7 +96,9 @@ void Game::clean() {
 }
 
 void Game::handleEvents() {
-    player->move();
+    for (Player* element : players){
+        element->move(std::vector<int>());
+    }
     for(std::vector<GameObject*>::size_type i = 0; i != _gameObjects.size(); i++) {
         _gameObjects[i]->move();
     }
@@ -117,7 +119,8 @@ bool Game::loadTexts() {
 }
 
 void Game::createGameObjects() {
-    player = new Player(camera->getCamera());
+    player = new Player(camera->getCamera(), "mario", "mario");
+    players.push_back(player);
     TextureManager::Instance() -> addPath("mario", imgPlayer, defaultPlayer); //ToDo ver como hacer para conseguir los paths de mario sin usar los define que tiene
     initializeGameObjects(1);
 }

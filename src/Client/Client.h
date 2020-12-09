@@ -12,8 +12,9 @@
 #include "../Game.h"
 #include "ClientMsg.h"
 #include "ClientException.h"
-#include "../Utils/Protocol.h"
-#include "../Utils/MessageValidator.h"
+#include "ClientParser.h"
+#include "../Protocol/MessageValidator.h"
+#include "../GameClient.h"
 
 using json = nlohmann::json;
 
@@ -38,6 +39,7 @@ private:
     Socket* _socket;
     std::string _clientID; //TODO inicializar con el XML? Tal vez el ID pueda ser el nombre de usuario, una vez que se haga el login utilizar username en este campo
     Login* _login;
+    GameClient* gameClient;
 
     bool authenticate();
     pthread_t         incomeThread;
@@ -61,8 +63,6 @@ private:
 
     void handleUserEvents();
 
-    void updateScreen(json json);
-
     void render();
 
     void pushCommand(json msg);
@@ -70,6 +70,8 @@ private:
     json getNewCommandMsg();
 
     void popCommandsOut();
+
+    bool keepConnection;
 };
 
 
