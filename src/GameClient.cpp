@@ -230,3 +230,28 @@ bool GameClient::isPlaying() {
 void GameClient::gameOver() {
     playing = false;
 }
+
+/*void GameClient::changeLevelBackground() {
+    background->setLevel(nextLevelConfig.stage.level);
+    background->setCurrentTime(nextLevelConfig.stage.time);
+    background->setBackgroundID(nextLevelConfig.stage.bgID);
+}*/
+
+void GameClient::changeLevel(GameObjectsInit nextLevelConfig) { //ToDo poner la estructura correcta
+    for (std::pair<int, Player*> player: playersMap){
+        player.second->restartPos(0, 380);
+        player.second->setDirection(true);
+        player.second->changeState(new Normal(0, player.second->getFrameAmount()));
+    }
+
+    //changeLevelBackground(nextLevelConfig.stage); //ToDo poner el struct que recibe para setearlo
+    camera->restartPos();
+
+    //Deleting the gameObjects of the current level
+    for (std::pair<int, GameObject*> gameObject: gameObjectsMap){
+        delete gameObject.second; //ToDo chequear que no explote, quizas poner el value en null a proposito
+    }
+    gameObjectsMap.clear();
+
+    createGameObjects(nextLevelConfig);
+}

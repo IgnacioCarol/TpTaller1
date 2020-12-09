@@ -29,7 +29,7 @@ public:
 
     bool finishJump();
 
-    void restartPos(int i, int i1);
+    void restartPos(int x, int y);
 
     void changeState(CharacterState* newState);
 
