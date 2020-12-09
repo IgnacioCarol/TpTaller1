@@ -38,6 +38,7 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
+    LEVEL_LIMIT = stage -> getWidth();
 
     addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
@@ -96,6 +97,7 @@ void GameServer::handleEvents() {
 void GameServer::nextStage() {
     BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
+    LEVEL_LIMIT = stage -> getWidth();
     if (currentStage != stage) {
         Logger::getInstance()->info("Stage changed");
         cleanGameObjects();
@@ -159,6 +161,7 @@ void GameServer::gameOver() {
 
 void GameServer::setChangeLevelFlag(bool setValue) {
     changeLevelFlag = setValue;
+}
 void GameServer::unpausePlayer(PlayerClient *playerClient) {
     for (Player *player: getPlayers()) {
         if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
@@ -173,4 +176,8 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
             player->changeState(new Paused(0,player->getFrameAmount()));
         }
     }
+}
+
+int GameServer::getLevelLimit() {
+    return LEVEL_LIMIT;
 }

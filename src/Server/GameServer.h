@@ -59,6 +59,8 @@ public:
 
     void setChangeLevelFlag(bool setValue);
 
+    int getLevelLimit();
+
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
@@ -87,7 +89,7 @@ private:
 
     bool playing = false;
     bool changeLevelFlag = false;
-    const int LEVEL_LIMIT = 3100; //ToDo chequear que este bien
+    int LEVEL_LIMIT;
 };
 
 
