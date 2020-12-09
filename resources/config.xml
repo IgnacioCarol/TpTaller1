@@ -212,20 +212,20 @@
          <cantidadJugadores>2</cantidadJugadores>
          <usuarios>
              <usuario>
-                 <nombre>a</nombre>
-                 <contrasenia>a</contrasenia>
+                 <nombre>mario</nombre>
+                 <contrasenia>mario</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>b</nombre>
-                 <contrasenia>b</contrasenia>
+                 <nombre>luigi</nombre>
+                 <contrasenia>luigi</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>c</nombre>
-                 <contrasenia>c</contrasenia>
+                 <nombre>yoshi</nombre>
+                 <contrasenia>yoshi</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>d</nombre>
-                 <contrasenia>d</contrasenia>
+                 <nombre>toad</nombre>
+                 <contrasenia>toad</contrasenia>
              </usuario>
          </usuarios>
      </credenciales>
