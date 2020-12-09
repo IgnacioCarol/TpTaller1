@@ -252,20 +252,21 @@ void GameClient::gameOver() {
     playing = false;
 }
 
-/*void GameClient::changeLevelBackground() {
-    background->setLevel(nextLevelConfig.stage.level);
-    background->setCurrentTime(nextLevelConfig.stage.time);
-    background->setBackgroundID(nextLevelConfig.stage.bgID);
-}*/
+void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
+    background->setLevel(nextLevelConfig.level);
+    background->setCurrentTime(nextLevelConfig.timer);
+    background->setBackgroundID("BG" + std::to_string(nextLevelConfig.level));
+    background -> isDefaultBackground(nextLevelConfig.isDefault);
+}
 
-void GameClient::changeLevel(GameObjectsInit nextLevelConfig) { //ToDo poner la estructura correcta
+void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     for (std::pair<int, Player*> player: playersMap){
         player.second->restartPos(0, 380);
         player.second->setDirection(true);
         player.second->changeState(new Normal(0, player.second->getFrameAmount()));
     }
 
-    //changeLevelBackground(nextLevelConfig.stage); //ToDo poner el struct que recibe para setearlo
+    changeLevelBackground(nextLevelConfig.stage);
     camera->restartPos();
 
     //Deleting the gameObjects of the current level
@@ -274,5 +275,5 @@ void GameClient::changeLevel(GameObjectsInit nextLevelConfig) { //ToDo poner la 
     }
     gameObjectsMap.clear();
 
-    createGameObjects(nextLevelConfig);
+    createGameObjects(nextLevelConfig.gameObjectsInit);
 }

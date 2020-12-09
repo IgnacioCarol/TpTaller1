@@ -83,3 +83,34 @@ GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
         contentJson["timer"]
     };
 }
+
+GameMsgLevelChange ClientParser::parseChangeLevelParams(json msg) {
+    Logger::getInstance()->debug("Parsing change level params...");
+    json contentJson = msg[MSG_CONTENT_PROTOCOL];
+
+    StageInit stage = {
+            contentJson["stage"]["level"],
+            contentJson["stage"]["timer"],
+            contentJson["stage"]["isDefault"]
+    };
+
+    std::vector<GameObjectInit> gameObjects;
+
+    for (auto&gameObjectJson : contentJson["gameObjects"]) {
+        GameObjectInit gameObjectInit = {
+                gameObjectJson["id"],
+                gameObjectJson["type"],
+                gameObjectJson["imageId"],
+                gameObjectJson["username"],
+                gameObjectJson["xPos"],
+                gameObjectJson["yPos"],
+                gameObjectJson["frameAmount"]
+        };
+        gameObjects.push_back(gameObjectInit);
+    }
+
+    return GameMsgLevelChange{
+            stage,
+            { gameObjects }
+    };
+}

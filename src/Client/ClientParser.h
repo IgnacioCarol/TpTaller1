@@ -13,6 +13,7 @@ public:
     static ProtocolCommand getCommand(json msg);
     static GameMsgParams parseInitParams(json json);
     static GameMsgPlaying parseUpdateParams(json json);
+    static GameMsgLevelChange parseChangeLevelParams(json json);
 };
 
 

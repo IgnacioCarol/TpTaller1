@@ -56,6 +56,11 @@ struct GameMsgParams {
     GameObjectsInit gameObjectsInit;
 };
 
+struct GameMsgLevelChange {
+    StageInit stage;
+    GameObjectsInit gameObjectsInit;
+};
+
 struct GamePlayerPlaying {
     int id;
     int xPos;

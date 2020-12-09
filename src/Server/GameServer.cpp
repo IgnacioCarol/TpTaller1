@@ -127,5 +127,23 @@ std::vector<Player *> GameServer::getPlayers() {
 void GameServer::updatePlayers() {
     for (Player* player: players) {
         player->move();
+        if (player->getXPosition() >= LEVEL_LIMIT && player->getState() != "JUMPING"){
+            player->changeState(new Paused(0, player->getFrameAmount()));
+            changeLevelFlag = true;
+        }
     }
+
+    for (Player* player: players){
+        changeLevelFlag &= (player->getState() == "DONE" || player->getState() == "PAUSED");
+    }
+
+    if (changeLevelFlag) nextStage();
+}
+
+BackgroundStage *GameServer::getBackgroundStage() {
+    return stage;
+}
+
+bool GameServer::changeLevel() {
+    return changeLevelFlag;
 }

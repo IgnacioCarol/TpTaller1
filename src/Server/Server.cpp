@@ -290,7 +290,7 @@ bool Server::run() {
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 100 / 60) {
+        if ((t2 - t1) < 1000 * 1000 / 60) {
             continue;
         }
 
@@ -512,6 +512,9 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
 
 json Server::getPlayersPositionMessage() {
     GameServer* game = GameServer::Instance();
+    if (game->changeLevel()){
+        return ServerParser::buildChangeLevelMsg(game->getGameObjects(), game->getBackgroundStage());
+    }
     return ServerParser::buildPlayingGameMessage(game->getPlayers(), game->getCamera(), game->getTimer());
 }
 

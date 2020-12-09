@@ -251,6 +251,7 @@ void Client::run() {
             ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
             GameMsgParams initParams;
             GameMsgPlaying updateParams;
+            GameMsgLevelChange updateLevel;
 
             switch(protocol) {
                 case GAME_INITIALIZE_CMD:
@@ -268,6 +269,9 @@ void Client::run() {
                 case GAME_OVER_CMD:
                     gameClient->gameOver();
                     break;
+                case GAME_CHANGE_LEVEL_CMD:
+                    updateLevel = ClientParser::parseChangeLevelParams(receivedMessage);
+                    gameClient -> changeLevel(updateLevel);
                 default:
                     Logger::getInstance()->error("[Client] unexpected protocol command.");
             }

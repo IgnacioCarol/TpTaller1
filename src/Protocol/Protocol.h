@@ -23,7 +23,8 @@ typedef enum {
     LOGIN_CMD,
     GAME_INITIALIZE_CMD,
     GAME_VIEW_CMD,
-    GAME_OVER_CMD
+    GAME_OVER_CMD,
+    GAME_CHANGE_LEVEL_CMD
 } ProtocolCommand;
 
 NLOHMANN_JSON_SERIALIZE_ENUM(ProtocolCommand, {
@@ -41,6 +42,7 @@ public:
 
     static json gameInitMsgToJson(GameMsgParams params);
     static json gameViewMsgToJson(GameMsgPlaying params);
+    static json gameChangeLevelMsgToJson(GameMsgLevelChange changeLevelMsg);
 private:
     Protocol() = default;
     ~Protocol() = default;

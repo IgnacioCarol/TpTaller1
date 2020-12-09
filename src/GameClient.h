@@ -22,7 +22,7 @@ public:
     bool createGameObjects(GameObjectsInit gameObjectsInit); //recibe la lista del init de game objects
     bool isPlaying();
     void gameOver();
-    void changeLevel(GameObjectsInit nextLevelConfig);
+    void changeLevel(GameMsgLevelChange nextLevelConfig);
     void clean();
 
 private:
@@ -36,7 +36,7 @@ private:
     void createStaticObject(GameObjectInit gameObject, GameObjectType objectType);
     void initBackground(SDL_Renderer* renderer, StageInit stage);
     void updatePlayers(std::vector<GamePlayerPlaying>);
-    void changeLevelBackground();
+    void changeLevelBackground(StageInit nextLevelConfig);
 
 
     SDL_Window* window;

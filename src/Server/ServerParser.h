@@ -18,6 +18,8 @@ public:
 
     static json buildPlayingGameMessage(std::vector<Player *> players, Camera *camera, int timer);
 
+    static json buildChangeLevelMsg(std::vector<GameObject*> gameObjects, BackgroundStage* stage);
+
     static json buildGameOverMsg();
 };
 

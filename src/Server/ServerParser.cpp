@@ -95,3 +95,32 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, Camera
 json ServerParser::buildGameOverMsg() {
     return Protocol::buildContentMsg(0, GAME_OVER_CMD, {});
 }
+
+json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, BackgroundStage *stage) {
+    StageInit stageUpdate = {
+            stage->getLevel(),
+            stage->getTimer()->getTimeSecond(),
+            Config::getInstance()->isDefault()
+    };
+
+    std::vector<GameObjectInit> gameObjectsInit;
+    for (auto& gameObject: gameObjects) {
+        GameObjectInit gameObjectInit = {
+                gameObject->getId(),
+                gameObject->getType(),
+                gameObject->getTextureId(),
+                "",
+                gameObject->getXPosition(),
+                gameObject->getYPosition(),
+                gameObject->getFrameAmount()
+        };
+        gameObjectsInit.push_back(gameObjectInit);
+    }
+
+    GameMsgLevelChange gameMsgLevelChange = {
+            stageUpdate,
+            gameObjectsInit
+    };
+
+    return Protocol::gameChangeLevelMsgToJson(gameMsgLevelChange);
+}

@@ -96,3 +96,32 @@ json Protocol::gameViewMsgToJson(GameMsgPlaying params) {
     };
     return buildContentMsg(0, GAME_VIEW_CMD, msg);
 }
+
+json Protocol::gameChangeLevelMsgToJson(GameMsgLevelChange params) {
+    json stage = {
+            {"level", params.stage.level},
+            {"timer", params.stage.timer},
+            {"isDefault", params.stage.isDefault}
+    };
+
+    json gameObjects = json::array();
+    for (auto& gameObject : params.gameObjectsInit.gameObjects) {
+        json gameObjectJson = {
+                {"id", gameObject.id},
+                {"type", gameObject.type},
+                {"imageId", gameObject.imageId},
+                {"username", gameObject.username},
+                {"xPos", gameObject.xPos},
+                {"yPos", gameObject.yPos},
+                {"frameAmount", gameObject.frameAmount}
+        };
+        gameObjects.push_back(gameObjectJson);
+    }
+
+    json msg = {
+            {"stage",       stage},
+            {"gameObjects", gameObjects}
+    };
+
+    return buildContentMsg(0, GAME_CHANGE_LEVEL_CMD, msg);
+}
