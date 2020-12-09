@@ -171,8 +171,8 @@ void * Server::handlePlayerClient(void * arg) {
     while (playerClient &&
             playerClient->isConnected() &&
             (msg = receive(playerClient)) != nullptr) {
-        /*ss.str("");
         msg["username"] = playerClient->username;
+        /*ss.str("");
         ss << "[thread:listener]" << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());*/
@@ -290,7 +290,7 @@ bool Server::run() {
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 50 / 60) {
+        if ((t2 - t1) < 1000 * 100 / 60) {
             continue;
         }
 
