@@ -31,7 +31,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM(ProtocolCommand, {
     { LOGIN_CMD, "login" },
     { GAME_INITIALIZE_CMD, "game_initialize" },
     { GAME_VIEW_CMD, "game_view" },
-    { GAME_OVER_CMD, "game_over" }
+    { GAME_OVER_CMD, "game_over" },
+    { GAME_CHANGE_LEVEL_CMD, "change_level"}
 })
 
 class Protocol {

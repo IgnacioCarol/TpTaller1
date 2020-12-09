@@ -1,5 +1,6 @@
 #include <src/CharacterStates/Normal.h>
 #include "GameServer.h"
+#include "../CharacterStates/Normal.h"
 
 GameServer* GameServer::instance = 0;
 
@@ -37,21 +38,23 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
+
+    addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
+    addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
+    addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
+    addPath("paused", "Sprites/Players/pausedPlayer.png","Sprites/Players/pausedPlayer.png");
+
     initializeAllElementsOfGameServer(clients);
-    sendInitializationMsg();
+    json msg = getInitializationMsg();
+    Server::getInstance()->broadcast(msg);
 
     logger -> info("Server init game success");
     playing = true;
     return true;
 }
 
-void GameServer::sendInitializationMsg() {
-    addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
-    addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
-    addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
-    addPath("paused", "Sprites/Players/pausedPlayer.png","Sprites/Players/pausedPlayer.png");
-    json msg = ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
-    Server::getInstance()->broadcast(msg);
+json GameServer::getInitializationMsg() {
+    return ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
 }
 
 int GameServer::getTimer() {
@@ -156,4 +159,18 @@ void GameServer::gameOver() {
 
 void GameServer::setChangeLevelFlag(bool setValue) {
     changeLevelFlag = setValue;
+void GameServer::unpausePlayer(PlayerClient *playerClient) {
+    for (Player *player: getPlayers()) {
+        if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
+            player->changeState(new Normal(0,player->getFrameAmount()));
+        }
+    }
+}
+
+void GameServer::pausePlayer(PlayerClient *playerClient) {
+    for (Player * player: getPlayers()) {
+        if (player->getUsername() == playerClient->username) {
+            player->changeState(new Paused(0,player->getFrameAmount()));
+        }
+    }
 }
