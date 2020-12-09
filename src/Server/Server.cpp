@@ -186,21 +186,23 @@ json Server::receive(PlayerClient *playerClient) {
     int tolerance = 0;
 
     while (playerClient->isConnected()) {
+        Logger::getInstance()->debug("Waiting to receive msg from player: " + playerClient->username);
         msg_received = playerClient->receive(&msg);
+        Logger::getInstance()->debug("Receive returned from player: " + playerClient->username);
         if (msg_received < 0) {
-            if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
+            /*if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
                 //ToDo suponemos que el socket se cerro, realizar tratamiento
                 // 1. Marcar connected como false
                 // 2. Mover player client a listado de conexiones muertas
                 // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-
+*/
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:listener] " << "[user:" << playerClient->id << "] ";
                 Logger::getInstance()->error(ss.str());
                 //throw ServerException(ss.str());
-            }
+           /* }
             tolerance++;
-            continue;
+            continue;*/
         }
         if (!msg_received) {
             //ToDo suponemos que el socket se cerro, realizar tratamiento
@@ -232,26 +234,26 @@ void * Server::broadcastToPlayerClient(void *arg) {
         }
 
         std::stringstream ss;
-/*        ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
+        ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
-*/
+
         if(!playerClient->send(&msg)) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
-            if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
+            /*if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
                 //ToDo suponemos que el socket se cerro, realizar tratamiento
                 // 1. Marcar connected como false
                 // 2. Mover player client a listado de conexiones muertas
                 // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-
+*/
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:broadcast] " << "[user:" << playerClient->id << "] ";
                 Logger::getInstance()->error(ss.str());
                 // throw ServerException(ss.str());
-            }
+            /*}
 
             tolerance++;
-            continue;
+            continue;*/
         }
 
         playerClient->popOutcome();
@@ -292,9 +294,9 @@ bool Server::run() {
 
         msg = this->getNewCommandMsg();
         if (!msg.empty()) {
-            /*ss.str("");
+            ss.str("");
             ss << "[thread:run] " << "msg: " << msg.dump();
-            Logger::getInstance()->info(ss.str());*/
+            Logger::getInstance()->info(ss.str());
             std::string username = msg["username"].get<std::string>();
             for (Player* player : game->getPlayers()) { //TODO: Debería estar dentro del Game Server este loop
                 if (player->getUsername() == username) {
@@ -315,13 +317,12 @@ bool Server::run() {
         t1 = clock();
 
     }
+    Logger::getInstance()->info("Finished run loop");
 
     if (!game->isPlaying()) {
         json msg = ServerParser::buildGameOverMsg();
         broadcast(msg);
     }
-
-    Logger::getInstance()->info("Finished run loop");
 
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {

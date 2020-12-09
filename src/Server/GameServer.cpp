@@ -136,7 +136,7 @@ void GameServer::updatePlayers() {
 void GameServer::unpausePlayer(PlayerClient *playerClient) {
     for (Player *player: getPlayers()) {
         if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
-            player->changeState(new Normal());
+            player->changeState(new Normal(0,player->getFrameAmount()));
         }
     }
 }
@@ -144,7 +144,7 @@ void GameServer::unpausePlayer(PlayerClient *playerClient) {
 void GameServer::pausePlayer(PlayerClient *playerClient) {
     for (Player * player: getPlayers()) {
         if (player->getUsername() == playerClient->username) {
-            player->changeState(new Paused());
+            player->changeState(new Paused(0,player->getFrameAmount()));
         }
     }
 }
