@@ -88,7 +88,7 @@ void *Server::handleIncomingConnections(void *arg) {
             ss << "[thread:acceptor] Connection accepted with id: " << id << " move to login thread";
             Logger::getInstance()->info(ss.str());
         } catch (std::exception &ex) {
-            Logger::getInstance()->error("Fatal error, couldn't accept client connection with id: " + std::to_string(id));
+            Logger::getInstance()->error("Fatal error, couldn't accept client connection with id: " + std::to_string(id) + ". ex: " + ex.what());
             id--;
         }
 
@@ -121,7 +121,9 @@ void *Server::authenticatePlayerClient(void *arg) {
         std::string username = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_USERNAME];
         std::string password = msg[MSG_CONTENT_PROTOCOL][MSG_LOGIN_PASSWORD];
 
-        if (!server->validClientsMaximum(playerClient)) {
+        if (server->getClientsSize() >= server->clientNo && !server->clientHasLogged(username)) {
+            playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
+            Logger::getInstance()->error("[Server] Client " + username + " rejected because rooom is full");
             delete playerClient;
             break;
         }
@@ -134,7 +136,7 @@ void *Server::authenticatePlayerClient(void *arg) {
         }
 
         for (auto & user : validPlayers.users) {
-            Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
+            Logger::getInstance()->debug("checking username: " + user.username + " and psw: " + user.password);
             if (user.username == username && user.password == password) {
                 authenticated = true;
                 playerClient->username = username;
@@ -150,6 +152,12 @@ void *Server::authenticatePlayerClient(void *arg) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
             //TODO: ver si podemos tener reintentos acá
         }
+        if (authenticated && Game::Instance()->isPlaying()) {
+            json startGame = {{"startGame", true}};
+            if (!playerClient->send(&startGame)) {
+                Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
+            }
+        }
     }
 
     return nullptr;
@@ -163,11 +171,11 @@ void * Server::handlePlayerClient(void * arg) {
     while (playerClient &&
             playerClient->isConnected() &&
             (msg = receive(playerClient)) != nullptr) {
-        ss.str("");
         msg["username"] = playerClient->username;
+        /*ss.str("");
         ss << "[thread:listener]" << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
-        Logger::getInstance()->debug(ss.str());
+        Logger::getInstance()->debug(ss.str());*/
 
         playerClient->pushCommand(msg);
     }
@@ -229,10 +237,10 @@ void * Server::broadcastToPlayerClient(void *arg) {
         }
 
         std::stringstream ss;
-        ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
+/*        ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
-
+*/
         if(!playerClient->send(&msg)) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
             if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
@@ -282,15 +290,15 @@ bool Server::run() {
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 1000 / 60) {
+        if ((t2 - t1) < 1000 * 100 / 60) {
             continue;
         }
 
         msg = this->getNewCommandMsg();
         if (!msg.empty()) {
-            ss.str("");
+            /*ss.str("");
             ss << "[thread:run] " << "msg: " << msg.dump();
-            Logger::getInstance()->info(ss.str());
+            Logger::getInstance()->info(ss.str());*/
             std::string username = msg["username"].get<std::string>();
             for (Player* player : game->getPlayers()) {
                 if (player->getUsername() == username) {
@@ -381,11 +389,34 @@ std::vector<PlayerClient *> Server::getClients() {
     return clients;
 }
 
+int Server::getConnectedClientsSize() {
+    int size = 0;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client : clients) {
+        if (client->isConnected()) {
+            size++;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return size;
+}
+
+bool Server::clientHasLogged(std::string username) {
+    bool hasLogged = false;
+    pthread_mutex_lock(&this->clientsMutex);
+    for (auto& client: this->clients) {
+        if (client->username == username) {
+            hasLogged = true;
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
+    return hasLogged;
+}
+
 bool Server::clientIsLogged(std::string username) {
     bool isLogged = false;
     pthread_mutex_lock(&this->clientsMutex);
     for (auto& client: this->clients) {
-        Logger::getInstance()->debug("[Server] checking login for client " + client->username);
         if (client->username == username && client->isConnected()) {
             isLogged = true;
         }
@@ -457,7 +488,7 @@ void Server::broadcast(json msg) {
 }
 
 bool Server::validClientsMaximum(PlayerClient *playerClient) {
-    int clientsSize = getClientsSize();
+    int clientsSize = getConnectedClientsSize();
     std::stringstream ss;
 
     if (clientsSize >= this->clientNo) {

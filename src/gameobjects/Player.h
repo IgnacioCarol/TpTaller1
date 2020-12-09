@@ -15,7 +15,7 @@ class CharacterState;
 
 class Player : public GameObject {
 public:
-    Player(SDL_Rect *camera, std::string username);
+    Player(SDL_Rect *camera, std::string username, std::string textureID);
     ~Player() override;
     void init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount);
     void jump(int yMove);

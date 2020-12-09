@@ -209,23 +209,23 @@
         </niveles>
     </escenario>
     <credenciales>
-         <cantidadJugadores>2</cantidadJugadores>
+         <cantidadJugadores>4</cantidadJugadores>
          <usuarios>
              <usuario>
-                 <nombre>mario</nombre>
-                 <contrasenia>mario</contrasenia>
+                 <nombre>a</nombre>
+                 <contrasenia>a</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>luigi</nombre>
-                 <contrasenia>luigi</contrasenia>
+                 <nombre>b</nombre>
+                 <contrasenia>b</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>yoshi</nombre>
-                 <contrasenia>yoshi</contrasenia>
+                 <nombre>c</nombre>
+                 <contrasenia>c</contrasenia>
              </usuario>
              <usuario>
-                 <nombre>toad</nombre>
-                 <contrasenia>toad</contrasenia>
+                 <nombre>d</nombre>
+                 <contrasenia>d</contrasenia>
              </usuario>
          </usuarios>
      </credenciales>

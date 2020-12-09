@@ -26,6 +26,7 @@ public:
     bool run();
     bool isRunning();
     int getClientsSize();
+    int getConnectedClientsSize();
     std::vector<PlayerClient*> getClients();
     void pushToWaitingRoom(PlayerClient * playerClient);
     PlayerClient * popFromWaitingRoom();
@@ -46,6 +47,7 @@ private:
     bool someoneIsConnected();
     bool validClientsMaximum(PlayerClient *playerClient);
     bool clientIsLogged(std::string username);
+    bool clientHasLogged(std::string username);
     static void * authenticatePlayerClient(void * arg);
     static void * handlePlayerClient(void * arg);
     static void * handleIncomingConnections(void * arg);

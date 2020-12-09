@@ -24,6 +24,13 @@ bool GameClient::init(GameMsgParams initialize) {
     int cameraWidth = initialize.camera.width;
     int cameraHeight = initialize.camera.height;
     camera = new Camera(initialize.camera.xPos, initialize.camera.yPos, cameraWidth, cameraHeight);
+    std::vector<GameObjectInit> players;
+
+    for (auto& gameObject: initialize.gameObjectsInit.gameObjects) {
+        if (gameObject.type == GOT_PLAYER) {
+            players.push_back(gameObject);
+        }
+    }
 
     //SDL initializing
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
@@ -58,7 +65,7 @@ bool GameClient::init(GameMsgParams initialize) {
         return false;
     }
 
-    if (!this -> loadTexts(initialize.stage.isDefault)){
+    if (!this -> loadTexts(initialize.stage.isDefault, players)){
         logger -> error("Error: Loading the sprites went wrong");
         return false;
     }
@@ -76,9 +83,12 @@ bool GameClient::init(GameMsgParams initialize) {
 void GameClient::render() {
     SDL_RenderClear(renderer);
     background -> renderBackground(camera -> getCamera()); //ToDo que imprima los usernames
+    int playerUsernameYPos = 20;
     //Drawing the players
     for (std::pair<int, Player*> element: playersMap){
         element.second -> draw(renderer, camera->getXpos(), 0);
+        TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
+        playerUsernameYPos += 20;
     }
     //Drawing the other gameObjects
     for (std::pair<int, GameObject*> element: gameObjectsMap){
@@ -129,11 +139,22 @@ bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imag
     return true;
 }
 
-bool GameClient::loadTexts(bool isDefault) {
+bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) {
     bool success = textureManager->loadText(TEXT_WORLD_LEVEL_LABEL_KEY, TEXT_WORLD_LEVEL_LABEL_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_TIMER_LABEL_KEY, TEXT_TIMER_LABEL_VALUE, WHITE_COLOR, renderer);
     if (isDefault) {
         success = success && textureManager->loadText(TEXT_DEFAULT_BACKGROUND_KEY, TEXT_DEFAULT_BACKGROUND_VALUE, WHITE_COLOR, renderer);
+    }
+    for (auto& player : players) {
+        if (player.imageId == "player0") {
+            success = success && textureManager->loadText("player0_text", player.username, RED_COLOR, renderer);
+        } else if (player.imageId == "player1") {
+            success = success && textureManager->loadText("player1_text", player.username, GREEN_COLOR, renderer);
+        } else if (player.imageId == "player2") {
+            success = success && textureManager->loadText("player2_text", player.username, YELLOW_COLOR, renderer);
+        } else if (player.imageId == "player3") {
+            success = success && textureManager->loadText("player3_text", player.username, PURPLE_COLOR, renderer);
+        }
     }
     return success;
 }
@@ -154,7 +175,7 @@ void GameClient::createEnemy(GameObjectInit enemy, GameObjectType enemyType) {
 }
 
 void GameClient::createPlayer(GameObjectInit player) {
-    Player* tmpPlayer = new Player(camera -> getCamera(), player.username);
+    Player* tmpPlayer = new Player(camera -> getCamera(), player.username, player.imageId);
     tmpPlayer->init(player.xPos, player.yPos, player.imageId, camera->getCamera(), player.frameAmount);
     playersMap[player.id] = tmpPlayer;
 }

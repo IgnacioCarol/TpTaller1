@@ -50,7 +50,7 @@ bool Client::login() {
         SDL_Event e;
         _login->isWaitingRoom = true;
         while(_login->isWaitingRoom) {
-            while (!this->eventsQueueIsEmpty()) {
+            if (!this->eventsQueueIsEmpty()) {
                 json receivedMessage = this->getMessageFromQueue();
                 std::stringstream ss;
                 ss <<"[Client] Message obtained at waiting stage:" << receivedMessage.dump();
@@ -131,7 +131,7 @@ int Client::send(json *msg) {
 }
 
 int Client::receive(json *msg) {
-    Logger::getInstance()->debug("[Client] waiting to receive message");
+    //Logger::getInstance()->debug("[Client] waiting to receive message");
     return _socket->receive(msg);
 }
 
@@ -142,10 +142,10 @@ void * Client::handleServerEvents(void * arg) {
     while (client != nullptr &&
            client->isConnected() &&
            (msg = receive(client)) != nullptr && client->keepConnection) {
-        ss.str("");
+        /*ss.str("");
         ss << "[thread:Client]"
            << "msg: " << msg.dump();
-        Logger::getInstance()->debug(ss.str());
+        Logger::getInstance()->debug(ss.str());*/
         client->pushEvent(msg);
     }
 
@@ -153,7 +153,7 @@ void * Client::handleServerEvents(void * arg) {
 }
 
 json Client::receive(Client *client) {
-    Logger::getInstance()->debug("Receiving message from server.");
+    //Logger::getInstance()->debug("Receiving message from server.");
     json msg;
     int msg_received;
     std::stringstream ss;
@@ -214,11 +214,12 @@ void * Client::broadcastToServer(void *arg) {
             continue;
         }
 
+
         std::stringstream ss;
-        ss << "[thread:broadcast]"
+/*        ss << "[thread:broadcast]"
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
-
+        */
         if(client->send(&msg)) {
             Logger::getInstance()->error("[Client] Error broadcasting msg to server");
             if (tolerance > 3) {
@@ -246,7 +247,7 @@ void Client::run() {
     while (gameClient->isPlaying()) {
         if (!this->eventsQueueIsEmpty()) {
             json receivedMessage = this->getMessageFromQueue();
-            Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
+            // Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
             ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
             GameMsgParams initParams;
             GameMsgPlaying updateParams;

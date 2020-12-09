@@ -43,8 +43,8 @@ bool Player::canJump() const {
     return ((jumping && yPosition > maxYPosition) || (!jumping && yPosition == initialJumpingPosition));
 }
 
-Player::Player(SDL_Rect *camera, std::string username) : GameObject() {
-    this->init(0, 380, username, camera, 6);
+Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
+    this->init(0, 380, textureID, camera, 6);
     this->username = username;
 }
 
