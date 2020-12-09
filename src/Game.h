@@ -49,6 +49,7 @@ public:
 
     SDL_Rect * getCamera();
 
+    bool playing = false;
 private:
     Game(); //Private constructor to prevent instancing.
     static Game* instance; //Here will be the instance stored.
@@ -64,7 +65,6 @@ private:
 
     std::vector <GameObject*> _gameObjects;
 
-    bool playing = false;
     SDL_Window* window;
     SDL_Renderer* renderer;
     TextureManager* textureManager;
