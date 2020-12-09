@@ -43,6 +43,10 @@ public:
 
     ~GameServer();
 
+    void unpausePlayer(PlayerClient *player);
+
+    void pausePlayer(PlayerClient *player);
+
     int getTimer();
 
     void updatePlayers();

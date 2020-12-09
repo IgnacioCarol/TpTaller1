@@ -180,11 +180,12 @@ void * Server::handlePlayerClient(void * arg) {
         playerClient->pushCommand(msg);
     }
 
+    Logger::getInstance()->info("Finishing handle player client thread");
     return nullptr;
 }
 
 json Server::receive(PlayerClient *playerClient) {
-    Logger::getInstance()->debug("Receiving message from client " + std::to_string(playerClient->id));
+    Logger::getInstance()->debug("Receiving message from client " + playerClient->username);
     json msg;
     int msg_received;
     std::stringstream ss;
@@ -202,7 +203,7 @@ json Server::receive(PlayerClient *playerClient) {
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:listener] " << "[user:" << playerClient->id << "] ";
                 Logger::getInstance()->error(ss.str());
-                throw ServerException(ss.str());
+                //throw ServerException(ss.str());
             }
             tolerance++;
             continue;
@@ -215,7 +216,7 @@ json Server::receive(PlayerClient *playerClient) {
             ss.str("");
             ss << "Connection has been lost with client [thread:listener] " << "[user:" << playerClient->id << "] ";
             Logger::getInstance()->error(ss.str());
-            throw ServerException(ss.str());
+            //throw ServerException(ss.str());
             //continue;
         }
 
@@ -252,7 +253,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:broadcast] " << "[user:" << playerClient->id << "] ";
                 Logger::getInstance()->error(ss.str());
-                throw ServerException(ss.str());
+                // throw ServerException(ss.str());
             }
 
             tolerance++;
@@ -262,6 +263,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
         playerClient->popOutcome();
     }
 
+    Logger::getInstance()->info("Finishing broadcast to player client thread");
     return nullptr;
 }
 
@@ -300,12 +302,14 @@ bool Server::run() {
             ss << "[thread:run] " << "msg: " << msg.dump();
             Logger::getInstance()->info(ss.str());*/
             std::string username = msg["username"].get<std::string>();
-            for (Player* player : game->getPlayers()) {
+            for (Player* player : game->getPlayers()) { //TODO: Debería estar dentro del Game Server este loop
                 if (player->getUsername() == username) {
                     std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
                     player->move(positions);
                 }
             }
+            checkPlayersConnection();
+
             this->popCommand();
             //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
@@ -323,6 +327,8 @@ bool Server::run() {
         broadcast(msg);
     }
 
+    Logger::getInstance()->info("Finished run loop");
+
     // Wait for all threads to finish before ending server run
     for(int i=0; i < this->clientNo; i++){
         pthread_join(this->incomeThreads[i], nullptr);
@@ -339,15 +345,26 @@ bool Server::run() {
 
 bool Server::someoneIsConnected() {
     pthread_mutex_lock(&this->clientsMutex);
-    for(auto & client : clients) {
-        bool status = client->isConnected();
-        if(!status) {
+    for (auto & client : clients) {
+        if (client->isConnected()) {
             pthread_mutex_unlock(&this->clientsMutex);
-            return false;
+            return true;
         }
     }
     pthread_mutex_unlock(&this->clientsMutex);
-    return true;
+    return false;
+}
+
+void Server::checkPlayersConnection() {
+    pthread_mutex_lock(&this->clientsMutex);
+    for (PlayerClient* client : clients) {
+        if (client->isConnected()) {
+            GameServer::Instance()->unpausePlayer(client);
+        } else {
+            GameServer::Instance()->pausePlayer(client);
+        }
+    }
+    pthread_mutex_unlock(&this->clientsMutex);
 }
 
 json Server::getNewCommandMsg() {

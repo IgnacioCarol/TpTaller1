@@ -5,7 +5,7 @@
 #include "EnemyMovement.h"
 
 EnemyMovement::EnemyMovement(int currentFrame, int framesAmount) : CharacterState(currentFrame, framesAmount) {
-
+    stateType = "ENEMY_MOVEMENT";
 }
 
 void EnemyMovement::move(Enemy *enemy) {
