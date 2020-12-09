@@ -260,6 +260,7 @@ void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
 }
 
 void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
+    logger->debug("VOY A CAMBIAR DE NIVEL EN GAME CLIENT");
     for (std::pair<int, Player*> player: playersMap){
         player.second->restartPos(0, 380);
         player.second->setDirection(true);

@@ -1,3 +1,4 @@
+#include <src/CharacterStates/Normal.h>
 #include "GameServer.h"
 
 GameServer* GameServer::instance = 0;
@@ -104,6 +105,7 @@ void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
     for (auto & player : players) {
         player->restartPos(0, 380);
+        player->changeState(new Normal(0, player->getFrameAmount()));
     }
     camera->restartPos();
 }
@@ -150,4 +152,8 @@ bool GameServer::changeLevel() {
 
 void GameServer::gameOver() {
     this->playing = false;
+}
+
+void GameServer::setChangeLevelFlag(bool setValue) {
+    changeLevelFlag = setValue;
 }

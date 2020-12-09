@@ -311,6 +311,7 @@ bool Server::run() {
         }
         //ToDo change game state with msg
         game->updatePlayers();
+
         game -> getCamera() -> update(game -> getPlayers(), 3000); //ToDo esta hardcodeado, el stage deberia decirme su width (guiarse por lo que esta en game.cpp)
         if (game->isPlaying()) {
             msg = getPlayersPositionMessage();
@@ -515,6 +516,7 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
 json Server::getPlayersPositionMessage() {
     GameServer* game = GameServer::Instance();
     if (game->changeLevel()){
+        game->setChangeLevelFlag(false);
         return ServerParser::buildChangeLevelMsg(game->getGameObjects(), game->getBackgroundStage());
     }
     return ServerParser::buildPlayingGameMessage(game->getPlayers(), game->getCamera(), game->getTimer());
