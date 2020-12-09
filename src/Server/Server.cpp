@@ -321,7 +321,7 @@ bool Server::run() {
     }
 
     if (!game->isPlaying()) {
-        json msg = ServerParser::buildGameOverMsg();
+        msg = ServerParser::buildGameOverMsg();
         broadcast(msg);
     }
 

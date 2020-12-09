@@ -272,8 +272,11 @@ void Client::run() {
                 case GAME_CHANGE_LEVEL_CMD:
                     updateLevel = ClientParser::parseChangeLevelParams(receivedMessage);
                     gameClient -> changeLevel(updateLevel);
+                    break;
                 default:
-                    Logger::getInstance()->error("[Client] unexpected protocol command.");
+                    std::stringstream ss;
+                    ss << "[Client] unexpected protocol command. Protocol:" << protocol << " With received message" << receivedMessage.dump();
+                    Logger::getInstance()->error(ss.str());
             }
         }
         if (clientInitialized) {
