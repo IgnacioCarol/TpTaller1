@@ -1,7 +1,11 @@
 //
 // Created by nacho on 25/10/20.
 //
+#ifdef __APPLE__
+#include "../Server/GameServer.h"
+#else
 #include <src/Server/GameServer.h>
+#endif
 #include "SecondStage.h"
 
 SecondStage::SecondStage() {
@@ -20,6 +24,7 @@ SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : Ba
 }
 
 BackgroundStage * SecondStage::nextStage() {
+    GameServer::Instance()->LEVEL_LIMIT = 7000;
     GameServer::Instance()->restartCharacters();
     Logger::getInstance()->debug("Stage changed into third stage");
     return new ThirdStage();

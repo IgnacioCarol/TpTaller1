@@ -1,6 +1,9 @@
-#include <src/CharacterStates/Normal.h>
-#include "GameServer.h"
+#ifdef __APPLE__
 #include "../CharacterStates/Normal.h"
+#else
+#include <src/CharacterStates/Normal.h>
+#endif
+#include "GameServer.h"
 
 GameServer* GameServer::instance = 0;
 
@@ -38,7 +41,7 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
-    LEVEL_LIMIT = stage -> getWidth();
+    LEVEL_LIMIT = 3600;
 
     addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
@@ -97,7 +100,6 @@ void GameServer::handleEvents() {
 void GameServer::nextStage() {
     BackgroundStage *currentStage = this->stage;
     stage = stage->nextStage();
-    LEVEL_LIMIT = stage -> getWidth();
     if (currentStage != stage) {
         Logger::getInstance()->info("Stage changed");
         cleanGameObjects();

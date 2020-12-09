@@ -6,7 +6,7 @@ Camera::Camera(int x, int y, int width, int height) {
 
 void Camera::update(std::vector<Player*> players, int borderLimit) {
     int maxPos = 0;
-    int minPos = 4000;
+    int minPos = 20000;
     for (Player* player: players){
         if (player->getState() != "PAUSED"){
             int playerPos = player -> getXPosition();

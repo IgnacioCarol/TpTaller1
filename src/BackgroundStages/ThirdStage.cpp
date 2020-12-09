@@ -1,5 +1,10 @@
+#ifdef __APPLE__
+#include "../Server/GameServer.h"
+#else
 #include <src/Server/GameServer.h>
+#endif
 #include "ThirdStage.h"
+#include "../Server/GameServer.h"
 
 ThirdStage::ThirdStage() {
     this->level = 3;
