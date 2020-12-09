@@ -119,7 +119,7 @@ bool Game::loadTexts() {
 }
 
 void Game::createGameObjects() {
-    player = new Player(camera->getCamera(), "mario");
+    player = new Player(camera->getCamera(), "mario", "mario");
     players.push_back(player);
     TextureManager::Instance() -> addPath("mario", imgPlayer, defaultPlayer); //ToDo ver como hacer para conseguir los paths de mario sin usar los define que tiene
     initializeGameObjects(1);

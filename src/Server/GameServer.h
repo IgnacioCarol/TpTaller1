@@ -23,7 +23,7 @@ public:
 
     //Getters to GameServer purpose
     Camera *  getCamera();
-    std::vector<std::string>  getPlayerPaths();
+    std::map<std::string, std::string>  getPlayerPaths();
 
     //Getters to send info to the client
     std::map<std::string, std::vector<std::string>> getImagePaths();
@@ -62,10 +62,10 @@ private:
     Window window;
 
     //Information about the game
-    std::vector <std::string> playersPaths = {PLAYER_0_IMG_PATH,
-                                             PLAYER_1_IMG_PATH,
-                                             PLAYER_2_IMG_PATH,
-                                             PLAYER_3_IMG_PATH};
+    std::map<std::string, std::string> playersPaths = {{"player0", PLAYER_0_IMG_PATH},
+                                                       {"player1", PLAYER_1_IMG_PATH},
+                                                       {"player2", PLAYER_2_IMG_PATH},
+                                                       {"player3", PLAYER_3_IMG_PATH}};
     std::map<std::string, std::vector<std::string>> imagePaths;
     BackgroundStage* stage;
 

@@ -88,7 +88,7 @@ void *Server::handleIncomingConnections(void *arg) {
             ss << "[thread:acceptor] Connection accepted with id: " << id << " move to login thread";
             Logger::getInstance()->info(ss.str());
         } catch (std::exception &ex) {
-            Logger::getInstance()->error("Fatal error, couldn't accept client connection with id: " + std::to_string(id));
+            Logger::getInstance()->error("Fatal error, couldn't accept client connection with id: " + std::to_string(id) + ". ex: " + ex.what());
             id--;
         }
 
@@ -134,7 +134,7 @@ void *Server::authenticatePlayerClient(void *arg) {
         }
 
         for (auto & user : validPlayers.users) {
-            Logger::getInstance()->info("checking username: " + user.username + " and psw: " + user.password);
+            Logger::getInstance()->debug("checking username: " + user.username + " and psw: " + user.password);
             if (user.username == username && user.password == password) {
                 authenticated = true;
                 playerClient->username = username;
@@ -163,11 +163,11 @@ void * Server::handlePlayerClient(void * arg) {
     while (playerClient &&
             playerClient->isConnected() &&
             (msg = receive(playerClient)) != nullptr) {
-        ss.str("");
+        /*ss.str("");
         msg["username"] = playerClient->username;
         ss << "[thread:listener]" << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
-        Logger::getInstance()->debug(ss.str());
+        Logger::getInstance()->debug(ss.str());*/
 
         playerClient->pushCommand(msg);
     }
@@ -229,10 +229,10 @@ void * Server::broadcastToPlayerClient(void *arg) {
         }
 
         std::stringstream ss;
-        ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
+/*        ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
-
+*/
         if(!playerClient->send(&msg)) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
             if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
@@ -282,15 +282,15 @@ bool Server::run() {
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 1000 / 60) {
+        if ((t2 - t1) < 1000 * 50 / 60) {
             continue;
         }
 
         msg = this->getNewCommandMsg();
         if (!msg.empty()) {
-            ss.str("");
+            /*ss.str("");
             ss << "[thread:run] " << "msg: " << msg.dump();
-            Logger::getInstance()->info(ss.str());
+            Logger::getInstance()->info(ss.str());*/
             std::string username = msg["username"].get<std::string>();
             for (Player* player : game->getPlayers()) {
                 if (player->getUsername() == username) {

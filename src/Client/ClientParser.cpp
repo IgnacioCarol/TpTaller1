@@ -57,7 +57,7 @@ GameMsgParams ClientParser::parseInitParams(json msg) {
 }
 
 GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
-    Logger::getInstance()->debug("Parsing update params...");
+    // Logger::getInstance()->debug("Parsing update params...");
     json contentJson = msg[MSG_CONTENT_PROTOCOL];
 
     CameraDuringGame camera = {

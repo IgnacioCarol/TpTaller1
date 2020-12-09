@@ -112,11 +112,12 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
 std::vector<Player*>  Factory::createPlayers(std::vector<PlayerClient*> clients) {
     std::vector<Player*>  players;
-    std::vector<std::string> imgPaths = GameServer::Instance()->getPlayerPaths();
+    std::map<std::string, std::string> imgPaths = GameServer::Instance()->getPlayerPaths();
+    auto it = imgPaths.begin();
 
-    for(int i = 0; i < clients.size(); i++) {
-        players.push_back(new Player(GameServer::Instance()->getCamera()->getCamera(), clients[i]->username));
-        GameServer::Instance() ->addPath(clients[i]->username, imgPaths[i], DEFAULT_PLAYER_PATH);
+    for(int i = 0; i < clients.size() && it != imgPaths.end(); i++, it++) {
+        players.push_back(new Player(GameServer::Instance()->getCamera()->getCamera(), clients[i]->username, it->first));
+        GameServer::Instance() ->addPath(it->first, it->second, DEFAULT_PLAYER_PATH);
         Logger::getInstance()->debug("Player " + clients[i]->username + " created correctly");
     }
 

@@ -57,7 +57,7 @@ int GameServer::getTimer() {
     return stage->getTimer()->getTimeSecond();
 }
 
-std::vector<std::string> GameServer::getPlayerPaths() {
+std::map<std::string, std::string> GameServer::getPlayerPaths() {
     return playersPaths;
 }
 
