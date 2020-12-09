@@ -1,6 +1,7 @@
 //
 // Created by nacho on 25/10/20.
 //
+#include <src/Server/GameServer.h>
 #include "SecondStage.h"
 
 SecondStage::SecondStage() {
@@ -19,9 +20,7 @@ SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : Ba
 }
 
 BackgroundStage * SecondStage::nextStage() {
-    textureManager->clearFromTextureMap(BACKGROUND);
-    textureManager->clearFromTextureMap(TEXT_WORLD_LEVEL_NUMBER_KEY);
-    Game::Instance()->restartCharacters();
+    GameServer::Instance()->restartCharacters();
     Logger::getInstance()->debug("Stage changed into third stage");
-    return new ThirdStage(textureManager, renderer);
+    return new ThirdStage();
 }

@@ -147,3 +147,7 @@ BackgroundStage *GameServer::getBackgroundStage() {
 bool GameServer::changeLevel() {
     return changeLevelFlag;
 }
+
+void GameServer::gameOver() {
+    this->playing = false;
+}
