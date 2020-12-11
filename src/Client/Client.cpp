@@ -70,6 +70,7 @@ bool Client::login() {
 bool Client::authenticate() {
     Logger::getInstance()->debug("Client start authentication");
     Authentication *auth = _login->getAuthentication();
+    username = auth->username;
     Logger::getInstance()->debug("Authentication login returned");
     std::stringstream ss;
     std::string error;
@@ -256,7 +257,7 @@ void Client::run() {
             switch(protocol) {
                 case GAME_INITIALIZE_CMD:
                     initParams = ClientParser::parseInitParams(receivedMessage);
-                    clientInitialized = gameClient->init(initParams);
+                    clientInitialized = gameClient->init(initParams, username.c_str());
                     if (!clientInitialized) { //le paso el resultado del parser magico
                         Logger::getInstance()->error("Error trying to init gameClient");
                         throw ClientException("Error trying to init gameClient");

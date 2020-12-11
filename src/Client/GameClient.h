@@ -5,17 +5,17 @@
 #include <string>
 #include <json.hpp>
 #include <SDL2/SDL.h>
-#include "BackgroundStages/BackgroundStage.h"
-#include "Protocol/GameMsgParams.h"
-#include "gameobjects/GameObject.h"
+#include "src/BackgroundStages/BackgroundStage.h"
+#include "src/Protocol/GameMsgParams.h"
+#include "src/gameobjects/GameObject.h"
 
-#include "TextureManager.h"
-#include "Camera.h"
+#include "src/TextureManager.h"
+#include "src/Camera.h"
 
 class GameClient {
 public:
     static GameClient* Instance();
-    bool init(GameMsgParams initialize); //
+    bool init(GameMsgParams initialize, const char* username); //
     ~GameClient();
     void render();
     void update(GameMsgPlaying initialize); //ToDo por ahora digo que recibe esto para orientarme despues poner estructura correcta
