@@ -37,6 +37,7 @@ private:
     void initBackground(SDL_Renderer* renderer, StageInit stage);
     void updatePlayers(std::vector<GamePlayerPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
+    void renderPlayers();
 
 
     SDL_Window* window;
@@ -47,6 +48,7 @@ private:
     Camera* camera;
     Logger* logger = Logger::getInstance();
     TextureManager* textureManager;
+    std::string clientUsername;
 
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;
