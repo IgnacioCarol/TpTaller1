@@ -1,13 +1,5 @@
-#include "src/gameobjects/EnemyTurtle.h"
-#include "src/gameobjects/PlatformNormal.h"
-#include "src/gameobjects/PlatformSurprise.h"
-#include "src/gameobjects/Coin.h"
-#include "src/gameobjects/EnemyMushroom.h"
-#include "src/BackgroundStages/FirstStage.h"
-#include "src/Client/GameClient.h"
-#include "src/CharacterStates/EnemyMovement.h"
-#include "src/CharacterStates/Normal.h"
-#include "src/Camera.h"
+#include "GameClient.h"
+
 
 GameClient* GameClient::instance = 0;
 

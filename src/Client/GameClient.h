@@ -5,12 +5,20 @@
 #include <string>
 #include <json.hpp>
 #include <SDL2/SDL.h>
-#include "src/BackgroundStages/BackgroundStage.h"
-#include "src/Protocol/GameMsgParams.h"
-#include "src/gameobjects/GameObject.h"
+#include "../BackgroundStages/BackgroundStage.h"
+#include "../Protocol/GameMsgParams.h"
+#include "../gameobjects/GameObject.h"
 
-#include "src/TextureManager.h"
-#include "src/Camera.h"
+#include "../TextureManager.h"
+#include "../Camera.h"
+#include "../gameobjects/Enemy.h"
+#include "../gameobjects/EnemyTurtle.h"
+#include "../gameobjects/PlatformNormal.h"
+#include "../gameobjects/PlatformSurprise.h"
+#include "../gameobjects/Coin.h"
+#include "../gameobjects/EnemyMushroom.h"
+#include "../CharacterStates/EnemyMovement.h"
+#include "../CharacterStates/Normal.h"
 
 class GameClient {
 public:
