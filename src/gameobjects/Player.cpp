@@ -8,7 +8,7 @@
 
 #include "Player.h"
 
-static const int GRAVITY = 2;
+static const int GRAVITY = 3;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
