@@ -12,9 +12,10 @@ Paused::Paused(int currentFrame, int frameAmount) : CharacterState(currentFrame,
 }
 
 void Paused::move(const Uint8 *currentKeyStates, Player *player) {
-
-    if (player -> getXPosition() <= GameServer::Instance()->getCamera()->getXpos()){
-        player -> run (1);
+    int camXPos = GameServer::Instance()->getCamera()->getXpos();
+    if (player -> getXPosition() <= camXPos){
+        player -> setDirection(true);
+        player -> setPosition(camXPos + 2, player->getYPosition());
     }
 }
 
