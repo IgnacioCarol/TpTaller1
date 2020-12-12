@@ -14,7 +14,7 @@
 #include "ClientException.h"
 #include "ClientParser.h"
 #include "../Protocol/MessageValidator.h"
-#include "../GameClient.h"
+#include "GameClient.h"
 
 using json = nlohmann::json;
 
@@ -38,6 +38,7 @@ private:
     Socket* _socket;
     std::string _clientID; //TODO inicializar con el XML? Tal vez el ID pueda ser el nombre de usuario, una vez que se haga el login utilizar username en este campo
     Login* _login;
+    std::string username;
     GameClient* gameClient;
 
     bool authenticate();

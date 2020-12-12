@@ -209,11 +209,11 @@
         </niveles>
     </escenario>
     <credenciales>
-         <cantidadJugadores>1</cantidadJugadores>
+         <cantidadJugadores>4</cantidadJugadores>
          <usuarios>
              <usuario>
-                 <nombre>a</nombre>
-                 <contrasenia>a</contrasenia>
+                 <nombre>mario</nombre>
+                 <contrasenia>mario</contrasenia>
              </usuario>
              <usuario>
                  <nombre>luigi</nombre>
