@@ -82,10 +82,14 @@ bool GameClient::init(GameMsgParams initialize) {
 
 void GameClient::render() {
     SDL_RenderClear(renderer);
-    background -> renderBackground(camera -> getCamera()); //ToDo que imprima los usernames
+    background -> renderBackground(camera -> getCamera());
     int playerUsernameYPos = 20;
+    //playersMap[clientUsername] -> draw(renderer, camera -> getXPos(), 0);
+    //TextureManager::Instance()->printText(playersMap[clientUsername]->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
+    //playerUsernameYPos += 20;
     //Drawing the players
     for (std::pair<int, Player*> element: playersMap){
+        //if (this-> clientUsername == element.second->getUsername()) continue;
         element.second -> draw(renderer, camera->getXpos(), 0);
         TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
         playerUsernameYPos += 20;
@@ -99,12 +103,7 @@ void GameClient::render() {
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
-    //Aca solo recibo las cosas que cambian de posicion
-    /*if (initialize.stage.changeLevel){
-        //codigo para hacer el cambio de level, no ejecuto lo que sigue
-    }*/
     updatePlayers(updateObjects.players);
-
 
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){ //Muevo todos los objetos distintos a player
         gameObject.second -> move();
