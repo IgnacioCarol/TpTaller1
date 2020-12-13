@@ -312,7 +312,7 @@ bool Server::run() {
         //ToDo change game state with msg
         game->updatePlayers();
 
-        game -> getCamera() -> update(game -> getPlayers(), game -> getLevelLimit());
+        game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {
             msg = getPlayersPositionMessage();
             broadcast(msg);

@@ -4,7 +4,7 @@ Camera::Camera(int x, int y, int width, int height) {
     camera = {x, y , width, height};
 }
 
-void Camera::update(std::vector<Player*> players, int borderLimit) {
+void Camera::update(std::vector<Player *> players) {
     int maxPos = 0;
     int minPos = 20000;
     for (Player* player: players){
