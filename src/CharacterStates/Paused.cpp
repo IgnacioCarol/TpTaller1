@@ -7,8 +7,9 @@
 #include "../Server/GameServer.h"
 
 
-Paused::Paused(int currentFrame, int frameAmount) : CharacterState(currentFrame, frameAmount) {
+Paused::Paused(int currentFrame, int frameAmount, bool disconnected) : CharacterState(currentFrame, frameAmount) {
     stateType = "PAUSED";
+    this -> disconnected = disconnected;
 }
 
 void Paused::move(const Uint8 *currentKeyStates, Player *player) {
@@ -25,5 +26,6 @@ void Paused::changeState(const Uint8 *currentKeyStates, Player *player) {
 
 void Paused::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth, SDL_Renderer *renderer,
                   SDL_RendererFlip flip) {
-    CharacterState::draw("paused", xPosition, yPosition, imageWidth, imageHeigth, renderer, flip);
+    ID = (disconnected) ? "paused" : ID;
+    CharacterState::draw(ID, xPosition, yPosition, imageWidth, imageHeigth, renderer, flip);
 }

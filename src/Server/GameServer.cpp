@@ -137,13 +137,13 @@ void GameServer::updatePlayers() {
     for (Player* player: players) {
         player->move();
         if (player->getXPosition() >= LEVEL_LIMIT && player->getState() != "JUMPING"){
-            player->changeState(new Paused(0, player->getFrameAmount()));
+            player->changeState(new Paused(0, player->getFrameAmount(), false));
             changeLevelFlag = true;
         }
     }
 
     for (Player* player: players){
-        changeLevelFlag &= (player->getState() == "DONE" || player->getState() == "PAUSED");
+        changeLevelFlag &= (player->getState() == "PAUSED");
     }
 
     if (changeLevelFlag) nextStage();
