@@ -302,13 +302,10 @@ bool Server::run() {
         throw ServerException(error);
     }
 
-    clock_t t2, t1 = clock();
+    clock_t t1;
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
-        t2 = clock();
-        if ((t2 - t1) < 1000 * 200 / 60) {
-            continue;
-        }
+        t1 = clock(); // Start transaction
 
         ss.str("");
         ss << "[Server][thread:run][event:queue_size] cmd_size= " << this->getCommandsSize();
@@ -339,7 +336,8 @@ bool Server::run() {
             msg = getPlayersPositionMessage();
             broadcast(msg);
         }
-        t1 = clock();
+
+        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017);
 
     }
     Logger::getInstance()->info("Finished run loop");

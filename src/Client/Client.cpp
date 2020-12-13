@@ -247,12 +247,9 @@ void Client::run() {
     bool clientInitialized = false;
     std::stringstream ss;
 
-    clock_t t2, t1 = clock();
+    clock_t t1;
     while (gameClient->isPlaying() && isConnected()) {
-        t2 = clock();
-        if ((t2 - t1) < 1000 * 200 / 60) {
-            continue;
-        }
+        t1 = clock(); // Start transaction
 
         if (!this->eventsQueueIsEmpty()) {
             do {
@@ -299,8 +296,9 @@ void Client::run() {
             this->handleUserEvents();
         }
 
-        t1 = clock();
+        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017);
     }
+
     keepConnection = false;
     pthread_join(incomeThread, nullptr); //FixMe creo que esto va a quedar trabado en el recv hasta que se cierre el socket de alguno de los dos lados
     pthread_join(outcomeThread, nullptr);
