@@ -76,18 +76,6 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
 void GameClient::render() {
     SDL_RenderClear(renderer);
     background -> renderBackground(camera -> getCamera());
-    /*int playerUsernameYPos = 20;
-    //playersMap[clientUsername] -> draw(renderer, camera -> getXPos(), 0);
-    //TextureManager::Instance()->printText(playersMap[clientUsername]->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
-    //playerUsernameYPos += 20;
-    //Drawing the players
-    for (std::pair<int, Player*> element: playersMap){
-        //if (this-> clientUsername == element.second->getUsername()) continue;
-        element.second -> draw(renderer, camera->getXpos(), 0);
-        TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
-        playerUsernameYPos += 20;
-    }*/
-    //Drawing the other gameObjects
     renderPlayers();
 
     for (std::pair<int, GameObject*> element: gameObjectsMap){
