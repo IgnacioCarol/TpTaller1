@@ -330,6 +330,9 @@ bool Server::run() {
         broadcast(msg);
     }
 
+    while (someoneIsConnected()) {
+        continue;
+    }
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {
         pthread_join(thread.second, nullptr);
