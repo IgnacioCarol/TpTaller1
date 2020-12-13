@@ -241,7 +241,6 @@ void * Client::broadcastToServer(void *arg) {
 
 void Client::run() {
     bool didMove = false;
-    //Parser magico
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
     bool clientInitialized = false;
@@ -258,14 +257,14 @@ void Client::run() {
                 case GAME_INITIALIZE_CMD:
                     initParams = ClientParser::parseInitParams(receivedMessage);
                     clientInitialized = gameClient->init(initParams, username.c_str());
-                    if (!clientInitialized) { //le paso el resultado del parser magico
+                    if (!clientInitialized) {
                         Logger::getInstance()->error("Error trying to init gameClient");
                         throw ClientException("Error trying to init gameClient");
                     }
                     break;
                 case GAME_VIEW_CMD:
                     updateParams = ClientParser::parseUpdateParams(receivedMessage);
-                    gameClient->update(updateParams); //le paso el resultado del parsermagico
+                    gameClient->update(updateParams);
                     break;
                 case GAME_OVER_CMD:
                     gameClient->gameOver();

@@ -4,7 +4,7 @@ Camera::Camera(int x, int y, int width, int height) {
     camera = {x, y , width, height};
 }
 
-void Camera::update(std::vector<Player*> players, int borderLimit) {
+void Camera::update(std::vector<Player *> players) {
     int maxPos = 0;
     int minPos = 20000;
     for (Player* player: players){
@@ -15,17 +15,14 @@ void Camera::update(std::vector<Player*> players, int borderLimit) {
         }
     }
     if (maxPos - minPos < 600){
-        camera.x = ( maxPos  + 200) - camera.w;
+        int diff = maxPos - camera.x;
+        camera.x = diff > 605 ? minPos - camera.w + diff : ( maxPos  + 200)  - camera.w;
         lastValue = camera.x > lastValue ? camera.x : lastValue;
     }
 
     if( camera.x < lastValue )
     {
         camera.x = lastValue;
-    }
-    if( camera.x > borderLimit - camera.w )
-    {
-        //Game::Instance() -> nextStage();
     }
 }
 

@@ -7,7 +7,6 @@
 #include "../TextureManager.h"
 #include "GameObject.h"
 
-#define playerID "mario" //Principal Player
 #define imgPlayer "Sprites/Players/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 

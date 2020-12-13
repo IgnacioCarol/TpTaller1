@@ -13,6 +13,7 @@ GameClient *GameClient::Instance() {
 
 bool GameClient::init(GameMsgParams initialize, const char* username) {
     this -> textureManager = TextureManager::Instance();
+    clientUsername = username;
     int cameraWidth = initialize.camera.width;
     int cameraHeight = initialize.camera.height;
     camera = new Camera(initialize.camera.xPos, initialize.camera.yPos, cameraWidth, cameraHeight);
@@ -28,7 +29,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
         logger -> info("SDL init success");
-        window = SDL_CreateWindow(username, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        window = SDL_CreateWindow(clientUsername.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   cameraWidth, cameraHeight, 0);
         if (window){
             logger -> info("Window init success");
@@ -74,15 +75,9 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
 
 void GameClient::render() {
     SDL_RenderClear(renderer);
-    background -> renderBackground(camera -> getCamera()); //ToDo que imprima los usernames
-    int playerUsernameYPos = 20;
-    //Drawing the players
-    for (std::pair<int, Player*> element: playersMap){
-        element.second -> draw(renderer, camera->getXpos(), 0);
-        TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
-        playerUsernameYPos += 20;
-    }
-    //Drawing the other gameObjects
+    background -> renderBackground(camera -> getCamera());
+    renderPlayers();
+
     for (std::pair<int, GameObject*> element: gameObjectsMap){
         element.second -> draw(renderer, camera->getXpos(), 0);
     }
@@ -90,13 +85,24 @@ void GameClient::render() {
     SDL_RenderPresent(renderer);
 }
 
-void GameClient::update(GameMsgPlaying updateObjects) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
-    //Aca solo recibo las cosas que cambian de posicion
-    /*if (initialize.stage.changeLevel){
-        //codigo para hacer el cambio de level, no ejecuto lo que sigue
-    }*/
-    updatePlayers(updateObjects.players);
+void GameClient::renderPlayers() {
+    int playerUsernameYPos = 40;
+    Player* clientPlayer;
+    for (std::pair<int, Player*> element: playersMap){
+        if (clientUsername == element.second->getUsername()){
+            clientPlayer = element.second;
+            continue;
+        }
+        element.second -> draw(renderer, camera->getXpos(), 0);
+        TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
+        playerUsernameYPos += 20;
+    }
+    clientPlayer -> draw(renderer, camera -> getXpos(), 0);
+    TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
+}
 
+void GameClient::update(GameMsgPlaying updateObjects) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
+    updatePlayers(updateObjects.players);
 
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){ //Muevo todos los objetos distintos a player
         gameObject.second -> move();

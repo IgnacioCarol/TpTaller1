@@ -13,7 +13,7 @@ private:
     //Related to the image
     static const int COIN_WIDTH = 161;
     static const int COIN_HEIGHT = 164;
-    static const int COIN_DELAY = 30;
+    static const int COIN_DELAY = 70;
     static const int COIN_FRAMES = 4;
 
     size_t delayCounter;
