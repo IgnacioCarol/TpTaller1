@@ -153,6 +153,9 @@ void *Server::authenticatePlayerClient(void *arg) {
     }
 
     if (!authenticated && playerClient != nullptr && !playerClient->isConnected()) {
+        ss.str("");
+        ss << "[Server][thread:login] delete unauthenticated playerClient with id: " << playerClient->id;
+        Logger::getInstance()->info(ss.str());
         delete playerClient;
     }
 
