@@ -110,15 +110,13 @@ void *Server::authenticatePlayerClient(void *arg) {
         if (server->getClientsSize() >= server->clientNo && !server->clientHasLogged(username)) {
             playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
             Logger::getInstance()->error("[Server] Client " + username + " rejected because rooom is full");
-            delete playerClient;
-            break;
+            continue;
         }
 
         if (server->clientIsLogged(username)) {
             Logger::getInstance()->error("[Server] Client " + username + " is already logged. Rejecting client");
             playerClient->rejectConnection(MSG_RESPONSE_ERROR_USER_ALREADY_LOGGED);
-            delete playerClient;
-            break;
+            continue;
         }
 
         for (auto & user : validPlayers.users) {
@@ -152,6 +150,10 @@ void *Server::authenticatePlayerClient(void *arg) {
             pthread_create(&server->incomeThreads[playerClient->username], nullptr, Server::handlePlayerClient, (void *) playerClient);
             pthread_create(&server->outcomeThreads[playerClient->username], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
         }
+    }
+
+    if (!authenticated && playerClient != nullptr && !playerClient->isConnected()) {
+        delete playerClient;
     }
 
     return nullptr;
