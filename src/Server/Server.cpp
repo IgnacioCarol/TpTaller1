@@ -301,7 +301,7 @@ bool Server::run() {
         if (!msg.empty()) {
             ss.str("");
             ss << "[thread:run] " << "msg: " << msg.dump();
-            Logger::getInstance()->info(ss.str());
+            Logger::getInstance()->debug(ss.str());
             std::string username = msg["username"].get<std::string>();
             for (Player* player : game->getPlayers()) { //TODO: Debería estar dentro del Game Server este loop
                 if (player->getUsername() == username) {
