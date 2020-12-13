@@ -5,17 +5,25 @@
 #include <string>
 #include <json.hpp>
 #include <SDL2/SDL.h>
-#include "BackgroundStages/BackgroundStage.h"
-#include "Protocol/GameMsgParams.h"
-#include "gameobjects/GameObject.h"
+#include "../BackgroundStages/BackgroundStage.h"
+#include "../Protocol/GameMsgParams.h"
+#include "../gameobjects/GameObject.h"
 
-#include "TextureManager.h"
-#include "Camera.h"
+#include "../TextureManager.h"
+#include "../Camera.h"
+#include "../gameobjects/Enemy.h"
+#include "../gameobjects/EnemyTurtle.h"
+#include "../gameobjects/PlatformNormal.h"
+#include "../gameobjects/PlatformSurprise.h"
+#include "../gameobjects/Coin.h"
+#include "../gameobjects/EnemyMushroom.h"
+#include "../CharacterStates/EnemyMovement.h"
+#include "../CharacterStates/Normal.h"
 
 class GameClient {
 public:
     static GameClient* Instance();
-    bool init(GameMsgParams initialize); //
+    bool init(GameMsgParams initialize, const char* username); //
     ~GameClient();
     void render();
     void update(GameMsgPlaying initialize); //ToDo por ahora digo que recibe esto para orientarme despues poner estructura correcta

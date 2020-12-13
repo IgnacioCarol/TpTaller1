@@ -1,13 +1,5 @@
-#include "gameobjects/EnemyTurtle.h"
-#include "gameobjects/PlatformNormal.h"
-#include "gameobjects/PlatformSurprise.h"
-#include "gameobjects/Coin.h"
-#include "gameobjects/EnemyMushroom.h"
-#include "BackgroundStages/FirstStage.h"
 #include "GameClient.h"
-#include "CharacterStates/EnemyMovement.h"
-#include "CharacterStates/Normal.h"
-#include "Camera.h"
+
 
 GameClient* GameClient::instance = 0;
 
@@ -19,7 +11,7 @@ GameClient *GameClient::Instance() {
     return instance;
 }
 
-bool GameClient::init(GameMsgParams initialize) {
+bool GameClient::init(GameMsgParams initialize, const char* username) {
     this -> textureManager = TextureManager::Instance();
     int cameraWidth = initialize.camera.width;
     int cameraHeight = initialize.camera.height;
@@ -36,7 +28,7 @@ bool GameClient::init(GameMsgParams initialize) {
     SDL_SetHint(SDL_HINT_RENDER_DRIVER, "opengl");
     if (!SDL_Init(SDL_INIT_EVERYTHING)){
         logger -> info("SDL init success");
-        window = SDL_CreateWindow("Mario Bros", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        window = SDL_CreateWindow(username, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                   cameraWidth, cameraHeight, 0);
         if (window){
             logger -> info("Window init success");
