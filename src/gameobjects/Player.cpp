@@ -121,8 +121,8 @@ void Player::setState(std::string state) {
         } else if (state == "CROUCHED") {
             changeState(new Crouched(5, framesAmount));
         }
-        else if (state == "PAUSED"){
-            changeState(new Paused(0, framesAmount));
+        else if (state == "PAUSED" || state == "FINISH"){
+            changeState(new Paused(0, framesAmount, state == "PAUSED"));
         }
     }
 }

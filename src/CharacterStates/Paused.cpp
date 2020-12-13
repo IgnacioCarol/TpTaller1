@@ -8,7 +8,7 @@
 
 
 Paused::Paused(int currentFrame, int frameAmount, bool disconnected) : CharacterState(currentFrame, frameAmount) {
-    stateType = "PAUSED";
+    stateType = disconnected ? "PAUSED" : "FINISH";
     this -> disconnected = disconnected;
 }
 
@@ -26,6 +26,6 @@ void Paused::changeState(const Uint8 *currentKeyStates, Player *player) {
 
 void Paused::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth, SDL_Renderer *renderer,
                   SDL_RendererFlip flip) {
-    ID = (disconnected) ? "paused" : ID;
+    ID = (stateType == "PAUSED") ? "paused" : ID;
     CharacterState::draw(ID, xPosition, yPosition, imageWidth, imageHeigth, renderer, flip);
 }
