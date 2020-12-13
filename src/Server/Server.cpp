@@ -277,7 +277,7 @@ bool Server::run() {
     while(this->getClientsSize() < this->clientNo);
     ss.str("");
     ss << "[thread:run] Amount of required clients reached successfully, initializing game...";
-    Logger::getInstance()->info(ss.str());
+    Logger::getInstance()->debug(ss.str());
 
     initThreads();
     json message = {{"startGame", true}};

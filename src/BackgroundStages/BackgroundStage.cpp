@@ -10,7 +10,9 @@ BackgroundStage::BackgroundStage(TextureManager *pManager, SDL_Renderer *pRender
 }
 
 BackgroundStage::~BackgroundStage() {
-    delete this->timer;
+    if (this->timer != nullptr) {
+        delete this->timer;
+    }
 }
 
 BackgroundStage *BackgroundStage::nextStage() {
