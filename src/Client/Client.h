@@ -31,6 +31,7 @@ public:
 
 
     void run();
+    bool didMove = false;
 
 private:
     const char * _IP;

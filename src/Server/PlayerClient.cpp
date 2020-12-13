@@ -81,3 +81,11 @@ void PlayerClient::rejectConnection(std::string error) {
         Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
     }
 }
+
+size_t PlayerClient::getOutcomeSize() {
+    size_t result;
+    pthread_mutex_lock(this->commandMutex);
+    result = this->outcome.size();
+    pthread_mutex_unlock(this->commandMutex);
+    return result;
+}

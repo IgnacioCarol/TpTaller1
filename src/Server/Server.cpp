@@ -239,6 +239,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
     int tolerance = 0;
     json msg;
+    std::stringstream ss;
 
     while (playerClient && playerClient->isConnected()) {
         msg = playerClient->getNewOutcomeMsg();
@@ -246,7 +247,10 @@ void * Server::broadcastToPlayerClient(void *arg) {
             continue;
         }
 
-        std::stringstream ss;
+        ss.str("");
+        ss << "[Server][thread:broadcast][event:queue_size] outcome_size= " << playerClient->getOutcomeSize();
+        Logger::getInstance()->debug(ss.str());
+
         ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
@@ -301,9 +305,18 @@ bool Server::run() {
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 1000 / 60) {
+        if ((t2 - t1) < 1000 * 150 / 60) {
             continue;
         }
+
+        size_t result;
+        pthread_mutex_lock(&this->commandMutex);
+        result = this->commands.size();
+        pthread_mutex_unlock(&this->commandMutex);
+
+        ss.str("");
+        ss << "[Server][thread:run][event:queue_size] cmd_size= " << result;
+        Logger::getInstance()->debug(ss.str());
 
         msg = this->getNewCommandMsg();
         if (!msg.empty()) {

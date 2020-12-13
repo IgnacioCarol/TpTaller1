@@ -11,6 +11,7 @@ public:
     bool send(json *msg);
     void pushOutcome(json msg);
     json getNewOutcomeMsg();
+    size_t getOutcomeSize();
     void popOutcome();
     void pushCommand(json msg);
     bool isConnected();

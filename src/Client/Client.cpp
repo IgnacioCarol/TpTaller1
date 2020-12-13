@@ -160,6 +160,7 @@ json Client::receive(Client *client) {
     std::stringstream ss;
     int tolerance = 0;
 
+//    while (client != nullptr && client->isConnected() && client->keepConnection) {
     while (client->isConnected()) {
         msg_received = client->receive(&msg);
         if (msg_received < 0) {
@@ -240,13 +241,29 @@ void * Client::broadcastToServer(void *arg) {
 }
 
 void Client::run() {
-    bool didMove = false;
     //Parser magico
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
     bool clientInitialized = false;
+    std::stringstream ss;
+
+    clock_t t2, t1 = clock();
     while (gameClient->isPlaying() && isConnected()) {
+        t2 = clock();
+        if ((t2 - t1) < 1000 * 200 / 60) {
+            continue;
+        }
+
         if (!this->eventsQueueIsEmpty()) {
+            size_t result;
+            pthread_mutex_lock(&this->eventsMutex);
+            result = this->events.size();
+            pthread_mutex_unlock(&this->eventsMutex);
+
+            ss.str("");
+            ss << "[Client][thread:run][event:queue_size] events_size= " << result;
+            Logger::getInstance()->debug(ss.str());
+
             json receivedMessage = this->getMessageFromQueue();
             Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
             ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
@@ -284,9 +301,11 @@ void Client::run() {
             gameClient->render();
             this->handleUserEvents();
         }
+
+        t1 = clock();
     }
     keepConnection = false;
-    pthread_join(incomeThread, nullptr);
+    pthread_join(incomeThread, nullptr); //FixMe creo que esto va a quedar trabado en el recv hasta que se cierre el socket de alguno de los dos lados
     pthread_join(outcomeThread, nullptr);
     gameClient -> clean();
     delete gameClient;
@@ -347,5 +366,15 @@ void Client::handleUserEvents() {
     msg["down"] = down;
     msg["left"] = left;
     msg["right"] = right;
+    if (!(up || down || left || right)) {
+        if (this->didMove) {
+            pushCommand(msg);
+            this->didMove = false;
+        }
+
+        return;
+    }
+
+    this->didMove = true;
     pushCommand(msg);
 }
