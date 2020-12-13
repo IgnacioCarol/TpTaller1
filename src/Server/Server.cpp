@@ -98,6 +98,14 @@ void *Server::authenticatePlayerClient(void *arg) {
     while (!authenticated && playerClient != nullptr && playerClient->isConnected()) {
         json msg = receive(playerClient);
         if (!(error = MessageValidator::validLoginMessage(msg)).empty()) {
+            if (error == "No message received") {
+                ss.str("");
+                ss << "[Server][thread:login] Client socket closed, delete unauthenticated playerClient with id: " << playerClient->id;
+                Logger::getInstance()->info(ss.str());
+                delete playerClient;
+                return nullptr;
+            }
+
             Logger::getInstance()->error("[Server - authenticate] unexpected login message from client: " + error);
             response = ServerParser::buildErrorMsg(error);
             playerClient->pushOutcome(response);
