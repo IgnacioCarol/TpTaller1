@@ -5,11 +5,11 @@
 #endif
 #include "GameServer.h"
 
-GameServer* GameServer::instance = 0;
+GameServer* GameServer::instance = nullptr;
 
 GameServer *GameServer::Instance() {
     //First time we create an instance of Game
-    if(instance == 0) instance = new GameServer();
+    if(instance == nullptr) instance = new GameServer();
     return instance;
 }
 
@@ -62,7 +62,7 @@ json GameServer::getInitializationMsg() {
 }
 
 int GameServer::getTimer() {
-    return stage->getTimer()->getTimeSecond();
+    return stage ? stage->getTimer()->getTimeSecond(): 0;
 }
 
 std::map<std::string, std::string> GameServer::getPlayerPaths() {
