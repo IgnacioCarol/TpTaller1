@@ -81,3 +81,7 @@ void PlayerClient::rejectConnection(std::string error) {
         Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
     }
 }
+
+void PlayerClient::disconnect() {
+    clientSocket->release();
+}

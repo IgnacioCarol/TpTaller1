@@ -21,6 +21,9 @@ public:
 
     int id;
     std::string username;
+
+    void disconnect();
+
 private:
     std::queue<json> * commandQueue;
     std::queue<json> outcome;
