@@ -250,7 +250,7 @@ void Client::run() {
     clock_t t2, t1 = clock();
     while (gameClient->isPlaying() && isConnected()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 200 / 60) {
+        if ((t2 - t1) < 1000 * 300 / 60) {
             continue;
         }
 

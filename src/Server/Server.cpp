@@ -305,7 +305,7 @@ bool Server::run() {
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 150 / 60) {
+        if ((t2 - t1) < 1000 * 400 / 60) {
             continue;
         }
 
