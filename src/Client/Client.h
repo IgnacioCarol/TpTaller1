@@ -25,6 +25,7 @@ public:
     void init();
     bool login();
     bool isConnected();
+    size_t getEventsSize();
     int send(json *msg);
     int receive(json *msg);
     void release();

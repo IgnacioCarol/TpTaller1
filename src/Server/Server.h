@@ -26,6 +26,7 @@ public:
     bool run();
     bool isRunning();
     int getClientsSize();
+    size_t getCommandsSize();
     int getConnectedClientsSize();
     std::vector<PlayerClient*> getClients();
     void pushToWaitingRoom(PlayerClient * playerClient);

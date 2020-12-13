@@ -251,6 +251,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
         ss << "[Server][thread:broadcast][event:queue_size] outcome_size= " << playerClient->getOutcomeSize();
         Logger::getInstance()->debug(ss.str());
 
+        ss.str("");
         ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
@@ -305,17 +306,12 @@ bool Server::run() {
     //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t2 = clock();
-        if ((t2 - t1) < 1000 * 400 / 60) {
+        if ((t2 - t1) < 1000 * 200 / 60) {
             continue;
         }
 
-        size_t result;
-        pthread_mutex_lock(&this->commandMutex);
-        result = this->commands.size();
-        pthread_mutex_unlock(&this->commandMutex);
-
         ss.str("");
-        ss << "[Server][thread:run][event:queue_size] cmd_size= " << result;
+        ss << "[Server][thread:run][event:queue_size] cmd_size= " << this->getCommandsSize();
         Logger::getInstance()->debug(ss.str());
 
         msg = this->getNewCommandMsg();
@@ -558,5 +554,13 @@ json Server::getPlayersPositionMessage() {
         return ServerParser::buildChangeLevelMsg(game->getGameObjects(), game->getBackgroundStage());
     }
     return ServerParser::buildPlayingGameMessage(game->getPlayers(), game->getCamera(), game->getTimer());
+}
+
+size_t Server::getCommandsSize() {
+    size_t result;
+    pthread_mutex_lock(&this->commandMutex);
+    result = this->commands.size();
+    pthread_mutex_unlock(&this->commandMutex);
+    return result;
 }
 
