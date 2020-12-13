@@ -167,6 +167,7 @@ void GameServer::setChangeLevelFlag(bool setValue) {
 void GameServer::unpausePlayer(PlayerClient *playerClient) {
     for (Player *player: getPlayers()) {
         if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
+            Logger::getInstance()->info("Client " +  player->getUsername() + " is connected.");
             player->changeState(new Normal(0,player->getFrameAmount()));
         }
     }
@@ -175,7 +176,10 @@ void GameServer::unpausePlayer(PlayerClient *playerClient) {
 void GameServer::pausePlayer(PlayerClient *playerClient) {
     for (Player * player: getPlayers()) {
         if (player->getUsername() == playerClient->username) {
-            player->changeState(new Paused(0,player->getFrameAmount()));
+            if (player->getState() != "PAUSED") {
+                Logger::getInstance()->info("Client " + player->getUsername() + " is disconnected.");
+                player->changeState(new Paused(0,player->getFrameAmount()));
+            }
         }
     }
 }
