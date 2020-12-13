@@ -121,17 +121,17 @@ int Socket::send(T* data, int bytesToWrite) {
 int Socket::receive(json *msg) {
     uint32_t sizeOfMessage;
     if (receive<uint32_t>(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
-        Logger::getInstance()->error("la cagaste pibe");
+        Logger::getInstance()->error("[Socket] There was an error receiving message.");
         return -1;
     };
     std::string message(sizeOfMessage, '\0');
     if (receive<char>(&message[0], sizeOfMessage) < 1) {
-        Logger::getInstance()->error("[Server] Couldn't receive message from client");
+        Logger::getInstance()->error("[Socket] There was an error receiving message.");
         //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
         return 0;
     }
     if (message.empty()) {
-        Logger::getInstance()->error("Message is empty");
+        Logger::getInstance()->error("[Socket] Message is empty");
         return 0;
     }
     *msg = json::parse(message);
