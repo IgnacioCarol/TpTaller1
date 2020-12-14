@@ -296,7 +296,14 @@ void Client::run() {
             this->handleUserEvents();
         }
 
-        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017);
+        size_t waitTime = 0;
+        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017) {
+            SDL_Delay(1);
+            waitTime++;
+        }
+        ss.str("");
+        ss << "[Client][thread:run][user:" << this->username << "] extra_time =" << waitTime;
+        Logger::getInstance()->debug(ss.str());
     }
 
     keepConnection = false;

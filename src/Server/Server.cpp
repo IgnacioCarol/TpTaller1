@@ -337,7 +337,14 @@ bool Server::run() {
             broadcast(msg);
         }
 
-        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017);
+        size_t waitTime = 0;
+        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017) {
+            SDL_Delay(1);
+            waitTime++;
+        }
+        ss.str("");
+        ss << "[Server][thread:run] extra_time =" << waitTime;
+        Logger::getInstance()->debug(ss.str());
 
     }
     Logger::getInstance()->info("Finished run loop");
