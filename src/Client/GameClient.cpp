@@ -76,12 +76,14 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
 void GameClient::render() {
     SDL_RenderClear(renderer);
     background -> renderBackground(camera -> getCamera());
-    renderPlayers();
 
     for (std::pair<int, GameObject*> element: gameObjectsMap){
-        element.second -> draw(renderer, camera->getXpos(), 0);
+        if (element.second->getAtScene()){
+            element.second -> draw(renderer, camera->getXpos(), 0);
+        }
     }
 
+    renderPlayers();
     SDL_RenderPresent(renderer);
 }
 
@@ -103,14 +105,38 @@ void GameClient::renderPlayers() {
 
 void GameClient::update(GameMsgPlaying updateObjects) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
     updatePlayers(updateObjects.players);
-
-    for (std::pair<int, GameObject*> gameObject: gameObjectsMap){ //Muevo todos los objetos distintos a player
-        gameObject.second -> move();
-    }
+    updateGameObjects(updateObjects.gameObjects);
 
     //Update camera position and timer
     camera -> setXPos(updateObjects.camera.xPos);
     background->setCurrentTime(updateObjects.timer);
+}
+
+void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
+    for (GamePlayerPlaying playerUpdate: players){
+        Player* player = playersMap[playerUpdate.id];
+        player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
+        player -> setDirection(playerUpdate.direction);
+        player -> setState(playerUpdate.state);
+    }
+}
+
+void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
+    logger->debug("ENTRE A UPDATE PLAYERS");
+    int cont = 0;
+    for (GameObjectPlaying gameObjectUpdate: gameObjects){
+        cont += 1;
+        GameObject* gameObject = gameObjectsMap[gameObjectUpdate.id];
+        gameObject->setPosition(gameObjectUpdate.xPos, gameObjectUpdate.yPos);
+        gameObject->setState(gameObjectUpdate.state);
+        gameObject->setDirection(gameObjectUpdate.direction);
+        gameObject->setAtScene(gameObjectUpdate.atScene);
+    }
+
+    if (!cont){
+        logger->debug("NO ENTRE NUNCA A UPDATEAR ALGO");
+    }
+    else logger ->debug("ENTRE A UPDATEAR ALGO ");
 }
 
 bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
@@ -202,15 +228,6 @@ void GameClient::initBackground(SDL_Renderer* renderer, StageInit stage) {
     background -> setBackgroundID("BG1");
     background -> setLevel(stage.level);
     background -> setCurrentTime(stage.timer);
-}
-
-void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
-    for (GamePlayerPlaying playerUpdate: players){
-        Player* player = playersMap[playerUpdate.id];
-        player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
-        player -> setDirection(playerUpdate.direction);
-        player -> setState(playerUpdate.state);
-    }
 }
 
 GameClient::~GameClient() {
