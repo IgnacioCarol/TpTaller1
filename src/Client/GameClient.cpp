@@ -76,7 +76,6 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
 void GameClient::render() {
     SDL_RenderClear(renderer);
     background -> renderBackground(camera -> getCamera());
-
     for (std::pair<int, GameObject*> element: gameObjectsMap){
         if (element.second->getAtScene()){
             element.second -> draw(renderer, camera->getXpos(), 0);
@@ -122,21 +121,13 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
 }
 
 void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
-    logger->debug("ENTRE A UPDATE PLAYERS");
-    int cont = 0;
     for (GameObjectPlaying gameObjectUpdate: gameObjects){
-        cont += 1;
         GameObject* gameObject = gameObjectsMap[gameObjectUpdate.id];
         gameObject->setPosition(gameObjectUpdate.xPos, gameObjectUpdate.yPos);
         gameObject->setState(gameObjectUpdate.state);
         gameObject->setDirection(gameObjectUpdate.direction);
         gameObject->setAtScene(gameObjectUpdate.atScene);
     }
-
-    if (!cont){
-        logger->debug("NO ENTRE NUNCA A UPDATEAR ALGO");
-    }
-    else logger ->debug("ENTRE A UPDATEAR ALGO ");
 }
 
 bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
