@@ -77,9 +77,23 @@ GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
         gamePlayers.push_back(gamePlayer);
     }
 
+    std::vector<GameObjectPlaying> gameObjects;
+    for (auto& go: contentJson["gameObjects"]){
+        GameObjectPlaying gameObject = {
+                go["id"],
+                go["xPos"],
+                go["yPos"],
+                go["state"],
+                go["direction"],
+                go["atScene"]
+        };
+        gameObjects.push_back(gameObject);
+    }
+
     return GameMsgPlaying {
         camera,
         gamePlayers,
+        gameObjects,
         contentJson["timer"]
     };
 }

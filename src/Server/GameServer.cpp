@@ -150,7 +150,9 @@ void GameServer::updatePlayers() {
 }
 
 void GameServer::updateGameObjects() {
-
+    for (GameObject* go: gameObjects){
+        go->move();
+    }
 }
 
 BackgroundStage *GameServer::getBackgroundStage() {

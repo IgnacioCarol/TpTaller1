@@ -20,8 +20,6 @@ public:
     void jump(int yMove);
     void run(int direction);
 
-    int getXPosition(){return xPosition;}
-
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
 
     bool isJumping();
