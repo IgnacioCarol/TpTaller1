@@ -37,9 +37,11 @@ public:
     int getXPosition();
     int getYPosition();
     virtual void setPosition(int x, int y);
+    virtual bool getDirection();
     virtual void setDirection(bool direction);
     virtual void setState(std::string state);
-    bool isAtScene(SDL_Rect* camera);
+    virtual std::string getState();
+    bool isAtScene(int camXPos);
     void setAtScene(bool isAtScene);
 
 protected:

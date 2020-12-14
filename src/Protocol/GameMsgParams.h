@@ -69,6 +69,15 @@ struct GamePlayerPlaying {
     bool direction;
 };
 
+struct GameObjectPlaying {
+    int id;
+    int xPos;
+    int yPos;
+    std::string state;
+    bool direction;
+    bool atScene;
+};
+
 struct CameraDuringGame {
     int xPos;
     int yPos;
@@ -77,6 +86,7 @@ struct CameraDuringGame {
 struct GameMsgPlaying {
     CameraDuringGame camera;
     std::vector<GamePlayerPlaying> players;
+    std::vector<GameObjectPlaying> gameObjects;
     int timer;
 };
 #endif //TPTALLER1_GAMEMSGPARAMS_H

@@ -59,11 +59,19 @@ GameObject::GameObject() {
     id = IdGenerator::getInstance()->getNextId();
 }
 
-bool GameObject::isAtScene(SDL_Rect* camera) {
-    atScene = xPosition >= camera->x && xPosition <= camera->x + 800;
+bool GameObject::isAtScene(int camXPos) {
+    atScene = xPosition >= camXPos && xPosition <= camXPos + 800;
     return atScene;
 }
 
 void GameObject::setAtScene(bool isAtScene) {
     atScene = isAtScene;
+}
+
+std::string GameObject::getState() {
+    return "StaticObject";  //ToDo Lo hago para safar ya que las monedas y esas cosas no tienen estado por ahora (quizas nunca tengan)
+}
+
+bool GameObject::getDirection() {
+    return true; //ToDo tmb para safar ya que los bloques y monedas no tienen direction
 }

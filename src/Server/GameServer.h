@@ -51,6 +51,8 @@ public:
 
     void updatePlayers();
 
+    void updateGameObjects();
+
     BackgroundStage* getBackgroundStage();
 
     bool changeLevel();

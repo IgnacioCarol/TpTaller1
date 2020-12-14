@@ -149,6 +149,10 @@ void GameServer::updatePlayers() {
     if (changeLevelFlag) nextStage();
 }
 
+void GameServer::updateGameObjects() {
+
+}
+
 BackgroundStage *GameServer::getBackgroundStage() {
     return stage;
 }

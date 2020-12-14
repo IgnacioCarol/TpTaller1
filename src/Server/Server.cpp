@@ -311,6 +311,7 @@ bool Server::run() {
         }
         //ToDo change game state with msg
         game->updatePlayers();
+        game->updateGameObjects();
 
         game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {

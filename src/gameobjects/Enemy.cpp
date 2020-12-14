@@ -43,11 +43,18 @@ void Enemy::setPosition(int x, int y) {
 }
 
 void Enemy::setDirection(bool direction) {
-    this -> flipFlag = !direction; //false: der a izq true: izq a der
+    this -> flipFlag = direction; //false: der a izq true: izq a der
 }
 
 void Enemy::setState(std::string state) {
     GameObject::setState(state); //ToDo implementar esto para la prox fase
 }
 
+std::string Enemy::getState() {
+    return enemyState->getStateType();
+}
+
+bool Enemy::getDirection() {
+    return direction > 0;
+}
 
