@@ -248,7 +248,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
         }
 
         ss.str("");
-        ss << "[Server][thread:broadcast][event:queue_size] outcome_size= " << playerClient->getOutcomeSize();
+        ss << "[Server][thread:broadcast][event:queue_size][username:" << playerClient->username << "] outcome_size= " << playerClient->getOutcomeSize();
         Logger::getInstance()->debug(ss.str());
 
         ss.str("");
@@ -290,7 +290,7 @@ bool Server::run() {
     while(this->getClientsSize() < this->clientNo);
     ss.str("");
     ss << "[thread:run] Amount of required clients reached successfully, initializing game...";
-    Logger::getInstance()->debug(ss.str());
+    Logger::getInstance()->info(ss.str());
 
     initThreads();
     json message = {{"startGame", true}};
