@@ -29,7 +29,7 @@ public:
     std::string getStateType();
 
 protected:
-    static const int ITER_TIMES = 24;
+    static const int ITER_TIMES = 2;
     static const int RUNNING_FRAME = 2;
     static const int CROUCHED_FRAME = 1;
     std::string stateType;
