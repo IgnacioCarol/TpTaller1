@@ -8,7 +8,7 @@
 
 #include "Player.h"
 
-static const int GRAVITY = 2;
+static const int GRAVITY = 3;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
@@ -121,8 +121,8 @@ void Player::setState(std::string state) {
         } else if (state == "CROUCHED") {
             changeState(new Crouched(5, framesAmount));
         }
-        else if (state == "PAUSED"){
-            changeState(new Paused(0, framesAmount));
+        else if (state == "PAUSED" || state == "FINISH"){
+            changeState(new Paused(0, framesAmount, state == "PAUSED"));
         }
     }
 }

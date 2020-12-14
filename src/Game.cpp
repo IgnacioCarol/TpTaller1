@@ -72,7 +72,7 @@ Game::~Game() {
 
 void Game::render() {
     SDL_RenderClear(renderer);
-    camera->update(players, stage->getWidth());
+    camera->update(players);
     textureManager->drawBackgroundWithCamera(800, 600, "BG", renderer, camera->getCamera());
     player->draw(renderer, camera -> getXpos(), 0);
 

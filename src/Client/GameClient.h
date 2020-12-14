@@ -26,8 +26,8 @@ public:
     bool init(GameMsgParams initialize, const char* username); //
     ~GameClient();
     void render();
-    void update(GameMsgPlaying initialize); //ToDo por ahora digo que recibe esto para orientarme despues poner estructura correcta
-    bool createGameObjects(GameObjectsInit gameObjectsInit); //recibe la lista del init de game objects
+    void update(GameMsgPlaying initialize);
+    bool createGameObjects(GameObjectsInit gameObjectsInit);
     bool isPlaying();
     void gameOver();
     void changeLevel(GameMsgLevelChange nextLevelConfig);
@@ -45,6 +45,7 @@ private:
     void initBackground(SDL_Renderer* renderer, StageInit stage);
     void updatePlayers(std::vector<GamePlayerPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
+    void renderPlayers();
 
 
     SDL_Window* window;
@@ -55,6 +56,7 @@ private:
     Camera* camera;
     Logger* logger = Logger::getInstance();
     TextureManager* textureManager;
+    std::string clientUsername;
 
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;
