@@ -307,7 +307,7 @@ void Client::run() {
     }
 
     keepConnection = false;
-    pthread_join(incomeThread, nullptr); //FixMe creo que esto va a quedar trabado en el recv hasta que se cierre el socket de alguno de los dos lados
+    pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
     gameClient -> clean();
     delete gameClient;
