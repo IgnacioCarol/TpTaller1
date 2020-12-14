@@ -303,7 +303,6 @@ bool Server::run() {
     }
 
     clock_t t1;
-    //ToDo while (Game->isRunning()) {
     while (someoneIsConnected() && game->isPlaying()) {
         t1 = clock(); // Start transaction
 
@@ -326,9 +325,7 @@ bool Server::run() {
             checkPlayersConnection();
 
             this->popCommand();
-            //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
-        //ToDo change game state with msg
         game->updatePlayers();
 
         game->getCamera()->update(game->getPlayers());
