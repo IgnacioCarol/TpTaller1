@@ -24,7 +24,6 @@ protected:
     CharacterState* enemyState{};
     int direction = -enemyVelocity;
     bool flipFlag = false;
-    bool inScene = false; //To know if the enemy appears in scene
     SDL_Rect* cam{};
 };
 

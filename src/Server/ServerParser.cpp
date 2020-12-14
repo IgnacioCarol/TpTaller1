@@ -67,7 +67,9 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
 
     return Protocol::gameInitMsgToJson(gameMsgParams);
 }
-json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, Camera *camera, int timer) {
+json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::vector<GameObject *> gameObjects,
+                                           Camera *camera,
+                                           int timer) {
     CameraDuringGame cameraDuringGame = {
             camera->getCamera()->x,
             camera->getCamera()->y,

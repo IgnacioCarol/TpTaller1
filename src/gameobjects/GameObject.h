@@ -39,6 +39,8 @@ public:
     virtual void setPosition(int x, int y);
     virtual void setDirection(bool direction);
     virtual void setState(std::string state);
+    bool isAtScene(SDL_Rect* camera);
+    void setAtScene(bool isAtScene);
 
 protected:
     //To manage the movement
@@ -49,6 +51,7 @@ protected:
     TextureManager* textureManager = TextureManager::Instance();
     std::string _textureID;
     int _currentFrame;
+    bool atScene = false; //To know if the object its at scene
 
     int id;
     GameObjectType type;

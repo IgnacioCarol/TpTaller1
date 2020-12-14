@@ -58,3 +58,12 @@ int GameObject::getFrameAmount() {
 GameObject::GameObject() {
     id = IdGenerator::getInstance()->getNextId();
 }
+
+bool GameObject::isAtScene(SDL_Rect* camera) {
+    atScene = xPosition >= camera->x && xPosition <= camera->x + 800;
+    return atScene;
+}
+
+void GameObject::setAtScene(bool isAtScene) {
+    atScene = isAtScene;
+}
