@@ -77,7 +77,14 @@ bool Client::authenticate() {
 
     json authJson = ClientParser::buildLoginMsg(auth->username, auth->password);
 
+    if (!isConnected()) {
+        Logger::getInstance()->info(std::string("[Client] ") + TEXT_SERVER_DISCONNECTED_VALUE);
+        _login->showError(TEXT_SERVER_DISCONNECTED_VALUE);
+        return false;
+    }
+
     Logger::getInstance()->debug("[Client] Will send authentication message");
+
     if (send(&authJson) < 0) {
         Logger::getInstance()->error(MSG_CLIENT_AUTH_SEND_ERROR);
         _login->showError("Unexpected error. Try again.");
@@ -140,14 +147,18 @@ void * Client::handleServerEvents(void * arg) {
     auto * client = (Client *)arg;
     json msg;
     std::stringstream ss;
-    while (client != nullptr &&
-           client->isConnected() &&
-           (msg = receive(client)) != nullptr && client->keepConnection) {
-        ss.str("");
-        ss << "[thread:Client]"
-           << "msg: " << msg.dump();
-        Logger::getInstance()->debug(ss.str());
-        client->pushEvent(msg);
+    try {
+        while (client != nullptr &&
+               client->isConnected() &&
+               (msg = receive(client)) != nullptr && client->keepConnection) {
+            ss.str("");
+            ss << "[thread:Client]"
+               << "msg: " << msg.dump();
+            Logger::getInstance()->debug(ss.str());
+            client->pushEvent(msg);
+        }
+    } catch (std::exception &ex) {
+        Logger::getInstance()->error(std::string("[Client] Unexpected exception receiving message from server. Error: ") + ex.what());
     }
 
     return nullptr;
@@ -245,10 +256,11 @@ void Client::run() {
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
     bool clientInitialized = false;
+    bool serverDisconnected = false;
     std::stringstream ss;
 
     clock_t t1;
-    while (gameClient->isPlaying() && isConnected()) {
+    while (gameClient->isPlaying()) {
         t1 = clock(); // Start transaction
 
         if (!this->eventsQueueIsEmpty()) {
@@ -292,8 +304,25 @@ void Client::run() {
             } while (this->getEventsSize() > 20 );
         }
         if (clientInitialized) {
-            gameClient->render();
-            this->handleUserEvents();
+            if (isConnected()) {
+                gameClient->render();
+                this->handleUserEvents();
+            } else {
+                SDL_Event e;
+                while( SDL_PollEvent( &e ) != 0 ) {
+                    if (e.type  == SDL_QUIT ) {
+                        gameClient->gameOver();
+                        break;
+                    }
+
+                    if (!serverDisconnected) {
+                        Logger::getInstance()->info("Connection to the server was lost");
+                        serverDisconnected = true;
+                    }
+                    gameClient->setServerDown();
+                    gameClient->render();
+                }
+            }
         }
 
         size_t waitTime = 0;
