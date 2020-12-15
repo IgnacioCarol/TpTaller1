@@ -25,3 +25,6 @@ int Timer::getTimeSecond() {
 bool Timer::isTimeOver() {
     return getTimeSecond() <= 0;
 }
+
+Timer::~Timer() {
+}

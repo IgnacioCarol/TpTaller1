@@ -15,7 +15,7 @@ private:
     static const int SURPRISE_BLOCK_WIDTH = 256;
     static const int SURPRISE_BLOCK_HEIGHT = 256;
     //Animation related definitions
-    static const int SURPRISE_BLOCK_DELAY = 200;
+    static const int SURPRISE_BLOCK_DELAY = 10;
     static const int SURPRISE_BLOCK_FRAMES = 4;
     size_t delayCounter;
 

@@ -13,7 +13,7 @@ public:
     void start();
     int getTimeSecond();
     bool isTimeOver();
-
+    virtual ~Timer();
 private:
     clock_t startTime = 0;
     int stopTime;
