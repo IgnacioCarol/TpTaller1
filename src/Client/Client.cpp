@@ -171,6 +171,7 @@ json Client::receive(Client *client) {
     std::stringstream ss;
     int tolerance = 0;
 
+//    while (client != nullptr && client->isConnected() && client->keepConnection) {
     while (client->isConnected()) {
         msg_received = client->receive(&msg);
         if (msg_received < 0) {
@@ -251,45 +252,56 @@ void * Client::broadcastToServer(void *arg) {
 }
 
 void Client::run() {
-    bool didMove = false;
+    //Parser magico
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
     bool clientInitialized = false;
     bool serverDisconnected = false;
-    while (gameClient->isPlaying()) {
-        if (!this->eventsQueueIsEmpty()) {
-            json receivedMessage = this->getMessageFromQueue();
-            Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
-            ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
-            GameMsgParams initParams;
-            GameMsgPlaying updateParams;
-            GameMsgLevelChange updateLevel;
+    std::stringstream ss;
 
-            switch(protocol) {
-                case GAME_INITIALIZE_CMD:
-                    initParams = ClientParser::parseInitParams(receivedMessage);
-                    clientInitialized = gameClient->init(initParams, username.c_str());
-                    if (!clientInitialized) {
-                        Logger::getInstance()->error("Error trying to init gameClient");
-                        throw ClientException("Error trying to init gameClient");
-                    }
-                    break;
-                case GAME_VIEW_CMD:
-                    updateParams = ClientParser::parseUpdateParams(receivedMessage);
-                    gameClient->update(updateParams);
-                    break;
-                case GAME_OVER_CMD:
-                    gameClient->gameOver();
-                    break;
-                case GAME_CHANGE_LEVEL_CMD:
-                    updateLevel = ClientParser::parseChangeLevelParams(receivedMessage);
-                    gameClient -> changeLevel(updateLevel);
-                    break;
-                default:
-                    std::stringstream ss;
-                    ss << "[Client] unexpected protocol command. Protocol:" << protocol << " With received message" << receivedMessage.dump();
-                    Logger::getInstance()->error(ss.str());
-            }
+    clock_t t1;
+    while (gameClient->isPlaying()) {
+        t1 = clock(); // Start transaction
+
+        if (!this->eventsQueueIsEmpty()) {
+            do {
+                ss.str("");
+                ss << "[Client][thread:run][event:queue_size] events_size= " << this->getEventsSize();
+                Logger::getInstance()->debug(ss.str());
+
+                json receivedMessage = this->getMessageFromQueue();
+                Logger::getInstance()->debug("[thread:run] msg: " + receivedMessage.dump());
+                ProtocolCommand protocol = ClientParser::getCommand(receivedMessage);
+                GameMsgParams initParams;
+                GameMsgPlaying updateParams;
+                GameMsgLevelChange updateLevel;
+
+                switch(protocol) {
+                    case GAME_INITIALIZE_CMD:
+                        initParams = ClientParser::parseInitParams(receivedMessage);
+                        clientInitialized = gameClient->init(initParams, username.c_str());
+                        if (!clientInitialized) { //le paso el resultado del parser magico
+                            Logger::getInstance()->error("Error trying to init gameClient");
+                            throw ClientException("Error trying to init gameClient");
+                        }
+                        break;
+                    case GAME_VIEW_CMD:
+                        updateParams = ClientParser::parseUpdateParams(receivedMessage);
+                        gameClient->update(updateParams); //le paso el resultado del parsermagico
+                        break;
+                    case GAME_OVER_CMD:
+                        gameClient->gameOver();
+                        break;
+                    case GAME_CHANGE_LEVEL_CMD:
+                        updateLevel = ClientParser::parseChangeLevelParams(receivedMessage);
+                        gameClient -> changeLevel(updateLevel);
+                        break;
+                    default:
+                        std::stringstream ss;
+                        ss << "[Client] unexpected protocol command. Protocol:" << protocol << " With received message" << receivedMessage.dump();
+                        Logger::getInstance()->error(ss.str());
+                }
+            } while (this->getEventsSize() > 20 );
         }
         if (clientInitialized) {
             if (isConnected()) {
@@ -312,7 +324,17 @@ void Client::run() {
                 }
             }
         }
+
+        size_t waitTime = 0;
+        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017) {
+            SDL_Delay(1);
+            waitTime++;
+        }
+        ss.str("");
+        ss << "[Client][thread:run][user:" << this->username << "] extra_time =" << waitTime;
+        Logger::getInstance()->debug(ss.str());
     }
+
     keepConnection = false;
     pthread_join(incomeThread, nullptr);
     pthread_join(outcomeThread, nullptr);
@@ -375,5 +397,23 @@ void Client::handleUserEvents() {
     msg["down"] = down;
     msg["left"] = left;
     msg["right"] = right;
+    if (!(up || down || left || right)) {
+        if (this->didMove) {
+            pushCommand(msg);
+            this->didMove = false;
+        }
+
+        return;
+    }
+
+    this->didMove = true;
     pushCommand(msg);
+}
+
+size_t Client::getEventsSize() {
+    size_t result;
+    pthread_mutex_lock(&this->eventsMutex);
+    result = this->events.size();
+    pthread_mutex_unlock(&this->eventsMutex);
+    return result;
 }

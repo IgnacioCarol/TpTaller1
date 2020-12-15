@@ -98,6 +98,14 @@ void *Server::authenticatePlayerClient(void *arg) {
     while (!authenticated && playerClient != nullptr && playerClient->isConnected()) {
         json msg = receive(playerClient);
         if (!(error = MessageValidator::validLoginMessage(msg)).empty()) {
+            if (error == "No message received") {
+                ss.str("");
+                ss << "[Server][thread:login] Client socket closed, delete unauthenticated playerClient with id: " << playerClient->id;
+                Logger::getInstance()->info(ss.str());
+                delete playerClient;
+                return nullptr;
+            }
+
             Logger::getInstance()->error("[Server - authenticate] unexpected login message from client: " + error);
             response = ServerParser::buildErrorMsg(error);
             playerClient->pushOutcome(response);
@@ -110,15 +118,13 @@ void *Server::authenticatePlayerClient(void *arg) {
         if (server->getClientsSize() >= server->clientNo && !server->clientHasLogged(username)) {
             playerClient->rejectConnection(MSG_RESPONSE_ERROR_SERVER_IS_FULL);
             Logger::getInstance()->error("[Server] Client " + username + " rejected because rooom is full");
-            delete playerClient;
-            break;
+            continue;
         }
 
         if (server->clientIsLogged(username)) {
             Logger::getInstance()->error("[Server] Client " + username + " is already logged. Rejecting client");
             playerClient->rejectConnection(MSG_RESPONSE_ERROR_USER_ALREADY_LOGGED);
-            delete playerClient;
-            break;
+            continue;
         }
 
         for (auto & user : validPlayers.users) {
@@ -152,6 +158,13 @@ void *Server::authenticatePlayerClient(void *arg) {
             pthread_create(&server->incomeThreads[playerClient->username], nullptr, Server::handlePlayerClient, (void *) playerClient);
             pthread_create(&server->outcomeThreads[playerClient->username], nullptr, Server::broadcastToPlayerClient, (void *) playerClient);
         }
+    }
+
+    if (!authenticated && playerClient != nullptr && !playerClient->isConnected()) {
+        ss.str("");
+        ss << "[Server][thread:login] delete unauthenticated playerClient with id: " << playerClient->id;
+        Logger::getInstance()->info(ss.str());
+        delete playerClient;
     }
 
     return nullptr;
@@ -226,6 +239,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
     PlayerClient * playerClient = (PlayerClient *)arg;
     int tolerance = 0;
     json msg;
+    std::stringstream ss;
 
     while (playerClient && playerClient->isConnected()) {
         msg = playerClient->getNewOutcomeMsg();
@@ -233,7 +247,11 @@ void * Server::broadcastToPlayerClient(void *arg) {
             continue;
         }
 
-        std::stringstream ss;
+        ss.str("");
+        ss << "[Server][thread:broadcast][event:queue_size][username:" << playerClient->username << "] outcome_size= " << playerClient->getOutcomeSize();
+        Logger::getInstance()->debug(ss.str());
+
+        ss.str("");
         ss << "[thread:broadcast] " << "[user:" << playerClient->id << "] "
            << "msg: " << msg.dump();
         Logger::getInstance()->debug(ss.str());
@@ -257,6 +275,9 @@ void * Server::broadcastToPlayerClient(void *arg) {
         }
 
         playerClient->popOutcome();
+        if (msg["command"] == GAME_OVER_CMD) {
+            playerClient->disconnect();
+        }
     }
 
     Logger::getInstance()->info("Finishing broadcast to player client thread");
@@ -284,19 +305,19 @@ bool Server::run() {
         throw ServerException(error);
     }
 
-    clock_t t2, t1 = clock();
-    //ToDo while (Game->isRunning()) {
+    clock_t t1;
     while (someoneIsConnected() && game->isPlaying()) {
-        t2 = clock();
-        if ((t2 - t1) < 1000 * 1000 / 60) {
-            continue;
-        }
+        t1 = clock(); // Start transaction
+
+        ss.str("");
+        ss << "[Server][thread:run][event:queue_size] cmd_size= " << this->getCommandsSize();
+        Logger::getInstance()->debug(ss.str());
 
         msg = this->getNewCommandMsg();
         if (!msg.empty()) {
             ss.str("");
             ss << "[thread:run] " << "msg: " << msg.dump();
-            Logger::getInstance()->info(ss.str());
+            Logger::getInstance()->debug(ss.str());
             std::string username = msg["username"].get<std::string>();
             for (Player* player : game->getPlayers()) { //TODO: Debería estar dentro del Game Server este loop
                 if (player->getUsername() == username) {
@@ -307,9 +328,7 @@ bool Server::run() {
             checkPlayersConnection();
 
             this->popCommand();
-            //ToDo quiza no sea necesario saltear ya que el juego va a tener que seguir su curso (movimiento de enemigos, sprites, etc)
         }
-        //ToDo change game state with msg
         game->updatePlayers();
 
         game->getCamera()->update(game->getPlayers());
@@ -317,7 +336,15 @@ bool Server::run() {
             msg = getPlayersPositionMessage();
             broadcast(msg);
         }
-        t1 = clock();
+
+        size_t waitTime = 0;
+        while((float)(clock() - t1)/CLOCKS_PER_SEC < 0.017) {
+            SDL_Delay(1);
+            waitTime++;
+        }
+        ss.str("");
+        ss << "[Server][thread:run] extra_time =" << waitTime;
+        Logger::getInstance()->debug(ss.str());
 
     }
     Logger::getInstance()->info("Finished run loop");
@@ -327,6 +354,9 @@ bool Server::run() {
         broadcast(msg);
     }
 
+    while (someoneIsConnected()) {
+        continue;
+    }
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {
         pthread_join(thread.second, nullptr);
@@ -532,5 +562,13 @@ json Server::getPlayersPositionMessage() {
         return ServerParser::buildChangeLevelMsg(game->getGameObjects(), game->getBackgroundStage());
     }
     return ServerParser::buildPlayingGameMessage(game->getPlayers(), game->getCamera(), game->getTimer());
+}
+
+size_t Server::getCommandsSize() {
+    size_t result;
+    pthread_mutex_lock(&this->commandMutex);
+    result = this->commands.size();
+    pthread_mutex_unlock(&this->commandMutex);
+    return result;
 }
 
