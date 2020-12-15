@@ -20,7 +20,8 @@ int GameObject::getHeight() {
 }
 
 void GameObject::setPosition(int x, int y) {
-
+    xPosition = x;
+    yPosition = y;
 }
 
 void GameObject::setDirection(bool direction) {
