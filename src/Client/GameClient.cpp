@@ -82,6 +82,10 @@ void GameClient::render() {
         element.second -> draw(renderer, camera->getXpos(), 0);
     }
 
+    if (serverIsDown) {
+        textureManager->printText(TEXT_SERVER_DISCONNECTED_KEY, 200, 520, renderer);
+    }
+
     SDL_RenderPresent(renderer);
 }
 
@@ -154,6 +158,7 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
             success = success && textureManager->loadText("player3_text", player.username, PURPLE_COLOR, renderer);
         }
     }
+    success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
     return success;
 }
 
@@ -274,4 +279,8 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     gameObjectsMap.clear();
 
     createGameObjects(nextLevelConfig.gameObjectsInit);
+}
+
+void GameClient::setServerDown() {
+    serverIsDown = true;
 }
