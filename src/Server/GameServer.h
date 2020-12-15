@@ -60,10 +60,6 @@ public:
     void gameOver();
 
     void setChangeLevelFlag(bool setValue);
-
-    int getLevelLimit();
-
-    int LEVEL_LIMIT;
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
@@ -92,6 +88,7 @@ private:
     std::vector <Player*>  players;
     bool playing = false;
     bool changeLevelFlag = false;
+    static const int LEVEL_LIMIT = 3600;
 };
 
 

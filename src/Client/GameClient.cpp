@@ -273,12 +273,11 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
 
     changeLevelBackground(nextLevelConfig.stage);
     camera->restartPos();
-
     //Deleting the gameObjects of the current level
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){
-        delete gameObject.second; //ToDo chequear que no explote, quizas poner el value en null a proposito
+        delete gameObject.second;
     }
     gameObjectsMap.clear();
-
+    idsToRender.clear();
     createGameObjects(nextLevelConfig.gameObjectsInit);
 }

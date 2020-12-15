@@ -41,7 +41,6 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
-    LEVEL_LIMIT = 3600;
 
     addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
@@ -188,8 +187,4 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
             }
         }
     }
-}
-
-int GameServer::getLevelLimit() {
-    return LEVEL_LIMIT;
 }
