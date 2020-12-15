@@ -296,12 +296,20 @@ void Client::run() {
                 gameClient->render();
                 this->handleUserEvents();
             } else {
-                if (!serverDisconnected) {
-                    Logger::getInstance()->info("Connection to the server was lost");
-                    serverDisconnected = true;
+                SDL_Event e;
+                while( SDL_PollEvent( &e ) != 0 ) {
+                    if (e.type  == SDL_QUIT ) {
+                        gameClient->gameOver();
+                        break;
+                    }
+
+                    if (!serverDisconnected) {
+                        Logger::getInstance()->info("Connection to the server was lost");
+                        serverDisconnected = true;
+                    }
+                    gameClient->setServerDown();
+                    gameClient->render();
                 }
-                gameClient->setServerDown();
-                gameClient->render();
             }
         }
     }

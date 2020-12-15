@@ -83,7 +83,7 @@ void GameClient::render() {
     }
 
     if (serverIsDown) {
-        textureManager->printText(TEXT_SERVER_DISCONNECTED_KEY, 150, 520, renderer);
+        textureManager->printText(TEXT_SERVER_DISCONNECTED_KEY, 200, 520, renderer);
     }
 
     SDL_RenderPresent(renderer);
