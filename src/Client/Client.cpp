@@ -309,7 +309,7 @@ void Client::run() {
                 this->handleUserEvents();
             } else {
                 SDL_Event e;
-                while( SDL_PollEvent( &e ) != 0 ) {
+                while( SDL_PollEvent( &e ) != 0 && gameClient->isPlaying()) {
                     if (e.type  == SDL_QUIT ) {
                         gameClient->gameOver();
                         break;
