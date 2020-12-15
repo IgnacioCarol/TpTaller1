@@ -22,6 +22,9 @@ public:
 
     int id;
     std::string username;
+
+    void disconnect();
+
 private:
     std::queue<json> * commandQueue;
     std::queue<json> outcome;
@@ -29,6 +32,7 @@ private:
     pthread_mutex_t  * commandMutex; // Mutex to control command queue
     pthread_mutex_t  outcomeMutex; // Mutex to control outcome queue
 
+    bool shouldBeConnected;
 };
 
 

@@ -275,6 +275,9 @@ void * Server::broadcastToPlayerClient(void *arg) {
         }
 
         playerClient->popOutcome();
+        if (msg["command"] == GAME_OVER_CMD) {
+            playerClient->disconnect();
+        }
     }
 
     Logger::getInstance()->info("Finishing broadcast to player client thread");
@@ -351,6 +354,9 @@ bool Server::run() {
         broadcast(msg);
     }
 
+    while (someoneIsConnected()) {
+        continue;
+    }
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {
         pthread_join(thread.second, nullptr);
