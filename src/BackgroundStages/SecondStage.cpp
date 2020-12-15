@@ -24,7 +24,6 @@ SecondStage::SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer) : Ba
 }
 
 BackgroundStage * SecondStage::nextStage() {
-    GameServer::Instance()->LEVEL_LIMIT = 7000;
     GameServer::Instance()->restartCharacters();
     Logger::getInstance()->debug("Stage changed into third stage");
     return new ThirdStage();

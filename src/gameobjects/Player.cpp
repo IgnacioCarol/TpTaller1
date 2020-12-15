@@ -21,6 +21,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
+    atScene = true; //Maybe we never gonna ask this to the player, but never knows...
 }
 
 void Player::run(int direction) {

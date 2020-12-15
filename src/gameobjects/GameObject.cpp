@@ -58,3 +58,16 @@ int GameObject::getFrameAmount() {
 GameObject::GameObject() {
     id = IdGenerator::getInstance()->getNextId();
 }
+
+bool GameObject::isAtScene(int camXPos) {
+    atScene = xPosition >= (camXPos - 70) && xPosition <= camXPos + 800;
+    return atScene;
+}
+
+std::string GameObject::getState() {
+    return "StaticObject";  //Lo hago para safar ya que las monedas y esas cosas no tienen estado por ahora (quizas nunca tengan)
+}
+
+bool GameObject::getDirection() {
+    return true; //tmb para safar ya que los bloques y monedas no tienen direction
+}

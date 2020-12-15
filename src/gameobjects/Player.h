@@ -20,8 +20,6 @@ public:
     void jump(int yMove);
     void run(int direction);
 
-    int getXPosition(){return xPosition;}
-
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
 
     bool isJumping();
@@ -45,9 +43,9 @@ public:
     void setDirection(bool direction) override;
 
     void setState(std::string state) override;
-    std::string getState();
+    std::string getState() override;
 
-    bool getDirection();
+    bool getDirection() override;
 
 private:
     //Image related

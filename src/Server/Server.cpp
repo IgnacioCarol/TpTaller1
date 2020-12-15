@@ -329,6 +329,8 @@ bool Server::run() {
 
             this->popCommand();
         }
+        //ToDo change game state with msg
+        game->updateGameObjects();
         game->updatePlayers();
 
         game->getCamera()->update(game->getPlayers());
@@ -561,7 +563,8 @@ json Server::getPlayersPositionMessage() {
         game->setChangeLevelFlag(false);
         return ServerParser::buildChangeLevelMsg(game->getGameObjects(), game->getBackgroundStage());
     }
-    return ServerParser::buildPlayingGameMessage(game->getPlayers(), game->getCamera(), game->getTimer());
+    return ServerParser::buildPlayingGameMessage(game->getPlayers(), game->getGameObjects(), game->getCamera(),
+                                                 game->getTimer());
 }
 
 size_t Server::getCommandsSize() {
@@ -571,4 +574,3 @@ size_t Server::getCommandsSize() {
     pthread_mutex_unlock(&this->commandMutex);
     return result;
 }
-

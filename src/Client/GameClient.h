@@ -44,6 +44,7 @@ private:
     void createStaticObject(GameObjectInit gameObject, GameObjectType objectType);
     void initBackground(SDL_Renderer* renderer, StageInit stage);
     void updatePlayers(std::vector<GamePlayerPlaying>);
+    void updateGameObjects(std::vector<GameObjectPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
 
@@ -61,6 +62,7 @@ private:
 
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;
+    std::vector<int> idsToRender;
 };
 
 

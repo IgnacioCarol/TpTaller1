@@ -13,15 +13,8 @@ void Enemy::move() {
 }
 
 void Enemy::walk() {
-    int camXPosition = cam -> x;
-    if (xPosition >= camXPosition && xPosition <= camXPosition + 800){ //The enemy is on scene
-        inScene = true;
-    }
-
-    if (inScene) {
-        xPosition += direction;
-        flipFlag = direction == enemyVelocity;
-    }
+    xPosition += direction;
+    flipFlag = direction == enemyVelocity;
 }
 
 void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) {
@@ -43,11 +36,18 @@ void Enemy::setPosition(int x, int y) {
 }
 
 void Enemy::setDirection(bool direction) {
-    this -> flipFlag = !direction; //false: der a izq true: izq a der
+    this -> flipFlag = direction; //false: der a izq true: izq a der
 }
 
 void Enemy::setState(std::string state) {
     GameObject::setState(state); //ToDo implementar esto para la prox fase
 }
 
+std::string Enemy::getState() {
+    return enemyState->getStateType();
+}
+
+bool Enemy::getDirection() {
+    return direction > 0;
+}
 

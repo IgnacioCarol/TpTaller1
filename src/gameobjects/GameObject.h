@@ -37,8 +37,11 @@ public:
     int getXPosition();
     int getYPosition();
     virtual void setPosition(int x, int y);
+    virtual bool getDirection();
     virtual void setDirection(bool direction);
     virtual void setState(std::string state);
+    virtual std::string getState();
+    bool isAtScene(int camXPos);
 
 protected:
     //To manage the movement
@@ -49,6 +52,7 @@ protected:
     TextureManager* textureManager = TextureManager::Instance();
     std::string _textureID;
     int _currentFrame;
+    bool atScene = false; //To know if the object its at scene
 
     int id;
     GameObjectType type;

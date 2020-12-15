@@ -78,8 +78,20 @@ json Protocol::gameViewMsgToJson(GameMsgPlaying params) {
             {"xPos", params.camera.xPos},
             {"yPos", params.camera.yPos},
     };
-    json gameObjects = json::array();
+    json players = json::array();
     for (auto& gameObject : params.players) {
+        json gameObjectJson = {
+                {"id", gameObject.id},
+                {"xPos", gameObject.xPos},
+                {"yPos", gameObject.yPos},
+                {"state", gameObject.state},
+                {"direction", gameObject.direction}
+        };
+        players.push_back(gameObjectJson);
+    }
+
+    json gameObjects = json::array();
+    for (auto& gameObject : params.gameObjects) {
         json gameObjectJson = {
                 {"id", gameObject.id},
                 {"xPos", gameObject.xPos},
@@ -89,9 +101,11 @@ json Protocol::gameViewMsgToJson(GameMsgPlaying params) {
         };
         gameObjects.push_back(gameObjectJson);
     }
+
     json msg = {
             {"camera", camera},
-            {"players", gameObjects},
+            {"players", players},
+            {"gameObjects", gameObjects},
             {"timer", params.timer}
     };
     return buildContentMsg(0, GAME_VIEW_CMD, msg);

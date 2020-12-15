@@ -67,13 +67,15 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
 
     return Protocol::gameInitMsgToJson(gameMsgParams);
 }
-json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, Camera *camera, int timer) {
+json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::vector<GameObject *> objects,
+                                           Camera *camera,
+                                           int timer) {
     CameraDuringGame cameraDuringGame = {
             camera->getCamera()->x,
             camera->getCamera()->y,
     };
     std::vector<GamePlayerPlaying> gamePlayers;
-    for (auto& player: players) {
+    for (Player* player: players) {
         GamePlayerPlaying gamePlayer = {
                 player->getId(),
                 player->getXPosition(),
@@ -83,9 +85,24 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, Camera
         };
         gamePlayers.push_back(gamePlayer);
     }
+
+    std::vector<GameObjectPlaying> gameObjects;
+    for (GameObject* go: objects){
+        if (!go->isAtScene(camera->getXpos())) continue;
+        GameObjectPlaying object = {
+                go->getId(),
+                go->getXPosition(),
+                go->getYPosition(),
+                go->getState(),
+                go->getDirection()
+        };
+        gameObjects.push_back(object);
+    }
+
     GameMsgPlaying gameMsgPlaying = {
             cameraDuringGame,
             gamePlayers,
+            gameObjects,
             timer
 
     };

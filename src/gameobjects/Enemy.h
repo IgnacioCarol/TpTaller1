@@ -15,7 +15,9 @@ public:
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height);
     void setPosition(int x, int y) override;
     void setDirection(bool direction) override;
+    bool getDirection() override;
     virtual void setState(std::string state) override;
+    std::string getState() override;
 
     int getFrameAmount() override;
 
@@ -24,7 +26,6 @@ protected:
     CharacterState* enemyState{};
     int direction = -enemyVelocity;
     bool flipFlag = false;
-    bool inScene = false; //To know if the enemy appears in scene
     SDL_Rect* cam{};
 };
 
