@@ -75,7 +75,6 @@ struct GameObjectPlaying {
     int yPos;
     std::string state;
     bool direction;
-    bool atScene;
 };
 
 struct CameraDuringGame {

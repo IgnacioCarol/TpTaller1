@@ -76,10 +76,8 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
 void GameClient::render() {
     SDL_RenderClear(renderer);
     background -> renderBackground(camera -> getCamera());
-    for (std::pair<int, GameObject*> element: gameObjectsMap){
-        if (element.second->getAtScene()){
-            element.second -> draw(renderer, camera->getXpos(), 0);
-        }
+    for (int objectID: idsToRender){
+        gameObjectsMap[objectID] -> draw(renderer, camera->getXpos(), 0);
     }
 
     renderPlayers();
@@ -102,7 +100,7 @@ void GameClient::renderPlayers() {
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
 }
 
-void GameClient::update(GameMsgPlaying updateObjects) { //ToDo por ahora solo actualizamos las cosas de los jugadores ya que no hay colisiones y esas cosas
+void GameClient::update(GameMsgPlaying updateObjects) {
     updatePlayers(updateObjects.players);
     updateGameObjects(updateObjects.gameObjects);
 
@@ -121,12 +119,13 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
 }
 
 void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
+    idsToRender.clear();
     for (GameObjectPlaying gameObjectUpdate: gameObjects){
+        idsToRender.push_back(gameObjectUpdate.id);
         GameObject* gameObject = gameObjectsMap[gameObjectUpdate.id];
         gameObject->setPosition(gameObjectUpdate.xPos, gameObjectUpdate.yPos);
         gameObject->setState(gameObjectUpdate.state);
         gameObject->setDirection(gameObjectUpdate.direction);
-        gameObject->setAtScene(gameObjectUpdate.atScene);
     }
 }
 

@@ -41,9 +41,7 @@ public:
     virtual void setDirection(bool direction);
     virtual void setState(std::string state);
     virtual std::string getState();
-    bool isAtScene(int camXPos); //ToDo ver como unir este metodo y el de abajo, por ahora este lo usa el server
-    bool getAtScene(); //este lo usa el client asi no tiene que saber como hacer para ver si algo esta en escena o no
-    void setAtScene(bool isAtScene);
+    bool isAtScene(int camXPos);
 
 protected:
     //To manage the movement

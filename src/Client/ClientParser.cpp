@@ -84,8 +84,7 @@ GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
                 go["xPos"],
                 go["yPos"],
                 go["state"],
-                go["direction"],
-                go["atScene"]
+                go["direction"]
         };
         gameObjects.push_back(gameObject);
     }

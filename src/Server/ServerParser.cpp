@@ -88,13 +88,13 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
 
     std::vector<GameObjectPlaying> gameObjects;
     for (GameObject* go: objects){
+        if (!go->isAtScene(camera->getXpos())) continue;
         GameObjectPlaying object = {
                 go->getId(),
                 go->getXPosition(),
                 go->getYPosition(),
                 go->getState(),
-                go->getDirection(),
-                go->isAtScene(camera->getXpos())
+                go->getDirection()
         };
         gameObjects.push_back(object);
     }
