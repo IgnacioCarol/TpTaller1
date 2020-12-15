@@ -220,7 +220,7 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
 void GameClient::initBackground(SDL_Renderer* renderer, StageInit stage) {
     background = new BackgroundStage(textureManager, renderer);
     background -> isDefaultBackground(stage.isDefault);
-    background -> setBackgroundID("BG1");
+    background -> setBackgroundID("BG" + std::to_string(stage.level));
     background -> setLevel(stage.level);
     background -> setCurrentTime(stage.timer);
 }
