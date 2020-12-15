@@ -32,7 +32,7 @@ public:
     void gameOver();
     void changeLevel(GameMsgLevelChange nextLevelConfig);
     void clean();
-
+    void setServerDown();
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
@@ -53,6 +53,7 @@ private:
     BackgroundStage* background;
 
     bool playing = true;
+    bool serverIsDown = false;
     Camera* camera;
     Logger* logger = Logger::getInstance();
     TextureManager* textureManager;

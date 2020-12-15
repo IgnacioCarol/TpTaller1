@@ -37,11 +37,7 @@ bool PlayerClient::send(json *msg) {
 }
 
 bool PlayerClient::isConnected() {
-    bool status = this->clientSocket->isConnected();
-//    std::stringstream ss;
-//    ss << "[PlayerClient][user:" << this->name << "] status: " << (status ? "connected" : "disconnected");
-//    Logger::getInstance()->debug(ss.str());
-    return  status;
+    return this->clientSocket->isConnected();
 }
 
 void PlayerClient::pushOutcome(json msg) {
