@@ -15,6 +15,7 @@ FirstStage::FirstStage() {
     this->backgroundPath = this->getLevelBackground().empty() ? DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND : this->getLevelBackground();
     this->timer = new Timer(this->getLevelTime());
     this->timer->start();
+    Logger::getInstance()->debug("First stage initialized");
 }
 
 FirstStage::FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {

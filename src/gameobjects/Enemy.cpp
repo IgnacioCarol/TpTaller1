@@ -13,13 +13,6 @@ void Enemy::move() {
 }
 
 void Enemy::walk() {
-    /*int camXPosition = cam -> x;
-    if (xPosition >= camXPosition && xPosition <= camXPosition + 800){ //The enemy is at scene
-        atScene = true;
-    }
-
-    if (atScene) { //ToDo dont delete this, logic for changing the direction will be needed for the fase3
-    }*/
     xPosition += direction;
     flipFlag = direction == enemyVelocity;
 }

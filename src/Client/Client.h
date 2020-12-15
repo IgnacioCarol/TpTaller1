@@ -25,12 +25,14 @@ public:
     void init();
     bool login();
     bool isConnected();
+    size_t getEventsSize();
     int send(json *msg);
     int receive(json *msg);
     void release();
 
 
     void run();
+    bool didMove = false;
 
 private:
     const char * _IP;

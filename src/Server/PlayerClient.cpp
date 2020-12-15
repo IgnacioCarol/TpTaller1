@@ -10,6 +10,7 @@ PlayerClient::PlayerClient(Socket *clientSocket, pthread_mutex_t * commandMutex,
     this->clientSocket = clientSocket;
     this->commandMutex = commandMutex;
     this->commandQueue = commandQueue;
+    this->shouldBeConnected = true;
 }
 
 PlayerClient::~PlayerClient() {
@@ -37,7 +38,7 @@ bool PlayerClient::send(json *msg) {
 }
 
 bool PlayerClient::isConnected() {
-    bool status = this->clientSocket->isConnected();
+    bool status = this->clientSocket->isConnected() && shouldBeConnected;
 //    std::stringstream ss;
 //    ss << "[PlayerClient][user:" << this->name << "] status: " << (status ? "connected" : "disconnected");
 //    Logger::getInstance()->debug(ss.str());
@@ -80,4 +81,18 @@ void PlayerClient::rejectConnection(std::string error) {
     if (!send(&msg)) {
         Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
     }
+}
+
+size_t PlayerClient::getOutcomeSize() {
+    size_t result;
+    pthread_mutex_lock(this->commandMutex);
+    result = this->outcome.size();
+    pthread_mutex_unlock(this->commandMutex);
+    return result;
+}
+
+void PlayerClient::disconnect() {
+    clientSocket->release();
+    shouldBeConnected = false;
+
 }
