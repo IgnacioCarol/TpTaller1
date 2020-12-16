@@ -45,7 +45,8 @@ json Protocol::gameInitMsgToJson(GameMsgParams params) {
     json stage = {
             {"level", params.stage.level},
             {"timer", params.stage.timer},
-            {"isDefault", params.stage.isDefault}
+            {"isDefault", params.stage.isDefault},
+            {"levelLimit", params.stage.levelLimit}
     };
 
     json gameObjects = json::array();
@@ -115,7 +116,8 @@ json Protocol::gameChangeLevelMsgToJson(GameMsgLevelChange params) {
     json stage = {
             {"level", params.stage.level},
             {"timer", params.stage.timer},
-            {"isDefault", params.stage.isDefault}
+            {"isDefault", params.stage.isDefault},
+            {"levelLimit", params.stage.levelLimit}
     };
 
     json gameObjects = json::array();

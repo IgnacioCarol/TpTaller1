@@ -29,7 +29,8 @@ GameMsgParams ClientParser::parseInitParams(json msg) {
     StageInit stage = {
             contentJson["stage"]["level"],
             contentJson["stage"]["timer"],
-            contentJson["stage"]["isDefault"]
+            contentJson["stage"]["isDefault"],
+            contentJson["stage"]["levelLimit"]
     };
 
     std::vector<GameObjectInit> gameObjects;
@@ -104,7 +105,8 @@ GameMsgLevelChange ClientParser::parseChangeLevelParams(json msg) {
     StageInit stage = {
             contentJson["stage"]["level"],
             contentJson["stage"]["timer"],
-            contentJson["stage"]["isDefault"]
+            contentJson["stage"]["isDefault"],
+            contentJson["stage"]["levelLimit"]
     };
 
     std::vector<GameObjectInit> gameObjects;

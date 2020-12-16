@@ -32,6 +32,7 @@ struct StageInit {
     int level;
     int timer;
     bool isDefault;
+    int levelLimit;
 };
 
 struct GameObjectInit {

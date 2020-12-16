@@ -88,7 +88,6 @@ private:
     std::vector <Player*>  players;
     bool playing = false;
     bool changeLevelFlag = false;
-    static const int LEVEL_LIMIT = 3600;
 };
 
 

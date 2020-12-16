@@ -120,7 +120,7 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
     for (GamePlayerPlaying playerUpdate: players){
         Player* player = playersMap[playerUpdate.id];
-        if (clientUsername == player->getUsername() && playerUpdate.xPos >= LEVEL_LIMIT) levelCompleted = true;
+        if (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit) levelCompleted = true;
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
         player -> setState(playerUpdate.state);
@@ -230,6 +230,7 @@ void GameClient::initBackground(SDL_Renderer* renderer, StageInit stage) {
     background -> setBackgroundID("BG" + std::to_string(stage.level));
     background -> setLevel(stage.level);
     background -> setCurrentTime(stage.timer);
+    levelLimit = stage.levelLimit;
 }
 
 GameClient::~GameClient() {
@@ -274,6 +275,7 @@ void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
     background->setCurrentTime(nextLevelConfig.timer);
     background->setBackgroundID("BG" + std::to_string(nextLevelConfig.level));
     background -> isDefaultBackground(nextLevelConfig.isDefault);
+    levelLimit = nextLevelConfig.levelLimit;
 }
 
 void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
