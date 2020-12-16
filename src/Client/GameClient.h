@@ -63,6 +63,8 @@ private:
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;
     std::vector<int> idsToRender;
+    int LEVEL_LIMIT = 3600;
+    bool levelCompleted = false;
 };
 
 

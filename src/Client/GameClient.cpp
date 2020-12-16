@@ -85,6 +85,10 @@ void GameClient::render() {
         textureManager->printText(TEXT_SERVER_DISCONNECTED_KEY, 200, 520, renderer);
     }
 
+    if (levelCompleted){
+        textureManager->printText(TEXT_LEVEL_COMPLETED, 300, 300, renderer);
+    }
+
     SDL_RenderPresent(renderer);
 }
 
@@ -116,6 +120,7 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
     for (GamePlayerPlaying playerUpdate: players){
         Player* player = playersMap[playerUpdate.id];
+        if (clientUsername == player->getUsername() && playerUpdate.xPos >= LEVEL_LIMIT) levelCompleted = true;
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
         player -> setState(playerUpdate.state);
@@ -175,6 +180,8 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
         }
     }
     success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LEVEL_COMPLETED, TEXT_LEVEL_COMPLETED_VALUE, WHITE_COLOR, renderer);
+
     return success;
 }
 
@@ -275,7 +282,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
         player.second->setDirection(true);
         player.second->changeState(new Normal(0, player.second->getFrameAmount()));
     }
-
+    levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);
     camera->restartPos();
     //Deleting the gameObjects of the current level
