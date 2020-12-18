@@ -103,6 +103,7 @@ int Socket::send(T* data, int bytesToWrite) {
 
         if (bytes_written < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_SEND_FAILED + std::string(strerror(errno)));
+            _connected = false;
             return bytes_written;
         }
         else if (bytes_written == 0) { // Socket closed
@@ -122,11 +123,13 @@ int Socket::receive(json *msg) {
     uint32_t sizeOfMessage;
     if (receive<uint32_t>(&sizeOfMessage, sizeof(sizeOfMessage)) < 1) {
         Logger::getInstance()->error("[Socket] There was an error receiving message.");
+        _connected = false;
         return -1;
     };
     std::string message(sizeOfMessage, '\0');
     if (receive<char>(&message[0], sizeOfMessage) < 1) {
         Logger::getInstance()->error("[Socket] There was an error receiving message.");
+        _connected = false;
         //ToDo ver como handlear el error, si devolver excepcion o devolver msg_t * y devolver Null
         return 0;
     }
@@ -159,6 +162,7 @@ int Socket::receive(T *msg, int receiveDataSize) {
                               FLAG_DATA_TRANSFER);
         if (bytes_received < 0) { // Error
             Logger::getInstance()->error(MSG_SOCKET_RECEIVE_FAILED + std::string(strerror(errno)));
+            _connected = false;
             return bytes_received;
         }
         else if (bytes_received == 0) { // Socket closed

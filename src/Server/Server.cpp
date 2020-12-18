@@ -258,23 +258,19 @@ void * Server::broadcastToPlayerClient(void *arg) {
 
         if(!playerClient->send(&msg)) {
             Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
-            /*if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
-                //ToDo suponemos que el socket se cerro, realizar tratamiento
-                // 1. Marcar connected como false
-                // 2. Mover player client a listado de conexiones muertas
-                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-*/
+            if (tolerance > 3) {
                 ss.str("");
-                ss << "Fail tolerance exceeded! [thread:broadcast] " << "[user:" << playerClient->id << "] ";
+                ss << "[thread:broadcast] " << "[user:" << playerClient->username << "] Fail tolerance exceeded! disconnecting user";
                 Logger::getInstance()->error(ss.str());
-                // throw ServerException(ss.str());
-            /*}
+                playerClient->disconnect();
+            }
 
             tolerance++;
-            continue;*/
+            continue;
         }
 
         playerClient->popOutcome();
+        tolerance = 0;
         if (msg["command"] == GAME_OVER_CMD) {
             playerClient->disconnect();
         }
