@@ -117,3 +117,7 @@ void BackgroundStage::renderBackground(SDL_Rect* camera) {
 void BackgroundStage::isDefaultBackground(bool defaultBackground) {
     this -> defaultBackground = defaultBackground;
 }
+
+int BackgroundStage::getLevelLimit() {
+    return LEVEL_LIMIT;
+}

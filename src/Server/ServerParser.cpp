@@ -22,7 +22,8 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
     StageInit stageInit = {
             stage->getLevel(),
             stage->getTimer()->getTimeSecond(),
-            Config::getInstance()->isDefault()
+            Config::getInstance()->isDefault(),
+            stage->getLevelLimit()
     };
 
     WindowInit windowInit = {
@@ -117,7 +118,8 @@ json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, Ba
     StageInit stageUpdate = {
             stage->getLevel(),
             stage->getTimer()->getTimeSecond(),
-            Config::getInstance()->isDefault()
+            Config::getInstance()->isDefault(),
+            stage->getLevelLimit()
     };
 
     std::vector<GameObjectInit> gameObjectsInit;

@@ -16,6 +16,7 @@ public:
     ~BackgroundStage();
     virtual BackgroundStage* nextStage();
     int getWidth() const;
+    int getLevelLimit();
     bool renderLevel();
     bool renderTime();
     void renderDefaultBackground();
@@ -35,6 +36,7 @@ protected:
     SDL_Renderer* renderer;
     Logger* logger = Logger::getInstance();
     int imageWidth;
+    static const int LEVEL_LIMIT = 3575;
     const char* BACKGROUND = "BG";
     Timer* timer;
     int level;

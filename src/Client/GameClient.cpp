@@ -85,6 +85,10 @@ void GameClient::render() {
         textureManager->printText(TEXT_SERVER_DISCONNECTED_KEY, 200, 520, renderer);
     }
 
+    if (levelCompleted){
+        textureManager->printText(TEXT_LEVEL_COMPLETED, 300, 300, renderer);
+    }
+
     SDL_RenderPresent(renderer);
 }
 
@@ -116,6 +120,7 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
     for (GamePlayerPlaying playerUpdate: players){
         Player* player = playersMap[playerUpdate.id];
+        levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
         player -> setState(playerUpdate.state);
@@ -175,6 +180,8 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
         }
     }
     success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LEVEL_COMPLETED, TEXT_LEVEL_COMPLETED_VALUE, WHITE_COLOR, renderer);
+
     return success;
 }
 
@@ -223,6 +230,7 @@ void GameClient::initBackground(SDL_Renderer* renderer, StageInit stage) {
     background -> setBackgroundID("BG" + std::to_string(stage.level));
     background -> setLevel(stage.level);
     background -> setCurrentTime(stage.timer);
+    levelLimit = stage.levelLimit;
 }
 
 GameClient::~GameClient() {
@@ -267,6 +275,7 @@ void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
     background->setCurrentTime(nextLevelConfig.timer);
     background->setBackgroundID("BG" + std::to_string(nextLevelConfig.level));
     background -> isDefaultBackground(nextLevelConfig.isDefault);
+    levelLimit = nextLevelConfig.levelLimit;
 }
 
 void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
@@ -275,7 +284,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
         player.second->setDirection(true);
         player.second->changeState(new Normal(0, player.second->getFrameAmount()));
     }
-
+    levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);
     camera->restartPos();
     //Deleting the gameObjects of the current level
