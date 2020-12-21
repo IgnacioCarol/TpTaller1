@@ -52,7 +52,7 @@ private:
     std::string username;
     static const int pWidth = 600;
     static const int pHeight = 600;
-    static const int playerVelocity = 2;
+    static const int playerVelocity = 4;
     bool xDirection; //True = +x False = -x
     CharacterState* characterState;
     bool jumping;
