@@ -120,7 +120,7 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
     for (GamePlayerPlaying playerUpdate: players){
         Player* player = playersMap[playerUpdate.id];
-        if (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit) levelCompleted = true;
+        levelCompleted |= clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit;
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
         player -> setState(playerUpdate.state);
