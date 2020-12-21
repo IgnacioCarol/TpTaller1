@@ -14,11 +14,9 @@ void Camera::update(std::vector<Player *> players) {
             minPos = (playerPos < minPos) ? playerPos : minPos;
         }
     }
-    Logger::getInstance()->debug("LA DIFF DE PLAYERS: " + std::to_string(maxPos - minPos));
     if (maxPos - minPos < camera.w - displacement){
         int diff = maxPos - camera.x;
-        Logger::getInstance()->debug("LA DIFF DE MAXPOS vs camX: " + std::to_string(diff));
-        camera.x = diff > 605 ? minPos - camera.w + diff : (maxPos  + displacement)  - camera.w;
+        camera.x = diff > 605 ? minPos - camera.w + diff: (maxPos  + displacement)  - camera.w;
         lastValue = camera.x > lastValue ? camera.x : lastValue;
     }
 
