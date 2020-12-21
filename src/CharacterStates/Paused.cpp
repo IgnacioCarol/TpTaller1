@@ -16,7 +16,7 @@ void Paused::move(const Uint8 *currentKeyStates, Player *player) {
     int camXPos = GameServer::Instance()->getCamera()->getXpos();
     if (player -> getXPosition() <= camXPos){
         player -> setDirection(true);
-        player -> setPosition(camXPos + 2, player->getYPosition());
+        player -> setPosition(camXPos + 3, player->getYPosition());
     }
 }
 
