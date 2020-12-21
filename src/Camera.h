@@ -29,7 +29,6 @@ public:
 
 private:
     SDL_Rect camera{};
-    static const int displacement = 300;
 };
 
 

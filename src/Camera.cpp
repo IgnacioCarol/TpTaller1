@@ -5,6 +5,7 @@ Camera::Camera(int x, int y, int width, int height) {
 }
 
 void Camera::update(std::vector<Player *> players) {
+    static const int displacement = 200;
     int maxPos = 0;
     int minPos = 20000;
     for (Player* player: players){
@@ -16,7 +17,7 @@ void Camera::update(std::vector<Player *> players) {
     }
     if (maxPos - minPos < camera.w - displacement){
         int diff = maxPos - camera.x;
-        camera.x = diff > 605 ? minPos - camera.w + diff: (maxPos  + displacement)  - camera.w;
+        camera.x = diff > 610 ? minPos - camera.w + diff + (200 - displacement) : (maxPos  + displacement)  - camera.w;
         lastValue = camera.x > lastValue ? camera.x : lastValue;
     }
 
