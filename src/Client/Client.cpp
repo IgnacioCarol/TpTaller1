@@ -32,6 +32,7 @@ void Client::init() {
         }
     } catch (std::exception &ex) {
         Logger::getInstance()->error(MSG_CLIENT_NOT_INITIALIZED);
+        std::cout << MSG_CLIENT_NOT_INITIALIZED << " error: " << ex.what() <<std::endl;
         throw ex;
     }
 }
