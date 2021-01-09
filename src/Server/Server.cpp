@@ -301,7 +301,6 @@ bool Server::run() {
         throw ServerException(error);
     }
 
-    game->playMusic();
     clock_t t1;
     while (someoneIsConnected() && game->isPlaying()) {
         t1 = clock(); // Start transaction

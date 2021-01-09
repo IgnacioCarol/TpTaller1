@@ -42,16 +42,12 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
 
-    musicManager = MusicManager::Instance();
-
-    musicManager->addPath("SONG", "Sound_Effects/Music/SuperMarioBrosSong.mp3", true);
-    musicManager->loadSounds();
-
     addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
     addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
     addPath("paused", "Sprites/Players/pausedPlayer.png","Sprites/Players/pausedPlayer.png");
 
+    addSoundsPaths();
     initializeAllElementsOfGameServer(clients);
     json msg = getInitializationMsg();
     Server::getInstance()->broadcast(msg);
@@ -194,6 +190,18 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
     }
 }
 
-void GameServer::playMusic() {
-    musicManager->playMusic("SONG", -1);
+void GameServer::addSoundsPaths() {
+    std::string path = "Sound_Effects/Sounds/";
+    soundsPath["BUMP"] = path + "SuperMarioBrosSong.mp3";
+    soundsPath["COIN"] = path + "Coin.mp3";
+    soundsPath["GAME_OVER"] = path + "GameOver.mp3";
+    soundsPath["HURRY_UP"] = path + "HurryUp.mp3";
+    soundsPath["JUMP_MEDIUM"] = path + "JumpMedium.mp3";
+    soundsPath["JUMP_SMALL"] = path + "JumpSmall.mp3";
+    soundsPath["MARIO_DIES"] = path + "MarioDies.mp3";
+    soundsPath["POWER_UP"] = path + "PowerUp.mp3";
+    soundsPath["POWER_UP_APP"] = path + "PowerUpAppears.mp3";
+    soundsPath["STOMP"] = path + "Stomp.mp3";
+
+    musicPath["MUSIC"] = "Sound_Effects/Music/SuperMarioBrosSong.mp3";
 }

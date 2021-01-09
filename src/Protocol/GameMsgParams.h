@@ -21,6 +21,11 @@ struct WindowInit {
     int height;
 };
 
+struct MusicInit{
+    std::map<std::string, std::string> soundsMap;
+    std::map<std::string, std::string> musicMap;
+};
+
 struct CameraInit {
     int xPos;
     int yPos; // Puede que no haga falta
@@ -55,6 +60,7 @@ struct GameMsgParams {
     CameraInit camera;
     StageInit stage;
     GameObjectsInit gameObjectsInit;
+    MusicInit soundEffectsInit;
 };
 
 struct GameMsgLevelChange {
