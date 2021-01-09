@@ -17,7 +17,6 @@ add_executable(TpTaller1
         src/Utils/Printer.cpp src/Utils/Printer.h
         src/Utils/Timer.cpp src/Utils/Timer.h
         src/Utils/Vector.cpp src/Utils/Vector.h
-        src/Game.cpp src/Game.h
         src/GameMap.cpp src/GameMap.h test/gamemap_test.cpp
         src/TextureManager.cpp src/TextureManager.h
         src/Camera.cpp src/Camera.h

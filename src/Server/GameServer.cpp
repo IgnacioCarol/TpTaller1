@@ -2,6 +2,8 @@
 #include "../CharacterStates/Normal.h"
 #else
 #include <src/CharacterStates/Normal.h>
+#include <src/CharacterStates/Paused.h>
+
 #endif
 #include "GameServer.h"
 

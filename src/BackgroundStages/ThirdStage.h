@@ -7,7 +7,6 @@
 
 #include "../TextureManager.h"
 #include "BackgroundStage.h"
-#include "../Game.h"
 
 
 class ThirdStage : public BackgroundStage {

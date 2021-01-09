@@ -179,10 +179,6 @@ void * Server::handlePlayerClient(void * arg) {
             playerClient->isConnected() &&
             (msg = receive(playerClient)) != nullptr) {
         msg["username"] = playerClient->username;
-        /*ss.str("");
-        ss << "[thread:listener]" << "[user:" << playerClient->id << "] "
-           << "msg: " << msg.dump();
-        Logger::getInstance()->debug(ss.str());*/
 
         playerClient->pushCommand(msg);
     }
@@ -203,30 +199,14 @@ json Server::receive(PlayerClient *playerClient) {
         msg_received = playerClient->receive(&msg);
         Logger::getInstance()->debug("Receive returned from player: " + playerClient->username);
         if (msg_received < 0) {
-            /*if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
-                //ToDo suponemos que el socket se cerro, realizar tratamiento
-                // 1. Marcar connected como false
-                // 2. Mover player client a listado de conexiones muertas
-                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-*/
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:listener] " << "[user:" << playerClient->id << "] ";
                 Logger::getInstance()->error(ss.str());
-                //throw ServerException(ss.str());
-           /* }
-            tolerance++;
-            continue;*/
         }
         if (!msg_received) {
-            //ToDo suponemos que el socket se cerro, realizar tratamiento
-            // 1. Marcar connected como false
-            // 2. Mover player client a listado de conexiones muertas
-            // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
             ss.str("");
             ss << "Connection has been lost with client [thread:listener] " << "[user:" << playerClient->id << "] ";
             Logger::getInstance()->error(ss.str());
-            //throw ServerException(ss.str());
-            //continue;
         }
 
         return msg;
@@ -280,7 +260,6 @@ void * Server::broadcastToPlayerClient(void *arg) {
     return nullptr;
 }
 
-// Infinite loop processing PlayerClients commands
 bool Server::run() {
     pthread_mutex_t  * cmdMutex = &this->commandMutex;
     json msg;
@@ -353,7 +332,6 @@ bool Server::run() {
     }
 
     while (someoneIsConnected()) {
-        continue;
     }
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {

@@ -9,7 +9,6 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 #include "logger/logger.h"
-#include "Game.h"
 #include "Server/Server.h"
 #include "Client/Client.h"
 #include <json.hpp>
@@ -104,10 +103,9 @@ int main(int argc, char * argv[]) {
             server->init(ipAddr.c_str(), std::to_string(port).c_str());
             server->run();
             delete server;
-            return 0;
         } catch (std::exception &ex) {
             delete server;
-            return 1;
+            return EXIT_FAILURE;
         }
     } else {
         Logger::getInstance()->info("[Client] Initializing in client mode");
@@ -118,53 +116,11 @@ int main(int argc, char * argv[]) {
                 client->run();
             }
             delete client;
-            return 0;
         } catch (std::exception &ex) {
             delete client;
             Logger::getInstance()->error("Algo fallo en el client");
             return EXIT_FAILURE;
         }
     }
-
-    Game* game = Game::Instance();
-
-    if (!game->init("Level 1", xmlPath)) { //Aca inicializo el background
-        Logger::getInstance() -> error("Error: the game could not be initialized");
-        return 1;
-    }
-
-    game->createGameObjects(); //ToDo refactorizar y mover al Factory, factory tiene que ser el unico responsable de instanciar gameObjects
-
-    if (!game->loadImages()){
-        Logger::getInstance() -> error("Error: Loading the sprites went wrong");
-        return EXIT_FAILURE;
-    }
-    if (!game-> loadTexts()) {
-        Logger::getInstance()->error("Error: Loading texts went wrong");
-        return 1;
-    }
-
-    //Event handler
-    SDL_Event e;
-
-    while(game->isPlaying()){
-
-        while(SDL_PollEvent(&e) != 0) {
-            if (e.type  == SDL_QUIT ) {
-                Game::Instance()->gameOver();
-            }
-        }
-
-        game->handleEvents();
-       // game->update();
-        game->render();
-        SDL_Delay(4);
-    }
-    Logger::getInstance() -> info("Game over");
-    game->clean();
-    delete game;
-    delete Logger::getInstance();
-
-    SDL_Quit();
     return EXIT_SUCCESS;
 }
