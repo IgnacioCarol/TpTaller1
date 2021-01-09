@@ -58,7 +58,8 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
 }
 
 json GameServer::getInitializationMsg() {
-    return ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
+    return ServerParser::buildGameInitMsg(getImagePaths(), soundsPath, getCamera(),
+                                          this->stage, getGameObjects(), getPlayers());
 }
 
 int GameServer::getTimer() {
@@ -202,6 +203,4 @@ void GameServer::addSoundsPaths() {
     soundsPath["POWER_UP"] = path + "PowerUp.mp3";
     soundsPath["POWER_UP_APP"] = path + "PowerUpAppears.mp3";
     soundsPath["STOMP"] = path + "Stomp.mp3";
-
-    musicPath["MUSIC"] = "Sound_Effects/Music/SuperMarioBrosSong.mp3";
 }

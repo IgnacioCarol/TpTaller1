@@ -14,7 +14,6 @@
 #include "ServerParser.h"
 #include "Server.h"
 #include "../BackgroundStages/FirstStage.h"
-#include "../Utils/MusicManager.h"
 
 
 class GameServer {
@@ -94,7 +93,6 @@ private:
     bool changeLevelFlag = false;
 
     std::map<std::string, std::string> soundsPath;
-    std::map<std::string, std::string> musicPath;
 
 };
 

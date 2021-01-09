@@ -68,7 +68,8 @@ json Protocol::gameInitMsgToJson(GameMsgParams params) {
             {"camera",      camera},
             {"window",      window},
             {"stage",       stage},
-            {"gameObjects", gameObjects}
+            {"gameObjects", gameObjects},
+            {"soundPaths", params.soundPaths}
     };
 
     return buildContentMsg(0, GAME_INITIALIZE_CMD, msg);

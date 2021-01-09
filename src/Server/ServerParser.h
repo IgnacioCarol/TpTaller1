@@ -12,8 +12,9 @@ using json = nlohmann::json;
 class ServerParser {
 public:
     static json buildLoginMsgResponse(bool authenticated);
-    static json buildGameInitMsg(std::map<std::string, std::vector<std::string>> imagePaths, Camera *camera,
-            BackgroundStage *stage, std::vector<GameObject *> gameObjects, std::vector<Player *> players);
+    static json buildGameInitMsg(std::map<std::string, std::vector<std::string>> imagePaths,
+                                 std::map<std::string, std::string> soundPaths, Camera *camera, BackgroundStage *stage,
+                                 std::vector<GameObject *> gameObjects, std::vector<Player *> players);
     static json buildErrorMsg(std::string error);
 
     static json

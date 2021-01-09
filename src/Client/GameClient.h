@@ -19,6 +19,7 @@
 #include "../gameobjects/EnemyMushroom.h"
 #include "../CharacterStates/EnemyMovement.h"
 #include "../CharacterStates/Normal.h"
+#include "../Utils/MusicManager.h"
 
 class GameClient {
 public:
@@ -38,6 +39,7 @@ private:
     GameClient(); //Private constructor to prevent instancing.
     static GameClient* instance; //Here will be the instance stored.
     bool loadImages(std::map<std::string, std::vector<std::string>> imagePaths);
+    void loadSounds(std::map<std::string, std::string> soundPaths);
     bool loadTexts(bool isDefault, std::vector<GameObjectInit> players);
     void createEnemy(GameObjectInit enemy, GameObjectType enemyType);
     void createPlayer(GameObjectInit player);
@@ -58,6 +60,7 @@ private:
     Camera* camera;
     Logger* logger = Logger::getInstance();
     TextureManager* textureManager;
+    MusicManager* musicManager;
     std::string clientUsername;
 
     std::map<int, Player*> playersMap;

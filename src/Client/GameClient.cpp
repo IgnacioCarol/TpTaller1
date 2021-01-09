@@ -13,6 +13,7 @@ GameClient *GameClient::Instance() {
 
 bool GameClient::init(GameMsgParams initialize, const char* username) {
     this -> textureManager = TextureManager::Instance();
+    this -> musicManager = MusicManager::Instance();
     clientUsername = username;
     int cameraWidth = initialize.camera.width;
     int cameraHeight = initialize.camera.height;
@@ -54,7 +55,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
     }
 
     if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
-        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs o volarlos
+        logger -> error("Cannot load the images in the client");
         return false;
     }
 
@@ -63,10 +64,13 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
         return false;
     }
 
-    if(!this -> createGameObjects(initialize.gameObjectsInit)){ //ToDo volar despues estos ifs
+    if(!this -> createGameObjects(initialize.gameObjectsInit)){
         logger -> error("Cannot create the objects in the client");
         return false;
     }
+
+    this -> loadSounds(initialize.soundPaths);
+    musicManager->playMusic("MUSIC", -1);
 
     initBackground(renderer, initialize.stage);
     logger -> info("Init success");
@@ -152,6 +156,16 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
         }
     }
     return true;
+}
+
+void GameClient::loadSounds(std::map<std::string, std::string> soundPaths) {
+    for (std::pair<std::string, std::string> element : soundPaths){
+        musicManager->addPath(element.first, element.second, false);
+    }
+
+    musicManager->addPath("MUSIC", "Sound_Effects/Music/SuperMarioBrosSong.mp3", true);
+
+    musicManager->loadSounds();
 }
 
 bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imagePaths) {
