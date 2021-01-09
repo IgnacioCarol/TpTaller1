@@ -53,6 +53,7 @@ void MusicManager::playSound(std::string ID, int loop) {
 }
 
 void MusicManager::playMusic(std::string ID, int loop) {
+    Mix_VolumeMusic(MIX_MAX_VOLUME / 2);
     if (musicMap.count(ID)){
        Mix_PlayMusic(musicMap[ID], loop);
     }

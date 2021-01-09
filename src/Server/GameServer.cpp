@@ -42,6 +42,11 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
 
+    musicManager = MusicManager::Instance();
+
+    musicManager->addPath("SONG", "Sound_Effects/Music/SuperMarioBrosSong.mp3", true);
+    musicManager->loadSounds();
+
     addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
     addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
@@ -187,4 +192,8 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
             }
         }
     }
+}
+
+void GameServer::playMusic() {
+    musicManager->playMusic("SONG", -1);
 }

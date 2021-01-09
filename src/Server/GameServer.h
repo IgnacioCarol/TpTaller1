@@ -14,6 +14,7 @@
 #include "ServerParser.h"
 #include "Server.h"
 #include "../BackgroundStages/FirstStage.h"
+#include "../Utils/MusicManager.h"
 
 
 class GameServer {
@@ -60,6 +61,8 @@ public:
     void gameOver();
 
     void setChangeLevelFlag(bool setValue);
+
+    void playMusic();
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
@@ -88,6 +91,8 @@ private:
     std::vector <Player*>  players;
     bool playing = false;
     bool changeLevelFlag = false;
+
+    MusicManager* musicManager;
 };
 
 
