@@ -192,7 +192,6 @@ json Server::receive(PlayerClient *playerClient) {
     json msg;
     int msg_received;
     std::stringstream ss;
-    int tolerance = 0;
 
     while (playerClient->isConnected()) {
         Logger::getInstance()->debug("Waiting to receive msg from player: " + playerClient->username);

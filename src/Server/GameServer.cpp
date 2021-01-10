@@ -9,6 +9,7 @@
 
 GameServer* GameServer::instance = nullptr;
 
+
 GameServer *GameServer::Instance() {
     //First time we create an instance of Game
     if(instance == nullptr) instance = new GameServer();
@@ -71,8 +72,9 @@ std::map<std::string, std::string> GameServer::getPlayerPaths() {
 }
 
 void GameServer::cleanGameObjects() {
-    for(std::vector<GameObject*>::size_type i = 0; i != gameObjects.size(); i++) {
-        delete gameObjects[i];
+    for (auto & gameObject : gameObjects) {
+        delete gameObject;
+    }
     }
     gameObjects.clear();
 }
@@ -82,7 +84,7 @@ GameServer::~GameServer() {
     for (auto& player: players) {
         delete player;
     }
-    cleanGameObjects(); //TODO: OJO, ACA USO CLEANOBJECTS PERO EN EL ORIGINAL USAN CICLO -> PREGUNTAR
+    cleanGameObjects();
     Logger::getInstance()->info("All Game Objects were deleted");
     delete this->camera;
     Logger::getInstance()->info("The camera was deleted");
@@ -90,12 +92,6 @@ GameServer::~GameServer() {
     Logger::getInstance()->info("The parser(config) was deleted");
     delete this->factory;
     Logger::getInstance()->info("The Factory was deleted");
-}
-
-void GameServer::handleEvents() {
-    for (auto & player : players) {
-        player->move(std::vector<int>()); //TODO: acá debería recibir los mensajes del client
-    }
 }
 
 void GameServer::nextStage() {

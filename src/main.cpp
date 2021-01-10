@@ -7,10 +7,7 @@
 #endif
 
 #include <iostream>
-#include <unistd.h>
 #include <arpa/inet.h>
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
 #include "logger/logger.h"
 #include "Server/Server.h"
 #include "Client/Client.h"
