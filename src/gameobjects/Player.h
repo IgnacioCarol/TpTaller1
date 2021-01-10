@@ -62,6 +62,10 @@ private:
     SDL_Rect *cam;
     int ticks;
     bool leftOrRightPressed;
+
+    void completeMovement(const Uint8 *keyStates);
+
+    bool isInIntersection(GameObject *pObject);
 };
 
 

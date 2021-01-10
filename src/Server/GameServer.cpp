@@ -75,8 +75,11 @@ void GameServer::cleanGameObjects() {
     for (auto & gameObject : gameObjects) {
         delete gameObject;
     }
+    for (auto & i : gameObjectsDeleted) {
+        delete i;
     }
     gameObjects.clear();
+    gameObjectsDeleted.clear();
 }
 
 GameServer::~GameServer() {
@@ -185,4 +188,22 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
             }
         }
     }
+}
+
+void GameServer::updateGameObjectsOnScreen() {
+    gameObjectsOnScreen.clear();
+    for (auto object : gameObjects) {
+        if (object->isAtScene(GameServer::Instance()->getCamera()->getXpos())) {
+            gameObjectsOnScreen.push_back(object);
+        }
+    }
+}
+
+std::vector<GameObject *> GameServer::getGameObjectsOnScreen() {
+    return gameObjectsOnScreen;
+}
+
+void GameServer::deleteGameObject(GameObject *pObject) {
+    gameObjects.resize(std::remove(gameObjects.begin(), gameObjects.end(), pObject) - gameObjects.begin());
+    gameObjectsDeleted.insert(pObject);
 }

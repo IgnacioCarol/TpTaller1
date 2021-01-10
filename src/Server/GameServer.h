@@ -14,7 +14,7 @@
 #include "ServerParser.h"
 #include "Server.h"
 #include "../BackgroundStages/FirstStage.h"
-
+#include <unordered_set>
 
 class GameServer {
 public:
@@ -40,6 +40,8 @@ public:
     bool isPlaying() const;
     void cleanGameObjects();
 
+    void updateGameObjectsOnScreen();
+    std::vector <GameObject*> getGameObjectsOnScreen();
     ~GameServer();
 
     void unpausePlayer(PlayerClient *player);
@@ -59,6 +61,9 @@ public:
     void gameOver();
 
     void setChangeLevelFlag(bool setValue);
+
+    void deleteGameObject(GameObject *pObject);
+
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
@@ -83,10 +88,11 @@ private:
     BackgroundStage* stage;
     //Elements of the game
     std::vector <GameObject*> gameObjects;
-
+    unordered_set <GameObject*> gameObjectsDeleted;
     std::vector <Player*>  players;
     bool playing = false;
     bool changeLevelFlag = false;
+    std::vector <GameObject*> gameObjectsOnScreen;
 };
 
 

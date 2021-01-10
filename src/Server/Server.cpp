@@ -260,7 +260,6 @@ void * Server::broadcastToPlayerClient(void *arg) {
 }
 
 bool Server::run() {
-    pthread_mutex_t  * cmdMutex = &this->commandMutex;
     json msg;
     std::stringstream ss;
 
@@ -293,7 +292,8 @@ bool Server::run() {
             ss << "[thread:run] " << "msg: " << msg.dump();
             Logger::getInstance()->debug(ss.str());
             std::string username = msg["username"].get<std::string>();
-            for (Player* player : game->getPlayers()) { //TODO: Debería estar dentro del Game Server este loop
+            GameServer::Instance()->updateGameObjectsOnScreen();
+            for (Player* player : game->getPlayers()) {
                 if (player->getUsername() == username) {
                     std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
                     player->move(positions);
@@ -303,7 +303,6 @@ bool Server::run() {
 
             this->popCommand();
         }
-        //ToDo change game state with msg
         game->updateGameObjects();
         game->updatePlayers();
 

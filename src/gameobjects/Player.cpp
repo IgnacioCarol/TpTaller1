@@ -1,5 +1,6 @@
 #include <cstdio>
 #include <utility>
+#include <src/Server/GameServer.h>
 #include "../CharacterStates/Paused.h"
 #include "../CharacterStates/Normal.h"
 #include "../CharacterStates/Jumping.h"
@@ -68,8 +69,7 @@ void Player::move(std::vector<int> vector) {
         keyStates[arrows[i]] = vector[i];
     }
     leftOrRightPressed = vector[1] || vector[3];
-    characterState->changeState(keyStates, this);
-    characterState->move(keyStates, this);
+    completeMovement(keyStates);
 }
 
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
@@ -147,6 +147,23 @@ void Player::move() {
     } else {
         keyStates[SDL_SCANCODE_UP] = keyStates[SDL_SCANCODE_LEFT] = keyStates[SDL_SCANCODE_RIGHT] = keyStates[SDL_SCANCODE_DOWN] = 0;
     }
+    completeMovement(keyStates);
+}
+
+void Player::completeMovement(const Uint8 *keyStates) {
+    auto imageMap = TextureManager::Instance()->getTextureMap();
+    auto gameServer = GameServer::Instance();
+    for (auto gameObject: gameServer->getGameObjectsOnScreen()) {
+        if (isInIntersection(gameObject)) {
+            gameServer->deleteGameObject(gameObject);
+        }
+    }
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
+}
+
+bool Player::isInIntersection(GameObject *pObject) {
+    int playerPosition = getXPosition();
+    int objectPosition = pObject->getXPosition();
+    return (playerPosition > objectPosition && playerPosition < objectPosition + 30);
 }
