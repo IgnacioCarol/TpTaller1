@@ -1,8 +1,11 @@
 #ifdef __APPLE__
 #include "SDL.h"
 #else
+
 #include "SDL2/SDL.h"
+
 #endif
+
 #include <iostream>
 #include <unistd.h>
 #include <arpa/inet.h>
@@ -12,6 +15,7 @@
 #include "Server/Server.h"
 #include "Client/Client.h"
 #include <json.hpp>
+
 using json = nlohmann::json;
 
 #define FPS 40;
@@ -20,7 +24,7 @@ Uint32 frameStart, frameTime;
 
 #define MAX_ARGS 5 // app_name, xml_path, server/client, ip_address, port
 
-bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * mode, std::string * ipAddr, int * port) {
+bool parseCLI(int argc, char *argv[], std::string *xmlPath, ConnectionType *mode, std::string *ipAddr, int *port) {
     if (argc > MAX_ARGS) {
         return false;
     }
@@ -54,7 +58,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
     *ipAddr = argv[3];
     struct sockaddr_in sa;
     int result = inet_pton(AF_INET, ipAddr->c_str(), &(sa.sin_addr));
-    if(result < 0) {
+    if (result < 0) {
         Logger::getInstance()->error("Invalid IP address format");
         return false;
     }
@@ -63,7 +67,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
     tmp = argv[4];
     std::stringstream intPort(tmp);
     intPort >> *port;
-    if(*port < 1) {
+    if (*port < 1) {
         Logger::getInstance()->error("The PORT must be a postive int");
         return false;
     }
@@ -72,7 +76,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
 }
 
 
-int main(int argc, char * argv[]) {
+int main(int argc, char *argv[]) {
 
 //#ifdef TEST
 //    testing::InitGoogleTest(&argc, argv);
@@ -83,10 +87,10 @@ int main(int argc, char * argv[]) {
     std::string xmlPath;
     ConnectionType mode;
     std::string ipAddr;
-    int         port;
+    int port;
 
     if (!parseCLI(argc, argv, &xmlPath, &mode, &ipAddr, &port)) {
-        Logger::getInstance() -> error("Error: incorrect the program does not support the amount of CLI params");
+        Logger::getInstance()->error("Error: incorrect the program does not support the amount of CLI params");
         return EXIT_FAILURE;
     }
 
@@ -98,7 +102,7 @@ int main(int argc, char * argv[]) {
     if (mode == SERVER) {
         Logger::getInstance()->info("Initializing in server mode");
         Config::getInstance()->load(xmlPath);
-        Server * server = Server::getInstance();
+        Server *server = Server::getInstance();
         try {
             server->init(ipAddr.c_str(), std::to_string(port).c_str());
             server->run();
@@ -109,7 +113,7 @@ int main(int argc, char * argv[]) {
         }
     } else {
         Logger::getInstance()->info("[Client] Initializing in client mode");
-        auto * client = new Client(ipAddr, to_string(port).c_str());
+        auto *client = new Client(ipAddr, to_string(port).c_str());
         try {
             client->init();
             if (client->login()) {
