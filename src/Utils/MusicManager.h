@@ -1,5 +1,6 @@
 //
 // Created by lisandro on 8/1/21.
+//All the info in: https://www.libsdl.org/projects/SDL_mixer/docs/SDL_mixer.html
 //
 
 #ifndef TPTALLER1_MUSICMANAGER_H
@@ -23,6 +24,7 @@ public:
     void unpauseMusic();
 
     ~MusicManager();
+    void clearSoundEffectsMaps();
 
 private:
     static MusicManager* instance;

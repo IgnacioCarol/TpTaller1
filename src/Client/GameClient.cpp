@@ -266,6 +266,9 @@ GameClient::~GameClient() {
 
     delete this->textureManager;
     Logger::getInstance()->info("Texture Manager was deleted");
+
+    delete this->musicManager;
+    Logger::getInstance()->info("Music Manager was deleted");
 }
 
 void GameClient::clean() {
@@ -273,6 +276,7 @@ void GameClient::clean() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     textureManager->clearTextureMap();
+    musicManager -> clearSoundEffectsMaps();
     SDL_Quit();
 }
 
@@ -318,10 +322,12 @@ void GameClient::pauseSoundEffects(int music, int sounds) {
     if (music && !musicPaused){
         musicManager->pauseMusic();
         musicPaused = true;
+        Logger::getInstance() -> debug("The music has been paused");
     }
     else if (music && musicPaused){
         musicManager->unpauseMusic();
         musicPaused = false;
+        Logger::getInstance() -> debug("The music has been resumed");
     }
 
     mutedSounds = sounds;

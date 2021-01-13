@@ -67,6 +67,36 @@ void MusicManager::unpauseMusic() {
     Mix_ResumeMusic();
 }
 
+void MusicManager::clearSoundEffectsMaps() {
+    soundPathsMap.clear();
+    musicPathsMap.clear();
+
+    for (std::pair<std::string, Mix_Chunk*> chunk: soundsMap){
+        Mix_FreeChunk(chunk.second);
+    }
+    Logger::getInstance()->info("All sounds were deleted");
+    soundsMap.clear();
+
+    for (std::pair<std::string, Mix_Music*> songs: musicMap){
+        Mix_FreeMusic(songs.second);
+    }
+    Logger::getInstance()->info("All songs were deleted");
+    musicMap.clear();
+}
+
 MusicManager::~MusicManager() {
-    Mix_CloseAudio();
+
+    /*Mix_VolumeChunk
+     * int Mix_VolumeChunk(Mix_Chunk *chunk, int volume)
+
+    chunk
+    Pointer to the Mix_Chunk to set the volume in.
+    volume
+The volume to use from 0 to MIX_MAX_VOLUME(128).
+If greater than MIX_MAX_VOLUME,
+then it will be set to MIX_MAX_VOLUME.
+If less than 0 then chunk->volume will not be set.
+Set chunk->volume to volume.
+
+     */
 }
