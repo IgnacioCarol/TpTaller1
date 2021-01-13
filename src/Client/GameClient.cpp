@@ -313,3 +313,16 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
 void GameClient::setServerDown() {
     serverIsDown = true;
 }
+
+void GameClient::pauseSoundEffects(int music, int sounds) {
+    if (music && !musicPaused){
+        musicManager->pauseMusic();
+        musicPaused = true;
+    }
+    else if (music && musicPaused){
+        musicManager->unpauseMusic();
+        musicPaused = false;
+    }
+
+    mutedSounds = sounds;
+}

@@ -59,8 +59,14 @@ void MusicManager::playMusic(std::string ID, int loop) {
     }
 }
 
+void MusicManager::pauseMusic() {
+    Mix_PauseMusic();
+}
+
+void MusicManager::unpauseMusic() {
+    Mix_ResumeMusic();
+}
+
 MusicManager::~MusicManager() {
     Mix_CloseAudio();
 }
-
-

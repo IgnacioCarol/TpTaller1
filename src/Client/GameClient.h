@@ -34,6 +34,7 @@ public:
     void changeLevel(GameMsgLevelChange nextLevelConfig);
     void clean();
     void setServerDown();
+    void pauseSoundEffects(int music, int sounds);
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
@@ -68,6 +69,9 @@ private:
     std::vector<int> idsToRender;
     int levelLimit;
     bool levelCompleted = false;
+
+    bool musicPaused = false;
+    bool mutedSounds = false;
 };
 
 

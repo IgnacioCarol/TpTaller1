@@ -17,8 +17,10 @@ public:
     void addPath(std::string ID, std::string soundPath, bool isMusic);
     void loadSounds();
     void playSound(std::string ID, int loop);
-
     void playMusic(std::string ID, int loop);
+
+    void pauseMusic();
+    void unpauseMusic();
 
     ~MusicManager();
 
