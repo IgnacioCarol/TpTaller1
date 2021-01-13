@@ -17,11 +17,15 @@ public:
     static MusicManager* Instance();
     void addPath(std::string ID, std::string soundPath, bool isMusic);
     void loadSounds();
-    void playSound(std::string ID, int loop);
-    void playMusic(std::string ID, int loop);
+    void playSound(std::string ID, int loop = 0);
+    void playMusic(std::string ID, int loop = -1);
+    bool isMusicPaused();
+    bool areSoundsMuted();
 
     void pauseMusic();
     void unpauseMusic();
+    void muteSounds();
+    void unmuteSounds();
 
     ~MusicManager();
     void clearSoundEffectsMaps();
@@ -36,6 +40,9 @@ private:
     //To store the sounds
     std::map<std::string, Mix_Chunk*> soundsMap;
     std::map<std::string, Mix_Music*> musicMap;
+
+    bool musicPaused = false;
+    bool mutedSounds = false;
 
     MusicManager();
 };

@@ -47,7 +47,9 @@ void MusicManager::loadSounds() {
 }
 
 void MusicManager::playSound(std::string ID, int loop) {
-    if(soundsMap.count(ID)){
+    //Plays the sound loop + 1 times
+    if(soundsMap.count(ID) and !mutedSounds){
+        Mix_VolumeChunk(soundsMap[ID], MIX_MAX_VOLUME / 2);
         Mix_PlayChannel(-1, soundsMap[ID], loop);
     }
 }
@@ -59,12 +61,30 @@ void MusicManager::playMusic(std::string ID, int loop) {
     }
 }
 
+bool MusicManager::isMusicPaused() {
+    return musicPaused;
+}
+
+bool MusicManager::areSoundsMuted() {
+    return mutedSounds;
+}
+
 void MusicManager::pauseMusic() {
     Mix_PauseMusic();
+    musicPaused = true;
 }
 
 void MusicManager::unpauseMusic() {
     Mix_ResumeMusic();
+    musicPaused = false;
+}
+
+void MusicManager::muteSounds() {
+    mutedSounds = true;
+}
+
+void MusicManager::unmuteSounds() {
+    mutedSounds = false;
 }
 
 void MusicManager::clearSoundEffectsMaps() {
@@ -85,18 +105,4 @@ void MusicManager::clearSoundEffectsMaps() {
 }
 
 MusicManager::~MusicManager() {
-
-    /*Mix_VolumeChunk
-     * int Mix_VolumeChunk(Mix_Chunk *chunk, int volume)
-
-    chunk
-    Pointer to the Mix_Chunk to set the volume in.
-    volume
-The volume to use from 0 to MIX_MAX_VOLUME(128).
-If greater than MIX_MAX_VOLUME,
-then it will be set to MIX_MAX_VOLUME.
-If less than 0 then chunk->volume will not be set.
-Set chunk->volume to volume.
-
-     */
 }

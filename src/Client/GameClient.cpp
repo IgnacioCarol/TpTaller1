@@ -70,7 +70,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
     }
 
     this -> loadSounds(initialize.soundPaths);
-    musicManager->playMusic("MUSIC", -1);
+    musicManager->playMusic("MUSIC");
 
     initBackground(renderer, initialize.stage);
     logger -> info("Init success");
@@ -319,16 +319,21 @@ void GameClient::setServerDown() {
 }
 
 void GameClient::pauseSoundEffects(int music, int sounds) {
-    if (music && !musicPaused){
+    if (music && !musicManager->isMusicPaused()){
         musicManager->pauseMusic();
-        musicPaused = true;
         Logger::getInstance() -> debug("The music has been paused");
     }
-    else if (music && musicPaused){
+    else if (music && musicManager->isMusicPaused()){
         musicManager->unpauseMusic();
-        musicPaused = false;
         Logger::getInstance() -> debug("The music has been resumed");
     }
 
-    mutedSounds = sounds;
+    if (sounds && !musicManager->areSoundsMuted()){
+        musicManager->muteSounds();
+        Logger::getInstance() -> debug("The sounds have been muted");
+    }
+    else if (sounds && musicManager->areSoundsMuted()){
+        musicManager->unmuteSounds();
+        Logger::getInstance() -> debug("The sounds have been unmuted");
+    }
 }

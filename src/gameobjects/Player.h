@@ -6,6 +6,7 @@
 #include "../logger/logger.h"
 #include "../TextureManager.h"
 #include "GameObject.h"
+#include "../Utils/MusicManager.h"
 
 #define imgPlayer "Sprites/Players/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"

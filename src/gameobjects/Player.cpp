@@ -114,6 +114,7 @@ void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
         int framesAmount = characterState->getFramesAmount();
         if (state == "JUMPING") {
+            MusicManager::Instance()->playSound("JUMP_SMALL");
             changeState(new Jumping(4, framesAmount));
         } else if (state == "NORMAL") {
             changeState(new Normal(0, framesAmount));
