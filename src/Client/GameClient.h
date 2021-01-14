@@ -8,7 +8,7 @@
 #include "../BackgroundStages/BackgroundStage.h"
 #include "../Protocol/GameMsgParams.h"
 #include "../gameobjects/GameObject.h"
-
+#include "../config/Constants.h"
 #include "../TextureManager.h"
 #include "../Camera.h"
 #include "../gameobjects/Enemy.h"
@@ -69,7 +69,6 @@ private:
     std::vector<int> idsToRender;
     int levelLimit;
     bool levelCompleted = false;
-
 };
 
 

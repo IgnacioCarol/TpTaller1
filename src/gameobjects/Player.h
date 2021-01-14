@@ -15,6 +15,7 @@
 #include "../CharacterStates/Crouched.h"
 #include "../CharacterStates/Running.h"
 #include "../CharacterStates/Dying.h"
+#include "../config/Constants.h"
 
 #define imgPlayer "Sprites/Players/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"

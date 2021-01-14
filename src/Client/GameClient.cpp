@@ -70,7 +70,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
     }
 
     this -> loadSounds(initialize.soundPaths);
-    musicManager->playMusic("MUSIC");
+    musicManager->playMusic(MUSIC);
 
     initBackground(renderer, initialize.stage);
     logger -> info("Init success");
@@ -118,6 +118,9 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 
     //Update camera position and timer
     camera -> setXPos(updateObjects.camera.xPos);
+    if (updateObjects.timer == 100){
+        musicManager->playSound(HURRY_UP_SOUND);
+    }
     background->setCurrentTime(updateObjects.timer);
 }
 
@@ -163,7 +166,7 @@ void GameClient::loadSounds(std::map<std::string, std::string> soundPaths) {
         musicManager->addPath(element.first, element.second, false);
     }
 
-    musicManager->addPath("MUSIC", "Sound_Effects/Music/SuperMarioBrosSong.mp3", true);
+    musicManager->addPath(MUSIC, "Sound_Effects/Music/SuperMarioBrosSong.mp3", true);
 
     musicManager->loadSounds();
 }
@@ -222,10 +225,10 @@ void GameClient::createPlayer(GameObjectInit player) {
 
 void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType) {
     GameObject* tmp;
-    if (gameObject.type == GOT_COIN){
+    if (objectType == GOT_COIN){
         tmp = new Coin();
     }
-    else if (gameObject.type == GOT_PLATFORM_NORMAL){
+    else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
     }
     else{
