@@ -193,7 +193,7 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
 
 void GameServer::addSoundsPaths() {
     std::string path = "Sound_Effects/Sounds/";
-    soundsPath["BUMP"] = path + "SuperMarioBrosSong.mp3";
+    soundsPath["BUMP"] = path + "Bump.mp3";
     soundsPath["COIN"] = path + "Coin.mp3";
     soundsPath["GAME_OVER"] = path + "GameOver.mp3";
     soundsPath["HURRY_UP"] = path + "HurryUp.mp3";

@@ -1,13 +1,4 @@
-#include <cstdio>
-#include <utility>
-#include "../CharacterStates/Paused.h"
-#include "../CharacterStates/Normal.h"
-#include "../CharacterStates/Jumping.h"
-#include "../CharacterStates/Crouched.h"
-#include "../CharacterStates/Running.h"
-
 #include "Player.h"
-
 static const int GRAVITY = 3;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
@@ -125,6 +116,10 @@ void Player::setState(std::string state) {
         }
         else if (state == "PAUSED" || state == "FINISH"){
             changeState(new Paused(0, framesAmount, state == "PAUSED"));
+        }
+        else{
+            MusicManager::Instance()->playSound("MARIO_DIES");
+            changeState(new Dying()); //ToDo agregar el currentFrame correspondiente a la imagen de dying cuando este lista
         }
     }
 }

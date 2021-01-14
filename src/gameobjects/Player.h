@@ -7,6 +7,14 @@
 #include "../TextureManager.h"
 #include "GameObject.h"
 #include "../Utils/MusicManager.h"
+#include <cstdio>
+#include <utility>
+#include "../CharacterStates/Paused.h"
+#include "../CharacterStates/Normal.h"
+#include "../CharacterStates/Jumping.h"
+#include "../CharacterStates/Crouched.h"
+#include "../CharacterStates/Running.h"
+#include "../CharacterStates/Dying.h"
 
 #define imgPlayer "Sprites/Players/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
