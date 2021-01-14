@@ -70,8 +70,6 @@ private:
     int levelLimit;
     bool levelCompleted = false;
 
-    bool musicPaused = false;
-    bool mutedSounds = false;
 };
 
 
