@@ -47,6 +47,10 @@ public:
 
     bool getDirection() override;
 
+    void hasIntersection(GameObject *go) override;
+
+    void die() override;
+
 private:
     //Image related
     std::string username;

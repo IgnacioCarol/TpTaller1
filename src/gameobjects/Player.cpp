@@ -155,7 +155,7 @@ void Player::completeMovement(const Uint8 *keyStates) {
     auto gameServer = GameServer::Instance();
     for (auto gameObject: gameServer->getGameObjectsOnScreen()) {
         if (isInIntersection(gameObject)) {
-            gameServer->deleteGameObject(gameObject);
+            gameObject->hasIntersection(this);
         }
     }
     characterState->changeState(keyStates, this);

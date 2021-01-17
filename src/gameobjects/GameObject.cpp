@@ -1,3 +1,4 @@
+#include <src/Server/GameServer.h>
 #include "GameObject.h"
 #include "../GameMap.h"
 
@@ -71,4 +72,12 @@ std::string GameObject::getState() {
 
 bool GameObject::getDirection() {
     return true; //tmb para safar ya que los bloques y monedas no tienen direction
+}
+
+void GameObject::die() {
+    GameServer::Instance()->deleteGameObject(this);
+}
+
+void GameObject::hasIntersection(GameObject *go) {
+    die();
 }

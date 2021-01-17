@@ -27,6 +27,8 @@ protected:
     int direction = -enemyVelocity;
     bool flipFlag = false;
     SDL_Rect* cam{};
+
+    void hasIntersection(GameObject *go) override;
 };
 
 
