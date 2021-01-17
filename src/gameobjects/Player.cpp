@@ -163,7 +163,17 @@ void Player::completeMovement(const Uint8 *keyStates) {
 }
 
 bool Player::isInIntersection(GameObject *pObject) {
-    int playerPosition = getXPosition();
-    int objectPosition = pObject->getXPosition();
-    return (playerPosition > objectPosition && playerPosition < objectPosition + 30);
+    int objectXPosition = pObject->getXPosition();
+    int objectYPosition = pObject->getYPosition();
+    int realYPosition = yPosition + 45; //Fixme this is to make a semi starting floor, should be fixed
+    return (xPosition >= objectXPosition && xPosition <= objectXPosition + 30) &&
+    (realYPosition <= objectYPosition && realYPosition >= objectYPosition - 30); //ToDo Implement variables
+}
+
+void Player::hasIntersection(GameObject *go) {
+
+}
+void Player::die() {
+    restartPos(GameServer::Instance()->getCamera()->getXpos(), 380); //This is current die of the player, we should implement
+    //lives and all of that, but this could stay for test enviroment
 }

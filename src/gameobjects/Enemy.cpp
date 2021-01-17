@@ -51,3 +51,11 @@ bool Enemy::getDirection() {
     return direction > 0;
 }
 
+void Enemy::hasIntersection(GameObject *go) {
+    if (go->getYPosition() + 45 + 15 < yPosition) {
+        this->die();
+    } else {
+        go->die();
+    }
+}
+
