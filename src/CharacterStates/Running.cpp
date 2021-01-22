@@ -22,7 +22,7 @@ void Running::changeState(const Uint8 *currentKeyStates, Player* player) {
     }
 
     else if (currentKeyStates[SDL_SCANCODE_DOWN]){
-        player -> changeState(new Crouched(framesAmount - CROUCHED_FRAME, framesAmount)); //ToDo revisar currentFrame
+        player -> changeState(new Crouched(framesAmount - CROUCHED_FRAME, framesAmount));
     }
 
     else if (!(currentKeyStates[ SDL_SCANCODE_RIGHT ] || currentKeyStates[ SDL_SCANCODE_LEFT ])){
