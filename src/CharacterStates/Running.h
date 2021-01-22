@@ -10,7 +10,7 @@
 
 class Running: public CharacterState {
 public:
-    explicit Running(int currentFrame = 0, int frameAmount = 1);
+    explicit Running();
     void move(const Uint8* currentKeyStates, Player* player) override;
     void changeState(const Uint8* currentKeyStates, Player* player) override;
     void draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,

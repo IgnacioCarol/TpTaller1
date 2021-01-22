@@ -8,7 +8,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     initialJumpingPosition = yPosition;
     maxYPosition = yPosition - 100;
     cam =  camera;
-    characterState = new Normal(0, framesAmount);
+    characterState = new Normal();
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
@@ -106,23 +106,23 @@ void Player::setState(std::string state) {
         int framesAmount = characterState->getFramesAmount();
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
-            changeState(new Jumping(4, framesAmount));
+            changeState(new Jumping());
         } else if (state == "NORMAL") {
-            changeState(new Normal(0, framesAmount));
+            changeState(new Normal());
         } else if (state == "RUNNING") {
-            changeState(new Running(0, framesAmount));
+            changeState(new Running());
         } else if (state == "CROUCHED") {
-            changeState(new Crouched(5, framesAmount));
+            changeState(new Crouched());
         }
         else if (state == "PAUSED" || state == "FINISH"){
             if (state == "FINISH"){
                 MusicManager::Instance()->playSound(STAGE_CLEAR_SOUND);
             }
-            changeState(new Paused(0, framesAmount, state == "PAUSED"));
+            changeState(new Paused(state == "PAUSED"));
         }
         else{
             MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
-            changeState(new Dying()); //ToDo agregar el currentFrame correspondiente a la imagen de dying cuando este lista
+            changeState(new Dying());
         }
     }
 }

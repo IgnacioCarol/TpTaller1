@@ -113,7 +113,7 @@ void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
     for (auto & player : players) {
         player->restartPos(0, 380);
-        player->changeState(new Normal(0, player->getFrameAmount()));
+        player->changeState(new Normal());
     }
     camera->restartPos();
 }
@@ -138,7 +138,7 @@ void GameServer::updatePlayers() {
     for (Player* player: players) {
         player->move();
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
-            player->changeState(new Paused(0, player->getFrameAmount(), false));
+            player->changeState(new Paused(false));
             changeLevelFlag = true;
         }
     }
@@ -175,7 +175,7 @@ void GameServer::unpausePlayer(PlayerClient *playerClient) {
     for (Player *player: getPlayers()) {
         if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
             Logger::getInstance()->info("Client " +  player->getUsername() + " is connected.");
-            player->changeState(new Normal(0,player->getFrameAmount()));
+            player->changeState(new Normal());
         }
     }
 }
@@ -185,7 +185,7 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
         if (player->getUsername() == playerClient->username) {
             if (player->getState() != "PAUSED") {
                 Logger::getInstance()->info("Client " + player->getUsername() + " is disconnected.");
-                player->changeState(new Paused(0,player->getFrameAmount()));
+                player->changeState(new Paused());
             }
         }
     }

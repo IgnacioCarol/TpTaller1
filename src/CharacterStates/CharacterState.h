@@ -14,6 +14,9 @@ class Enemy;
 class CharacterState {
 public:
     explicit CharacterState(int currentFrame, int framesAmount);
+
+    explicit CharacterState();
+
     virtual void draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
                       SDL_Renderer* renderer, SDL_RendererFlip flip);
 
@@ -23,15 +26,20 @@ public:
 
     virtual void changeState(const Uint8* currentKeyStates, Player* player);
 
-    int getCurrentFrame();
     int getFramesAmount();
 
     std::string getStateType();
 
 protected:
+    static const int NORMAL_FRAME = 0;
+    static const int RUNNING_FRAME = 1;
+    static const int JUMPING_FRAME = 4;
+    static const int CROUCHED_FRAME = 5;
+    static const int DYING_FRAME = 6;
+    static const int FRAMES_AMOUNT_PLAYER = 7;
+
     static const int ITER_TIMES = 4;
-    static const int RUNNING_FRAME = 2;
-    static const int CROUCHED_FRAME = 1;
+
     std::string stateType;
     int currentFrame;
     int framesAmount; //Amount of pictures in the sprite sheet

@@ -8,8 +8,9 @@
 #include "Normal.h"
 #include "Crouched.h"
 
-Running::Running(int currentFrame, int frameAmount) : CharacterState(currentFrame, frameAmount) {
+Running::Running() : CharacterState() {
     stateType = "RUNNING";
+    currentFrame = RUNNING_FRAME;
 }
 
 void Running::move(const Uint8 *currentKeyStates, Player* player) {
@@ -18,22 +19,22 @@ void Running::move(const Uint8 *currentKeyStates, Player* player) {
 
 void Running::changeState(const Uint8 *currentKeyStates, Player* player) {
     if (currentKeyStates[SDL_SCANCODE_UP]){
-        player -> changeState(new Jumping(framesAmount - RUNNING_FRAME, framesAmount));
+        player -> changeState(new Jumping());
     }
 
     else if (currentKeyStates[SDL_SCANCODE_DOWN]){
-        player -> changeState(new Crouched(framesAmount - CROUCHED_FRAME, framesAmount));
+        player -> changeState(new Crouched());
     }
 
     else if (!(currentKeyStates[ SDL_SCANCODE_RIGHT ] || currentKeyStates[ SDL_SCANCODE_LEFT ])){
-        player -> changeState(new Normal(0, framesAmount));
+        player -> changeState(new Normal());
     }
 }
 
 void Running::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
                    SDL_Renderer *renderer,SDL_RendererFlip flip) {
     if (contAux == ITER_TIMES) {
-        currentFrame = (currentFrame % (framesAmount - RUNNING_FRAME - 1)) + 1;
+        currentFrame = (currentFrame % (RUNNING_FRAME + 2)) + 1;
         contAux = 0;
     }
     else contAux++;

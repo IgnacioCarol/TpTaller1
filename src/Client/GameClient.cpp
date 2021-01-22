@@ -303,7 +303,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     for (std::pair<int, Player*> player: playersMap){
         player.second->restartPos(0, 380);
         player.second->setDirection(true);
-        player.second->changeState(new Normal(0, player.second->getFrameAmount()));
+        player.second->changeState(new Normal());
     }
     levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);

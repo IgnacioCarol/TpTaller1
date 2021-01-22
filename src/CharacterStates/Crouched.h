@@ -9,7 +9,7 @@
 
 class Crouched : public CharacterState{
     public:
-        explicit Crouched(int currentFrame = 0, int frameAmount = 1);
+        explicit Crouched();
         void move(const Uint8* currentKeyStates, Player* player) override;
         void changeState(const Uint8* currentKeyStates, Player* player) override;
 };

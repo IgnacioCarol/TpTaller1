@@ -4,8 +4,9 @@
 
 #include "Dying.h"
 
-Dying::Dying(int currentFrame, int frameAmount) : CharacterState(currentFrame, frameAmount) {
+Dying::Dying() : CharacterState() {
     stateType = "DYING";
+    currentFrame = DYING_FRAME;
 }
 
 void Dying::move(const Uint8 *currentKeyStates, Player *player) {
