@@ -193,16 +193,17 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
 
 void GameServer::addSoundsPaths() {
     std::string path = "Sound_Effects/Sounds/";
-    soundsPath[BUMP_SOUND] = path + "Bump.mp3";
-    soundsPath[COIN_SOUND] = path + "Coin.mp3";
-    soundsPath[GAME_OVER_SOUND] = path + "GameOver.mp3";
-    soundsPath[HURRY_UP_SOUND] = path + "HurryUp.mp3";
-    soundsPath[JUMP_MEDIUM_SOUND] = path + "JumpMedium.mp3";
-    soundsPath[JUMP_SMALL_SOUND] = path + "JumpSmall.mp3";
-    soundsPath[MARIO_DIES_SOUND] = path + "MarioDies.mp3";
-    soundsPath[POWER_UP_SOUND] = path + "PowerUp.mp3";
-    soundsPath[POWER_UP_APPEARS_SOUND] = path + "PowerUpAppears.mp3";
-    soundsPath[STAGE_CLEAR_SOUND] = path + "stageClear.mp3";
-    soundsPath[STOMP_SOUND] = path + "Stomp.mp3";
-    soundsPath[WORLD_CLEAR_SOUND] = path + "worldClear.mp3";
+    std::string format = ".wav";
+    soundsPath[BUMP_SOUND] = path + "Bump" + format;
+    soundsPath[COIN_SOUND] = path + "Coin" + format;
+    soundsPath[GAME_OVER_SOUND] = path + "GameOver" + format;
+    soundsPath[HURRY_UP_SOUND] = path + "HurryUp" + format;
+    soundsPath[JUMP_MEDIUM_SOUND] = path + "JumpMedium" + format;
+    soundsPath[JUMP_SMALL_SOUND] = path + "JumpSmall" + format;
+    soundsPath[MARIO_DIES_SOUND] = path + "MarioDies" + format;
+    soundsPath[POWER_UP_SOUND] = path + "PowerUp" + format;
+    soundsPath[POWER_UP_APPEARS_SOUND] = path + "PowerUpAppears" + format;
+    soundsPath[STAGE_CLEAR_SOUND] = path + "stageClear" + format;
+    soundsPath[STOMP_SOUND] = path + "Stomp" + format;
+    soundsPath[WORLD_CLEAR_SOUND] = path + "worldClear" + format;
 }

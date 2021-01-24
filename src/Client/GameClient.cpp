@@ -166,7 +166,7 @@ void GameClient::loadSounds(std::map<std::string, std::string> soundPaths) {
         musicManager->addPath(element.first, element.second, false);
     }
 
-    musicManager->addPath(MUSIC, "Sound_Effects/Music/SuperMarioBrosSong.mp3", true);
+    musicManager->addPath(MUSIC, "Sound_Effects/Music/SuperMarioBrosSong.wav", true);
 
     musicManager->loadSounds();
 }
