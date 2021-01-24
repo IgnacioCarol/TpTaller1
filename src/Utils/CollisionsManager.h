@@ -11,6 +11,11 @@ class CollisionsManager {
     bool isInIntersection(GameObject *first, GameObject *pObject);
 
     void doIntersection();
+
+    CollisionsManager *Instance();
+
+private:
+    CollisionsManager* instance;
 };
 
 

@@ -6,6 +6,12 @@
 #include <src/Server/GameServer.h>
 #include "CollisionsManager.h"
 
+CollisionsManager *CollisionsManager::Instance() {
+    //First time we create an instance of Game
+    if (instance == nullptr) instance = new CollisionsManager();
+    return instance;
+}
+
 bool CollisionsManager::isInIntersection(GameObject *first, GameObject *pObject) {
     int objectXPosition = pObject->getXPosition();
     int objectYPosition = pObject->getYPosition();
