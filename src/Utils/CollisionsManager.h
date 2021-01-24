@@ -7,12 +7,12 @@
 
 
 class CollisionsManager {
-
+public:
     bool isInIntersection(GameObject *first, GameObject *pObject);
 
     void doIntersection();
 
-    CollisionsManager *Instance();
+    static CollisionsManager *Instance();
 
 private:
     CollisionsManager* instance;

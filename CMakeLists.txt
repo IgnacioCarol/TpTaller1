@@ -58,7 +58,7 @@ add_executable(TpTaller1
         src/Client/ClientParser.cpp src/Client/ClientParser.h
         src/CharacterStates/Paused.cpp src/CharacterStates/Paused.h
         src/Utils/IdGenerator.cpp src/Utils/IdGenerator.h
-        src/Client/GameClient.cpp src/Client/GameClient.h)
+        src/Client/GameClient.cpp src/Client/GameClient.h src/Utils/CollisionsManager.cpp src/Utils/CollisionsManager.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")
