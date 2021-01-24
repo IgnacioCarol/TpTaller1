@@ -153,12 +153,6 @@ void Player::move() {
 
 void Player::completeMovement(const Uint8 *keyStates) {
     auto imageMap = TextureManager::Instance()->getTextureMap();
-    auto gameServer = GameServer::Instance();
-    for (auto gameObject: gameServer->getGameObjectsOnScreen()) {
-        if (CollisionsManager::Instance()->isInIntersection(this, gameObject)) {
-            gameObject->collideWith(this);
-        }
-    }
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
 }

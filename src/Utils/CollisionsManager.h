@@ -12,7 +12,7 @@ public:
 
     void doIntersection();
 
-    static CollisionsManager *Instance();
+    CollisionsManager *Instance();
 
 private:
     CollisionsManager* instance;
