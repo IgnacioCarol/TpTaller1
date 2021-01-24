@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <utility>
 #include <src/Server/GameServer.h>
+#include <src/Utils/CollisionsManager.h>
 #include "../CharacterStates/Paused.h"
 #include "../CharacterStates/Normal.h"
 #include "../CharacterStates/Jumping.h"
@@ -154,25 +155,18 @@ void Player::completeMovement(const Uint8 *keyStates) {
     auto imageMap = TextureManager::Instance()->getTextureMap();
     auto gameServer = GameServer::Instance();
     for (auto gameObject: gameServer->getGameObjectsOnScreen()) {
-        if (isInIntersection(gameObject)) {
-            gameObject->hasIntersection(this);
+        if (CollisionsManager::Instance()->isInIntersection(this, gameObject)) {
+            gameObject->collideWith(this);
         }
     }
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
 }
 
-bool Player::isInIntersection(GameObject *pObject) {
-    int objectXPosition = pObject->getXPosition();
-    int objectYPosition = pObject->getYPosition();
-    int realYPosition = yPosition + 45; //Fixme this is to make a semi starting floor, should be fixed
-    return (xPosition >= objectXPosition && xPosition <= objectXPosition + 30) &&
-    (realYPosition <= objectYPosition && realYPosition >= objectYPosition - 30); //ToDo Implement variables
-}
-
-void Player::hasIntersection(GameObject *go) {
+void Player::collideWith(GameObject *go) {
 
 }
+
 void Player::die() {
     restartPos(GameServer::Instance()->getCamera()->getXpos(), 380); //This is current die of the player, we should implement
     //lives and all of that, but this could stay for test enviroment

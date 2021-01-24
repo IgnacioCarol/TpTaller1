@@ -43,7 +43,7 @@ public:
     virtual std::string getState();
     bool isAtScene(int camXPos);
 
-    virtual void hasIntersection(GameObject *go);
+    virtual void collideWith(GameObject *go);
 
     virtual void die();
 protected:

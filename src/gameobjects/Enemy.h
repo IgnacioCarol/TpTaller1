@@ -28,7 +28,7 @@ protected:
     bool flipFlag = false;
     SDL_Rect* cam{};
 
-    void hasIntersection(GameObject *go) override;
+    void collideWith(GameObject *go) override;
 };
 
 

@@ -78,6 +78,6 @@ void GameObject::die() {
     GameServer::Instance()->deleteGameObject(this);
 }
 
-void GameObject::hasIntersection(GameObject *go) {
+void GameObject::collideWith(GameObject *go) {
     die();
 }
