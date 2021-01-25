@@ -322,21 +322,25 @@ void GameClient::setServerDown() {
 }
 
 void GameClient::pauseSoundEffects(int music, int sounds) {
-    if (music && !musicManager->isMusicPaused()){
-        musicManager->pauseMusic();
-        Logger::getInstance() -> debug("The music has been paused");
-    }
-    else if (music && musicManager->isMusicPaused()){
-        musicManager->unpauseMusic();
-        Logger::getInstance() -> debug("The music has been resumed");
-    }
 
-    if (sounds && !musicManager->areSoundsMuted()){
-        musicManager->muteSounds();
-        Logger::getInstance() -> debug("The sounds have been muted");
+    if (music){
+        if (!musicManager->isMusicPaused()){
+            musicManager->pauseMusic();
+            Logger::getInstance() -> debug("The music has been paused");
+        }
+        else{
+            musicManager->unpauseMusic();
+            Logger::getInstance() -> debug("The music has been resumed");
+        }
     }
-    else if (sounds && musicManager->areSoundsMuted()){
-        musicManager->unmuteSounds();
-        Logger::getInstance() -> debug("The sounds have been unmuted");
+    if (sounds){
+        if (!musicManager->areSoundsMuted()){
+            musicManager->muteSounds();
+            Logger::getInstance() -> debug("The sounds have been muted");
+        }
+        else{
+            musicManager->unmuteSounds();
+            Logger::getInstance() -> debug("The sounds have been unmuted");
+        }
     }
 }
