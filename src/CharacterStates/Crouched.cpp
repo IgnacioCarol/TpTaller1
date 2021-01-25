@@ -7,7 +7,7 @@
 #include "Normal.h"
 #include "Crouched.h"
 
-Crouched::Crouched() : CharacterState() {
+Crouched::Crouched(){
     stateType = "CROUCHED";
     currentFrame = CROUCHED_FRAME;
 }

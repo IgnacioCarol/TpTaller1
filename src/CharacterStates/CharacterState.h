@@ -31,11 +31,6 @@ public:
     std::string getStateType();
 
 protected:
-    static const int NORMAL_FRAME = 0;
-    static const int RUNNING_FRAME = 1;
-    static const int JUMPING_FRAME = 4;
-    static const int CROUCHED_FRAME = 5;
-    static const int DYING_FRAME = 6;
     static const int FRAMES_AMOUNT_PLAYER = 7;
 
     static const int ITER_TIMES = 4;

@@ -8,7 +8,7 @@
 #include "Normal.h"
 #include "Crouched.h"
 
-Running::Running() : CharacterState() {
+Running::Running(){
     stateType = "RUNNING";
     currentFrame = RUNNING_FRAME;
 }

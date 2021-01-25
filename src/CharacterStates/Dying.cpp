@@ -4,7 +4,7 @@
 
 #include "Dying.h"
 
-Dying::Dying() : CharacterState() {
+Dying::Dying(){
     stateType = "DYING";
     currentFrame = DYING_FRAME;
 }

@@ -6,7 +6,7 @@
 #include "Jumping.h"
 #include "Normal.h"
 
-Jumping::Jumping() : CharacterState() {
+Jumping::Jumping(){
     stateType = "JUMPING";
     currentFrame = JUMPING_FRAME;
 }

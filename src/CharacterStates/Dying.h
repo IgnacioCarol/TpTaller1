@@ -15,6 +15,7 @@ public:
     void move(const Uint8 *currentKeyStates, Player *player) override;
 
 private:
+    static const int DYING_FRAME = 6;
     int initialY = 0;
     int countAux = 0;
     static const int GRAVITY = 3;

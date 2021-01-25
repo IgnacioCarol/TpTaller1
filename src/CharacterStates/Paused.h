@@ -15,6 +15,7 @@ public:
               SDL_Renderer* renderer, SDL_RendererFlip flip) override;
 private:
     bool disconnected;
+    static const int PAUSED_FRAME = 0;
 };
 
 

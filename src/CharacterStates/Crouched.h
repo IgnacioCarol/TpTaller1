@@ -12,6 +12,9 @@ class Crouched : public CharacterState{
         explicit Crouched();
         void move(const Uint8* currentKeyStates, Player* player) override;
         void changeState(const Uint8* currentKeyStates, Player* player) override;
+
+private:
+    static const int CROUCHED_FRAME = 5;
 };
 
 #endif //TPTALLER1_CROUCHED_H

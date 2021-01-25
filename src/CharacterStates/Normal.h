@@ -13,6 +13,8 @@ public:
     void move(const Uint8* currentKeyStates, Player* player) override;
     void changeState(const Uint8* currentKeyStates, Player* player) override;
 
+private:
+    static const int NORMAL_FRAME = 0;
 };
 
 

@@ -7,10 +7,10 @@
 #include "../Server/GameServer.h"
 
 
-Paused::Paused(bool disconnected) : CharacterState() {
+Paused::Paused(bool disconnected){
     stateType = disconnected ? "PAUSED" : "FINISH";
     this -> disconnected = disconnected;
-    currentFrame = NORMAL_FRAME;
+    currentFrame = PAUSED_FRAME;
 }
 
 void Paused::move(const Uint8 *currentKeyStates, Player *player) {
