@@ -46,6 +46,7 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
     addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
     addPath("paused", "Sprites/Players/pausedPlayer.png","Sprites/Players/pausedPlayer.png");
+    addPath("HEART","Sprites/heart.png", "Sprites/heart.png");
 
     addSoundsPaths();
     initializeAllElementsOfGameServer(clients);

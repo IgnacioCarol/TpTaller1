@@ -106,10 +106,12 @@ void GameClient::renderPlayers() {
         }
         element.second -> draw(renderer, camera->getXpos(), 0);
         TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
+        renderLives(playerUsernameYPos, element.second->getLives());
         playerUsernameYPos += 20;
     }
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
+    renderLives(20, clientPlayer->getLives());
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -342,5 +344,13 @@ void GameClient::pauseSoundEffects(int music, int sounds) {
             musicManager->unmuteSounds();
             Logger::getInstance() -> debug("The sounds have been unmuted");
         }
+    }
+}
+
+void GameClient::renderLives(int yPosition, int lives) {
+    int xPosition = 30;
+    for (int i = 0; i < lives; i++){
+        TextureManager::Instance()->drawFrame("HEART",xPosition, yPosition - 30,300,300,0, renderer, SDL_FLIP_NONE);
+        xPosition += 20;
     }
 }

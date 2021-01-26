@@ -42,11 +42,14 @@ public:
     virtual void setState(std::string state);
     virtual std::string getState();
     bool isAtScene(int camXPos);
+    int getPoints();
 
 protected:
     //To manage the movement
     int xPosition;
     int yPosition;
+
+    int points = 0;
 
     //To manage the image
     TextureManager* textureManager = TextureManager::Instance();

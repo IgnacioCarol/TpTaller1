@@ -149,3 +149,11 @@ void Player::move() {
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
 }
+
+void Player::addPoints(int newPoints) {
+    points += newPoints;
+}
+
+int Player::getLives() {
+    return lives;
+}

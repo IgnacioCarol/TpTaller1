@@ -50,6 +50,7 @@ private:
     void updateGameObjects(std::vector<GameObjectPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
+    void renderLives(int yPosition, int lives);
 
 
     SDL_Window* window;
