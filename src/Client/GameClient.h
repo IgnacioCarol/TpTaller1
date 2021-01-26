@@ -50,7 +50,7 @@ private:
     void updateGameObjects(std::vector<GameObjectPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
-    void renderLives(int yPosition, int lives);
+    void renderPointsAndLives(int yPosition, int points, int lives);
 
 
     SDL_Window* window;
@@ -70,6 +70,8 @@ private:
     std::vector<int> idsToRender;
     int levelLimit;
     bool levelCompleted = false;
+
+    static const int DIGITS = 6;
 };
 
 

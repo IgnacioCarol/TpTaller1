@@ -106,12 +106,13 @@ void GameClient::renderPlayers() {
         }
         element.second -> draw(renderer, camera->getXpos(), 0);
         TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
-        renderLives(playerUsernameYPos, element.second->getLives());
+        renderPointsAndLives(playerUsernameYPos, element.second->getPoints(), element.second->getLives());
+
         playerUsernameYPos += 20;
     }
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
-    renderLives(20, clientPlayer->getLives());
+    renderPointsAndLives(20, clientPlayer->getPoints(), clientPlayer->getLives());
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -347,8 +348,17 @@ void GameClient::pauseSoundEffects(int music, int sounds) {
     }
 }
 
-void GameClient::renderLives(int yPosition, int lives) {
-    int xPosition = 30;
+void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
+    int xPosition = 50;
+    std::string pointsStr = std::to_string(points);
+    pointsStr = std::string(DIGITS - pointsStr.length(), '0') + pointsStr;
+    bool success = textureManager->loadText(TEXT_POINTS_KEY, pointsStr, WHITE_COLOR, renderer);
+    if (!success) {
+        logger->error("Error loading points");
+    }
+    textureManager->printText(TEXT_POINTS_KEY, xPosition, yPosition, renderer);
+
+    xPosition += 60;
     for (int i = 0; i < lives; i++){
         TextureManager::Instance()->drawFrame("HEART",xPosition, yPosition - 30,300,300,0, renderer, SDL_FLIP_NONE);
         xPosition += 20;

@@ -23,6 +23,7 @@
 #define TEXT_DEFAULT_BACKGROUND_YPOS 10
 #define TEXT_SERVER_DISCONNECTED_VALUE "Lost connection to server"
 #define TEXT_LEVEL_COMPLETED_VALUE "Level completed!"
+#define TEXT_POINTS_KEY "points"
 
 #define BUMP_SOUND "BUMP"
 #define COIN_SOUND "COIN"
