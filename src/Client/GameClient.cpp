@@ -13,6 +13,7 @@ GameClient *GameClient::Instance() {
 
 bool GameClient::init(GameMsgParams initialize, const char* username) {
     this -> textureManager = TextureManager::Instance();
+    this -> musicManager = MusicManager::Instance();
     clientUsername = username;
     int cameraWidth = initialize.camera.width;
     int cameraHeight = initialize.camera.height;
@@ -54,7 +55,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
     }
 
     if(!this -> loadImages(initialize.paths)){ //cargo las imagenes
-        logger -> error("Cannot load the images in the client"); //TODO mejorar estos logs o volarlos
+        logger -> error("Cannot load the images in the client");
         return false;
     }
 
@@ -63,10 +64,13 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
         return false;
     }
 
-    if(!this -> createGameObjects(initialize.gameObjectsInit)){ //ToDo volar despues estos ifs
+    if(!this -> createGameObjects(initialize.gameObjectsInit)){
         logger -> error("Cannot create the objects in the client");
         return false;
     }
+
+    this -> loadSounds(initialize.soundPaths);
+    musicManager->playMusic(MUSIC);
 
     initBackground(renderer, initialize.stage);
     logger -> info("Init success");
@@ -114,6 +118,9 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 
     //Update camera position and timer
     camera -> setXPos(updateObjects.camera.xPos);
+    if (updateObjects.timer == 100){
+        musicManager->playSound(HURRY_UP_SOUND);
+    }
     background->setCurrentTime(updateObjects.timer);
 }
 
@@ -152,6 +159,16 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
         }
     }
     return true;
+}
+
+void GameClient::loadSounds(std::map<std::string, std::string> soundPaths) {
+    for (std::pair<std::string, std::string> element : soundPaths){
+        musicManager->addPath(element.first, element.second, false);
+    }
+
+    musicManager->addPath(MUSIC, "Sound_Effects/Music/SuperMarioBrosSong.wav", true);
+
+    musicManager->loadSounds();
 }
 
 bool GameClient::loadImages(std::map<std::string, std::vector<std::string>> imagePaths) {
@@ -208,10 +225,10 @@ void GameClient::createPlayer(GameObjectInit player) {
 
 void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType) {
     GameObject* tmp;
-    if (gameObject.type == GOT_COIN){
+    if (objectType == GOT_COIN){
         tmp = new Coin();
     }
-    else if (gameObject.type == GOT_PLATFORM_NORMAL){
+    else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
     }
     else{
@@ -252,6 +269,9 @@ GameClient::~GameClient() {
 
     delete this->textureManager;
     Logger::getInstance()->info("Texture Manager was deleted");
+
+    delete this->musicManager;
+    Logger::getInstance()->info("Music Manager was deleted");
 }
 
 void GameClient::clean() {
@@ -259,6 +279,7 @@ void GameClient::clean() {
     SDL_DestroyWindow(window);
     SDL_DestroyRenderer(renderer);
     textureManager->clearTextureMap();
+    musicManager -> clearSoundEffectsMaps();
     SDL_Quit();
 }
 
@@ -282,7 +303,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     for (std::pair<int, Player*> player: playersMap){
         player.second->restartPos(0, 380);
         player.second->setDirection(true);
-        player.second->changeState(new Normal(0, player.second->getFrameAmount()));
+        player.second->changeState(new Normal());
     }
     levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);
@@ -298,4 +319,28 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
 
 void GameClient::setServerDown() {
     serverIsDown = true;
+}
+
+void GameClient::pauseSoundEffects(int music, int sounds) {
+
+    if (music){
+        if (!musicManager->isMusicPaused()){
+            musicManager->pauseMusic();
+            Logger::getInstance() -> debug("The music has been paused");
+        }
+        else{
+            musicManager->unpauseMusic();
+            Logger::getInstance() -> debug("The music has been resumed");
+        }
+    }
+    if (sounds){
+        if (!musicManager->areSoundsMuted()){
+            musicManager->muteSounds();
+            Logger::getInstance() -> debug("The sounds have been muted");
+        }
+        else{
+            musicManager->unmuteSounds();
+            Logger::getInstance() -> debug("The sounds have been unmuted");
+        }
+    }
 }

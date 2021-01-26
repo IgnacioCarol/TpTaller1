@@ -10,10 +10,12 @@
 
 class Jumping: public CharacterState {
 public:
-    explicit Jumping(int currentFrame = 0, int frameAmount = 1);
+    explicit Jumping();
     void move(const Uint8* currentKeyStates, Player* player) override;
     void changeState(const Uint8* currentKeyStates, Player* player) override;
 
+private:
+    static const int JUMPING_FRAME = 4;
 };
 
 #endif //TPTALLER1_JUMPING_H

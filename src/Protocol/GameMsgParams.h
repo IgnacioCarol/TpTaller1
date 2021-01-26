@@ -55,6 +55,7 @@ struct GameMsgParams {
     CameraInit camera;
     StageInit stage;
     GameObjectsInit gameObjectsInit;
+    std::map<std::string, std::string> soundPaths;
 };
 
 struct GameMsgLevelChange {
