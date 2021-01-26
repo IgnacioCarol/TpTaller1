@@ -4,9 +4,9 @@
 
 #include "Dying.h"
 
-Dying::Dying(){
+Dying::Dying(int currentFrame){
     stateType = "DYING";
-    currentFrame = DYING_FRAME;
+    this -> currentFrame = (currentFrame) ? currentFrame : DYING_FRAME;
 }
 
 void Dying::move(const Uint8 *currentKeyStates, Player *player) {
@@ -22,5 +22,11 @@ void Dying::move(const Uint8 *currentKeyStates, Player *player) {
     else{
         initialY = player->getYPosition();
         countAux++;
+    }
+}
+
+void Dying::move(Enemy *enemy) {
+    if (counter++ == DIE_COUNTER){
+        enemy->die();
     }
 }
