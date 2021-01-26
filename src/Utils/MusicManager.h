@@ -9,7 +9,11 @@
 
 #include <string>
 #include <map>
+#ifdef __APPLE__
+#include "SDL_mixer.h"
+#elif
 #include "SDL2/SDL_mixer.h"
+#endif
 #include "../logger/logger.h"
 
 class MusicManager {
