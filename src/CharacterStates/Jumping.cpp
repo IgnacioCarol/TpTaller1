@@ -6,8 +6,9 @@
 #include "Jumping.h"
 #include "Normal.h"
 
-Jumping::Jumping(int currentFrame, int frameAmount) : CharacterState(currentFrame, frameAmount) {
+Jumping::Jumping(){
     stateType = "JUMPING";
+    currentFrame = JUMPING_FRAME;
 }
 
 void Jumping::move(const Uint8 *currentKeyStates, Player* player) {
@@ -18,6 +19,6 @@ void Jumping::move(const Uint8 *currentKeyStates, Player* player) {
 void Jumping::changeState(const Uint8 *currentKeyStates, Player* player) {
 
     if (player -> finishJump()){
-        player -> changeState(new Normal(0, framesAmount));
+        player -> changeState(new Normal());
     }
 }

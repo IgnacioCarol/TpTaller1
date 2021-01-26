@@ -10,8 +10,10 @@ json ServerParser::buildErrorMsg(std::string error) {
     return Protocol::buildErrorMsg(error);
 }
 
-json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::string>> imagePaths, Camera *camera,
-        BackgroundStage *stage, std::vector<GameObject *> gameObjects, std::vector<Player *> players) {
+json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::string>> imagePaths,
+                                    std::map<std::string, std::string> soundPaths, Camera *camera,
+                                    BackgroundStage *stage,
+                                    std::vector<GameObject *> gameObjects, std::vector<Player *> players) {
     CameraInit cameraInit = {
             camera->getCamera()->x,
             camera->getCamera()->y,
@@ -63,7 +65,8 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
         windowInit,
         cameraInit,
         stageInit,
-        gameObjectsInit
+        gameObjectsInit,
+        soundPaths
     };
 
     return Protocol::gameInitMsgToJson(gameMsgParams);

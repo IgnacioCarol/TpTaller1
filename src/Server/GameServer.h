@@ -60,6 +60,9 @@ public:
     void gameOver();
 
     void setChangeLevelFlag(bool setValue);
+
+    void addSoundsPaths();
+
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
@@ -88,6 +91,9 @@ private:
     std::vector <Player*>  players;
     bool playing = false;
     bool changeLevelFlag = false;
+
+    std::map<std::string, std::string> soundsPath;
+
 };
 
 

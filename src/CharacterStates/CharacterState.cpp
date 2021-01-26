@@ -6,6 +6,10 @@ CharacterState::CharacterState(int currentFrame, int framesAmount) {
     this -> framesAmount = framesAmount;
 }
 
+CharacterState::CharacterState() {
+
+}
+
 void CharacterState::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
                           SDL_Renderer *renderer, SDL_RendererFlip flip) {
 
@@ -23,10 +27,6 @@ void CharacterState::changeState(const Uint8 *currentKeyStates, Player *player) 
 
 void CharacterState::move(Enemy *enemy) {
 
-}
-
-int CharacterState::getCurrentFrame() {
-    return currentFrame;
 }
 
 int CharacterState::getFramesAmount() {

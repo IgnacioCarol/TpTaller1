@@ -47,6 +47,7 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
     addPath("paused", "Sprites/Players/pausedPlayer.png","Sprites/Players/pausedPlayer.png");
 
+    addSoundsPaths();
     initializeAllElementsOfGameServer(clients);
     json msg = getInitializationMsg();
     Server::getInstance()->broadcast(msg);
@@ -57,7 +58,8 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
 }
 
 json GameServer::getInitializationMsg() {
-    return ServerParser::buildGameInitMsg(getImagePaths(), getCamera(), this->stage, getGameObjects(), getPlayers());
+    return ServerParser::buildGameInitMsg(getImagePaths(), soundsPath, getCamera(),
+                                          this->stage, getGameObjects(), getPlayers());
 }
 
 int GameServer::getTimer() {
@@ -111,7 +113,7 @@ void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
     for (auto & player : players) {
         player->restartPos(0, 380);
-        player->changeState(new Normal(0, player->getFrameAmount()));
+        player->changeState(new Normal());
     }
     camera->restartPos();
 }
@@ -136,7 +138,7 @@ void GameServer::updatePlayers() {
     for (Player* player: players) {
         player->move();
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
-            player->changeState(new Paused(0, player->getFrameAmount(), false));
+            player->changeState(new Paused(false));
             changeLevelFlag = true;
         }
     }
@@ -173,7 +175,7 @@ void GameServer::unpausePlayer(PlayerClient *playerClient) {
     for (Player *player: getPlayers()) {
         if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
             Logger::getInstance()->info("Client " +  player->getUsername() + " is connected.");
-            player->changeState(new Normal(0,player->getFrameAmount()));
+            player->changeState(new Normal());
         }
     }
 }
@@ -183,8 +185,25 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
         if (player->getUsername() == playerClient->username) {
             if (player->getState() != "PAUSED") {
                 Logger::getInstance()->info("Client " + player->getUsername() + " is disconnected.");
-                player->changeState(new Paused(0,player->getFrameAmount()));
+                player->changeState(new Paused());
             }
         }
     }
+}
+
+void GameServer::addSoundsPaths() {
+    std::string path = "Sound_Effects/Sounds/";
+    std::string format = ".wav";
+    soundsPath[BUMP_SOUND] = path + "Bump" + format;
+    soundsPath[COIN_SOUND] = path + "Coin" + format;
+    soundsPath[GAME_OVER_SOUND] = path + "GameOver" + format;
+    soundsPath[HURRY_UP_SOUND] = path + "HurryUp" + format;
+    soundsPath[JUMP_MEDIUM_SOUND] = path + "JumpMedium" + format;
+    soundsPath[JUMP_SMALL_SOUND] = path + "JumpSmall" + format;
+    soundsPath[MARIO_DIES_SOUND] = path + "MarioDies" + format;
+    soundsPath[POWER_UP_SOUND] = path + "PowerUp" + format;
+    soundsPath[POWER_UP_APPEARS_SOUND] = path + "PowerUpAppears" + format;
+    soundsPath[STAGE_CLEAR_SOUND] = path + "stageClear" + format;
+    soundsPath[STOMP_SOUND] = path + "Stomp" + format;
+    soundsPath[WORLD_CLEAR_SOUND] = path + "worldClear" + format;
 }
