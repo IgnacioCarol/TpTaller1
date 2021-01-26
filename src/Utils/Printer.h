@@ -3,14 +3,15 @@
 
 #ifdef __APPLE__
 #define FONT_FILE_PATH "../resources/fonts/SuperMario256.ttf"
+#include <SDL_ttf.h>
 #else
 #define FONT_FILE_PATH "resources/fonts/SuperMario256.ttf"
+#include <SDL2/SDL_ttf.h>
 #endif
 #include "../logger/logger.h"
 #define FONT_PTR_SIZE 20
 
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
 #include <string>
 #include <map>
 
