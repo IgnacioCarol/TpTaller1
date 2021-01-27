@@ -1,11 +1,16 @@
 #ifndef __TextureManager__
 #define __TextureManager__
 
+#ifdef __APPLE__
+#include "SDL_image.h"
+#else
+#include "SDL2/SDL_image.h"
+#endif
+
 #include <iostream>
 #include <string>
 #include <map>
 #include "SDL2/SDL.h"
-#include "SDL2/SDL_image.h"
 #include "Utils/Printer.h"
 #include "../src/logger/logger.h"
 #include <vector>
