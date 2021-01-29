@@ -57,7 +57,9 @@ public:
 
     bool getDirection() override;
 
-    void addPoints(int newPoints);
+    void addPoints(int level, int newPoints);
+
+    int getLevelPoints(int level);
 
     int getLives();
 
@@ -77,6 +79,7 @@ private:
     int ticks;
     bool leftOrRightPressed;
     int lives = 3;
+    std::map<int, int> levelPoints;
 };
 
 

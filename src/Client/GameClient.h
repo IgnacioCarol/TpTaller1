@@ -32,6 +32,7 @@ public:
     bool isPlaying();
     void gameOver();
     void changeLevel(GameMsgLevelChange nextLevelConfig);
+    void showPartialScore();
     void clean();
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
@@ -70,8 +71,11 @@ private:
     std::vector<int> idsToRender;
     int levelLimit;
     bool levelCompleted = false;
+    bool showScore = false;
 
     static const int DIGITS = 6;
+
+    void loadScoreText();
 };
 
 

@@ -106,13 +106,13 @@ void GameClient::renderPlayers() {
         }
         element.second -> draw(renderer, camera->getXpos(), 0);
         TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
-        renderPointsAndLives(playerUsernameYPos, element.second->getPoints(), element.second->getLives());
+        renderPointsAndLives(playerUsernameYPos, element.second->getLevelPoints(background->getLevel()), element.second->getLives());
 
         playerUsernameYPos += 20;
     }
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
-    renderPointsAndLives(20, clientPlayer->getPoints(), clientPlayer->getLives());
+    renderPointsAndLives(20, clientPlayer->getLevelPoints(background->getLevel()), clientPlayer->getLives());
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -201,6 +201,8 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     }
     success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_LEVEL_COMPLETED, TEXT_LEVEL_COMPLETED_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_SCORE_TITLE_KEY, TEXT_SCORE_TITLE_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_NEXT_CONTINUE_KEY, TEXT_NEXT_CONTINUE_VALUE, WHITE_COLOR, renderer);
 
     return success;
 }
@@ -303,6 +305,8 @@ void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
 }
 
 void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
+    showScore = true;
+    showPartialScore();
     for (std::pair<int, Player*> player: playersMap){
         player.second->restartPos(0, 380);
         player.second->setDirection(true);
@@ -318,6 +322,44 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     gameObjectsMap.clear();
     idsToRender.clear();
     createGameObjects(nextLevelConfig.gameObjectsInit);
+}
+
+void GameClient::showPartialScore() {
+    loadScoreText();
+
+    while (showScore) {
+        static const unsigned char *keys = SDL_GetKeyboardState(NULL);
+
+        SDL_Event e;
+
+        while (SDL_PollEvent(&e) != 0) {
+            switch (e.type) {
+                case SDL_QUIT:
+                    throw exception();
+                case SDL_KEYDOWN:
+                    if (e.key.keysym.sym == SDLK_RETURN) {
+                        showScore = false; // Should display next level.
+                        return;
+                    }
+                    break;
+            }
+        }
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+        SDL_RenderClear(renderer);
+
+        textureManager->printText(TEXT_SCORE_TITLE_KEY, 360, 100, renderer);
+        int yCount = 4;
+        for (std::pair<int, Player*> player: playersMap) {
+            textureManager->printText(player.second->getTextureId() + "_text", 280, 50 * yCount, renderer);
+            textureManager->printText(player.second->getTextureId() + "_score", 480, 50 * yCount, renderer);
+            yCount++;
+        }
+        textureManager->printText(TEXT_NEXT_CONTINUE_KEY, 200, -100, renderer);
+
+        SDL_RenderPresent( renderer );
+        SDL_Delay(10);
+    }
 }
 
 void GameClient::setServerDown() {
@@ -362,5 +404,11 @@ void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
     for (int i = 0; i < lives; i++){
         TextureManager::Instance()->drawFrame("HEART",xPosition, yPosition - 30,300,300,0, renderer, SDL_FLIP_NONE);
         xPosition += 20;
+    }
+}
+
+void GameClient::loadScoreText() {
+    for (std::pair<int, Player*> player: playersMap) {
+        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getLevelPoints(background->getLevel())), WHITE_COLOR, renderer);
     }
 }

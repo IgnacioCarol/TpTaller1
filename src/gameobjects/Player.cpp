@@ -150,8 +150,12 @@ void Player::move() {
     characterState->move(keyStates, this);
 }
 
-void Player::addPoints(int newPoints) {
-    points += newPoints;
+void Player::addPoints(int level, int newPoints) {
+    levelPoints[level] += newPoints;
+}
+
+int Player::getLevelPoints(int level) {
+    return levelPoints[level];
 }
 
 int Player::getLives() {
