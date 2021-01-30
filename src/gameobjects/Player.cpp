@@ -24,6 +24,8 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     ticks = 0;
     leftOrRightPressed = false;
     atScene = true; //Maybe we never gonna ask this to the player, but never knows...
+    lives = 3;
+    playerPoints = 0;
 }
 
 void Player::run(int direction) {
@@ -157,11 +159,29 @@ void Player::completeMovement(const Uint8 *keyStates) {
     characterState->move(keyStates, this);
 }
 
-void Player::collideWith(GameObject *go) {
-
-}
-
 void Player::die() {
     restartPos(GameServer::Instance()->getCamera()->getXpos(), 380); //This is current die of the player, we should implement
     //lives and all of that, but this could stay for test enviroment
+}
+
+void Player::collideWith(GameObject *go) {
+    go->collideWith(this);
+}
+
+
+void Player::collideWith(Enemy *enemy) {
+    if(isPlayerBig) {
+        isPlayerBig = false;
+        return;
+    }
+    lives--;
+    if(lives) {
+        restartPos(GameServer::Instance()->getCamera()->getXpos(), 380); // appears at the beginning of the screen
+        return;
+    }
+    this->die();
+}
+
+void Player::addPoints(size_t points) {
+    playerPoints += points;
 }

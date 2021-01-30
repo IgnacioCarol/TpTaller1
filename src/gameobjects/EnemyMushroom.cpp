@@ -8,6 +8,7 @@ EnemyMushroom::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera,
     x = GameMap::getInstance()->getRandomX(y);
     Enemy::init(x, y, textureID, camera, state);
     type = GOT_ENEMY_MUSHROOM;
+    pointsToPlayer = POINTS_MUSHROOM;
 }
 
 void EnemyMushroom::move() {

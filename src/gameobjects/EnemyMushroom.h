@@ -3,6 +3,8 @@
 
 #include "Enemy.h"
 
+#define POINTS_MUSHROOM 500
+
 class CharacterState;
 
 class EnemyMushroom : public Enemy{

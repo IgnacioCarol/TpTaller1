@@ -6,11 +6,13 @@
 #include "../logger/logger.h"
 #include "../TextureManager.h"
 #include "GameObject.h"
+#include "Enemy.h"
 
 #define imgPlayer "Sprites/Players/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
 class CharacterState;
+class Enemy;
 
 class Player : public GameObject {
 public:
@@ -48,8 +50,11 @@ public:
     bool getDirection() override;
 
     void collideWith(GameObject *go) override;
+    void collideWith(Enemy* enemy);
 
     void die() override;
+
+    void addPoints(size_t points);
 
 private:
     //Image related
@@ -68,6 +73,13 @@ private:
     bool leftOrRightPressed;
 
     void completeMovement(const Uint8 *keyStates);
+
+    size_t playerPoints;
+
+    //Health related attributes
+    bool isPlayerBig;
+    int lives;
+
 
     bool isInIntersection(GameObject *pObject);
 };

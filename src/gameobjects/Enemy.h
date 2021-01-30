@@ -2,9 +2,10 @@
 #define TPTALLER1_ENEMY_H
 
 #include "GameObject.h"
-
+#include "Player.h"
 
 class CharacterState;
+class Player;
 
 class Enemy: public GameObject {
 public:
@@ -21,12 +22,16 @@ public:
 
     int getFrameAmount() override;
 
+    void collideWith(Player* player);
+
 protected:
     static const int enemyVelocity = 1;
     CharacterState* enemyState{};
     int direction = -enemyVelocity;
     bool flipFlag = false;
     SDL_Rect* cam{};
+
+    size_t pointsToPlayer;
 
     void collideWith(GameObject *go) override;
 };
