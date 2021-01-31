@@ -1,3 +1,4 @@
+#include <src/Utils/CollisionsManager.h>
 #include "Server.h"
 
 Server* Server::instance = nullptr;
@@ -306,6 +307,7 @@ bool Server::run() {
         game->updateGameObjects();
         game->updatePlayers();
 
+        CollisionsManager::Instance()->checkCollisions();
         game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {
             msg = getPlayersPositionMessage();
