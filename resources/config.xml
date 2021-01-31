@@ -48,7 +48,12 @@
                     </plataforma>
                 </plataformas>
                 <pozos>
-
+                    <pozo>
+                        <coordX>200</coordX>
+                        <coordY>300</coordY>
+                        <ancho>100</ancho>
+                        <alto>100</alto>
+                    </pozo>
                 </pozos>
             </nivel>
             <nivel>
