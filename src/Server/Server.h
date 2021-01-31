@@ -71,6 +71,8 @@ private:
     const int MAX_ACCEPT_RETRIES = 10;
 
     json getPlayersPositionMessage();
+
+    static vector<GameObject *> getPlayersAsGameObjects(const vector<Player *> &players);
 };
 
 

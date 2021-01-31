@@ -306,11 +306,7 @@ bool Server::run() {
         }
         game->updateGameObjects();
         game->updatePlayers();
-        std::vector<GameObject*> o;
-        for (auto pl : game->getPlayers()) {
-            o.push_back(pl);
-        }
-        CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), o);
+        CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), getPlayersAsGameObjects(game->getPlayers()));
         game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {
             msg = getPlayersPositionMessage();
@@ -348,6 +344,14 @@ bool Server::run() {
     this->running = false;
 
     return true;
+}
+
+std::vector<GameObject*> Server::getPlayersAsGameObjects(const std::vector<Player*>& players) {
+    std::vector<GameObject*> gos;
+    for (auto player : players) {
+        gos.push_back(player);
+    }
+    return gos;
 }
 
 bool Server::someoneIsConnected() {
