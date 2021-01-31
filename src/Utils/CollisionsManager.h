@@ -5,14 +5,13 @@
 #ifndef TPTALLER1_COLLISIONSMANAGER_H
 #define TPTALLER1_COLLISIONSMANAGER_H
 #include <src/gameobjects/GameObject.h>
-#include <src/Server/GameServer.h>
 
 class CollisionsManager {
 public:
     bool isInIntersection(GameObject *first, GameObject *pObject);
 
     static CollisionsManager *Instance();
-    void checkCollisions();
+    void checkCollisions(std::vector<GameObject *> goOnScreen, std::vector<GameObject *> players);
 
 private:
     static CollisionsManager* instance;

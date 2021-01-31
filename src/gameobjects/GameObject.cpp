@@ -62,7 +62,7 @@ GameObject::GameObject() {
 }
 
 bool GameObject::isAtScene(int camXPos) {
-    atScene = xPosition >= (camXPos - 70) && xPosition <= camXPos + 800;
+    atScene = (xPosition >= (camXPos - 70) && xPosition <= camXPos + 800) && (yPosition >= 0 && yPosition <= 600);
     return atScene;
 }
 

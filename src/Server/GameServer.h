@@ -16,6 +16,8 @@
 #include "../BackgroundStages/FirstStage.h"
 #include <unordered_set>
 
+class ServerParser;
+class Camera;
 class GameServer {
 public:
     static GameServer* Instance();
@@ -63,6 +65,7 @@ public:
     void setChangeLevelFlag(bool setValue);
 
     void deleteGameObject(GameObject *pObject);
+    void addSoundsPaths();
 
 private:
     GameServer(); //Private constructor to prevent instancing.
@@ -93,6 +96,8 @@ private:
     bool playing = false;
     bool changeLevelFlag = false;
     std::vector <GameObject*> gameObjectsOnScreen;
+    std::map<std::string, std::string> soundsPath;
+
 };
 
 

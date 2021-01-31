@@ -306,8 +306,11 @@ bool Server::run() {
         }
         game->updateGameObjects();
         game->updatePlayers();
-
-        CollisionsManager::Instance()->checkCollisions();
+        std::vector<GameObject*> o;
+        for (auto pl : game->getPlayers()) {
+            o.push_back(pl);
+        }
+        CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), o);
         game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {
             msg = getPlayersPositionMessage();

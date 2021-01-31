@@ -22,10 +22,7 @@ bool CollisionsManager::isInIntersection(GameObject *first, GameObject *pObject)
            (realYPosition <= objectYPosition && realYPosition >= objectYPosition - 30); //ToDo Implement variables
 }
 
-void CollisionsManager::checkCollisions() {
-    GameServer* gs = GameServer::Instance();
-    auto goOnScreen = gs->getGameObjectsOnScreen();
-    auto players = gs->getPlayers();
+void CollisionsManager::checkCollisions(std::vector<GameObject *> goOnScreen, std::vector<GameObject *> players) {
     for (auto go : goOnScreen) {
         auto type = go->getType();
         if (type == GOT_COIN || type == GOT_ENEMY_MUSHROOM || type == GOT_ENEMY_TURTLE) {

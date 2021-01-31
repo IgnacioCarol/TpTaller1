@@ -253,7 +253,6 @@ void * Client::broadcastToServer(void *arg) {
 }
 
 void Client::run() {
-    //Parser magico
     gameClient = GameClient::Instance();
     Logger::getInstance()->info("[Client:run] Game is playing: " + std::to_string(gameClient->isPlaying()));
     bool clientInitialized = false;
@@ -376,7 +375,7 @@ void Client::handleUserEvents() {
     SDL_Event e;
     const Uint8 * keyboardState = SDL_GetKeyboardState( NULL );
     bool keysAssigned = false;
-    int up, down, right, left;
+    int up, down, right, left, sound, music;
     up = down = right = left = false;
     while( SDL_PollEvent( &e ) != 0 ) {
         if (e.type  == SDL_QUIT ) {
@@ -388,6 +387,8 @@ void Client::handleUserEvents() {
             left = keyboardState[SDL_SCANCODE_LEFT];
             right = keyboardState[SDL_SCANCODE_RIGHT];
             down = keyboardState[SDL_SCANCODE_DOWN];
+            sound = keyboardState[SDL_SCANCODE_S];
+            music = keyboardState[SDL_SCANCODE_M];
             keysAssigned = true;
         }
     }
@@ -398,6 +399,11 @@ void Client::handleUserEvents() {
     msg["down"] = down;
     msg["left"] = left;
     msg["right"] = right;
+
+    if (music || sound){
+        gameClient->pauseSoundEffects(music, sound);
+    }
+
     if (!(up || down || left || right)) {
         if (this->didMove) {
             pushCommand(msg);

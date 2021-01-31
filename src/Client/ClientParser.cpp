@@ -53,7 +53,8 @@ GameMsgParams ClientParser::parseInitParams(json msg) {
         window,
         camera,
         stage,
-        { gameObjects }
+        { gameObjects },
+        contentJson["soundPaths"]
     };
 }
 

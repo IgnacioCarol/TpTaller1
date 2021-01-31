@@ -9,10 +9,12 @@
 #include "CharacterState.h"
 class Normal: public CharacterState{
 public:
-    explicit Normal(int currentFrame = 0, int frameAmount = 1);
+    explicit Normal();
     void move(const Uint8* currentKeyStates, Player* player) override;
     void changeState(const Uint8* currentKeyStates, Player* player) override;
 
+private:
+    static const int NORMAL_FRAME = 0;
 };
 
 
