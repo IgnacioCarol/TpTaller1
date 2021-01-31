@@ -16,4 +16,8 @@ void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     delayCounter++;
 }
 
+void Coin::collideWith(Player *player) {
+    player->addPoints(POINTS_COIN);
+}
+
 Coin::~Coin() = default;

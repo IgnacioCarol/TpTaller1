@@ -3,6 +3,7 @@
 
 #include "Enemy.h"
 
+#define POINTS_TURTLE 1000
 
 class EnemyTurtle : public Enemy{
 public:
