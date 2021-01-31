@@ -19,7 +19,8 @@ enum GameObjectType {
     GOT_ENEMY_TURTLE,
     GOT_PLATFORM_NORMAL,
     GOT_PLATFORM_SURPRISE,
-    GOT_PLAYER
+    GOT_PLAYER,
+    GOT_HOLE
 };
 
 class GameObject {

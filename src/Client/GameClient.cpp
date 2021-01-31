@@ -1,4 +1,5 @@
 #include "GameClient.h"
+#include "../gameobjects/Hole.h"
 
 
 GameClient* GameClient::instance = 0;
@@ -143,6 +144,8 @@ void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
         gameObject->setState(gameObjectUpdate.state);
         gameObject->setDirection(gameObjectUpdate.direction);
     }
+
+    idsToRender.push_back(100000);
 }
 
 bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
@@ -158,6 +161,16 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createStaticObject(gameObject, type);
         }
     }
+
+    // Just for test
+    GameObjectInit holeTest;
+    holeTest.type = GOT_HOLE;
+    holeTest.id = 100000;
+    holeTest.xPos = 100;
+    holeTest.yPos = 200;
+    holeTest.frameAmount = 1;
+    holeTest.imageId = "hole";
+    createStaticObject(holeTest, GOT_HOLE);
     return true;
 }
 
@@ -231,8 +244,12 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
     }
-    else{
+    else if (objectType == GOT_PLATFORM_SURPRISE){
         tmp = new PlatformSurprise();
+    } else {
+        Hole * h = new Hole(); //ToDo deshardcodear, mañana intentar hacerlo prolijamente siguiendo la arq server-client
+        h->setDimensions(100, 100);
+        tmp = h;
     }
 
     if (tmp != nullptr){

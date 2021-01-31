@@ -70,6 +70,17 @@ void TextureManager::draw(std::string ID, int x, int y, int width, int height, S
     SDL_Rect  srcRect; //Aca defino size de la imagen
     SDL_Rect destRect; //Aca donde va a ir, se mapea para ajustarse el tamanio
 
+    if (ID == "hole") {
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
+        SDL_Rect rect; // the rectangle
+        rect.h = height;
+        rect.w = width;
+        rect.x = x;
+        rect.y = y;
+        SDL_RenderFillRect(renderer, &rect);
+        return;
+    }
+
     SDL_Texture* texture = textureMap[ID];
     SDL_QueryTexture(texture, nullptr, nullptr, &srcRect.w, &srcRect.h);
 
@@ -114,6 +125,18 @@ void TextureManager::drawBackgroundWithCamera(int width, int height, std::string
 void
 TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
                           SDL_RendererFlip flip) {
+
+    if (ID == "hole") {
+        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
+        SDL_Rect rect; // the rectangle
+        rect.h = height;
+        rect.w = width;
+        rect.x = x;
+        rect.y = y;
+        SDL_RenderFillRect(renderer, &rect);
+        return;
+    }
+
     SDL_Rect srcRect;
     SDL_Rect destRect;
 
