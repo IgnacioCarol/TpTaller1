@@ -275,6 +275,7 @@ void Client::run() {
                 GameMsgParams initParams;
                 GameMsgPlaying updateParams;
                 GameMsgLevelChange updateLevel;
+                GameMsgShowPartialScore partialScoreParams;
 
                 switch(protocol) {
                     case GAME_INITIALIZE_CMD:
@@ -291,6 +292,13 @@ void Client::run() {
                         break;
                     case GAME_OVER_CMD:
                         gameClient->gameOver();
+                        break;
+                    case GAME_SHOW_PARTIAL_SCORE_CMD:
+                        partialScoreParams = ClientParser::parsePartialScoreParams(receivedMessage);
+                        gameClient -> showPartialScore(partialScoreParams);
+                        break;
+                    case GAME_STOP_PARTIAL_SCORE_CMD:
+                        gameClient -> stopShowPartialScore();
                         break;
                     case GAME_CHANGE_LEVEL_CMD:
                         updateLevel = ClientParser::parseChangeLevelParams(receivedMessage);

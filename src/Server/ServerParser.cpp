@@ -146,3 +146,27 @@ json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, Ba
 
     return Protocol::gameChangeLevelMsgToJson(gameMsgLevelChange);
 }
+
+json ServerParser::buildPartialScore(std::vector<Player*> players, BackgroundStage *stage) {
+    std::vector<GameMsgPlayersScore> playersScore;
+
+    for (int i = 1; i <= players.size(); i++) {
+        GameMsgPlayersScore playerMsg = {
+                players[i]->getId(),
+                players[i]->getLevelPoints(stage->getLevel()),
+                i //Expecting players to be sorted by position
+        };
+        playersScore.push_back(playerMsg);
+    }
+
+    GameMsgShowPartialScore gameMsgShowPartialScore = {
+            stage->getLevel(),
+            playersScore
+    };
+
+    return Protocol::gameShowPartialScoreMsgToJson(gameMsgShowPartialScore);
+}
+
+json ServerParser::buildStopPartialScore() {
+    return Protocol::buildContentMsg(0, GAME_STOP_PARTIAL_SCORE_CMD, {});
+}

@@ -4,6 +4,7 @@
 #include <src/CharacterStates/Normal.h>
 #endif
 #include "GameServer.h"
+#include "../Utils/Score.h"
 
 GameServer* GameServer::instance = nullptr;
 
@@ -140,12 +141,16 @@ void GameServer::updatePlayers() {
         player->move();
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
             player->changeState(new Paused(false));
-            changeLevelFlag = true;
+            sendScore = true;
         }
     }
 
     for (Player* player: players){
-        changeLevelFlag &= (player->getState() == "FINISH" || player->getState() == "PAUSED");
+        sendScore &= (player->getState() == "FINISH" || player->getState() == "PAUSED");
+    }
+
+    if (sendScore) {
+        score->startLevelScore(stage->getLevel());
     }
 
     if (changeLevelFlag) nextStage();
@@ -207,4 +212,21 @@ void GameServer::addSoundsPaths() {
     soundsPath[STAGE_CLEAR_SOUND] = path + "stageClear" + format;
     soundsPath[STOMP_SOUND] = path + "Stomp" + format;
     soundsPath[WORLD_CLEAR_SOUND] = path + "worldClear" + format;
+}
+
+bool GameServer::shouldSendScore() {
+    return sendScore;
+}
+
+std::vector<Player*> GameServer::getPlayersSortedByScore() {
+    std::sort(players.begin(), players.end());
+    return players;
+}
+
+Score* GameServer::getScore() {
+    return score;
+}
+
+void GameServer::updateSendScore() {
+    sendScore = !score->isShowScoreTimeOver();
 }

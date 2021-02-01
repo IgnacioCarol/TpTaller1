@@ -123,6 +123,13 @@ void Config::parseStage(ptree pt) {
 
         this->stage.levels.push_back(level);
     }
+
+    validateTags(XML_STAGE_SCORE_TAG, validScoreTags, pt.get_child(XML_STAGE_SCORE_TAG));
+    this->stage.score.time = pt.get<int>(XML_STAGE_SCORE_TIME);
+    if (this->stage.score.time < 1) {
+        Logger::getInstance()->error("Invalid time configuration for score view " + to_string(this->stage.score.time) + ". Expected greater than 0, setting default to 10");
+        this->stage.score.time = 10;
+    }
 }
 
 void Config::parseEnemies(Level *level, ptree pt) {

@@ -63,12 +63,29 @@ struct GameMsgLevelChange {
     GameObjectsInit gameObjectsInit;
 };
 
+struct GameMsgPlayersScore {
+    int id;
+    int position;
+    int score;
+
+    bool operator <(const GameMsgPlayersScore& p) const { //In order to sort by position, lowest first
+        return position < p.position;
+    }
+};
+
+struct GameMsgShowPartialScore {
+    int level;
+    std::vector<GameMsgPlayersScore> playersPartialScore;
+};
+
 struct GamePlayerPlaying {
     int id;
     int xPos;
     int yPos;
     std::string state;
     bool direction;
+    int points;
+    int lives;
 };
 
 struct GameObjectPlaying {
@@ -77,6 +94,8 @@ struct GameObjectPlaying {
     int yPos;
     std::string state;
     bool direction;
+    int points;
+    int lives;
 };
 
 struct CameraDuringGame {

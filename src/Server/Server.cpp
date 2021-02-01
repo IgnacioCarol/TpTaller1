@@ -325,14 +325,22 @@ bool Server::run() {
 
             this->popCommand();
         }
-        //ToDo change game state with msg
-        game->updateGameObjects();
-        game->updatePlayers();
 
-        game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {
-            msg = getPlayersPositionMessage();
+            if (game->shouldSendScore() && !game->getScore()->isShowScoreTimeOver()) {
+                msg = ServerParser::buildPartialScore(game->getPlayersSortedByScore(), game->getBackgroundStage());
+            } else if (game->shouldSendScore() && game->getScore()->isShowScoreTimeOver()) {
+                game->updateSendScore();
+                msg = ServerParser::buildStopPartialScore();
+            } else {
+                game->updateGameObjects();
+                game->updatePlayers();
+                game->getCamera()->update(game->getPlayers());
+                msg = getPlayersPositionMessage();
+            }
             broadcast(msg);
+        } else {
+            //Game over view!!
         }
 
         size_t waitTime = 0;

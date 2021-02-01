@@ -32,7 +32,8 @@ public:
     bool isPlaying();
     void gameOver();
     void changeLevel(GameMsgLevelChange nextLevelConfig);
-    void showPartialScore();
+    void stopShowPartialScore();
+    void showPartialScore(GameMsgShowPartialScore params);
     void clean();
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
@@ -52,6 +53,7 @@ private:
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
     void renderPointsAndLives(int yPosition, int points, int lives);
+    void renderPartialScore();
 
 
     SDL_Window* window;

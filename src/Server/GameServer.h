@@ -14,6 +14,7 @@
 #include "ServerParser.h"
 #include "Server.h"
 #include "../BackgroundStages/FirstStage.h"
+#include "../Utils/Score.h"
 
 
 class GameServer {
@@ -63,6 +64,14 @@ public:
 
     void addSoundsPaths();
 
+    bool shouldSendScore();
+
+    std::vector<Player*> getPlayersSortedByScore();
+
+    Score* getScore();
+
+    void updateSendScore();
+
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
@@ -74,6 +83,7 @@ private:
     Logger* logger = Logger::getInstance();
     Config* config = Config::getInstance();
     Factory* factory = Factory::getInstance();
+    Score* score = Score::getInstance();
     Camera* camera;
 
     Window window;
@@ -91,6 +101,7 @@ private:
     std::vector <Player*>  players;
     bool playing = false;
     bool changeLevelFlag = false;
+    bool sendScore = false;
 
     std::map<std::string, std::string> soundsPath;
 
