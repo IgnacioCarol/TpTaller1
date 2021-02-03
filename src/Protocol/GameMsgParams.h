@@ -43,6 +43,8 @@ struct GameObjectInit {
     int xPos;
     int yPos;
     int frameAmount;
+    int height;
+    int width;
 };
 
 struct GameObjectsInit {

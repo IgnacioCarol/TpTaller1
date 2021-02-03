@@ -18,6 +18,10 @@ int Hole::getHeight() {
     return this->height;
 }
 
+int Hole::getWidth() {
+    return this->width;
+}
+
 void Hole::setDimensions(int width, int height) {
     this->width = width;
     this->height = height;

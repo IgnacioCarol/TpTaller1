@@ -121,6 +121,9 @@ void Config::parseStage(ptree pt) {
         level.coins.clear();
         Config::parseCoins(&level, level_pt);
 
+        level.coins.clear();
+        Config::parseHoles(&level, level_pt);
+
         this->stage.levels.push_back(level);
     }
 }
@@ -202,6 +205,48 @@ void Config::parsePlatforms(Level *level, ptree pt) {
         }
 
         level->platforms.push_back(platform);
+    }
+}
+
+void Config::parseHoles(Level *level, ptree pt) {
+    for (const auto &e : pt.get_child(XML_STAGE_LEVEL_HOLES)) {
+        xmlHole hole;
+        string hole_name;
+        ptree hole_pt;
+        tie(hole_name, hole_pt) = e;
+
+        if (hole_name != XML_STAGE_LEVEL_HOLE_NAME) {
+            throw ConfigException("Invalid hole tag, found: " + hole_name);
+        }
+
+        validateTags(XML_STAGE_LEVEL_HOLE_NAME, validHoleTags, hole_pt);
+
+        hole.coordX = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_COORDX);
+        if (hole.coordX < 0) {
+            Logger::getInstance()->error("Invalid hole coordX " + to_string(hole.coordX)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.coordX = 0;
+        }
+        hole.coordY = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_COORDY);
+        if (hole.coordY < 1) {
+            Logger::getInstance()->error("Invalid hole coordY " + to_string(hole.coordY)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.coordY = 0;
+        }
+        hole.width = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_WIDTH);
+        if (hole.width < 1) {
+            Logger::getInstance()->error("Invalid hole width " + to_string(hole.width)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.width = 0;
+        }
+        hole.height = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_HEIGHT);
+        if (hole.height < 1) {
+            Logger::getInstance()->error("Invalid hole height " + to_string(hole.height)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.height = 0;
+        }
+
+        level->holes.push_back(hole);
     }
 }
 

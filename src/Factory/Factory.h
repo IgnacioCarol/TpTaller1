@@ -21,6 +21,7 @@ static const std::string FLYING_KOOPA_ID = "flyingKoopa";
 static const std::string GOOMBA_ID = "goomba";
 static const std::string GOOMBA_DARK_ID = "goombaDark";
 static const std::string COIN_ID = "coinsSprites";
+static const std::string HOLE_ID = "hole";
 
 //Players images paths
 static const std::string PLAYER_0_IMG_PATH = "Sprites/Players/mario.png";

@@ -144,8 +144,6 @@ void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
         gameObject->setState(gameObjectUpdate.state);
         gameObject->setDirection(gameObjectUpdate.direction);
     }
-
-    idsToRender.push_back(100000);
 }
 
 bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
@@ -158,19 +156,10 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createPlayer(gameObject);
         }
         else{
-            createStaticObject(gameObject, type);
+            createStaticObject(gameObject, type); //ToDo queda ver como pasar el Width y el Height desde el client
         }
     }
 
-    // Just for test
-    GameObjectInit holeTest;
-    holeTest.type = GOT_HOLE;
-    holeTest.id = 100000;
-    holeTest.xPos = 100;
-    holeTest.yPos = 200;
-    holeTest.frameAmount = 1;
-    holeTest.imageId = "hole";
-    createStaticObject(holeTest, GOT_HOLE);
     return true;
 }
 

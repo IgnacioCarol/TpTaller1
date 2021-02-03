@@ -31,6 +31,7 @@ public:
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
     virtual void move();
     virtual int getHeight();
+    virtual int getWidth();
     virtual int getFrameAmount();
     int getId();
     GameObjectType getType();

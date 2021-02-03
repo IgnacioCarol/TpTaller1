@@ -8,6 +8,7 @@
 #include "../CharacterStates/EnemyMovement.h"
 #include "../Game.h"
 #include "../Server/GameServer.h"
+#include "../gameobjects/Hole.h"
 
 Factory* Factory::instance = nullptr;
 
@@ -76,6 +77,17 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         }
     }
 
+    // Init Holes
+    for(auto xmlHole : levelConfig.holes) {
+        Hole * h = new Hole();
+        h->init(xmlHole.coordX, xmlHole.coordY, HOLE_ID);
+        h->setDimensions(xmlHole.width, xmlHole.height);
+        tmp = h;
+        actors.push_back(tmp);
+        Logger::getInstance()->debug("Hole created correctly");
+    }
+
+
     for(auto enemies : levelConfig.enemies) {
         for(long i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
@@ -105,7 +117,6 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             }
         }
     }
-
 
     return actors;
 }
