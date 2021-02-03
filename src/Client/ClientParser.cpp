@@ -43,7 +43,9 @@ GameMsgParams ClientParser::parseInitParams(json msg) {
                 gameObjectJson["username"],
                 gameObjectJson["xPos"],
                 gameObjectJson["yPos"],
-                gameObjectJson["frameAmount"]
+                gameObjectJson["frameAmount"],
+                gameObjectJson["height"],
+                gameObjectJson["width"]
         };
         gameObjects.push_back(gameObjectInit);
     }

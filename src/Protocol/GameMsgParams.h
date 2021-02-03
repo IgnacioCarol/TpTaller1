@@ -14,6 +14,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GameObjectType, {
     { GOT_PLATFORM_NORMAL, "normal_platform" },
     { GOT_PLATFORM_SURPRISE, "surprise_platform" },
     { GOT_PLAYER, "player" },
+    { GOT_HOLE, "hole" },
 })
 
 struct WindowInit {
