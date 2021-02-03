@@ -51,8 +51,8 @@
                     <pozo>
                         <coordX>250</coordX>
                         <coordY>100</coordY>
-                        <ancho>100</ancho>
-                        <alto>400</alto>
+                        <ancho>10</ancho>
+                        <alto>10</alto>
                     </pozo>
                 </pozos>
             </nivel>

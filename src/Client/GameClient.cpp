@@ -156,7 +156,7 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createPlayer(gameObject);
         }
         else{
-            createStaticObject(gameObject, type); //ToDo queda ver como pasar el Width y el Height desde el client
+            createStaticObject(gameObject, type);
         }
     }
 
@@ -236,8 +236,8 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     else if (objectType == GOT_PLATFORM_SURPRISE){
         tmp = new PlatformSurprise();
     } else {
-        Hole * h = new Hole(); //ToDo deshardcodear, mañana intentar hacerlo prolijamente siguiendo la arq server-client
-        h->setDimensions(100, 100);
+        Hole * h = new Hole();
+        h->setDimensions(gameObject.width, gameObject.height);
         tmp = h;
     }
 
