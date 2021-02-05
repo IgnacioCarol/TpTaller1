@@ -49,10 +49,10 @@
                 </plataformas>
                 <pozos>
                     <pozo>
-                        <coordX>250</coordX>
-                        <coordY>100</coordY>
-                        <ancho>100</ancho>
-                        <alto>400</alto>
+                        <coordX>400</coordX>
+                        <coordY>500</coordY>
+                        <ancho>200</ancho>
+                        <alto>100</alto>
                     </pozo>
                 </pozos>
             </nivel>

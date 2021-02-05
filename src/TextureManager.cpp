@@ -71,7 +71,8 @@ void TextureManager::draw(std::string ID, int x, int y, int width, int height, S
     SDL_Rect destRect; //Aca donde va a ir, se mapea para ajustarse el tamanio
 
     if (ID == "hole") {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
+        SDL_SetRenderDrawColor(renderer, 107, 140, 255, 255); // Sky blue
+//        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
         SDL_Rect rect; // the rectangle
         rect.h = height;
         rect.w = width;
@@ -127,7 +128,8 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
                           SDL_RendererFlip flip) {
 
     if (ID == "hole") {
-        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
+        SDL_SetRenderDrawColor(renderer, 107, 140, 255, 255); // Sky blue
+//        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
         SDL_Rect rect; // the rectangle
         rect.h = height;
         rect.w = width;
