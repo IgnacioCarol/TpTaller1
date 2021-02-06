@@ -24,6 +24,7 @@
 
 class CharacterState;
 class Enemy;
+class PlatformNormal;
 
 class Player : public GameObject {
 public:
@@ -60,12 +61,16 @@ public:
 
     bool getDirection() override;
 
-    void addPoints(int level, int newPoints);
-
     void collideWith(GameObject *go) override;
-    void collideWith(Enemy* enemy);
 
+    //Collisions
+    void collideWith(Enemy* enemy);
+    void changeLevel();
+    void addPoints(int newPoints);
     void die() override;
+
+    std::pair<int, int> getPosition();
+
 
 private:
     //Image related
@@ -85,14 +90,14 @@ private:
 
     void completeMovement(const Uint8 *keyStates);
 
-    size_t playerPoints;
-
     //Health related attributes
     bool isPlayerBig;
     int lives = 3;
+
+    //Score related attributes
+    int level = 1;
     int scorePosition;
     int actualScore;
-    std::map<int, int> levelPosition;
     std::map<int, int> levelPoints;
 
 

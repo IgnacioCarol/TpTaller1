@@ -13,7 +13,6 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     ticks = 0;
     leftOrRightPressed = false;
     atScene = true; //Maybe we never gonna ask this to the player, but never knows...
-    playerPoints = 0;
 }
 
 void Player::run(int direction) {
@@ -149,9 +148,14 @@ void Player::move() {
     completeMovement(keyStates);
 }
 
-void Player::addPoints(int level, int newPoints) {
+void Player::addPoints(int newPoints) {
     actualScore += newPoints;
     levelPoints[level] += newPoints;
+}
+
+void Player::changeLevel() {
+    level += 1;
+    levelPoints[level] = 0; //TODO que Dani C revise esto que era la que lo estaba haciendo
 }
 
 void Player::completeMovement(const Uint8 *keyStates) {
@@ -181,5 +185,9 @@ void Player::collideWith(Enemy *enemy) {
         return;
     }
     this->die();
+}
+
+std::pair<int, int> Player::getPosition() {
+    return std::make_pair(xPosition, yPosition);
 }
 
