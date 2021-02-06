@@ -20,6 +20,8 @@ Server::~Server() {
     pthread_mutex_destroy(&this->commandMutex);
     pthread_mutex_destroy(&this->clientsMutex);
     pthread_mutex_destroy(&this->waitingRoomMutex);
+    pthread_join(loginThread, nullptr);
+    pthread_join(acceptorThread, nullptr);
 }
 
 Server::Server() {
@@ -293,7 +295,6 @@ bool Server::run() {
             ss << "[thread:run] " << "msg: " << msg.dump();
             Logger::getInstance()->debug(ss.str());
             std::string username = msg["username"].get<std::string>();
-            GameServer::Instance()->updateGameObjectsOnScreen();
             for (Player* player : game->getPlayers()) {
                 if (player->getUsername() == username) {
                     std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
@@ -304,6 +305,7 @@ bool Server::run() {
 
             this->popCommand();
         }
+        game->updateGameObjectsOnScreen();
         game->updateGameObjects();
         game->updatePlayers();
         CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), getPlayersAsGameObjects(game->getPlayers()));
@@ -319,7 +321,7 @@ bool Server::run() {
             waitTime++;
         }
         ss.str("");
-        ss << "[Server][thread:run] extra_time =" << waitTime;
+        ss << "[Server][thread:run] extra_time = " << waitTime;
         Logger::getInstance()->debug(ss.str());
 
     }

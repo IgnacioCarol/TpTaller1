@@ -15,11 +15,11 @@ CollisionsManager *CollisionsManager::Instance() {
 
 bool CollisionsManager::isInIntersection(GameObject *first, GameObject *pObject) {
     int objectXPosition = pObject->getXPosition();
-    int objectYPosition = pObject->getYPosition();
-    int realYPosition = first->getYPosition() + 45; //Fixme this is to make a semi starting floor, should be fixed
+    int objectYPosition = pObject->getYPosition() + pObject->getFloorPosition();
+    int realYPosition = first->getYPosition() + first->getFloorPosition();
     int xPosition = first->getXPosition();
-    return (xPosition >= objectXPosition && xPosition <= objectXPosition + 30) &&
-           (realYPosition <= objectYPosition && realYPosition >= objectYPosition - 30); //ToDo Implement variables
+    return (abs(xPosition - objectXPosition) < 60) &&
+           (abs(realYPosition - objectYPosition) < 30); //ToDo Implement variables
 }
 
 void CollisionsManager::checkCollisions(std::vector<GameObject *> goOnScreen, std::vector<GameObject *> players) {
