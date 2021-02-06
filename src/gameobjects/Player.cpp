@@ -122,9 +122,8 @@ void Player::setState(std::string state) {
             changeState(new Paused(state == "PAUSED"));
         }
         else{
-            MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
-            changeState(new Dying());
-            loseLife();
+            changeState(new Dying(0, state == "DYING_FALLING"));
+            (!loseLife()) ? MusicManager::Instance()->playSound(GAME_OVER_SOUND) : MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
         }
     }
 }
@@ -160,10 +159,21 @@ int Player::getLives() {
     return lives;
 }
 
-void Player::loseLife() {
+int Player::loseLife() {
     lives = (0 > lives - 1) ? 0 : lives - 1;
+    return lives;
 }
 
 bool Player::itsAlive() {
     return lives != 0;
+}
+
+void Player::dieFalling() {
+    changeState(new Dying(0, true));
+    loseLife();
+}
+
+void Player::die() {
+    changeState(new Dying());
+    loseLife();
 }

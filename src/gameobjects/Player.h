@@ -61,9 +61,13 @@ public:
 
     int getLives();
 
-    void loseLife();
+    int loseLife();
 
     bool itsAlive();
+
+    void dieFalling();
+
+    void die();
 
 private:
     //Image related

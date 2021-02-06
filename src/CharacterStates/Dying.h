@@ -12,7 +12,7 @@
 
 class Dying: public CharacterState{
 public:
-    explicit Dying(int currentFrame = 0);
+    explicit Dying(int currentFrame = 0, bool falling = false);
     void move(Enemy* enemy) override;
     void move(const Uint8 *currentKeyStates, Player *player) override;
 
