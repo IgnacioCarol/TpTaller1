@@ -61,6 +61,10 @@ public:
 
     int getLives();
 
+    void loseLife();
+
+    bool itsAlive();
+
 private:
     //Image related
     std::string username;

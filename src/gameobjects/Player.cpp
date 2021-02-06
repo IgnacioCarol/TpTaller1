@@ -64,8 +64,10 @@ void Player::move(std::vector<int> vector) {
 }
 
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+    if (itsAlive()){
+        SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+    }
 }
 
 bool Player::isJumping() {
@@ -103,7 +105,6 @@ void Player::setDirection(bool direction) {
 
 void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
-        int framesAmount = characterState->getFramesAmount();
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
             changeState(new Jumping());
@@ -123,6 +124,7 @@ void Player::setState(std::string state) {
         else{
             MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
             changeState(new Dying());
+            loseLife();
         }
     }
 }
@@ -156,4 +158,12 @@ void Player::addPoints(int newPoints) {
 
 int Player::getLives() {
     return lives;
+}
+
+void Player::loseLife() {
+    lives = (0 > lives - 1) ? 0 : lives - 1;
+}
+
+bool Player::itsAlive() {
+    return lives != 0;
 }

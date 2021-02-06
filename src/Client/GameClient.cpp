@@ -107,12 +107,14 @@ void GameClient::renderPlayers() {
         element.second -> draw(renderer, camera->getXpos(), 0);
         TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
         renderPointsAndLives(playerUsernameYPos, element.second->getPoints(), element.second->getLives());
-
         playerUsernameYPos += 20;
     }
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
     renderPointsAndLives(20, clientPlayer->getPoints(), clientPlayer->getLives());
+    if (!clientPlayer->itsAlive()){
+        textureManager->printText(TEXT_GAME_OVER, 300, 300, renderer);
+    }
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -201,6 +203,7 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     }
     success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_LEVEL_COMPLETED, TEXT_LEVEL_COMPLETED_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_GAME_OVER, TEXT_GAME_OVER_VALUE, WHITE_COLOR, renderer);
 
     return success;
 }
