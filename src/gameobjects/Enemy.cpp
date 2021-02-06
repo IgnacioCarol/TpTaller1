@@ -62,7 +62,7 @@ void Enemy::collideWith(GameObject *go) {
 
 void Enemy::collideWith(Player *player) {
     if (player->getYPosition() + 45 + 15 < yPosition) { //TODO preguntar Nacho por que carajo hay un +45 + 15
-        player->addPoints(pointsToPlayer);
+       // player->addPoints(pointsToPlayer);
         this->die();
     } else {
         player->collideWith(this);

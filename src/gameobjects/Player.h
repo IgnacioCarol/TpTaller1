@@ -60,12 +60,12 @@ public:
 
     bool getDirection() override;
 
+    void addPoints(int level, int newPoints);
+
     void collideWith(GameObject *go) override;
     void collideWith(Enemy* enemy);
 
     void die() override;
-
-    void addPoints(size_t points);
 
 private:
     //Image related
@@ -89,7 +89,11 @@ private:
 
     //Health related attributes
     bool isPlayerBig;
-    int lives;
+    int lives = 3;
+    int scorePosition;
+    int actualScore;
+    std::map<int, int> levelPosition;
+    std::map<int, int> levelPoints;
 
 
     bool isInIntersection(GameObject *pObject);

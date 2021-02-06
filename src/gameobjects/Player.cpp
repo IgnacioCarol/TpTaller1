@@ -13,7 +13,6 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     ticks = 0;
     leftOrRightPressed = false;
     atScene = true; //Maybe we never gonna ask this to the player, but never knows...
-    lives = 3;
     playerPoints = 0;
 }
 
@@ -150,6 +149,11 @@ void Player::move() {
     completeMovement(keyStates);
 }
 
+void Player::addPoints(int level, int newPoints) {
+    actualScore += newPoints;
+    levelPoints[level] += newPoints;
+}
+
 void Player::completeMovement(const Uint8 *keyStates) {
     auto imageMap = TextureManager::Instance()->getTextureMap();
     characterState->changeState(keyStates, this);
@@ -158,7 +162,7 @@ void Player::completeMovement(const Uint8 *keyStates) {
 
 void Player::die() {
     restartPos(cam->x, 380); //This is current die of the player, we should implement
-    //lives and all of that, but this could stay for test enviroment
+    //lives and all of that, but this could stay for test environment
 }
 
 void Player::collideWith(GameObject *go) {
@@ -179,6 +183,3 @@ void Player::collideWith(Enemy *enemy) {
     this->die();
 }
 
-void Player::addPoints(size_t points) {
-    playerPoints += points;
-}
