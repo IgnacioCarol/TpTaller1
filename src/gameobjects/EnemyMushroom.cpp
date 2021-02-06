@@ -26,3 +26,7 @@ void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_
 void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     this->draw(renderer, cameraX, cameraY, ENEMY_WIDTH, ENEMY_HEIGHT);
 }
+
+int EnemyMushroom::getFloorPosition() {
+    return -45;
+}

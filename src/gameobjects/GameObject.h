@@ -46,6 +46,9 @@ public:
     virtual void collideWith(GameObject *go);
 
     virtual void die();
+
+    virtual int getFloorPosition();
+
 protected:
     //To manage the movement
     int xPosition;

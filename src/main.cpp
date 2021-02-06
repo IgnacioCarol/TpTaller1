@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
         }
     } else {
         Logger::getInstance()->info("[Client] Initializing in client mode");
-        auto *client = new Client(ipAddr, to_string(port).c_str());
+        auto *client = new Client(ipAddr, to_string(port));
         try {
             client->init();
             if (client->login()) {

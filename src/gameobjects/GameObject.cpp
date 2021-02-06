@@ -81,3 +81,7 @@ void GameObject::die() {
 void GameObject::collideWith(GameObject *go) {
     die();
 }
+
+int GameObject::getFloorPosition() {
+    return 0;
+}

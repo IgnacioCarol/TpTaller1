@@ -52,7 +52,7 @@ bool Enemy::getDirection() {
 }
 
 void Enemy::collideWith(GameObject *go) {
-    if (go->getYPosition() + 45 + 15 < yPosition) {
+    if (go->getYPosition() + go->getFloorPosition() + 5 < yPosition + getFloorPosition()) {
         this->die();
     } else {
         go->die();
