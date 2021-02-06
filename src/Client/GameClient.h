@@ -28,7 +28,7 @@ public:
     ~GameClient();
     void render();
     void update(GameMsgPlaying initialize);
-    bool createGameObjects(GameObjectsInit gameObjectsInit);
+    bool createGameObjects(GameObjectsInit gameObjectsInit, int level);
     bool isPlaying();
     void gameOver();
     void changeLevel(GameMsgLevelChange nextLevelConfig);
@@ -44,7 +44,7 @@ private:
     bool loadTexts(bool isDefault, std::vector<GameObjectInit> players);
     void createEnemy(GameObjectInit enemy, GameObjectType enemyType);
     void createPlayer(GameObjectInit player);
-    void createStaticObject(GameObjectInit gameObject, GameObjectType objectType);
+    void createStaticObject(GameObjectInit gameObject, GameObjectType objectType, int level);
     void initBackground(SDL_Renderer* renderer, StageInit stage);
     void updatePlayers(std::vector<GamePlayerPlaying>);
     void updateGameObjects(std::vector<GameObjectPlaying>);

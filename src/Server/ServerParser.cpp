@@ -136,7 +136,9 @@ json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, Ba
                 "",
                 gameObject->getXPosition(),
                 gameObject->getYPosition(),
-                gameObject->getFrameAmount()
+                gameObject->getFrameAmount(),
+                gameObject->getHeight(),
+                gameObject->getWidth()
         };
         gameObjectsInit.push_back(gameObjectInit);
     }

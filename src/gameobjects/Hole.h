@@ -17,9 +17,10 @@ public:
     int getHeight() override;
     int getWidth() override;
     void setDimensions(int width, int height);
-
+    void setLevel(int level);
 private:
     int width;
+    int level;
     int height;
 };
 

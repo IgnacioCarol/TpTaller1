@@ -127,9 +127,13 @@ void
 TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
                           SDL_RendererFlip flip) {
 
-    if (ID == "hole") {
-        SDL_SetRenderDrawColor(renderer, 107, 140, 255, 255); // Sky blue
-//        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
+    if (ID.find("hole") != std::string::npos) {
+        if(ID == "hole-black") {
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255); // Black
+        } else {
+            SDL_SetRenderDrawColor(renderer, 107, 140, 255, 255); // Sky blue
+        }
+
         SDL_Rect rect; // the rectangle
         rect.h = height;
         rect.w = width;
