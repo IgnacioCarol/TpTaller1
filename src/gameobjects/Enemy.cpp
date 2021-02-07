@@ -52,22 +52,7 @@ bool Enemy::getDirection() {
 }
 
 void Enemy::collideWith(GameObject *go) {
-   /* if (go->getYPosition() + go->getFloorPosition() + 5 < yPosition + getFloorPosition()) {
-        this->die();
-    } else {
-        go->die();
-    }*/
    go->collideWith(this);
-}
-
-
-void Enemy::collideWith(Player *player) {
-    if (player->getYPosition() + 45 + 15 < yPosition) { //TODO preguntar Nacho por que carajo hay un +45 + 15
-       player->addPoints(pointsToPlayer);
-        this->die();
-    } else {
-        player->collideWith(this);
-    }
 }
 
 size_t Enemy::getPoints() {
