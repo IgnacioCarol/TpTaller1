@@ -17,6 +17,8 @@
 #include "../gameobjects/PlatformSurprise.h"
 #include "../gameobjects/Coin.h"
 #include "../gameobjects/EnemyMushroom.h"
+#include "../gameobjects/Hole.h"
+#include "../gameobjects/Pipe.h"
 #include "../CharacterStates/EnemyMovement.h"
 #include "../CharacterStates/Normal.h"
 #include "../Utils/MusicManager.h"

@@ -1,5 +1,4 @@
 #include "GameClient.h"
-#include "../gameobjects/Hole.h"
 
 
 GameClient* GameClient::instance = 0;
@@ -235,11 +234,13 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     }
     else if (objectType == GOT_PLATFORM_SURPRISE){
         tmp = new PlatformSurprise();
-    } else {
+    } else if (objectType == GOT_HOLE) {
         Hole * h = new Hole();
         h->setDimensions(gameObject.width, gameObject.height);
         h->setLevel(level);
         tmp = h;
+    } else {
+        tmp = new Pipe();
     }
 
     if (tmp != nullptr){

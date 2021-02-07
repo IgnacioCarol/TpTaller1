@@ -1,6 +1,7 @@
 #include "Factory.h"
 #include <vector>
 #include "../gameobjects/Coin.h"
+#include "../gameobjects/Pipe.h"
 #include "../gameobjects/PlatformNormal.h"
 #include "../gameobjects/PlatformSurprise.h"
 #include "../gameobjects/EnemyMushroom.h"
@@ -87,6 +88,15 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         Logger::getInstance()->debug("Hole created correctly");
     }
 
+    // Init Pipes
+    for(auto xmlPipe : levelConfig.pipes) {
+        Pipe * p = new Pipe();
+        p->init(xmlPipe.coordX, xmlPipe.coordY, PIPE_ID);
+        tmp = p;
+        GameServer::Instance() ->addPath(PIPE_ID, xmlPipe.image, DEFAULT_PIPE_PATH);
+        actors.push_back(tmp);
+        Logger::getInstance()->debug("Pipe created correctly");
+    }
 
     for(auto enemies : levelConfig.enemies) {
         for(long i = 0; i < enemies.quantity; i++) {

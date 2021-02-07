@@ -20,7 +20,8 @@ enum GameObjectType {
     GOT_PLATFORM_NORMAL,
     GOT_PLATFORM_SURPRISE,
     GOT_PLAYER,
-    GOT_HOLE
+    GOT_HOLE,
+    GOT_PIPE
 };
 
 class GameObject {
