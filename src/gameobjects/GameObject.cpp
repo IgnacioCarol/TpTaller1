@@ -1,4 +1,4 @@
-#include <src/Server/GameServer.h>
+#include "../Server/GameServer.h"
 #include "GameObject.h"
 #include "../GameMap.h"
 

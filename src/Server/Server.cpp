@@ -1,4 +1,4 @@
-#include <src/Utils/CollisionsManager.h>
+#include "../Utils/CollisionsManager.h"
 #include "Server.h"
 
 Server* Server::instance = nullptr;
@@ -305,9 +305,9 @@ bool Server::run() {
 
             this->popCommand();
         }
-        game->updateGameObjectsOnScreen();
         game->updateGameObjects();
         game->updatePlayers();
+        game->updateGameObjectsOnScreen();
         CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), getPlayersAsGameObjects(game->getPlayers()));
         game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {

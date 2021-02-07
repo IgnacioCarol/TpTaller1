@@ -4,7 +4,7 @@
 
 #ifndef TPTALLER1_COLLISIONSMANAGER_H
 #define TPTALLER1_COLLISIONSMANAGER_H
-#include <src/gameobjects/GameObject.h>
+#include "../gameobjects/GameObject.h"
 
 class CollisionsManager {
 public:

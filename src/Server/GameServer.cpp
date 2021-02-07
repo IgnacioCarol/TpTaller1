@@ -195,7 +195,7 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
 void GameServer::updateGameObjectsOnScreen() {
     gameObjectsOnScreen.clear();
     for (auto object : gameObjects) {
-        if (object->isAtScene(GameServer::Instance()->getCamera()->getXpos())) {
+        if (object->isAtScene(getCamera()->getXpos())) {
             gameObjectsOnScreen.push_back(object);
         }
     }

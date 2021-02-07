@@ -7,7 +7,7 @@
 #include "../TextureManager.h"
 #include "GameObject.h"
 #include "Enemy.h"
-#include <src/Utils/CollisionsManager.h>
+#include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
 #include <utility>
