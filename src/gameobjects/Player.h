@@ -69,6 +69,8 @@ public:
 
     void testMode();
 
+    bool getTestModeState();
+
 private:
     //Image related
     std::string username;

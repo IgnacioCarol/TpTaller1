@@ -69,6 +69,7 @@ struct GamePlayerPlaying {
     int yPos;
     std::string state;
     bool direction;
+    bool testMode;
 };
 
 struct GameObjectPlaying {

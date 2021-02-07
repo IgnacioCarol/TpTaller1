@@ -180,3 +180,7 @@ void Player::testMode() {
     std::string msg = (testModeActivated) ? "ACTIVATED" : "DEACTIVATED";
     Logger::getInstance()->info("TEST MODE" + msg);
 }
+
+bool Player::getTestModeState() {
+    return testModeActivated;
+}
