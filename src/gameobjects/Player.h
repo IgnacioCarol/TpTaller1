@@ -67,6 +67,8 @@ public:
 
     void die();
 
+    void testMode();
+
 private:
     //Image related
     std::string username;
@@ -83,6 +85,7 @@ private:
     int ticks;
     bool leftOrRightPressed;
     int lives = 3;
+    bool testModeActivated = false;
 };
 
 
