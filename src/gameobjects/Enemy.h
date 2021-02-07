@@ -24,6 +24,8 @@ public:
 
     void collideWith(Player* player);
 
+    size_t getPoints();
+
 protected:
     static const int enemyVelocity = 1;
     CharacterState* enemyState{};

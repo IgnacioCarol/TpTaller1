@@ -64,7 +64,7 @@ public:
     void collideWith(GameObject *go) override;
 
     //Collisions
-    void collideWith(Enemy* enemy);
+    void collideWith(Enemy* enemy) override;
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;

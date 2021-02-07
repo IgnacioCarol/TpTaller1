@@ -52,11 +52,12 @@ bool Enemy::getDirection() {
 }
 
 void Enemy::collideWith(GameObject *go) {
-    if (go->getYPosition() + go->getFloorPosition() + 5 < yPosition + getFloorPosition()) {
+   /* if (go->getYPosition() + go->getFloorPosition() + 5 < yPosition + getFloorPosition()) {
         this->die();
     } else {
         go->die();
-    }
+    }*/
+   go->collideWith(this);
 }
 
 
@@ -67,6 +68,10 @@ void Enemy::collideWith(Player *player) {
     } else {
         player->collideWith(this);
     }
+}
+
+size_t Enemy::getPoints() {
+    return pointsToPlayer;
 }
 
 

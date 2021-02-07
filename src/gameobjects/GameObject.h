@@ -13,6 +13,8 @@
 #include <cstdio>
 #include <string>
 
+class Enemy;
+
 enum GameObjectType {
     GOT_COIN,
     GOT_ENEMY_MUSHROOM,
@@ -44,6 +46,7 @@ public:
     bool isAtScene(int camXPos);
 
     virtual void collideWith(GameObject *go);
+    virtual void collideWith(Enemy* enemy);
 
     virtual void die();
 

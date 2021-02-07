@@ -175,16 +175,20 @@ void Player::collideWith(GameObject *go) {
 
 
 void Player::collideWith(Enemy *enemy) {
-    if(isPlayerBig) {
-        isPlayerBig = false;
-        return;
+    if (yPosition + getFloorPosition() + 5 < enemy->getYPosition() + enemy->getFloorPosition()) {
+        addPoints(enemy->getPoints());
+        enemy->die();
+    } else {
+        if(isPlayerBig) {
+            isPlayerBig = false;
+            return;
+        }
+        if(--lives > 0) {
+            restartPos(cam->x, 380); // appears at the beginning of the screen
+            return;
+        }
+        this->die();
     }
-    lives--;
-    if(lives) {
-        restartPos(cam->x, 380); // appears at the beginning of the screen
-        return;
-    }
-    this->die();
 }
 
 std::pair<int, int> Player::getPosition() {

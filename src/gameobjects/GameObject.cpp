@@ -85,3 +85,7 @@ void GameObject::collideWith(GameObject *go) {
 int GameObject::getFloorPosition() {
     return 0;
 }
+
+void GameObject::collideWith(Enemy *enemy) {
+
+}
