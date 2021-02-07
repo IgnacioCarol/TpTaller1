@@ -61,3 +61,7 @@ void Enemy::die() {
     delete enemyState;
     enemyState = new Dying(framesAmount - 1);
 }
+
+void Enemy::dieFalling() {
+    //GameObject::die();
+}

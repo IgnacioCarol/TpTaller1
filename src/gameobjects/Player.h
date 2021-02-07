@@ -65,8 +65,6 @@ public:
 
     bool itsAlive();
 
-    void dieFalling();
-
     void die();
 
 private:

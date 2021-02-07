@@ -6,9 +6,14 @@
 
 #include <utility>
 
-Dying::Dying(int currentFrame, bool falling){
+Dying::Dying(int currentFrame) {
+    stateType = "DYING";
+    this->currentFrame = currentFrame;
+}
+
+Dying::Dying(bool falling){
     stateType = (!falling) ? "DYING" : "DYING_FALLING";
-    this -> currentFrame = (currentFrame) ? currentFrame : DYING_FRAME;
+    this -> currentFrame = DYING_FRAME;
 }
 
 void Dying::move(const Uint8 *currentKeyStates, Player *player) {
