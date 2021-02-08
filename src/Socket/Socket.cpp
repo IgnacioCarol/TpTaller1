@@ -184,6 +184,19 @@ void Socket::bindAndListen() {
         throw SocketException(MSG_SOCKET_BIND_CLIENT_ERR);
     }
 
+    int yes=1;
+
+    // Para fixear el bind fail despues de una corrida:
+    // Somewhere in the kernel, there's still some information about your previous socket hanging around.
+    // Tell the kernel that you are willing to re-use the port anyway:
+
+    if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(yes)) == -1) {
+        std::string errorMsg = "Failed attempting to set socket option";
+
+        Logger::getInstance()->error(errorMsg);
+        throw SocketException(errorMsg);
+    }
+
     // Bind
     // int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
     // sockfd -> file descriptor that refers to a socket
