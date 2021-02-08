@@ -120,7 +120,7 @@ void GameServer::restartCharacters() {
 }
 
 bool GameServer::isPlaying() const {
-    return this->playing && !this->stage->isTimeOver();
+    return this->playing && !this->stage->isTimeOver() && arePlayersAlive();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
@@ -207,4 +207,13 @@ void GameServer::addSoundsPaths() {
     soundsPath[STAGE_CLEAR_SOUND] = path + "stageClear" + format;
     soundsPath[STOMP_SOUND] = path + "Stomp" + format;
     soundsPath[WORLD_CLEAR_SOUND] = path + "worldClear" + format;
+}
+
+bool GameServer::arePlayersAlive() const{
+    for(Player* ply: players){
+        if (ply->itsAlive()){
+            return true;
+        }
+    }
+    return false;
 }
