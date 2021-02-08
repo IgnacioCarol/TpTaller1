@@ -83,9 +83,9 @@
                 </pozos>
                 <tubos>
                     <tubo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>100</coordX>
-                        <coordY>400</coordY>
+                        <coordY>380</coordY>
                     </tubo>
                 </tubos>
             </nivel>
@@ -164,9 +164,9 @@
                 </pozos>
                 <tubos>
                     <tubo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>100</coordX>
-                        <coordY>450</coordY>
+                        <coordY>380</coordY>
                     </tubo>
                 </tubos>
             </nivel>
@@ -245,16 +245,16 @@
                 </pozos>
                 <tubos>
                     <tubo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>500</coordX>
-                        <coordY>400</coordY>
+                        <coordY>380</coordY>
                     </tubo>
                 </tubos>
             </nivel>
         </niveles>
     </escenario>
     <credenciales>
-         <cantidadJugadores>2</cantidadJugadores>
+         <cantidadJugadores>1</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>a</nombre>

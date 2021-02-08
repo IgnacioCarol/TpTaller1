@@ -65,8 +65,8 @@ GameObject::GameObject() {
 }
 
 bool GameObject::isAtScene(int camXPos) {
-    atScene = (xPosition >= (camXPos - 70) && xPosition <= camXPos + 800) && (yPosition >= 0 && yPosition <= 600);
-    return atScene;
+    atScene = (xPosition >= (camXPos - 200) && xPosition <= camXPos + 800) && (yPosition >= 0 && yPosition <= 600);
+    return atScene; //ToDo hacer la magia de nacho de usar el width
 }
 
 std::string GameObject::getState() {
