@@ -57,6 +57,20 @@ public:
 
     bool getDirection() override;
 
+    void addPoints(int newPoints);
+
+    int getLives();
+
+    int loseLife();
+
+    bool itsAlive();
+
+    void die();
+
+    void testMode();
+
+    bool getTestModeState();
+
 private:
     //Image related
     std::string username;
@@ -72,6 +86,8 @@ private:
     SDL_Rect *cam;
     int ticks;
     bool leftOrRightPressed;
+    int lives = 3;
+    bool testModeState = false;
 };
 
 

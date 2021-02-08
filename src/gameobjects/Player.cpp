@@ -64,8 +64,10 @@ void Player::move(std::vector<int> vector) {
 }
 
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+    if (itsAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
+        SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+    }
 }
 
 bool Player::isJumping() {
@@ -103,7 +105,6 @@ void Player::setDirection(bool direction) {
 
 void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
-        int framesAmount = characterState->getFramesAmount();
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
             changeState(new Jumping());
@@ -121,8 +122,8 @@ void Player::setState(std::string state) {
             changeState(new Paused(state == "PAUSED"));
         }
         else{
-            MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
-            changeState(new Dying());
+            changeState(new Dying(state == "DYING_FALLING"));
+            (!loseLife()) ? MusicManager::Instance()->playSound(GAME_OVER_SOUND) : MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
         }
     }
 }
@@ -148,4 +149,38 @@ void Player::move() {
     }
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
+}
+
+void Player::addPoints(int newPoints) {
+    points += newPoints;
+}
+
+int Player::getLives() {
+    return lives;
+}
+
+int Player::loseLife() {
+    if (!testModeState){
+        lives = (0 > lives - 1) ? 0 : lives - 1;
+    }
+    return lives;
+}
+
+bool Player::itsAlive() {
+    return lives != 0;
+}
+
+void Player::die() {
+    changeState(new Dying());
+    loseLife();
+}
+
+void Player::testMode() {
+    testModeState = !testModeState;
+    std::string msg = (testModeState) ? "ACTIVATED" : "DEACTIVATED";
+    Logger::getInstance()->info("TEST MODE " + msg);
+}
+
+bool Player::getTestModeState() {
+    return testModeState;
 }

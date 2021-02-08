@@ -46,6 +46,7 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
     addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
     addPath("paused", "Sprites/Players/pausedPlayer.png","Sprites/Players/pausedPlayer.png");
+    addPath("HEART","Sprites/heart.png", "Sprites/heart.png");
 
     addSoundsPaths();
     initializeAllElementsOfGameServer(clients);
@@ -119,7 +120,7 @@ void GameServer::restartCharacters() {
 }
 
 bool GameServer::isPlaying() const {
-    return this->playing && !this->stage->isTimeOver();
+    return this->playing && !this->stage->isTimeOver() && arePlayersAlive();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
@@ -206,4 +207,13 @@ void GameServer::addSoundsPaths() {
     soundsPath[STAGE_CLEAR_SOUND] = path + "stageClear" + format;
     soundsPath[STOMP_SOUND] = path + "Stomp" + format;
     soundsPath[WORLD_CLEAR_SOUND] = path + "worldClear" + format;
+}
+
+bool GameServer::arePlayersAlive() const{
+    for(Player* ply: players){
+        if (ply->itsAlive()){
+            return true;
+        }
+    }
+    return false;
 }

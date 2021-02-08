@@ -76,3 +76,7 @@ std::string GameObject::getState() {
 bool GameObject::getDirection() {
     return true; //tmb para safar ya que los bloques y monedas no tienen direction
 }
+
+int GameObject::getPoints() {
+    return points;
+}

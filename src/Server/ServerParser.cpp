@@ -87,7 +87,8 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
                 player->getXPosition(),
                 player->getYPosition(),
                 player->getState(),
-                player->getDirection()
+                player->getDirection(),
+                player->getTestModeState()
         };
         gamePlayers.push_back(gamePlayer);
     }

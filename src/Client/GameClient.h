@@ -37,6 +37,7 @@ public:
     void clean();
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
+    bool isPlayerAlive();
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
@@ -52,6 +53,7 @@ private:
     void updateGameObjects(std::vector<GameObjectPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
+    void renderPointsAndLives(int yPosition, int points, int lives);
 
 
     SDL_Window* window;
@@ -65,12 +67,15 @@ private:
     TextureManager* textureManager;
     MusicManager* musicManager;
     std::string clientUsername;
+    int clientPlayerID;
 
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;
     std::vector<int> idsToRender;
     int levelLimit;
     bool levelCompleted = false;
+
+    static const int DIGITS = 6;
 };
 
 

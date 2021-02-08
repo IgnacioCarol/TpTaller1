@@ -76,7 +76,8 @@ GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
                 player["xPos"],
                 player["yPos"],
                 player["state"],
-                player["direction"]
+                player["direction"],
+                player["testMode"]
         };
         gamePlayers.push_back(gamePlayer);
     }
