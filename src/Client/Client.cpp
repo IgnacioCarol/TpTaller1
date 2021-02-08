@@ -306,7 +306,9 @@ void Client::run() {
         if (clientInitialized) {
             if (isConnected()) {
                 gameClient->render();
-                this->handleUserEvents();
+                if (gameClient->isPlayerAlive()){
+                    this->handleUserEvents();
+                }
             } else {
                 SDL_Event e;
                 while( SDL_PollEvent( &e ) != 0 && gameClient->isPlaying()) {

@@ -35,6 +35,7 @@ public:
     void clean();
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
+    bool isPlayerAlive();
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
@@ -64,6 +65,7 @@ private:
     TextureManager* textureManager;
     MusicManager* musicManager;
     std::string clientUsername;
+    int clientPlayerID;
 
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;

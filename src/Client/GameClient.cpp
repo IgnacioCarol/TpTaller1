@@ -230,6 +230,9 @@ void GameClient::createPlayer(GameObjectInit player) {
     Player* tmpPlayer = new Player(camera -> getCamera(), player.username, player.imageId);
     tmpPlayer->init(player.xPos, player.yPos, player.imageId, camera->getCamera(), player.frameAmount);
     playersMap[player.id] = tmpPlayer;
+    if (player.username == clientUsername){
+        clientPlayerID = player.id;
+    }
 }
 
 void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType) {
@@ -369,4 +372,8 @@ void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
         TextureManager::Instance()->drawFrame("HEART",xPosition, yPosition - 30,300,300,0, renderer, SDL_FLIP_NONE);
         xPosition += 20;
     }
+}
+
+bool GameClient::isPlayerAlive() {
+    return playersMap[clientPlayerID]->itsAlive();
 }
