@@ -58,7 +58,9 @@ json Protocol::gameInitMsgToJson(GameMsgParams params) {
                 {"username", gameObject.username},
                 {"xPos", gameObject.xPos},
                 {"yPos", gameObject.yPos},
-                {"frameAmount", gameObject.frameAmount}
+                {"frameAmount", gameObject.frameAmount},
+                {"height", gameObject.height},
+                {"width", gameObject.width}
         };
         gameObjects.push_back(gameObjectJson);
     }
@@ -131,7 +133,9 @@ json Protocol::gameChangeLevelMsgToJson(GameMsgLevelChange params) {
                 {"username", gameObject.username},
                 {"xPos", gameObject.xPos},
                 {"yPos", gameObject.yPos},
-                {"frameAmount", gameObject.frameAmount}
+                {"frameAmount", gameObject.frameAmount},
+                {"height", gameObject.height},
+                {"width", gameObject.width}
         };
         gameObjects.push_back(gameObjectJson);
     }

@@ -64,7 +64,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
         return false;
     }
 
-    if(!this -> createGameObjects(initialize.gameObjectsInit)){
+    if(!this -> createGameObjects(initialize.gameObjectsInit, initialize.stage.level)){
         logger -> error("Cannot create the objects in the client");
         return false;
     }
@@ -153,7 +153,7 @@ void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
     }
 }
 
-bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
+bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit, int level) {
     for (GameObjectInit gameObject: gameObjectsInit.gameObjects){
         GameObjectType type = gameObject.type;
         if (type == GOT_ENEMY_TURTLE || type == GOT_ENEMY_MUSHROOM){
@@ -163,9 +163,10 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createPlayer(gameObject);
         }
         else{
-            createStaticObject(gameObject, type);
+            createStaticObject(gameObject, type, level);
         }
     }
+
     return true;
 }
 
@@ -235,7 +236,7 @@ void GameClient::createPlayer(GameObjectInit player) {
     }
 }
 
-void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType) {
+void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType, int level) {
     GameObject* tmp;
     if (objectType == GOT_COIN){
         tmp = new Coin();
@@ -243,8 +244,15 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
     }
-    else{
+    else if (objectType == GOT_PLATFORM_SURPRISE){
         tmp = new PlatformSurprise();
+    } else if (objectType == GOT_HOLE) {
+        Hole * h = new Hole();
+        h->setDimensions(gameObject.width, gameObject.height);
+        h->setLevel(level);
+        tmp = h;
+    } else {
+        tmp = new Pipe();
     }
 
     if (tmp != nullptr){
@@ -326,7 +334,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     }
     gameObjectsMap.clear();
     idsToRender.clear();
-    createGameObjects(nextLevelConfig.gameObjectsInit);
+    createGameObjects(nextLevelConfig.gameObjectsInit, nextLevelConfig.stage.level);
 }
 
 void GameClient::setServerDown() {

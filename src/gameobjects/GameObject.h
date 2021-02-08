@@ -19,7 +19,9 @@ enum GameObjectType {
     GOT_ENEMY_TURTLE,
     GOT_PLATFORM_NORMAL,
     GOT_PLATFORM_SURPRISE,
-    GOT_PLAYER
+    GOT_PLAYER,
+    GOT_HOLE,
+    GOT_PIPE
 };
 
 class GameObject {
@@ -30,6 +32,7 @@ public:
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
     virtual void move();
     virtual int getHeight();
+    virtual int getWidth();
     virtual int getFrameAmount();
     int getId();
     GameObjectType getType();

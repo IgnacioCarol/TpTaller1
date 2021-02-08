@@ -1,13 +1,15 @@
 #ifndef TPTALLER1_LOGIN_H
 #define TPTALLER1_LOGIN_H
 #include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 #include "../logger/logger.h"
 #ifdef __APPLE__
 #define FONT_FILE_PATH "../resources/fonts/SuperMario256.ttf"
+#include <SDL_image.h>
+#include <SDL_ttf.h>
 #else
 #define FONT_FILE_PATH "resources/fonts/SuperMario256.ttf"
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 #endif
 
 #define LOGIN_BACKGROUND_PATH "Sprites/loginBackground.png"
