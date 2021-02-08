@@ -303,14 +303,19 @@ void Client::run() {
                 }
             } while (this->getEventsSize() > 20 );
         }
+        SDL_Event e;
         if (clientInitialized) {
             if (isConnected()) {
                 gameClient->render();
                 if (gameClient->isPlayerAlive()){
                     this->handleUserEvents();
                 }
+                else{
+                    if (SDL_PollEvent(&e) != 0 && e.type == SDL_QUIT){
+                        gameClient->gameOver();
+                    }
+                }
             } else {
-                SDL_Event e;
                 while( SDL_PollEvent( &e ) != 0 && gameClient->isPlaying()) {
                     if (e.type  == SDL_QUIT ) {
                         gameClient->gameOver();

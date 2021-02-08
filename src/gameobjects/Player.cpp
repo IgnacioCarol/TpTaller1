@@ -64,7 +64,7 @@ void Player::move(std::vector<int> vector) {
 }
 
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    if (itsAlive()){
+    if (itsAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
     }
