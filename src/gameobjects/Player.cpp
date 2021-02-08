@@ -160,7 +160,7 @@ int Player::getLives() {
 }
 
 int Player::loseLife() {
-    if (!testModeActivated){
+    if (!testModeState){
         lives = (0 > lives - 1) ? 0 : lives - 1;
     }
     return lives;
@@ -176,11 +176,11 @@ void Player::die() {
 }
 
 void Player::testMode() {
-    testModeActivated = !testModeActivated;
-    std::string msg = (testModeActivated) ? "ACTIVATED" : "DEACTIVATED";
-    Logger::getInstance()->info("TEST MODE" + msg);
+    testModeState = !testModeState;
+    std::string msg = (testModeState) ? "ACTIVATED" : "DEACTIVATED";
+    Logger::getInstance()->info("TEST MODE " + msg);
 }
 
 bool Player::getTestModeState() {
-    return testModeActivated;
+    return testModeState;
 }

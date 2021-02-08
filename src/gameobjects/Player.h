@@ -87,7 +87,7 @@ private:
     int ticks;
     bool leftOrRightPressed;
     int lives = 3;
-    bool testModeActivated = false;
+    bool testModeState = false;
 };
 
 
