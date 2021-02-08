@@ -348,6 +348,7 @@ bool Server::run() {
         Logger::getInstance()->debug(ss.str());
 
     }
+    //ToDo agregar lo que hace falta cuando el juego termina porque todos murieron
     Logger::getInstance()->info("Finished run loop");
 
     if (!game->isPlaying()) {
