@@ -96,3 +96,7 @@ void GameObject::collideWith(Enemy *enemy) {
 size_t GameObject::getPoints() {
     return points;
 }
+
+void GameObject::collideWith(Coin *coin) {
+
+}

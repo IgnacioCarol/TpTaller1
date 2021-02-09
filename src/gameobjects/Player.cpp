@@ -228,3 +228,8 @@ void Player::testMode() {
 bool Player::getTestModeState() {
     return testModeState;
 }
+
+void Player::collideWith(Coin *coin) {
+    this->addPoints(coin->getPoints());
+    coin->die();
+}

@@ -7,6 +7,7 @@
 #include "../TextureManager.h"
 #include "GameObject.h"
 #include "Enemy.h"
+#include "Coin.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -65,6 +66,7 @@ public:
 
     //Collisions
     void collideWith(Enemy* enemy) override;
+    void collideWith(Coin* coin) override;
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;

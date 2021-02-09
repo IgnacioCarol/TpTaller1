@@ -14,6 +14,7 @@
 #include <string>
 
 class Enemy;
+class Coin;
 
 enum GameObjectType {
     GOT_COIN,
@@ -52,6 +53,7 @@ public:
 
     virtual void collideWith(GameObject *go);
     virtual void collideWith(Enemy* enemy);
+    virtual void collideWith(Coin* coin);
 
     virtual void die();
 
