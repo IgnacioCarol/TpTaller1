@@ -17,6 +17,8 @@
 #include "../gameobjects/PlatformSurprise.h"
 #include "../gameobjects/Coin.h"
 #include "../gameobjects/EnemyMushroom.h"
+#include "../gameobjects/Hole.h"
+#include "../gameobjects/Pipe.h"
 #include "../CharacterStates/EnemyMovement.h"
 #include "../CharacterStates/Normal.h"
 #include "../Utils/MusicManager.h"
@@ -28,13 +30,14 @@ public:
     ~GameClient();
     void render();
     void update(GameMsgPlaying initialize);
-    bool createGameObjects(GameObjectsInit gameObjectsInit);
+    bool createGameObjects(GameObjectsInit gameObjectsInit, int level);
     bool isPlaying();
     void gameOver();
     void changeLevel(GameMsgLevelChange nextLevelConfig);
     void clean();
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
+    bool isPlayerAlive();
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
@@ -44,12 +47,13 @@ private:
     bool loadTexts(bool isDefault, std::vector<GameObjectInit> players);
     void createEnemy(GameObjectInit enemy, GameObjectType enemyType);
     void createPlayer(GameObjectInit player);
-    void createStaticObject(GameObjectInit gameObject, GameObjectType objectType);
+    void createStaticObject(GameObjectInit gameObject, GameObjectType objectType, int level);
     void initBackground(SDL_Renderer* renderer, StageInit stage);
     void updatePlayers(std::vector<GamePlayerPlaying>);
     void updateGameObjects(std::vector<GameObjectPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
+    void renderPointsAndLives(int yPosition, int points, int lives);
 
 
     SDL_Window* window;
@@ -63,12 +67,15 @@ private:
     TextureManager* textureManager;
     MusicManager* musicManager;
     std::string clientUsername;
+    int clientPlayerID;
 
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;
     std::vector<int> idsToRender;
     int levelLimit;
     bool levelCompleted = false;
+
+    static const int DIGITS = 6;
 };
 
 

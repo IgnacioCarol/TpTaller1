@@ -299,6 +299,9 @@ bool Server::run() {
                 if (player->getUsername() == username) {
                     std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
                     player->move(positions);
+                    if (msg["testMode"].get<int>()){
+                        player->testMode();
+                    }
                 }
             }
             checkPlayersConnection();
@@ -325,6 +328,7 @@ bool Server::run() {
         Logger::getInstance()->debug(ss.str());
 
     }
+    //ToDo agregar lo que hace falta cuando el juego termina porque todos murieron
     Logger::getInstance()->info("Finished run loop");
 
     if (!game->isPlaying()) {

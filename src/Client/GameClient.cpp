@@ -64,7 +64,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
         return false;
     }
 
-    if(!this -> createGameObjects(initialize.gameObjectsInit)){
+    if(!this -> createGameObjects(initialize.gameObjectsInit, initialize.stage.level)){
         logger -> error("Cannot create the objects in the client");
         return false;
     }
@@ -106,10 +106,15 @@ void GameClient::renderPlayers() {
         }
         element.second -> draw(renderer, camera->getXpos(), 0);
         TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
+        renderPointsAndLives(playerUsernameYPos, element.second->getPoints(), element.second->getLives());
         playerUsernameYPos += 20;
     }
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
+    renderPointsAndLives(20, clientPlayer->getPoints(), clientPlayer->getLives());
+    if (!clientPlayer->itsAlive()){
+        textureManager->printText(TEXT_GAME_OVER, 300, 300, renderer);
+    }
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -130,6 +135,9 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
+        if (playerUpdate.testMode){
+            player -> testMode();
+        }
         player -> setState(playerUpdate.state);
     }
 }
@@ -145,7 +153,7 @@ void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
     }
 }
 
-bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
+bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit, int level) {
     for (GameObjectInit gameObject: gameObjectsInit.gameObjects){
         GameObjectType type = gameObject.type;
         if (type == GOT_ENEMY_TURTLE || type == GOT_ENEMY_MUSHROOM){
@@ -155,9 +163,10 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createPlayer(gameObject);
         }
         else{
-            createStaticObject(gameObject, type);
+            createStaticObject(gameObject, type, level);
         }
     }
+
     return true;
 }
 
@@ -198,6 +207,7 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     }
     success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_LEVEL_COMPLETED, TEXT_LEVEL_COMPLETED_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_GAME_OVER, TEXT_GAME_OVER_VALUE, WHITE_COLOR, renderer);
 
     return success;
 }
@@ -221,9 +231,12 @@ void GameClient::createPlayer(GameObjectInit player) {
     Player* tmpPlayer = new Player(camera -> getCamera(), player.username, player.imageId);
     tmpPlayer->init(player.xPos, player.yPos, player.imageId, camera->getCamera(), player.frameAmount);
     playersMap[player.id] = tmpPlayer;
+    if (player.username == clientUsername){
+        clientPlayerID = player.id;
+    }
 }
 
-void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType) {
+void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType, int level) {
     GameObject* tmp;
     if (objectType == GOT_COIN){
         tmp = new Coin();
@@ -231,8 +244,15 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
     }
-    else{
+    else if (objectType == GOT_PLATFORM_SURPRISE){
         tmp = new PlatformSurprise();
+    } else if (objectType == GOT_HOLE) {
+        Hole * h = new Hole();
+        h->setDimensions(gameObject.width, gameObject.height);
+        h->setLevel(level);
+        tmp = h;
+    } else {
+        tmp = new Pipe();
     }
 
     if (tmp != nullptr){
@@ -316,7 +336,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     }
     gameObjectsMap.clear();
     idsToRender.clear();
-    createGameObjects(nextLevelConfig.gameObjectsInit);
+    createGameObjects(nextLevelConfig.gameObjectsInit, nextLevelConfig.stage.level);
 }
 
 void GameClient::setServerDown() {
@@ -345,4 +365,25 @@ void GameClient::pauseSoundEffects(int music, int sounds) {
             Logger::getInstance() -> debug("The sounds have been unmuted");
         }
     }
+}
+
+void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
+    int xPosition = 50;
+    std::string pointsStr = std::to_string(points);
+    pointsStr = std::string(DIGITS - pointsStr.length(), '0') + pointsStr;
+    bool success = textureManager->loadText(TEXT_POINTS_KEY, pointsStr, WHITE_COLOR, renderer);
+    if (!success) {
+        logger->error("Error loading points");
+    }
+    textureManager->printText(TEXT_POINTS_KEY, xPosition, yPosition, renderer);
+
+    xPosition += 60;
+    for (int i = 0; i < lives; i++){
+        TextureManager::Instance()->drawFrame("HEART",xPosition, yPosition - 30,300,300,0, renderer, SDL_FLIP_NONE);
+        xPosition += 20;
+    }
+}
+
+bool GameClient::isPlayerAlive() {
+    return playersMap[clientPlayerID]->itsAlive();
 }

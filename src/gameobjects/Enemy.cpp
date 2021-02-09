@@ -40,7 +40,9 @@ void Enemy::setDirection(bool direction) {
 }
 
 void Enemy::setState(std::string state) {
-    GameObject::setState(state); //ToDo implementar esto para la prox fase
+    if (state != enemyState->getStateType() && state == "DYING"){
+        this->die();
+    }
 }
 
 std::string Enemy::getState() {
@@ -60,3 +62,15 @@ size_t Enemy::getPoints() {
 }
 
 
+void Enemy::die() {
+    if (enemyState->getStateType() == "DYING"){
+        //GameObject::die();
+    }
+    int framesAmount = enemyState->getFramesAmount();
+    delete enemyState;
+    enemyState = new Dying(framesAmount - 1);
+}
+
+void Enemy::dieFalling() {
+    //GameObject::die();
+}

@@ -67,6 +67,8 @@ public:
     void deleteGameObject(GameObject *pObject);
     void addSoundsPaths();
 
+    bool arePlayersAlive() const;
+
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.

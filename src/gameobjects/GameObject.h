@@ -21,7 +21,9 @@ enum GameObjectType {
     GOT_ENEMY_TURTLE,
     GOT_PLATFORM_NORMAL,
     GOT_PLATFORM_SURPRISE,
-    GOT_PLAYER
+    GOT_PLAYER,
+    GOT_HOLE,
+    GOT_PIPE
 };
 
 class GameObject {
@@ -32,6 +34,7 @@ public:
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
     virtual void move();
     virtual int getHeight();
+    virtual int getWidth();
     virtual int getFrameAmount();
     int getId();
     GameObjectType getType();
@@ -45,6 +48,8 @@ public:
     virtual std::string getState();
     bool isAtScene(int camXPos);
 
+    virtual size_t getPoints();
+
     virtual void collideWith(GameObject *go);
     virtual void collideWith(Enemy* enemy);
 
@@ -56,6 +61,8 @@ protected:
     //To manage the movement
     int xPosition;
     int yPosition;
+
+    int points = 0;
 
     //To manage the image
     TextureManager* textureManager = TextureManager::Instance();

@@ -1,12 +1,14 @@
 #include "Factory.h"
 #include <vector>
 #include "../gameobjects/Coin.h"
+#include "../gameobjects/Pipe.h"
 #include "../gameobjects/PlatformNormal.h"
 #include "../gameobjects/PlatformSurprise.h"
 #include "../gameobjects/EnemyMushroom.h"
 #include "../gameobjects/EnemyTurtle.h"
 #include "../CharacterStates/EnemyMovement.h"
 #include "../Server/GameServer.h"
+#include "../gameobjects/Hole.h"
 
 Factory* Factory::instance = nullptr;
 
@@ -75,6 +77,26 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         }
     }
 
+    // Init Holes
+    for(auto xmlHole : levelConfig.holes) {
+        Hole * h = new Hole();
+        h->init(xmlHole.coordX, xmlHole.coordY, HOLE_ID);
+        h->setDimensions(xmlHole.width, xmlHole.height);
+        tmp = h;
+        actors.push_back(tmp);
+        Logger::getInstance()->debug("Hole created correctly");
+    }
+
+    // Init Pipes
+    for(auto xmlPipe : levelConfig.pipes) {
+        Pipe * p = new Pipe();
+        p->init(xmlPipe.coordX, xmlPipe.coordY, PIPE_ID);
+        tmp = p;
+        GameServer::Instance() ->addPath(PIPE_ID, xmlPipe.image, DEFAULT_PIPE_PATH);
+        actors.push_back(tmp);
+        Logger::getInstance()->debug("Pipe created correctly");
+    }
+
     for(auto enemies : levelConfig.enemies) {
         for(long i = 0; i < enemies.quantity; i++) {
             if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
@@ -104,7 +126,6 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             }
         }
     }
-
 
     return actors;
 }

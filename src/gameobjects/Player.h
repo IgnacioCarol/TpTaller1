@@ -69,8 +69,12 @@ public:
     void addPoints(int newPoints);
     void die() override;
 
+    int getLives() const;
+    int loseLife();
+    bool itsAlive();
+    void testMode();
+    bool getTestModeState();
     std::pair<int, int> getPosition();
-
 
 private:
     //Image related
@@ -101,7 +105,7 @@ private:
     std::map<int, int> levelPoints;
 
 
-    bool isInIntersection(GameObject *pObject);
+    bool testModeState = false;
 };
 
 

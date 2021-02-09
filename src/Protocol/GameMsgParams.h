@@ -14,6 +14,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GameObjectType, {
     { GOT_PLATFORM_NORMAL, "normal_platform" },
     { GOT_PLATFORM_SURPRISE, "surprise_platform" },
     { GOT_PLAYER, "player" },
+    { GOT_HOLE, "hole" },
+    { GOT_PIPE, "pipe" },
 })
 
 struct WindowInit {
@@ -43,6 +45,8 @@ struct GameObjectInit {
     int xPos;
     int yPos;
     int frameAmount;
+    int height;
+    int width;
 };
 
 struct GameObjectsInit {
@@ -69,6 +73,7 @@ struct GamePlayerPlaying {
     int yPos;
     std::string state;
     bool direction;
+    bool testMode;
 };
 
 struct GameObjectPlaying {

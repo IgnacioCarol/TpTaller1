@@ -7,6 +7,7 @@ void Coin::init(int x, int y, std::string textureID) {
     _currentFrame = 0;
     delayCounter = 0;
     type = GOT_COIN;
+    points = 200;
 }
 
 void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {

@@ -20,6 +20,10 @@ int GameObject::getHeight() {
     return 0;
 }
 
+int GameObject::getWidth() {
+    return 0;
+}
+
 void GameObject::setPosition(int x, int y) {
     xPosition = x;
     yPosition = y;
@@ -88,4 +92,7 @@ int GameObject::getFloorPosition() {
 
 void GameObject::collideWith(Enemy *enemy) {
 
+}
+size_t GameObject::getPoints() {
+    return points;
 }

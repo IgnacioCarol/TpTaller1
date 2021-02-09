@@ -280,14 +280,14 @@ void Client::run() {
                     case GAME_INITIALIZE_CMD:
                         initParams = ClientParser::parseInitParams(receivedMessage);
                         clientInitialized = gameClient->init(initParams, username.c_str());
-                        if (!clientInitialized) { //le paso el resultado del parser magico
+                        if (!clientInitialized) {
                             Logger::getInstance()->error("Error trying to init gameClient");
                             throw ClientException("Error trying to init gameClient");
                         }
                         break;
                     case GAME_VIEW_CMD:
                         updateParams = ClientParser::parseUpdateParams(receivedMessage);
-                        gameClient->update(updateParams); //le paso el resultado del parsermagico
+                        gameClient->update(updateParams);
                         break;
                     case GAME_OVER_CMD:
                         gameClient->gameOver();
@@ -303,12 +303,19 @@ void Client::run() {
                 }
             } while (this->getEventsSize() > 20 );
         }
+        SDL_Event e;
         if (clientInitialized) {
             if (isConnected()) {
                 gameClient->render();
-                this->handleUserEvents();
+                if (gameClient->isPlayerAlive()){
+                    this->handleUserEvents();
+                }
+                else{
+                    if (SDL_PollEvent(&e) != 0 && e.type == SDL_QUIT){
+                        gameClient->gameOver();
+                    }
+                }
             } else {
-                SDL_Event e;
                 while( SDL_PollEvent( &e ) != 0 && gameClient->isPlaying()) {
                     if (e.type  == SDL_QUIT ) {
                         gameClient->gameOver();
@@ -375,7 +382,7 @@ void Client::handleUserEvents() {
     SDL_Event e;
     const Uint8 * keyboardState = SDL_GetKeyboardState( NULL );
     bool keysAssigned = false;
-    int up, down, right, left, sound, music;
+    int up, down, right, left, sound, music, testMode;
     up = down = right = left = false;
     while( SDL_PollEvent( &e ) != 0 ) {
         if (e.type  == SDL_QUIT ) {
@@ -389,6 +396,7 @@ void Client::handleUserEvents() {
             down = keyboardState[SDL_SCANCODE_DOWN];
             sound = keyboardState[SDL_SCANCODE_S];
             music = keyboardState[SDL_SCANCODE_M];
+            testMode = keyboardState[SDL_SCANCODE_T];
             keysAssigned = true;
         }
     }
@@ -399,12 +407,13 @@ void Client::handleUserEvents() {
     msg["down"] = down;
     msg["left"] = left;
     msg["right"] = right;
+    msg["testMode"] = testMode;
 
     if (music || sound){
         gameClient->pauseSoundEffects(music, sound);
     }
 
-    if (!(up || down || left || right)) {
+    if (!(up || down || left || right || testMode)) {
         if (this->didMove) {
             pushCommand(msg);
             this->didMove = false;

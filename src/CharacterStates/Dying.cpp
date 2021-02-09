@@ -4,23 +4,38 @@
 
 #include "Dying.h"
 
-Dying::Dying(){
+#include <utility>
+
+Dying::Dying(int currentFrame) {
     stateType = "DYING";
-    currentFrame = DYING_FRAME;
+    this->currentFrame = currentFrame;
+}
+
+Dying::Dying(bool falling){
+    stateType = (!falling) ? "DYING" : "DYING_FALLING";
+    this -> currentFrame = DYING_FRAME;
 }
 
 void Dying::move(const Uint8 *currentKeyStates, Player *player) {
-    if (countAux > ITER_TIMES * 2){
-        if ((player->getYPosition() >= initialY - EXTRA_HEIGHT) && !descending){
-            player->setPosition(player->getXPosition(), player->getYPosition() - GRAVITY);
+    if (stateType == "DYING"){
+        if (countAux > ITER_TIMES * 2){
+            if ((player->getYPosition() >= initialY - EXTRA_HEIGHT) && !descending){
+                player->setPosition(player->getXPosition(), player->getYPosition() - GRAVITY);
+            }
+            else{
+                descending = true;
+                player->setPosition(player->getXPosition(), player->getYPosition() + GRAVITY);
+            }
         }
         else{
-            descending = true;
-            player->setPosition(player->getXPosition(), player->getYPosition() + GRAVITY);
+            initialY = player->getYPosition();
+            countAux++;
         }
     }
-    else{
-        initialY = player->getYPosition();
-        countAux++;
+}
+
+void Dying::move(Enemy *enemy) {
+    if (counter++ == DIE_COUNTER){
+        enemy->die();
     }
 }

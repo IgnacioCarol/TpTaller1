@@ -8,10 +8,13 @@
 
 #include "CharacterState.h"
 #include "../gameobjects/Player.h"
+#include "../gameobjects/Enemy.h"
 
 class Dying: public CharacterState{
 public:
-    explicit Dying();
+    explicit Dying(bool falling = false);
+    explicit Dying(int currentFrame); //For the enemies, they have their death image in different frames
+    void move(Enemy* enemy) override;
     void move(const Uint8 *currentKeyStates, Player *player) override;
 
 private:
@@ -21,6 +24,9 @@ private:
     static const int GRAVITY = 3;
     static const int EXTRA_HEIGHT = 80; //To do the effect that marios goes up and then goes down when he dies
     bool descending = false;
+
+    static const int DIE_COUNTER = 4;
+    int counter = 0;
 
 };
 
