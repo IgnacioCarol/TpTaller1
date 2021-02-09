@@ -100,3 +100,7 @@ size_t GameObject::getPoints() {
 void GameObject::collideWith(Coin *coin) {
 
 }
+
+void GameObject::collideWith(PlatformNormal *nBlock) {
+
+}

@@ -12,7 +12,8 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
-    void collideWith(Player* player);
+    void collideWith(GameObject *go) override;
+    std::pair<int, int> getPosition();
 
 private:
     //Related to the image

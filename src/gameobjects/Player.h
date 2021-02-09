@@ -8,6 +8,7 @@
 #include "GameObject.h"
 #include "Enemy.h"
 #include "Coin.h"
+#include "PlatformNormal.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -67,6 +68,7 @@ public:
     //Collisions
     void collideWith(Enemy* enemy) override;
     void collideWith(Coin* coin) override;
+    void collideWith(PlatformNormal* nBlock) override;
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;
@@ -76,7 +78,7 @@ public:
     bool itsAlive();
     void testMode();
     bool getTestModeState();
-    std::pair<int, int> getPosition();
+
 
 private:
     //Image related

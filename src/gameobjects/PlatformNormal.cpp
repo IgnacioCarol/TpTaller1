@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 26/10/2020.
-//
-
 #include "PlatformNormal.h"
 
 void PlatformNormal::init(int x, int y, std::string textureID) {
@@ -18,10 +14,10 @@ int PlatformNormal::getHeight() {
     return NORMAL_BLOCK_HEIGHT;
 }
 
-void PlatformNormal::collideWith(Player *player) {
-    std::pair<int, int> position = player->getPosition();
-    int xPlayer = position.first;
-    int yPlayer = position.second;
-    if(xPlayer > xPosition && xPlayer < (xPosition + NORMAL_BLOCK_WIDTH) && yPlayer >= (yPosition + NORMAL_BLOCK_HEIGHT))
-        player->setPosition(xPlayer, yPosition + NORMAL_BLOCK_HEIGHT); //TODO chequear si queda bien graficamente
+void PlatformNormal::collideWith(GameObject *go) {
+    go->collideWith(this);
+}
+
+std::pair<int, int> PlatformNormal::getPosition() {
+    return std::make_pair(xPosition, yPosition);
 }

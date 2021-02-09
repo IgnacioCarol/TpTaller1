@@ -200,10 +200,6 @@ void Player::collideWith(Enemy *enemy) {
     }
 }
 
-std::pair<int, int> Player::getPosition() {
-    return std::make_pair(xPosition, yPosition);
-}
-
 int Player::getLives() const {
     return lives;
 }
@@ -232,4 +228,11 @@ bool Player::getTestModeState() {
 void Player::collideWith(Coin *coin) {
     this->addPoints(coin->getPoints());
     coin->die();
+}
+
+void Player::collideWith(PlatformNormal *nBlock) {
+    std::pair<int, int> position = nBlock->getPosition();
+    int yBlock = position.second;
+    if(yPosition + getFloorPosition() < nBlock->getYPosition() + nBlock->getFloorPosition())
+        this->setPosition(xPosition, yBlock + yPosition);
 }
