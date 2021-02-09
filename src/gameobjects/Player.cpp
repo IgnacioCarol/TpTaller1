@@ -166,8 +166,12 @@ void Player::completeMovement(const Uint8 *keyStates) {
 }
 
 void Player::die() {
+    if (getState() == "DYING") {
+        return;
+    }
     changeState(new Dying());
     loseLife();
+    restartPos(cam->x, 380);
     //lives and all of that, but this could stay for test environment
 }
 
@@ -177,6 +181,9 @@ void Player::collideWith(GameObject *go) {
 
 
 void Player::collideWith(Enemy *enemy) {
+    if (enemy->getState() == "DYING") {
+        return;
+    }
     if (yPosition + getFloorPosition() + 5 < enemy->getYPosition() + enemy->getFloorPosition()) {
         addPoints(enemy->getPoints());
         enemy->die();
