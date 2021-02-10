@@ -170,9 +170,7 @@ void Player::die() {
         return;
     }
     changeState(new Dying());
-    loseLife();
-    restartPos(cam->x, 380);
-    //lives and all of that, but this could stay for test environment
+    lives = loseLife();
 }
 
 void Player::collideWith(GameObject *go) {
@@ -190,10 +188,6 @@ void Player::collideWith(Enemy *enemy) {
     } else {
         if(isPlayerBig) {
             isPlayerBig = false;
-            return;
-        }
-        if(--lives > 0) {
-            restartPos(cam->x, 380); // appears at the beginning of the screen
             return;
         }
         this->die();
