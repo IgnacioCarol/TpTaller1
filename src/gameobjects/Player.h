@@ -75,8 +75,8 @@ public:
     bool itsAlive();
     void testMode();
     bool getTestModeState();
-
-    void setJumpConfig(int yPos);
+    void startToJump();
+    void setJumpConfig(bool restart);
 
 
     void restartPos();
@@ -111,6 +111,8 @@ private:
     int floor;
 
     bool testModeState = false;
+
+    void dropPlayer();
 };
 
 

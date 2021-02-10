@@ -33,7 +33,7 @@ void Player::jump(int yMovement) {
 }
 
 bool Player::canJump() const {
-    return ((jumping && yPosition > maxYPosition) || (!jumping && yPosition == initialJumpingPosition));
+    return ((jumping && yPosition > maxYPosition) || (!jumping && (yPosition == initialJumpingPosition || yPosition == maxYPosition + 100)));
 }
 
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
@@ -60,7 +60,6 @@ void Player::move(std::vector<int> vector) {
         keyStates[arrows[i]] = vector[i];
     }
     leftOrRightPressed = vector[1] || vector[3];
-   // setJumpConfig(380);
     completeMovement(keyStates);
 }
 
@@ -108,6 +107,7 @@ void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
+            startToJump();
             changeState(new Jumping());
         } else if (state == "NORMAL") {
             changeState(new Normal());
@@ -139,7 +139,7 @@ bool Player::getDirection() {
 void Player::move() {
     Uint8 keyStates[83];
     if (ticks < 50) {
-        keyStates[SDL_SCANCODE_UP] = isJumping();
+        keyStates[SDL_SCANCODE_UP] = isJumping() && (abs(yPosition - initialJumpingPosition) > GRAVITY || ticks < 5);
         bool isMoving = leftOrRightPressed && (characterState->getStateType() == "JUMPING" || characterState->getStateType() == "RUNNING");
         keyStates[SDL_SCANCODE_LEFT] =  isMoving && !xDirection;
         keyStates[SDL_SCANCODE_RIGHT] = isMoving && xDirection;
@@ -164,6 +164,7 @@ void Player::changeLevel() {
 void Player::completeMovement(const Uint8 *keyStates) {
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
+    dropPlayer();
 }
 
 void Player::die() {
@@ -226,19 +227,30 @@ void Player::collideWith(Coin *coin) {
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
-    std::pair<int, int> position = nBlock->getPosition();
-    int yBlock = position.second;
-    if(yPosition + getFloorPosition() + 10 < nBlock->getYPosition() + nBlock->getFloorPosition()) {
-        yPosition = yBlock - pHeight/4 + 10;
-        setJumpConfig(yPosition);
+    int yBlock = nBlock->getYPosition() + nBlock->getFloorPosition();
+    if(yPosition + getFloorPosition() + 20 < yBlock) {
+        yPosition = yBlock - nBlock->getHeight() / 4 + 10;
+        initialJumpingPosition = yPosition;
     }
 }
 
-void Player::setJumpConfig(int yPos) {
-    initialJumpingPosition = yPos;
+void Player::startToJump() {
+    initialJumpingPosition = floor;
     maxYPosition = yPosition - 100;
+}
+
+void Player::setJumpConfig(bool restart) {
+    initialJumpingPosition = restart ? floor : yPosition + GRAVITY;
+    maxYPosition = initialJumpingPosition - 100;
 }
 
 void Player::restartPos() {
     restartPos(cam->x, floor);
+}
+
+void Player::dropPlayer() {
+    if (initialJumpingPosition < floor && getState() != "JUMPING") {
+        yPosition += GRAVITY;
+        initialJumpingPosition = yPosition > floor ? floor : yPosition;
+    }
 }

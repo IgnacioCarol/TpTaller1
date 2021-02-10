@@ -18,8 +18,8 @@ bool CollisionsManager::isInIntersection(GameObject *first, GameObject *pObject)
     int objectYPosition = pObject->getYPosition() + pObject->getFloorPosition();
     int realYPosition = first->getYPosition() + first->getFloorPosition();
     int xPosition = first->getXPosition();
-    return (abs(xPosition - objectXPosition) < 60) &&
-           (abs(realYPosition - objectYPosition) < 30); //ToDo Implement variables
+    return (abs(xPosition - objectXPosition) < 80) &&
+           (abs(realYPosition - objectYPosition) < 60); //ToDo Implement variables
 }
 
 void CollisionsManager::checkCollisions(std::vector<GameObject *> goOnScreen, std::vector<GameObject *> players) {
