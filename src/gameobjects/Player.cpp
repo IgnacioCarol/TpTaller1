@@ -59,6 +59,7 @@ void Player::move(std::vector<int> vector) {
         keyStates[arrows[i]] = vector[i];
     }
     leftOrRightPressed = vector[1] || vector[3];
+   // setJumpConfig(380);
     completeMovement(keyStates);
 }
 
@@ -233,6 +234,13 @@ void Player::collideWith(Coin *coin) {
 void Player::collideWith(PlatformNormal *nBlock) {
     std::pair<int, int> position = nBlock->getPosition();
     int yBlock = position.second;
-    if(yPosition + getFloorPosition() < nBlock->getYPosition() + nBlock->getFloorPosition())
-        this->setPosition(xPosition, yBlock + yPosition);
+    if(yPosition + getFloorPosition() + 10 < nBlock->getYPosition() + nBlock->getFloorPosition()) {
+        yPosition = yBlock - pHeight/4 + 10;
+        setJumpConfig(yPosition);
+    }
+}
+
+void Player::setJumpConfig(int yPos) {
+    initialJumpingPosition = yPos;
+    maxYPosition = yPosition - 100;
 }

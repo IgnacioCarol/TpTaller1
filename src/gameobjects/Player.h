@@ -21,9 +21,6 @@
 #include "../CharacterStates/Dying.h"
 #include "../config/Constants.h"
 
-#define imgPlayer "Sprites/Players/mario.png"
-#define defaultPlayer "Sprites/Default/defaultPlayer.png"
-
 class CharacterState;
 class Enemy;
 class PlatformNormal;
@@ -78,6 +75,8 @@ public:
     bool itsAlive();
     void testMode();
     bool getTestModeState();
+
+    void setJumpConfig(int yPos);
 
 
 private:
