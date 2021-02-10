@@ -21,3 +21,7 @@ void PlatformNormal::collideWith(GameObject *go) {
 std::pair<int, int> PlatformNormal::getPosition() {
     return std::make_pair(xPosition, yPosition);
 }
+
+int PlatformNormal::getFloorPosition() {
+    return -70;
+}

@@ -13,6 +13,7 @@ public:
     void move() override {};
     int getHeight() override;
     void collideWith(GameObject *go) override;
+    int getFloorPosition() override;
     std::pair<int, int> getPosition();
 
 private:
