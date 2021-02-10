@@ -12,7 +12,8 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
-    atScene = true; //Maybe we never gonna ask this to the player, but never knows...
+    atScene = true;
+    floor = yPosition;
 }
 
 void Player::run(int direction) {
@@ -150,7 +151,7 @@ void Player::move() {
 }
 
 void Player::addPoints(int newPoints) {
-    actualScore += newPoints;
+    points += newPoints;
     levelPoints[level] += newPoints;
 }
 
