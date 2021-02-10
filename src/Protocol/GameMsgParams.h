@@ -63,19 +63,34 @@ struct GameMsgLevelChange {
     GameObjectsInit gameObjectsInit;
 };
 
-struct GameMsgPlayersScore {
+struct GameMsgPlayersPartialScore {
     int id;
     int position;
     int score;
 
-    bool operator <(const GameMsgPlayersScore& p) const { //In order to sort by position, lowest first
+    bool operator <(const GameMsgPlayersPartialScore& p) const { //In order to sort by position, lowest first
+        return position < p.position;
+    }
+};
+
+struct GameMsgPlayersTotalScore {
+    int id;
+    int scores[3];
+    int totalScore;
+    int position;
+
+    bool operator <(const GameMsgPlayersTotalScore& p) const {
         return position < p.position;
     }
 };
 
 struct GameMsgShowPartialScore {
     int level;
-    std::vector<GameMsgPlayersScore> playersPartialScore;
+    std::vector<GameMsgPlayersPartialScore> playersPartialScore;
+};
+
+struct GameMsgShowGameOver {
+    std::vector<GameMsgPlayersTotalScore> playersTotalScore;
 };
 
 struct GamePlayerPlaying {

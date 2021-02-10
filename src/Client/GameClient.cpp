@@ -333,7 +333,7 @@ void GameClient::stopShowPartialScore() {
 
 void GameClient::showPartialScore(GameMsgShowPartialScore params) {
     std::sort(params.playersPartialScore.begin(), params.playersPartialScore.end());
-    for (GameMsgPlayersScore player: params.playersPartialScore) {
+    for (GameMsgPlayersPartialScore player: params.playersPartialScore) {
         playersMap[player.id]->setPoints(player.score);
     }
 

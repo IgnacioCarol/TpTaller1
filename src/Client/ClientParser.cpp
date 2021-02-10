@@ -137,9 +137,9 @@ GameMsgShowPartialScore ClientParser::parsePartialScoreParams(json msg) {
     Logger::getInstance()->debug("Parsing partial score params");
     json contentJson = msg[MSG_CONTENT_PROTOCOL];
 
-    std::vector<GameMsgPlayersScore> playersPartialScore;
+    std::vector<GameMsgPlayersPartialScore> playersPartialScore;
     for (auto& playerJson: contentJson["playersScore"]) {
-        GameMsgPlayersScore player = {
+        GameMsgPlayersPartialScore player = {
                 playerJson["id"],
                 playerJson["position"],
                 playerJson["score"]

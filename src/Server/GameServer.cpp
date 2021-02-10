@@ -142,20 +142,20 @@ void GameServer::updatePlayers() {
         player->move();
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
             player->changeState(new Paused(false));
-            sendScore = true;
             changeLevelFlag = true;
         }
     }
 
     for (Player* player: players){
-        sendScore &= (player->getState() == "FINISH" || player->getState() == "PAUSED");
+        changeLevelFlag &= (player->getState() == "FINISH" || player->getState() == "PAUSED");
     }
 
-    if (sendScore) {
+    if (changeLevelFlag) {
         score->startLevelScore(stage->getLevel());
+        nextStage();
     }
 
-    if (changeLevelFlag) nextStage();
+    sendScore = changeLevelFlag;
 }
 
 void GameServer::updateGameObjects() {
