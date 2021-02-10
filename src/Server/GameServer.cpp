@@ -116,6 +116,7 @@ void GameServer::restartCharacters() {
     for (auto & player : players) {
         player->restartPos(0, 380);
         player->changeState(new Normal());
+        player->saveLevelPoints(stage->getLevel());
     }
     camera->restartPos();
 }
@@ -142,6 +143,7 @@ void GameServer::updatePlayers() {
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
             player->changeState(new Paused(false));
             sendScore = true;
+            changeLevelFlag = true;
         }
     }
 

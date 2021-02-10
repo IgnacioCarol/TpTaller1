@@ -150,11 +150,11 @@ json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, Ba
 json ServerParser::buildPartialScore(std::vector<Player*> players, BackgroundStage *stage) {
     std::vector<GameMsgPlayersScore> playersScore;
 
-    for (int i = 1; i <= players.size(); i++) {
+    for (int i = 0; i < players.size(); i++) {
         GameMsgPlayersScore playerMsg = {
                 players[i]->getId(),
-                players[i]->getLevelPoints(stage->getLevel()),
-                i //Expecting players to be sorted by position
+                i+1, //Expecting players to be sorted by position
+                players[i]->getTotalPoints()
         };
         playersScore.push_back(playerMsg);
     }

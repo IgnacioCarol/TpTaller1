@@ -150,31 +150,30 @@ void Player::move() {
     characterState->move(keyStates, this);
 }
 
-void Player::changeLevel(int levelBefore, int levelAfter) {
-    levelPoints[levelAfter] = levelPoints[levelBefore];
+void Player::saveLevelPoints(int currentLevel) {
+    levelPoints[currentLevel] = totalPoints - levelPoints[currentLevel - 1];
 }
 
-void Player::addPoints(int level, int newPoints) {
-    actualScore += newPoints;
-    levelPoints[level] += newPoints;
+void Player::addPoints(int newPoints) {
+    totalPoints += newPoints;
+}
+
+void Player::setPoints(int points) {
+    totalPoints = points;
 }
 
 int Player::getLevelPoints(int level) {
     return levelPoints[level];
 }
 
+int Player::getTotalPoints() {
+    return totalPoints;
+}
+
 int Player::getLives() {
     return lives;
 }
 
-void Player::setPoints(int level, int points) {
-    levelPoints[level] = points;
-}
-
-void Player::setLevelPosition(int level, int position) {
-    levelPosition[level] = position; //TODO: ver si es necesario
-}
-
 bool Player::operator<(const Player &p) const {
-    return this->actualScore > p.actualScore;
+    return this->totalPoints > p.totalPoints;
 }

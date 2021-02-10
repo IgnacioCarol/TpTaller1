@@ -334,7 +334,7 @@ void GameClient::stopShowPartialScore() {
 void GameClient::showPartialScore(GameMsgShowPartialScore params) {
     std::sort(params.playersPartialScore.begin(), params.playersPartialScore.end());
     for (GameMsgPlayersScore player: params.playersPartialScore) {
-        playersMap[player.id]->setPoints(params.level, player.score); //TODO: TERMINAR
+        playersMap[player.id]->setPoints(player.score);
     }
 
     showScore = true;
@@ -401,6 +401,6 @@ void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
 
 void GameClient::loadScoreText() {
     for (std::pair<int, Player*> player: playersMap) {
-        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getLevelPoints(background->getLevel())), WHITE_COLOR, renderer);
+        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getTotalPoints()), WHITE_COLOR, renderer);
     }
 }

@@ -188,7 +188,7 @@ private:
     const vector<string> validConfigTags = {"log", "ventana", "escenario", "credenciales"};
     const vector<string> validLogTags = {"level"};
     const vector<string> validWindowTags = {"ancho", "alto"};
-    const vector<string> validStageTags = {"niveles","score"};
+    const vector<string> validStageTags = {"niveles","puntuacion"};
     const vector<string> validScoreTags = {"tiempo"};
     const vector<string> validCredentialTags = {"usuarios", "cantidadJugadores"};
     const vector<string> validUserTags = {"nombre", "contrasenia"};
