@@ -161,7 +161,6 @@ void Player::changeLevel() {
 }
 
 void Player::completeMovement(const Uint8 *keyStates) {
-    auto imageMap = TextureManager::Instance()->getTextureMap();
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
 }

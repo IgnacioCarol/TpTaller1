@@ -76,6 +76,8 @@ public:
     bool getTestModeState();
     std::pair<int, int> getPosition();
 
+    void restartPos();
+
 private:
     //Image related
     std::string username;
@@ -103,7 +105,7 @@ private:
     int scorePosition;
     int actualScore;
     std::map<int, int> levelPoints;
-
+    int floor;
 
     bool testModeState = false;
 };
