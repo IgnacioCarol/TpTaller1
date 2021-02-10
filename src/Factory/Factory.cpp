@@ -7,7 +7,6 @@
 #include "../gameobjects/EnemyMushroom.h"
 #include "../gameobjects/EnemyTurtle.h"
 #include "../CharacterStates/EnemyMovement.h"
-#include "../Game.h"
 #include "../Server/GameServer.h"
 #include "../gameobjects/Hole.h"
 
@@ -115,7 +114,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmpEnemy = new EnemyMushroom();
                 if (tmpEnemy != nullptr){
                     GameServer::Instance() ->addPath(GOOMBA_ID, enemies.image, DEFAULT_MUSHROOM_PATH);
-                    tmpEnemy->init(900, 425, GOOMBA_ID, Game::Instance()->getCamera(), new EnemyMovement(0, 5));
+                    tmpEnemy->init(900, 425, GOOMBA_ID, GameServer::Instance()->getCamera()->getCamera(), new EnemyMovement(0, 5));
 
                     Logger::getInstance()->debug("Mushroom enemy created correctly");
                 }

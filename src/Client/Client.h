@@ -9,7 +9,6 @@
 #include "../Socket/Socket.h"
 #include "../logger/logger.h"
 #include "../Login/Login.h"
-#include "../Game.h"
 #include "ClientMsg.h"
 #include "ClientException.h"
 #include "ClientParser.h"

@@ -183,7 +183,6 @@ void Socket::bindAndListen() {
         Logger::getInstance()->error(MSG_SOCKET_BIND_CLIENT_ERR);
         throw SocketException(MSG_SOCKET_BIND_CLIENT_ERR);
     }
-
     int yes=1;
 
     // Para fixear el bind fail despues de una corrida:
@@ -196,7 +195,6 @@ void Socket::bindAndListen() {
         Logger::getInstance()->error(errorMsg);
         throw SocketException(errorMsg);
     }
-
     // Bind
     // int bind(int sockfd, const struct sockaddr *addr, socklen_t addrlen);
     // sockfd -> file descriptor that refers to a socket

@@ -7,7 +7,6 @@
 
 #include "BackgroundStage.h"
 #include "SecondStage.h"
-#include "../Game.h"
 
 class FirstStage: public BackgroundStage {
 public:

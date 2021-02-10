@@ -14,8 +14,10 @@
 #include "ServerParser.h"
 #include "Server.h"
 #include "../BackgroundStages/FirstStage.h"
+#include <unordered_set>
 
-
+class ServerParser;
+class Camera;
 class GameServer {
 public:
     static GameServer* Instance();
@@ -39,8 +41,9 @@ public:
     json getInitializationMsg();
     bool isPlaying() const;
     void cleanGameObjects();
-    void handleEvents(); //TODO: ver qué debería devolver (porque puede cambiar de escena/terminar juego)
 
+    void updateGameObjectsOnScreen();
+    std::vector <GameObject*> getGameObjectsOnScreen();
     ~GameServer();
 
     void unpausePlayer(PlayerClient *player);
@@ -61,6 +64,7 @@ public:
 
     void setChangeLevelFlag(bool setValue);
 
+    void deleteGameObject(GameObject *pObject);
     void addSoundsPaths();
 
     bool arePlayersAlive() const;
@@ -89,11 +93,11 @@ private:
     BackgroundStage* stage;
     //Elements of the game
     std::vector <GameObject*> gameObjects;
-
+    unordered_set <GameObject*> gameObjectsDeleted;
     std::vector <Player*>  players;
     bool playing = false;
     bool changeLevelFlag = false;
-
+    std::vector <GameObject*> gameObjectsOnScreen;
     std::map<std::string, std::string> soundsPath;
 
 };

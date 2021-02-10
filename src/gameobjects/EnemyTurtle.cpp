@@ -6,7 +6,7 @@ void EnemyTurtle::init(size_t x, size_t y, std::string textureID, SDL_Rect *came
     x = GameMap::getInstance()->getRandomX(y);
     Enemy::init(x, y, textureID, camera, state);
     type = GOT_ENEMY_TURTLE;
-    points = 200;
+    pointsToPlayer = POINTS_TURTLE;
 }
 
 
@@ -21,4 +21,8 @@ void EnemyTurtle::walk() {
 
 void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     this->draw(renderer, cameraX, cameraY, ENEMY_WIDTH, ENEMY_HEIGHT);
+}
+
+int EnemyTurtle::getFloorPosition() {
+    return -55;
 }

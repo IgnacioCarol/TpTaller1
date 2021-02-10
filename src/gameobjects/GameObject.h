@@ -13,6 +13,8 @@
 #include <cstdio>
 #include <string>
 
+class Enemy;
+
 enum GameObjectType {
     GOT_COIN,
     GOT_ENEMY_MUSHROOM,
@@ -45,7 +47,15 @@ public:
     virtual void setState(std::string state);
     virtual std::string getState();
     bool isAtScene(int camXPos);
-    int getPoints();
+
+    virtual size_t getPoints();
+
+    virtual void collideWith(GameObject *go);
+    virtual void collideWith(Enemy* enemy);
+
+    virtual void die();
+
+    virtual int getFloorPosition();
 
 protected:
     //To manage the movement

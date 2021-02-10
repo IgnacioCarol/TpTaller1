@@ -6,6 +6,8 @@
 #include "../logger/logger.h"
 #include "../TextureManager.h"
 #include "GameObject.h"
+#include "Enemy.h"
+#include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
 #include <utility>
@@ -21,6 +23,8 @@
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
 class CharacterState;
+class Enemy;
+class PlatformNormal;
 
 class Player : public GameObject {
 public:
@@ -57,19 +61,22 @@ public:
 
     bool getDirection() override;
 
+    void collideWith(GameObject *go) override;
+
+    //Collisions
+    void collideWith(Enemy* enemy) override;
+    void changeLevel();
     void addPoints(int newPoints);
+    void die() override;
 
-    int getLives();
-
+    int getLives() const;
     int loseLife();
-
     bool itsAlive();
-
-    void die();
-
     void testMode();
-
     bool getTestModeState();
+    std::pair<int, int> getPosition();
+
+    void restartPos();
 
 private:
     //Image related
@@ -86,7 +93,20 @@ private:
     SDL_Rect *cam;
     int ticks;
     bool leftOrRightPressed;
+
+    void completeMovement(const Uint8 *keyStates);
+
+    //Health related attributes
+    bool isPlayerBig;
     int lives = 3;
+
+    //Score related attributes
+    int level = 1;
+    int scorePosition;
+    int actualScore;
+    std::map<int, int> levelPoints;
+    int floor;
+
     bool testModeState = false;
 };
 

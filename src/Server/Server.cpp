@@ -1,3 +1,4 @@
+#include "../Utils/CollisionsManager.h"
 #include "Server.h"
 
 Server* Server::instance = nullptr;
@@ -19,6 +20,8 @@ Server::~Server() {
     pthread_mutex_destroy(&this->commandMutex);
     pthread_mutex_destroy(&this->clientsMutex);
     pthread_mutex_destroy(&this->waitingRoomMutex);
+    pthread_join(loginThread, nullptr);
+    pthread_join(acceptorThread, nullptr);
 }
 
 Server::Server() {
@@ -179,10 +182,6 @@ void * Server::handlePlayerClient(void * arg) {
             playerClient->isConnected() &&
             (msg = receive(playerClient)) != nullptr) {
         msg["username"] = playerClient->username;
-        /*ss.str("");
-        ss << "[thread:listener]" << "[user:" << playerClient->id << "] "
-           << "msg: " << msg.dump();
-        Logger::getInstance()->debug(ss.str());*/
 
         playerClient->pushCommand(msg);
     }
@@ -196,37 +195,20 @@ json Server::receive(PlayerClient *playerClient) {
     json msg;
     int msg_received;
     std::stringstream ss;
-    int tolerance = 0;
 
     while (playerClient->isConnected()) {
         Logger::getInstance()->debug("Waiting to receive msg from player: " + playerClient->username);
         msg_received = playerClient->receive(&msg);
         Logger::getInstance()->debug("Receive returned from player: " + playerClient->username);
         if (msg_received < 0) {
-            /*if (tolerance > 3) {//ToDo definir esto con mas criterio y poner en macro
-                //ToDo suponemos que el socket se cerro, realizar tratamiento
-                // 1. Marcar connected como false
-                // 2. Mover player client a listado de conexiones muertas
-                // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
-*/
                 ss.str("");
                 ss << "Fail tolerance exceeded! [thread:listener] " << "[user:" << playerClient->id << "] ";
                 Logger::getInstance()->error(ss.str());
-                //throw ServerException(ss.str());
-           /* }
-            tolerance++;
-            continue;*/
         }
         if (!msg_received) {
-            //ToDo suponemos que el socket se cerro, realizar tratamiento
-            // 1. Marcar connected como false
-            // 2. Mover player client a listado de conexiones muertas
-            // comment: en caso de reconexion se marca connected como true y se mueve al listado de clients activo reanudando el juego para el client
             ss.str("");
             ss << "Connection has been lost with client [thread:listener] " << "[user:" << playerClient->id << "] ";
             Logger::getInstance()->error(ss.str());
-            //throw ServerException(ss.str());
-            //continue;
         }
 
         return msg;
@@ -280,9 +262,7 @@ void * Server::broadcastToPlayerClient(void *arg) {
     return nullptr;
 }
 
-// Infinite loop processing PlayerClients commands
 bool Server::run() {
-    pthread_mutex_t  * cmdMutex = &this->commandMutex;
     json msg;
     std::stringstream ss;
 
@@ -315,7 +295,7 @@ bool Server::run() {
             ss << "[thread:run] " << "msg: " << msg.dump();
             Logger::getInstance()->debug(ss.str());
             std::string username = msg["username"].get<std::string>();
-            for (Player* player : game->getPlayers()) { //TODO: Debería estar dentro del Game Server este loop
+            for (Player* player : game->getPlayers()) {
                 if (player->getUsername() == username) {
                     std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
                     player->move(positions);
@@ -328,10 +308,10 @@ bool Server::run() {
 
             this->popCommand();
         }
-        //ToDo change game state with msg
         game->updateGameObjects();
         game->updatePlayers();
-
+        game->updateGameObjectsOnScreen();
+        CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), getPlayersAsGameObjects(game->getPlayers()));
         game->getCamera()->update(game->getPlayers());
         if (game->isPlaying()) {
             msg = getPlayersPositionMessage();
@@ -344,7 +324,7 @@ bool Server::run() {
             waitTime++;
         }
         ss.str("");
-        ss << "[Server][thread:run] extra_time =" << waitTime;
+        ss << "[Server][thread:run] extra_time = " << waitTime;
         Logger::getInstance()->debug(ss.str());
 
     }
@@ -357,7 +337,6 @@ bool Server::run() {
     }
 
     while (someoneIsConnected()) {
-        continue;
     }
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {
@@ -371,6 +350,14 @@ bool Server::run() {
     this->running = false;
 
     return true;
+}
+
+std::vector<GameObject*> Server::getPlayersAsGameObjects(const std::vector<Player*>& players) {
+    std::vector<GameObject*> gos;
+    for (auto player : players) {
+        gos.push_back(player);
+    }
+    return gos;
 }
 
 bool Server::someoneIsConnected() {
