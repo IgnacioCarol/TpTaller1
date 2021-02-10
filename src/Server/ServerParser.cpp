@@ -113,8 +113,22 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
     return Protocol::gameViewMsgToJson(gameMsgPlaying);
 }
 
-json ServerParser::buildGameOverMsg() {
-    return Protocol::buildContentMsg(0, GAME_OVER_CMD, {});
+json ServerParser::buildGameOverMsg(std::vector<Player*> players) {
+    std::vector<GameMsgPlayersTotalScore> playersScore;
+
+    for (int i = 0; i < players.size(); i++) {
+        GameMsgPlayersTotalScore playerMsg = {
+                players[i]->getId(),
+                i+1, //Expecting players to be sorted by position
+                players[i]->getPointsByLevel(),
+                players[i]->getTotalPoints()
+        };
+        playersScore.push_back(playerMsg);
+    }
+
+    return Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver{
+            playersScore
+    });
 }
 
 json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, BackgroundStage *stage) {

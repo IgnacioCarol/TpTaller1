@@ -152,3 +152,24 @@ GameMsgShowPartialScore ClientParser::parsePartialScoreParams(json msg) {
         playersPartialScore
     };
 }
+
+GameMsgShowGameOver ClientParser::parseGameOverParams(json msg) {
+    Logger::getInstance()->debug("Parsing game over params");
+    json contentJson = msg[MSG_CONTENT_PROTOCOL];
+
+    std::vector<GameMsgPlayersTotalScore> playersTotal;
+    for (auto& playerJson: contentJson["playersScore"]) {
+        GameMsgPlayersTotalScore player = {
+                playerJson["id"],
+                playerJson["position"],
+                playerJson["levelScores"],
+                playerJson["totalScore"]
+        };
+        playersTotal.push_back(player);
+    }
+
+    return GameMsgShowGameOver {
+        playersTotal
+    };
+}
+

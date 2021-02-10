@@ -163,3 +163,23 @@ json Protocol::gameShowPartialScoreMsgToJson(GameMsgShowPartialScore params) {
 
     return buildContentMsg(0, GAME_SHOW_PARTIAL_SCORE_CMD, msg);
 }
+
+json Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver params) {
+    json playersScore = json::array();
+
+    for (auto& player : params.playersTotalScore) {
+        json playerTotalScoreJson = {
+                {"id", player.id},
+                {"position", player.position},
+                {"levelScores", player.levelScores},
+                {"totalScore", player.totalScore}
+        };
+        playersScore.push_back(playerTotalScoreJson);
+    }
+
+    json msg = {
+            {"playersScore", playersScore}
+    };
+
+    return buildContentMsg(0, GAME_OVER_CMD, msg);
+}

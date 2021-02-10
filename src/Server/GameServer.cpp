@@ -116,13 +116,12 @@ void GameServer::restartCharacters() {
     for (auto & player : players) {
         player->restartPos(0, 380);
         player->changeState(new Normal());
-        player->saveLevelPoints(stage->getLevel());
     }
     camera->restartPos();
 }
 
 bool GameServer::isPlaying() const {
-    return this->playing && !this->stage->isTimeOver();
+    return this->playing && this->stage && !this->stage->isTimeOver();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
@@ -138,10 +137,14 @@ std::vector<Player *> GameServer::getPlayers() {
 }
 
 void GameServer::updatePlayers() {
+    logger->debug("Updating players...");
     for (Player* player: players) {
         player->move();
-        if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
+        if (player->getXPosition() >= stage->getLevelLimit() && player->getState() == "NORMAL"){
             player->changeState(new Paused(false));
+            player->addPoints(levelRacePoints[currentRaceIndex]);
+            player->saveLevelPoints(stage->getLevel());
+            currentRaceIndex++;
             changeLevelFlag = true;
         }
     }
@@ -151,14 +154,19 @@ void GameServer::updatePlayers() {
     }
 
     if (changeLevelFlag) {
-        score->startLevelScore(stage->getLevel());
+        currentRaceIndex = 0;
         nextStage();
+
+        if (stage->getLevel() != 0) { //TODO: mejorar esto, tal vez haya una forma mejor
+            score->startLevelScore(stage->getLevel());
+            sendScore = true;
+        }
     }
 
-    sendScore = changeLevelFlag;
 }
 
 void GameServer::updateGameObjects() {
+    logger->debug("Updating game objects...");
     for (GameObject* go: gameObjects){
         go->move();
     }

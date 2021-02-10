@@ -212,7 +212,7 @@
         </puntuacion>
     </escenario>
     <credenciales>
-         <cantidadJugadores>2</cantidadJugadores>
+         <cantidadJugadores>1</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>a</nombre>

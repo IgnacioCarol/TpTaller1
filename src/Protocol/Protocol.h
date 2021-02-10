@@ -49,6 +49,7 @@ public:
     static json gameViewMsgToJson(GameMsgPlaying params);
     static json gameShowPartialScoreMsgToJson(GameMsgShowPartialScore params);
     static json gameChangeLevelMsgToJson(GameMsgLevelChange changeLevelMsg);
+    static json gameShowGameOverMsgToJson(GameMsgShowGameOver params);
 private:
     Protocol() = default;
     ~Protocol() = default;

@@ -82,6 +82,8 @@ void GameClient::render() {
 
     if (showScore) {
         renderPartialScore();
+    } else if(showGameOver) {
+        renderGameOver();
     } else {
         background -> renderBackground(camera -> getCamera());
         for (int objectID: idsToRender){
@@ -111,13 +113,13 @@ void GameClient::renderPlayers() {
         }
         element.second -> draw(renderer, camera->getXpos(), 0);
         TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
-        renderPointsAndLives(playerUsernameYPos, element.second->getLevelPoints(background->getLevel()), element.second->getLives());
+        renderPointsAndLives(playerUsernameYPos, element.second->getTotalPoints(), element.second->getLives());
 
         playerUsernameYPos += 20;
     }
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
-    renderPointsAndLives(20, clientPlayer->getLevelPoints(background->getLevel()), clientPlayer->getLives());
+    renderPointsAndLives(20, clientPlayer->getTotalPoints(), clientPlayer->getLives());
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -206,8 +208,11 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     }
     success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_LEVEL_COMPLETED, TEXT_LEVEL_COMPLETED_VALUE, WHITE_COLOR, renderer);
-    success = success && textureManager->loadText(TEXT_SCORE_TITLE_KEY, TEXT_SCORE_TITLE_VALUE, WHITE_COLOR, renderer);
-    success = success && textureManager->loadText(TEXT_NEXT_CONTINUE_KEY, TEXT_NEXT_CONTINUE_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_SCORE_TITLE_KEY, TEXT_SCORE_TITLE_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_GAME_OVER_KEY, TEXT_GAME_OVER_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LVL1_KEY, TEXT_LVL1_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LVL2_KEY, TEXT_LVL2_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LVL3_KEY, TEXT_LVL3_VALUE, GRAY_COLOR, renderer);
 
     return success;
 }
@@ -297,8 +302,14 @@ bool GameClient::isPlaying() {
     return playing;
 }
 
-void GameClient::gameOver() {
-    playing = false;
+void GameClient::gameOver(GameMsgShowGameOver params) {
+    std::sort(params.playersTotalScore.begin(), params.playersTotalScore.end());
+    for (GameMsgPlayersTotalScore player: params.playersTotalScore) {
+        playersMap[player.id]->setPoints(player.totalScore);
+        playersMap[player.id]->setPointsByLevel(player.levelScores);
+    }
+
+    showGameOver = true;
 }
 
 void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
@@ -344,14 +355,50 @@ void GameClient::renderPartialScore() {
     loadScoreText();
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
 
-    textureManager->printText(TEXT_SCORE_TITLE_KEY, 360, 100, renderer);
-    int yCount = 4;
+    int yCount = 3;
+    textureManager->printText(TEXT_SCORE_TITLE_KEY, 480, 50 * yCount, renderer);
     for (std::pair<int, Player*> player: playersMap) {
+        yCount++;
         textureManager->printText(player.second->getTextureId() + "_text", 280, 50 * yCount, renderer);
         textureManager->printText(player.second->getTextureId() + "_score", 480, 50 * yCount, renderer);
-        yCount++;
     }
-    textureManager->printText(TEXT_NEXT_CONTINUE_KEY, 200, -100, renderer);
+}
+
+void GameClient::renderGameOver() {
+    //loadGameOverScoreText();
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    int yCount = 1;
+    int xCount = 0;
+    const int initX = 130;
+    const int xFactor = 110;
+    const int initY = 200;
+    const int yFactor = 50;
+
+    textureManager->printText(TEXT_GAME_OVER_KEY, 340, 50, renderer);
+    textureManager->printText(TEXT_LVL1_KEY, initX + 1 * xFactor, initY, renderer);
+    textureManager->printText(TEXT_LVL2_KEY, initX + 2 * xFactor, initY, renderer);
+    textureManager->printText(TEXT_LVL3_KEY, initX + 3 * xFactor, initY, renderer);
+    textureManager->printText(TEXT_SCORE_TITLE_KEY, initX + 4 * xFactor, initY, renderer);
+
+    //std::sort(playersMap.begin()->second, playersMap.end()->second);
+    for (std::pair<int, Player*> player: playersMap) {
+        textureManager->printText(player.second->getTextureId() + "_text", initX - 50 + xCount * xFactor, initY + yCount * yFactor, renderer);
+        xCount++;
+
+        std::map<int,int> levelScores = player.second->getPointsByLevel();
+
+        for (int i = 1; i <= 3; i++) {
+            string textID = player.second->getTextureId() + "_lvl" + std::to_string(i);
+            textureManager->loadText(textID, std::to_string(levelScores.at(i)), WHITE_COLOR, renderer);
+            textureManager->printText(textID, initX + xCount * xFactor, initY + yCount * yFactor, renderer);
+            xCount++;
+        }
+
+        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getTotalPoints()), WHITE_COLOR, renderer);
+        textureManager->printText(player.second->getTextureId() + "_score", initX + xCount * xFactor, initY + yCount * yFactor, renderer);
+        yCount++;
+        xCount = 0;
+    }
 }
 
 void GameClient::setServerDown() {
@@ -402,5 +449,18 @@ void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
 void GameClient::loadScoreText() {
     for (std::pair<int, Player*> player: playersMap) {
         textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getTotalPoints()), WHITE_COLOR, renderer);
+    }
+}
+
+void GameClient::setPlaying(bool isPlaying) {
+    this->playing = isPlaying;
+}
+
+void GameClient::loadGameOverScoreText() {
+    for (std::pair<int, Player*> player: playersMap) {
+
+        for (std::pair<int,int> levelScore: player.second->getPointsByLevel()) {
+
+        }
     }
 }

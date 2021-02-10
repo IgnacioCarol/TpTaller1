@@ -151,19 +151,21 @@ void Player::move() {
 }
 
 void Player::saveLevelPoints(int currentLevel) {
-    levelPoints[currentLevel] = totalPoints - levelPoints[currentLevel - 1];
+    levelPoints[currentLevel] = partialPoints;
+    partialPoints = 0;
 }
 
 void Player::addPoints(int newPoints) {
     totalPoints += newPoints;
+    partialPoints += newPoints;
 }
 
 void Player::setPoints(int points) {
     totalPoints = points;
 }
 
-int Player::getLevelPoints(int level) {
-    return levelPoints[level];
+std::map<int,int> Player::getPointsByLevel() {
+    return levelPoints;
 }
 
 int Player::getTotalPoints() {
@@ -176,4 +178,8 @@ int Player::getLives() {
 
 bool Player::operator<(const Player &p) const {
     return this->totalPoints > p.totalPoints;
+}
+
+void Player::setPointsByLevel(std::map<int,int> points) {
+    levelPoints = points;
 }

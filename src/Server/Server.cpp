@@ -271,9 +271,6 @@ void * Server::broadcastToPlayerClient(void *arg) {
 
         playerClient->popOutcome();
         tolerance = 0;
-        if (msg["command"] == GAME_OVER_CMD) {
-            playerClient->disconnect();
-        }
     }
 
     Logger::getInstance()->info("Finishing broadcast to player client thread");
@@ -336,11 +333,12 @@ bool Server::run() {
                 game->updateGameObjects();
                 game->updatePlayers();
                 game->getCamera()->update(game->getPlayers());
+                if (!game->isPlaying()) {
+                    break;
+                }
                 msg = getPlayersPositionMessage();
             }
             broadcast(msg);
-        } else {
-            //Game over view!!
         }
 
         size_t waitTime = 0;
@@ -355,14 +353,11 @@ bool Server::run() {
     }
     Logger::getInstance()->info("Finished run loop");
 
-    if (!game->isPlaying()) {
-        msg = ServerParser::buildGameOverMsg();
+    while (someoneIsConnected() && !game->isPlaying()) {
+        msg = ServerParser::buildGameOverMsg(game->getPlayersSortedByScore());
         broadcast(msg);
     }
 
-    while (someoneIsConnected()) {
-        continue;
-    }
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {
         pthread_join(thread.second, nullptr);

@@ -30,13 +30,16 @@ public:
     void update(GameMsgPlaying initialize);
     bool createGameObjects(GameObjectsInit gameObjectsInit);
     bool isPlaying();
-    void gameOver();
+    void gameOver(GameMsgShowGameOver params);
     void changeLevel(GameMsgLevelChange nextLevelConfig);
     void stopShowPartialScore();
     void showPartialScore(GameMsgShowPartialScore params);
     void clean();
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
+
+    void setPlaying(bool isPlaying);
+
 private:
     //functions
     GameClient(); //Private constructor to prevent instancing.
@@ -54,20 +57,22 @@ private:
     void renderPlayers();
     void renderPointsAndLives(int yPosition, int points, int lives);
     void renderPartialScore();
-
+    void loadScoreText();
+    void renderGameOver();
+    void loadGameOverScoreText();
 
     SDL_Window* window;
     SDL_Renderer* renderer;
-    BackgroundStage* background;
 
+    BackgroundStage* background;
     bool playing = true;
     bool serverIsDown = false;
     Camera* camera;
     Logger* logger = Logger::getInstance();
     TextureManager* textureManager;
     MusicManager* musicManager;
-    std::string clientUsername;
 
+    std::string clientUsername;
     std::map<int, Player*> playersMap;
     std::map<int, GameObject*> gameObjectsMap;
     std::vector<int> idsToRender;
@@ -75,9 +80,9 @@ private:
     bool levelCompleted = false;
     bool showScore = false;
 
-    static const int DIGITS = 6;
+    bool showGameOver = false;
 
-    void loadScoreText();
+    static const int DIGITS = 6;
 };
 
 

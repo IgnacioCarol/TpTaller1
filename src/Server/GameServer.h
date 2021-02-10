@@ -103,6 +103,9 @@ private:
     bool changeLevelFlag = false;
     bool sendScore = false;
 
+    int currentRaceIndex = 0;
+    const int levelRacePoints[4] = {2500, 1500, 1000, 500};
+
     std::map<std::string, std::string> soundsPath;
 
 };

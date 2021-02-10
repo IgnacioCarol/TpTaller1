@@ -63,7 +63,9 @@ public:
 
     void setPoints(int points);
 
-    int getLevelPoints(int level);
+    std::map<int,int> getPointsByLevel();
+
+    void setPointsByLevel(std::map<int,int> points);
 
     int getTotalPoints();
 
@@ -88,6 +90,7 @@ private:
     bool leftOrRightPressed;
     int lives = 3;
     int totalPoints = 0;
+    int partialPoints = 0;
     std::map<int, int> levelPoints;
 };
 

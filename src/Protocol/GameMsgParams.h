@@ -75,9 +75,9 @@ struct GameMsgPlayersPartialScore {
 
 struct GameMsgPlayersTotalScore {
     int id;
-    int scores[3];
-    int totalScore;
     int position;
+    std::map<int,int> levelScores;
+    int totalScore;
 
     bool operator <(const GameMsgPlayersTotalScore& p) const {
         return position < p.position;

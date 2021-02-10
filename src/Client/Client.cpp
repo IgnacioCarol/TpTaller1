@@ -276,6 +276,7 @@ void Client::run() {
                 GameMsgPlaying updateParams;
                 GameMsgLevelChange updateLevel;
                 GameMsgShowPartialScore partialScoreParams;
+                GameMsgShowGameOver gameOverParams;
 
                 switch(protocol) {
                     case GAME_INITIALIZE_CMD:
@@ -291,7 +292,8 @@ void Client::run() {
                         gameClient->update(updateParams); //le paso el resultado del parsermagico
                         break;
                     case GAME_OVER_CMD:
-                        gameClient->gameOver();
+                        gameOverParams = ClientParser::parseGameOverParams(receivedMessage);
+                        gameClient->gameOver(gameOverParams);
                         break;
                     case GAME_SHOW_PARTIAL_SCORE_CMD:
                         partialScoreParams = ClientParser::parsePartialScoreParams(receivedMessage);
@@ -319,7 +321,7 @@ void Client::run() {
                 SDL_Event e;
                 while( SDL_PollEvent( &e ) != 0 && gameClient->isPlaying()) {
                     if (e.type  == SDL_QUIT ) {
-                        gameClient->gameOver();
+                        gameClient->setPlaying(false);
                         break;
                     }
 
@@ -387,7 +389,7 @@ void Client::handleUserEvents() {
     up = down = right = left = false;
     while( SDL_PollEvent( &e ) != 0 ) {
         if (e.type  == SDL_QUIT ) {
-            GameClient::Instance()->gameOver();
+            GameClient::Instance()->setPlaying(false);
             return;
         }
         if (!keysAssigned) {
