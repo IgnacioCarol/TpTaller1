@@ -12,7 +12,8 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
-    atScene = true; //Maybe we never gonna ask this to the player, but never knows...
+    atScene = true;
+    floor = yPosition;
 }
 
 void Player::run(int direction) {
@@ -151,7 +152,7 @@ void Player::move() {
 }
 
 void Player::addPoints(int newPoints) {
-    actualScore += newPoints;
+    points += newPoints;
     levelPoints[level] += newPoints;
 }
 
@@ -161,7 +162,6 @@ void Player::changeLevel() {
 }
 
 void Player::completeMovement(const Uint8 *keyStates) {
-    auto imageMap = TextureManager::Instance()->getTextureMap();
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
 }
@@ -171,9 +171,7 @@ void Player::die() {
         return;
     }
     changeState(new Dying());
-    loseLife();
-    restartPos(cam->x, 380);
-    //lives and all of that, but this could stay for test environment
+    lives = loseLife();
 }
 
 void Player::collideWith(GameObject *go) {
@@ -191,10 +189,6 @@ void Player::collideWith(Enemy *enemy) {
     } else {
         if(isPlayerBig) {
             isPlayerBig = false;
-            return;
-        }
-        if(--lives > 0) {
-            restartPos(cam->x, 380); // appears at the beginning of the screen
             return;
         }
         this->die();
@@ -243,4 +237,8 @@ void Player::collideWith(PlatformNormal *nBlock) {
 void Player::setJumpConfig(int yPos) {
     initialJumpingPosition = yPos;
     maxYPosition = yPosition - 100;
+}
+
+void Player::restartPos() {
+    restartPos(cam->x, floor);
 }

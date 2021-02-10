@@ -121,7 +121,7 @@ void GameServer::restartCharacters() {
 }
 
 bool GameServer::isPlaying() const {
-    return this->playing && !this->stage->isTimeOver();
+    return this->playing && !this->stage->isTimeOver() && arePlayersAlive();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {

@@ -39,7 +39,7 @@ void CollisionsManager::checkCollisions(std::vector<GameObject *> goOnScreen, st
     }
     for (auto player : players) {
         for (auto go : goOnScreen) {
-            if (this->isInIntersection(player, go)) {
+            if (player->getState() != "DYING" && go->getState() != "DYING" && this->isInIntersection(player, go)) {
                 go->collideWith(player);
             }
         }
