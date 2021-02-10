@@ -228,3 +228,7 @@ void Player::testMode() {
 bool Player::getTestModeState() {
     return testModeState;
 }
+
+void Player::restartPos() {
+    restartPos(cam->x, floor);
+}
