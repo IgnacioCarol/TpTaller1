@@ -74,9 +74,9 @@ private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
     void initializeGameObjects(int level);
-
-
     void initializeAllElementsOfGameServer(std::vector<PlayerClient*> clients);
+    bool someoneIsAlive() const;
+
     //Utils
     Logger* logger = Logger::getInstance();
     Config* config = Config::getInstance();

@@ -71,6 +71,8 @@ public:
 
     int getLives();
 
+    void subtractLife();
+
     bool operator<(const Player& p) const;
 
 private:

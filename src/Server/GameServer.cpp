@@ -121,7 +121,7 @@ void GameServer::restartCharacters() {
 }
 
 bool GameServer::isPlaying() const {
-    return this->playing && this->stage && !this->stage->isTimeOver();
+    return this->playing && this->stage && !this->stage->isTimeOver() && someoneIsAlive();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
@@ -234,4 +234,13 @@ Score* GameServer::getScore() {
 
 void GameServer::updateSendScore() {
     sendScore = !score->isShowScoreTimeOver();
+}
+
+bool GameServer::someoneIsAlive() const {
+    for (auto& player: players) {
+        if (player->getLives() > 0) {
+            return true;
+        }
+    }
+    return false;
 }

@@ -38,6 +38,9 @@ bool Player::canJump() const {
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
     this->init(0, 380, textureID, camera, 6);
     this->username = username;
+    this->levelPoints[1] = 0;
+    this->levelPoints[2] = 0;
+    this->levelPoints[3] = 0;
 }
 
 void Player::restartPos(int x, int y) {
@@ -123,6 +126,7 @@ void Player::setState(std::string state) {
         else{
             MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
             changeState(new Dying());
+            subtractLife();
         }
     }
 }
@@ -174,6 +178,12 @@ int Player::getTotalPoints() {
 
 int Player::getLives() {
     return lives;
+}
+
+void Player::subtractLife() {
+    if (lives > 0) {
+        lives -= 1;
+    }
 }
 
 bool Player::operator<(const Player &p) const {
