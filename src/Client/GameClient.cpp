@@ -303,7 +303,6 @@ bool GameClient::isPlaying() {
 }
 
 void GameClient::gameOver(GameMsgShowGameOver params) {
-    std::sort(params.playersTotalScore.begin(), params.playersTotalScore.end());
     for (GameMsgPlayersTotalScore player: params.playersTotalScore) {
         playersMap[player.id]->setPoints(player.totalScore);
         playersMap[player.id]->setPointsByLevel(player.levelScores);
@@ -343,7 +342,6 @@ void GameClient::stopShowPartialScore() {
 }
 
 void GameClient::showPartialScore(GameMsgShowPartialScore params) {
-    std::sort(params.playersPartialScore.begin(), params.playersPartialScore.end());
     for (GameMsgPlayersPartialScore player: params.playersPartialScore) {
         playersMap[player.id]->setPoints(player.score);
     }
@@ -357,7 +355,7 @@ void GameClient::renderPartialScore() {
 
     int yCount = 3;
     textureManager->printText(TEXT_SCORE_TITLE_KEY, 480, 50 * yCount, renderer);
-    for (std::pair<int, Player*> player: playersMap) {
+    for (std::pair<int, Player*> player: sortPlayersByScore()) {
         yCount++;
         textureManager->printText(player.second->getTextureId() + "_text", 280, 50 * yCount, renderer);
         textureManager->printText(player.second->getTextureId() + "_score", 480, 50 * yCount, renderer);
@@ -380,8 +378,7 @@ void GameClient::renderGameOver() {
     textureManager->printText(TEXT_LVL3_KEY, initX + 3 * xFactor, initY, renderer);
     textureManager->printText(TEXT_SCORE_TITLE_KEY, initX + 4 * xFactor, initY, renderer);
 
-    //std::sort(playersMap.begin()->second, playersMap.end()->second);
-    for (std::pair<int, Player*> player: playersMap) {
+    for (std::pair<int, Player*> player: sortPlayersByScore()) {
         textureManager->printText(player.second->getTextureId() + "_text", initX - 50 + xCount * xFactor, initY + yCount * yFactor, renderer);
         xCount++;
 
@@ -456,11 +453,13 @@ void GameClient::setPlaying(bool isPlaying) {
     this->playing = isPlaying;
 }
 
-void GameClient::loadGameOverScoreText() {
-    for (std::pair<int, Player*> player: playersMap) {
+vector<pair<int,Player*>> GameClient::sortPlayersByScore() {
+    vector<pair<int, Player*>> playersVector;
 
-        for (std::pair<int,int> levelScore: player.second->getPointsByLevel()) {
-
-        }
+    for (auto& it : playersMap) {
+        playersVector.emplace_back(it);
     }
+
+    sort(playersVector.begin(), playersVector.end(), cmp);
+    return playersVector;
 }

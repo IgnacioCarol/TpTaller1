@@ -65,23 +65,13 @@ struct GameMsgLevelChange {
 
 struct GameMsgPlayersPartialScore {
     int id;
-    int position;
     int score;
-
-    bool operator <(const GameMsgPlayersPartialScore& p) const { //In order to sort by position, lowest first
-        return position < p.position;
-    }
 };
 
 struct GameMsgPlayersTotalScore {
     int id;
-    int position;
     std::map<int,int> levelScores;
     int totalScore;
-
-    bool operator <(const GameMsgPlayersTotalScore& p) const {
-        return position < p.position;
-    }
 };
 
 struct GameMsgShowPartialScore {

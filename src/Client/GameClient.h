@@ -21,6 +21,10 @@
 #include "../CharacterStates/Normal.h"
 #include "../Utils/MusicManager.h"
 
+static bool cmp(pair<int,Player*>& a, pair<int,Player*> b) {
+    return *a.second < *b.second;
+}
+
 class GameClient {
 public:
     static GameClient* Instance();
@@ -59,7 +63,7 @@ private:
     void renderPartialScore();
     void loadScoreText();
     void renderGameOver();
-    void loadGameOverScoreText();
+    vector<pair<int,Player*>> sortPlayersByScore();
 
     SDL_Window* window;
     SDL_Renderer* renderer;

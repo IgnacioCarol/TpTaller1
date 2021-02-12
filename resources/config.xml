@@ -208,11 +208,11 @@
             </nivel>
         </niveles>
         <puntuacion>
-            <tiempo>5</tiempo>
+            <tiempo>10</tiempo>
         </puntuacion>
     </escenario>
     <credenciales>
-         <cantidadJugadores>1</cantidadJugadores>
+         <cantidadJugadores>3</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>a</nombre>

@@ -119,7 +119,6 @@ json ServerParser::buildGameOverMsg(std::vector<Player*> players) {
     for (int i = 0; i < players.size(); i++) {
         GameMsgPlayersTotalScore playerMsg = {
                 players[i]->getId(),
-                i+1, //Expecting players to be sorted by position
                 players[i]->getPointsByLevel(),
                 players[i]->getTotalPoints()
         };
@@ -167,7 +166,6 @@ json ServerParser::buildPartialScore(std::vector<Player*> players, BackgroundSta
     for (int i = 0; i < players.size(); i++) {
         GameMsgPlayersPartialScore playerMsg = {
                 players[i]->getId(),
-                i+1, //Expecting players to be sorted by position
                 players[i]->getTotalPoints()
         };
         playersScore.push_back(playerMsg);

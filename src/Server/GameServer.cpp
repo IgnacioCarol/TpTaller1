@@ -228,11 +228,6 @@ bool GameServer::shouldSendScore() {
     return sendScore;
 }
 
-std::vector<Player*> GameServer::getPlayersSortedByScore() {
-    std::sort(players.begin(), players.end());
-    return players;
-}
-
 Score* GameServer::getScore() {
     return score;
 }

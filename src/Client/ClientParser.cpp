@@ -141,7 +141,6 @@ GameMsgShowPartialScore ClientParser::parsePartialScoreParams(json msg) {
     for (auto& playerJson: contentJson["playersScore"]) {
         GameMsgPlayersPartialScore player = {
                 playerJson["id"],
-                playerJson["position"],
                 playerJson["score"]
         };
         playersPartialScore.push_back(player);
@@ -161,7 +160,6 @@ GameMsgShowGameOver ClientParser::parseGameOverParams(json msg) {
     for (auto& playerJson: contentJson["playersScore"]) {
         GameMsgPlayersTotalScore player = {
                 playerJson["id"],
-                playerJson["position"],
                 playerJson["levelScores"],
                 playerJson["totalScore"]
         };

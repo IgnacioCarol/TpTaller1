@@ -325,7 +325,7 @@ bool Server::run() {
 
         if (game->isPlaying()) {
             if (game->shouldSendScore() && !game->getScore()->isShowScoreTimeOver()) {
-                msg = ServerParser::buildPartialScore(game->getPlayersSortedByScore(), game->getBackgroundStage());
+                msg = ServerParser::buildPartialScore(game->getPlayers(), game->getBackgroundStage());
             } else if (game->shouldSendScore() && game->getScore()->isShowScoreTimeOver()) {
                 game->updateSendScore();
                 msg = ServerParser::buildStopPartialScore();
@@ -354,7 +354,7 @@ bool Server::run() {
     Logger::getInstance()->info("Finished run loop");
 
     while (someoneIsConnected() && !game->isPlaying()) {
-        msg = ServerParser::buildGameOverMsg(game->getPlayersSortedByScore());
+        msg = ServerParser::buildGameOverMsg(game->getPlayers());
         broadcast(msg);
     }
 

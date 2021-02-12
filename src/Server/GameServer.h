@@ -66,8 +66,6 @@ public:
 
     bool shouldSendScore();
 
-    std::vector<Player*> getPlayersSortedByScore();
-
     Score* getScore();
 
     void updateSendScore();

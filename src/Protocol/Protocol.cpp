@@ -150,8 +150,7 @@ json Protocol::gameShowPartialScoreMsgToJson(GameMsgShowPartialScore params) {
     for (auto& player : params.playersPartialScore) {
         json playerPartialScoreJson = {
                 {"id", player.id},
-                {"score", player.score},
-                {"position", player.position}
+                {"score", player.score}
         };
         playersScore.push_back(playerPartialScoreJson);
     }
@@ -170,7 +169,6 @@ json Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver params) {
     for (auto& player : params.playersTotalScore) {
         json playerTotalScoreJson = {
                 {"id", player.id},
-                {"position", player.position},
                 {"levelScores", player.levelScores},
                 {"totalScore", player.totalScore}
         };
