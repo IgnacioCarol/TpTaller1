@@ -141,6 +141,8 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
         player -> setState(playerUpdate.state);
+        player -> setPoints(playerUpdate.points);
+        player -> setLives(playerUpdate.lives);
     }
 }
 

@@ -193,3 +193,7 @@ bool Player::operator<(const Player &p) const {
 void Player::setPointsByLevel(std::map<int,int> points) {
     levelPoints = points;
 }
+
+void Player::setLives(int lives) {
+    this->lives = lives;
+}

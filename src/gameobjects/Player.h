@@ -75,6 +75,8 @@ public:
 
     bool operator<(const Player& p) const;
 
+    void setLives(int lives);
+
 private:
     //Image related
     std::string username;
