@@ -8,7 +8,7 @@
 #include "../Protocol/GameMsgParams.h"
 
 using json = nlohmann::json;
-
+class Camera;
 class ServerParser {
 public:
     static json buildLoginMsgResponse(bool authenticated);

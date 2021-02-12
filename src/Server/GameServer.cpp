@@ -1,12 +1,15 @@
 #ifdef __APPLE__
 #include "../CharacterStates/Normal.h"
+#include "../CharacterStates/Paused.h"
 #else
 #include <src/CharacterStates/Normal.h>
+#include <src/CharacterStates/Paused.h>
 #endif
 #include "GameServer.h"
 #include "../Utils/Score.h"
 
 GameServer* GameServer::instance = nullptr;
+
 
 GameServer *GameServer::Instance() {
     //First time we create an instance of Game
@@ -73,10 +76,14 @@ std::map<std::string, std::string> GameServer::getPlayerPaths() {
 }
 
 void GameServer::cleanGameObjects() {
-    for(std::vector<GameObject*>::size_type i = 0; i != gameObjects.size(); i++) {
-        delete gameObjects[i];
+    for (auto & gameObject : gameObjects) {
+        delete gameObject;
+    }
+    for (auto & i : gameObjectsDeleted) {
+        delete i;
     }
     gameObjects.clear();
+    gameObjectsDeleted.clear();
 }
 
 GameServer::~GameServer() {
@@ -84,7 +91,7 @@ GameServer::~GameServer() {
     for (auto& player: players) {
         delete player;
     }
-    cleanGameObjects(); //TODO: OJO, ACA USO CLEANOBJECTS PERO EN EL ORIGINAL USAN CICLO -> PREGUNTAR
+    cleanGameObjects();
     Logger::getInstance()->info("All Game Objects were deleted");
     delete this->camera;
     Logger::getInstance()->info("The camera was deleted");
@@ -92,12 +99,6 @@ GameServer::~GameServer() {
     Logger::getInstance()->info("The parser(config) was deleted");
     delete this->factory;
     Logger::getInstance()->info("The Factory was deleted");
-}
-
-void GameServer::handleEvents() {
-    for (auto & player : players) {
-        player->move(std::vector<int>()); //TODO: acá debería recibir los mensajes del client
-    }
 }
 
 void GameServer::nextStage() {
@@ -121,7 +122,7 @@ void GameServer::restartCharacters() {
 }
 
 bool GameServer::isPlaying() const {
-    return this->playing && this->stage && !this->stage->isTimeOver() && someoneIsAlive();
+    return this->playing && !this->stage->isTimeOver() && arePlayersAlive();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
@@ -137,7 +138,6 @@ std::vector<Player *> GameServer::getPlayers() {
 }
 
 void GameServer::updatePlayers() {
-    logger->debug("Updating players...");
     for (Player* player: players) {
         player->move();
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() == "NORMAL"){
@@ -166,7 +166,6 @@ void GameServer::updatePlayers() {
 }
 
 void GameServer::updateGameObjects() {
-    logger->debug("Updating game objects...");
     for (GameObject* go: gameObjects){
         go->move();
     }
@@ -207,6 +206,24 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
     }
 }
 
+void GameServer::updateGameObjectsOnScreen() {
+    gameObjectsOnScreen.clear();
+    for (auto object : gameObjects) {
+        if (object->isAtScene(getCamera()->getXpos())) {
+            gameObjectsOnScreen.push_back(object);
+        }
+    }
+}
+
+std::vector<GameObject *> GameServer::getGameObjectsOnScreen() {
+    return gameObjectsOnScreen;
+}
+
+void GameServer::deleteGameObject(GameObject *pObject) {
+    gameObjects.resize(std::remove(gameObjects.begin(), gameObjects.end(), pObject) - gameObjects.begin());
+    gameObjectsDeleted.insert(pObject);
+}
+
 void GameServer::addSoundsPaths() {
     std::string path = "Sound_Effects/Sounds/";
     std::string format = ".wav";
@@ -236,9 +253,9 @@ void GameServer::updateSendScore() {
     sendScore = !score->isShowScoreTimeOver();
 }
 
-bool GameServer::someoneIsAlive() const {
-    for (auto& player: players) {
-        if (player->getLives() > 0) {
+bool GameServer::arePlayersAlive() const{
+    for(Player* ply: players){
+        if (ply->itsAlive()){
             return true;
         }
     }

@@ -53,11 +53,24 @@ bool Enemy::getDirection() {
     return direction > 0;
 }
 
+void Enemy::collideWith(GameObject *go) {
+   go->collideWith(this);
+}
+
+size_t Enemy::getPoints() {
+    return pointsToPlayer;
+}
+
+
 void Enemy::die() {
     if (enemyState->getStateType() == "DYING"){
-        //GameObject::die();
+        GameObject::die();
     }
     int framesAmount = enemyState->getFramesAmount();
     delete enemyState;
     enemyState = new Dying(framesAmount - 1);
+}
+
+void Enemy::dieFalling() {
+    GameObject::die();
 }

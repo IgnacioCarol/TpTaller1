@@ -13,13 +13,17 @@
 #include <cstdio>
 #include <string>
 
+class Enemy;
+
 enum GameObjectType {
     GOT_COIN,
     GOT_ENEMY_MUSHROOM,
     GOT_ENEMY_TURTLE,
     GOT_PLATFORM_NORMAL,
     GOT_PLATFORM_SURPRISE,
-    GOT_PLAYER
+    GOT_PLAYER,
+    GOT_HOLE,
+    GOT_PIPE
 };
 
 class GameObject {
@@ -30,6 +34,7 @@ public:
     virtual void draw(SDL_Renderer *renderer, int cameraX, int cameraY) = 0;
     virtual void move();
     virtual int getHeight();
+    virtual int getWidth();
     virtual int getFrameAmount();
     int getId();
     GameObjectType getType();
@@ -42,7 +47,15 @@ public:
     virtual void setState(std::string state);
     virtual std::string getState();
     bool isAtScene(int camXPos);
-    int getPoints();
+
+    virtual size_t getPoints();
+
+    virtual void collideWith(GameObject *go);
+    virtual void collideWith(Enemy* enemy);
+
+    virtual void die();
+
+    virtual int getFloorPosition();
 
 protected:
     //To manage the movement

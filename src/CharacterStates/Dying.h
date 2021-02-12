@@ -12,7 +12,8 @@
 
 class Dying: public CharacterState{
 public:
-    explicit Dying(int currentFrame = 0);
+    explicit Dying(bool falling = false);
+    explicit Dying(int currentFrame); //For the enemies, they have their death image in different frames
     void move(Enemy* enemy) override;
     void move(const Uint8 *currentKeyStates, Player *player) override;
 

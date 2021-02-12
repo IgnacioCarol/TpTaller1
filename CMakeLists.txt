@@ -17,7 +17,6 @@ add_executable(TpTaller1
         src/Utils/Printer.cpp src/Utils/Printer.h
         src/Utils/Timer.cpp src/Utils/Timer.h
         src/Utils/Vector.cpp src/Utils/Vector.h
-        src/Game.cpp src/Game.h
         src/GameMap.cpp src/GameMap.h test/gamemap_test.cpp
         src/TextureManager.cpp src/TextureManager.h
         src/Camera.cpp src/Camera.h
@@ -59,7 +58,13 @@ add_executable(TpTaller1
         src/Client/ClientParser.cpp src/Client/ClientParser.h
         src/CharacterStates/Paused.cpp src/CharacterStates/Paused.h
         src/Utils/IdGenerator.cpp src/Utils/IdGenerator.h
-        src/Client/GameClient.cpp src/Client/GameClient.h src/Utils/MusicManager.cpp src/Utils/MusicManager.h src/CharacterStates/Dying.cpp src/CharacterStates/Dying.h src/Utils/Score.cpp src/Utils/Score.h)
+        src/Client/GameClient.cpp src/Client/GameClient.h
+        src/Utils/MusicManager.cpp src/Utils/MusicManager.h
+        src/CharacterStates/Dying.cpp src/CharacterStates/Dying.h
+        src/Utils/CollisionsManager.cpp src/Utils/CollisionsManager.h
+        src/gameobjects/Hole.cpp src/gameobjects/Hole.h
+        src/gameobjects/Pipe.cpp src/gameobjects/Pipe.h
+        src/Utils/Score.cpp src/Utils/Score.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

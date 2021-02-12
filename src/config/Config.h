@@ -63,11 +63,25 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_STAGE_LEVEL_ENEMY_NAME "enemigo"
 #define XML_STAGE_LEVEL_ENEMY_TYPE "tipo"
 #define XML_STAGE_LEVEL_ENEMY_QTY "cantidad"
+// Holes
+#define XML_STAGE_LEVEL_HOLES "pozos"
+#define XML_STAGE_LEVEL_HOLE_NAME "pozo"
+#define XML_STAGE_LEVEL_HOLE_COORDX "coordX"
+#define XML_STAGE_LEVEL_HOLE_COORDY "coordY"
+#define XML_STAGE_LEVEL_HOLE_WIDTH "ancho"
+#define XML_STAGE_LEVEL_HOLE_HEIGHT "alto"
+// Platforms
 #define XML_STAGE_LEVEL_PLATFORMS "plataformas"
 #define XML_STAGE_LEVEL_PLATFORM_NAME "plataforma"
 #define XML_STAGE_LEVEL_PLATFORM_TYPE "tipo"
 #define XML_STAGE_LEVEL_PLATFORM_COORDX "coordX"
 #define XML_STAGE_LEVEL_PLATFORM_COORDY "coordY"
+#define XML_STAGE_LEVEL_PLATFORM_QTY "cantidad"
+// Pipes
+#define XML_STAGE_LEVEL_PIPES "tubos"
+#define XML_STAGE_LEVEL_PIPE_NAME "tubo"
+#define XML_STAGE_LEVEL_PIPE_COORDX "coordX"
+#define XML_STAGE_LEVEL_PIPE_COORDY "coordY"
 #define XML_STAGE_LEVEL_PLATFORM_QTY "cantidad"
 
 #define XML_CREDENTIAL_TAG "configuracion.credenciales"
@@ -103,6 +117,19 @@ struct Platform {
     int quantity;
 };
 
+struct xmlHole {
+    int coordX;
+    int coordY;
+    int width;
+    int height;
+};
+
+struct xmlPipe {
+    int coordX;
+    int coordY;
+    string image;
+};
+
 struct xmlCoin { //ToDo el xml no deberia tener un path por moneda, reconfigurar para que reciba el path de las imagenes una sola vez
     string image;
     int coordY;
@@ -116,6 +143,8 @@ struct Level {
     vector<xmlCoin> coins;
     vector<xmlEnemy> enemies;
     vector<Platform> platforms;
+    vector<xmlHole>  holes;
+    vector<xmlPipe>  pipes;
 };
 
 struct xmlScore {
@@ -180,6 +209,8 @@ private:
     void parseStage(ptree pt);
     void parseEnemies(Level *level, ptree pt);
     void parsePlatforms(Level *level, ptree pt);
+    void parseHoles(Level *level, ptree pt);
+    void parsePipes(Level *level, ptree pt);
     void parseCoins(Level *level, ptree pt);
     void parsePlayers(ptree pt);
     void validateTags(string xmlLvl, vector<string> validTags, ptree pt);
@@ -192,10 +223,12 @@ private:
     const vector<string> validScoreTags = {"tiempo"};
     const vector<string> validCredentialTags = {"usuarios", "cantidadJugadores"};
     const vector<string> validUserTags = {"nombre", "contrasenia"};
-    const vector<string> validLevelTags = {"numero", "fondo", "monedas", "tiempo", "enemigos", "plataformas"};
+    const vector<string> validLevelTags = {"numero", "fondo", "monedas", "tiempo", "enemigos", "plataformas", "pozos", "tubos"};
     const vector<string> validCoinTags = {"imagen", "coordY", "cantidad"};
     const vector<string> validEnemyTags = {"tipo", "imagen", "cantidad"};
     const vector<string> validPlatformTags = {"tipo", "imagen", "coordX", "coordY", "cantidad"};
+    const vector<string> validHoleTags = {"coordX", "coordY", "ancho", "alto"};
+    const vector<string> validPipeTags = {"coordX", "coordY", "imagen"};
     const vector<string> validLogLevels = {"ERROR", "DEBUG", "INFO"};
 };
 

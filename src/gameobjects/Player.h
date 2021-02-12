@@ -6,6 +6,8 @@
 #include "../logger/logger.h"
 #include "../TextureManager.h"
 #include "GameObject.h"
+#include "Enemy.h"
+#include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
 #include <utility>
@@ -21,6 +23,8 @@
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
 class CharacterState;
+class Enemy;
+class PlatformNormal;
 
 class Player : public GameObject {
 public:
@@ -57,24 +61,28 @@ public:
 
     bool getDirection() override;
 
+    void collideWith(GameObject *go) override;
+
+    //Collisions
+    void collideWith(Enemy* enemy) override;
     void saveLevelPoints(int currentLevel);
 
     void addPoints(int newPoints);
+    void die() override;
+
+    int getLives() const;
+    int loseLife();
+    bool itsAlive();
+    void testMode();
+    bool getTestModeState();
+    std::pair<int, int> getPosition();
+    void restartPos();
 
     void setPoints(int points);
-
     std::map<int,int> getPointsByLevel();
-
     void setPointsByLevel(std::map<int,int> points);
-
     int getTotalPoints();
-
-    int getLives();
-
-    void subtractLife();
-
     bool operator<(const Player& p) const;
-
     void setLives(int lives);
 
 private:
@@ -92,7 +100,18 @@ private:
     SDL_Rect *cam;
     int ticks;
     bool leftOrRightPressed;
+
+    void completeMovement(const Uint8 *keyStates);
+
+    //Health related attributes
+    bool isPlayerBig;
     int lives = 3;
+
+    //Score related attributes
+    int level = 1;
+    int floor;
+
+    bool testModeState = false;
     int totalPoints = 0;
     int partialPoints = 0;
     std::map<int, int> levelPoints;

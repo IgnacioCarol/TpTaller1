@@ -121,6 +121,12 @@ void Config::parseStage(ptree pt) {
         level.coins.clear();
         Config::parseCoins(&level, level_pt);
 
+        level.holes.clear();
+        Config::parseHoles(&level, level_pt);
+
+        level.pipes.clear();
+        Config::parsePipes(&level, level_pt);
+
         this->stage.levels.push_back(level);
     }
 
@@ -209,6 +215,79 @@ void Config::parsePlatforms(Level *level, ptree pt) {
         }
 
         level->platforms.push_back(platform);
+    }
+}
+
+void Config::parseHoles(Level *level, ptree pt) {
+    for (const auto &e : pt.get_child(XML_STAGE_LEVEL_HOLES)) {
+        xmlHole hole;
+        string hole_name;
+        ptree hole_pt;
+        tie(hole_name, hole_pt) = e;
+
+        if (hole_name != XML_STAGE_LEVEL_HOLE_NAME) {
+            throw ConfigException("Invalid hole tag, found: " + hole_name);
+        }
+
+        validateTags(XML_STAGE_LEVEL_HOLE_NAME, validHoleTags, hole_pt);
+
+        hole.coordX = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_COORDX);
+        if (hole.coordX < 0) {
+            Logger::getInstance()->error("Invalid hole coordX " + to_string(hole.coordX)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.coordX = 0;
+        }
+        hole.coordY = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_COORDY);
+        if (hole.coordY < 1) {
+            Logger::getInstance()->error("Invalid hole coordY " + to_string(hole.coordY)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.coordY = 0;
+        }
+        hole.width = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_WIDTH);
+        if (hole.width < 1) {
+            Logger::getInstance()->error("Invalid hole width " + to_string(hole.width)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.width = 0;
+        }
+        hole.height = hole_pt.get<int>(XML_STAGE_LEVEL_HOLE_HEIGHT);
+        if (hole.height < 1) {
+            Logger::getInstance()->error("Invalid hole height " + to_string(hole.height)
+                                         + ". Expected greater than 0, setting default to 0");
+            hole.height = 0;
+        }
+
+        level->holes.push_back(hole);
+    }
+}
+
+void Config::parsePipes(Level *level, ptree pt) {
+    for (const auto &e : pt.get_child(XML_STAGE_LEVEL_PIPES)) {
+        xmlPipe pipe;
+        string pipe_name;
+        ptree pipe_pt;
+        tie(pipe_name, pipe_pt) = e;
+
+        if (pipe_name != XML_STAGE_LEVEL_PIPE_NAME) {
+            throw ConfigException("Invalid pipe tag, found: " + pipe_name);
+        }
+
+        validateTags(XML_STAGE_LEVEL_PIPE_NAME, validPipeTags, pipe_pt);
+
+        pipe.coordX = pipe_pt.get<int>(XML_STAGE_LEVEL_PIPE_COORDX);
+        if (pipe.coordX < 0) {
+            Logger::getInstance()->error("Invalid pipe coordX " + to_string(pipe.coordX)
+                                         + ". Expected greater than 0, setting default to 0");
+            pipe.coordX = 0;
+        }
+        pipe.coordY = pipe_pt.get<int>(XML_STAGE_LEVEL_PIPE_COORDY);
+        if (pipe.coordY < 1) {
+            Logger::getInstance()->error("Invalid hole coordY " + to_string(pipe.coordY)
+                                         + ". Expected greater than 0, setting default to 0");
+            pipe.coordY = 0;
+        }
+        pipe.image = pipe_pt.get<string>(XML_STAGE_LEVEL_IMAGE);
+
+        level->pipes.push_back(pipe);
     }
 }
 

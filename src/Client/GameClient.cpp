@@ -64,7 +64,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
         return false;
     }
 
-    if(!this -> createGameObjects(initialize.gameObjectsInit)){
+    if(!this -> createGameObjects(initialize.gameObjectsInit, initialize.stage.level)){
         logger -> error("Cannot create the objects in the client");
         return false;
     }
@@ -120,6 +120,9 @@ void GameClient::renderPlayers() {
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
     renderPointsAndLives(20, clientPlayer->getTotalPoints(), clientPlayer->getLives());
+    if (!clientPlayer->itsAlive()){
+        textureManager->printText(TEXT_GAME_OVER_KEY, 300, 300, renderer);
+    }
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -140,6 +143,9 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
+        if (playerUpdate.testMode){
+            player -> testMode();
+        }
         player -> setState(playerUpdate.state);
         player -> setPoints(playerUpdate.points);
         player -> setLives(playerUpdate.lives);
@@ -157,7 +163,7 @@ void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
     }
 }
 
-bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
+bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit, int level) {
     for (GameObjectInit gameObject: gameObjectsInit.gameObjects){
         GameObjectType type = gameObject.type;
         if (type == GOT_ENEMY_TURTLE || type == GOT_ENEMY_MUSHROOM){
@@ -167,9 +173,10 @@ bool GameClient::createGameObjects(GameObjectsInit gameObjectsInit) {
             createPlayer(gameObject);
         }
         else{
-            createStaticObject(gameObject, type);
+            createStaticObject(gameObject, type, level);
         }
     }
+
     return true;
 }
 
@@ -238,9 +245,12 @@ void GameClient::createPlayer(GameObjectInit player) {
     Player* tmpPlayer = new Player(camera -> getCamera(), player.username, player.imageId);
     tmpPlayer->init(player.xPos, player.yPos, player.imageId, camera->getCamera(), player.frameAmount);
     playersMap[player.id] = tmpPlayer;
+    if (player.username == clientUsername){
+        clientPlayerID = player.id;
+    }
 }
 
-void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType) {
+void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType objectType, int level) {
     GameObject* tmp;
     if (objectType == GOT_COIN){
         tmp = new Coin();
@@ -248,8 +258,15 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
     }
-    else{
+    else if (objectType == GOT_PLATFORM_SURPRISE){
         tmp = new PlatformSurprise();
+    } else if (objectType == GOT_HOLE) {
+        Hole * h = new Hole();
+        h->setDimensions(gameObject.width, gameObject.height);
+        h->setLevel(level);
+        tmp = h;
+    } else {
+        tmp = new Pipe();
     }
 
     if (tmp != nullptr){
@@ -330,13 +347,14 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);
     camera->restartPos();
+
     //Deleting the gameObjects of the current level
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){
         delete gameObject.second;
     }
     gameObjectsMap.clear();
     idsToRender.clear();
-    createGameObjects(nextLevelConfig.gameObjectsInit);
+    createGameObjects(nextLevelConfig.gameObjectsInit, nextLevelConfig.stage.level);
 }
 
 void GameClient::stopShowPartialScore() {
@@ -464,4 +482,8 @@ vector<pair<int,Player*>> GameClient::sortPlayersByScore() {
 
     sort(playersVector.begin(), playersVector.end(), cmp);
     return playersVector;
+}
+
+bool GameClient::isPlayerAlive() {
+    return playersMap[clientPlayerID]->itsAlive();
 }

@@ -7,7 +7,6 @@
 #include <vector>
 #include <SDL2/SDL.h>
 
-
 class Camera {
 
 public:

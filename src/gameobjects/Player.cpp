@@ -12,7 +12,8 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
-    atScene = true; //Maybe we never gonna ask this to the player, but never knows...
+    atScene = true;
+    floor = yPosition;
 }
 
 void Player::run(int direction) {
@@ -62,13 +63,14 @@ void Player::move(std::vector<int> vector) {
         keyStates[arrows[i]] = vector[i];
     }
     leftOrRightPressed = vector[1] || vector[3];
-    characterState->changeState(keyStates, this);
-    characterState->move(keyStates, this);
+    completeMovement(keyStates);
 }
 
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-    characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+    if (itsAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
+        SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
+        characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+    }
 }
 
 bool Player::isJumping() {
@@ -106,7 +108,6 @@ void Player::setDirection(bool direction) {
 
 void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
-        int framesAmount = characterState->getFramesAmount();
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
             changeState(new Jumping());
@@ -124,9 +125,8 @@ void Player::setState(std::string state) {
             changeState(new Paused(state == "PAUSED"));
         }
         else{
-            MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
-            changeState(new Dying());
-            subtractLife();
+            changeState(new Dying(state == "DYING_FALLING"));
+            (!loseLife()) ? MusicManager::Instance()->playSound(GAME_OVER_SOUND) : MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
         }
     }
 }
@@ -150,8 +150,7 @@ void Player::move() {
     } else {
         keyStates[SDL_SCANCODE_UP] = keyStates[SDL_SCANCODE_LEFT] = keyStates[SDL_SCANCODE_RIGHT] = keyStates[SDL_SCANCODE_DOWN] = 0;
     }
-    characterState->changeState(keyStates, this);
-    characterState->move(keyStates, this);
+    completeMovement(keyStates);
 }
 
 void Player::saveLevelPoints(int currentLevel) {
@@ -176,14 +175,71 @@ int Player::getTotalPoints() {
     return totalPoints;
 }
 
-int Player::getLives() {
+void Player::completeMovement(const Uint8 *keyStates) {
+    characterState->changeState(keyStates, this);
+    characterState->move(keyStates, this);
+}
+
+void Player::die() {
+    if (getState() == "DYING") {
+        return;
+    }
+    changeState(new Dying());
+    lives = loseLife();
+}
+
+void Player::collideWith(GameObject *go) {
+    go->collideWith(this);
+}
+
+
+void Player::collideWith(Enemy *enemy) {
+    if (enemy->getState() == "DYING") {
+        return;
+    }
+    if (yPosition + getFloorPosition() + 5 < enemy->getYPosition() + enemy->getFloorPosition()) {
+        addPoints(enemy->getPoints());
+        enemy->die();
+    } else {
+        if(isPlayerBig) {
+            isPlayerBig = false;
+            return;
+        }
+        this->die();
+    }
+}
+
+std::pair<int, int> Player::getPosition() {
+    return std::make_pair(xPosition, yPosition);
+}
+
+int Player::getLives() const {
     return lives;
 }
 
-void Player::subtractLife() {
-    if (lives > 0) {
-        lives -= 1;
+int Player::loseLife() {
+    if (!testModeState){
+        lives = (0 > lives - 1) ? 0 : lives - 1;
     }
+    return lives;
+}
+
+bool Player::itsAlive() {
+    return lives != 0;
+}
+
+void Player::testMode() {
+    testModeState = !testModeState;
+    std::string msg = (testModeState) ? "ACTIVATED" : "DEACTIVATED";
+    Logger::getInstance()->info("TEST MODE " + msg);
+}
+
+bool Player::getTestModeState() {
+    return testModeState;
+}
+
+void Player::restartPos() {
+    restartPos(cam->x, floor);
 }
 
 bool Player::operator<(const Player &p) const {
