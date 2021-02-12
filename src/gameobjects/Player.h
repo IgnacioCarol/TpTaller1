@@ -72,7 +72,7 @@ public:
 
     int getLives() const;
     int loseLife();
-    bool itsAlive();
+    bool isAlive();
     void testMode();
     bool getTestModeState();
     std::pair<int, int> getPosition();

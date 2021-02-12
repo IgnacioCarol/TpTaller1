@@ -120,7 +120,7 @@ void GameClient::renderPlayers() {
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
     renderPointsAndLives(20, clientPlayer->getTotalPoints(), clientPlayer->getLives());
-    if (!clientPlayer->itsAlive()){
+    if (!clientPlayer->isAlive()){
         textureManager->printText(TEXT_GAME_OVER_KEY, 300, 300, renderer);
     }
 }
@@ -222,6 +222,8 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     success = success && textureManager->loadText(TEXT_LVL1_KEY, TEXT_LVL1_VALUE, GRAY_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_LVL2_KEY, TEXT_LVL2_VALUE, GRAY_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_LVL3_KEY, TEXT_LVL3_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_CONGRATULATIONS_KEY, TEXT_CONGRATULATIONS_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_WINNER_KEY, TEXT_WINNER_VALUE, WHITE_COLOR, renderer);
 
     return success;
 }
@@ -389,10 +391,11 @@ void GameClient::renderGameOver() {
     int xCount = 0;
     const int initX = 130;
     const int xFactor = 110;
-    const int initY = 200;
+    const int initY = 100;
     const int yFactor = 50;
+    Player* winner;
 
-    textureManager->printText(TEXT_GAME_OVER_KEY, 340, 50, renderer);
+    textureManager->printText(TEXT_GAME_OVER_KEY, initX + 210, 50, renderer);
     textureManager->printText(TEXT_LVL1_KEY, initX + 1 * xFactor, initY, renderer);
     textureManager->printText(TEXT_LVL2_KEY, initX + 2 * xFactor, initY, renderer);
     textureManager->printText(TEXT_LVL3_KEY, initX + 3 * xFactor, initY, renderer);
@@ -403,6 +406,10 @@ void GameClient::renderGameOver() {
         xCount++;
 
         std::map<int,int> levelScores = player.second->getPointsByLevel();
+
+        if (winner == nullptr && player.second->isAlive()) {
+            winner = player.second;
+        }
 
         for (int i = 1; i <= 3; i++) {
             string textID = player.second->getTextureId() + "_lvl" + std::to_string(i);
@@ -415,6 +422,19 @@ void GameClient::renderGameOver() {
         textureManager->printText(player.second->getTextureId() + "_score", initX + xCount * xFactor, initY + yCount * yFactor, renderer);
         yCount++;
         xCount = 0;
+    }
+    yCount ++;
+
+    if (isPlayerAlive()) {
+        textureManager->printText(TEXT_CONGRATULATIONS_KEY, initX + 180, initY + yCount * yFactor, renderer);
+        yCount ++;
+    }
+
+    if (winner != nullptr) {
+        int nameSize = winner->getUsername().size();
+        int xOffset = 180;
+        textureManager->printText(winner->getTextureId() + "_text", initX + xOffset, initY + yCount * yFactor, renderer);
+        textureManager->printText(TEXT_WINNER_KEY, initX + xOffset + (FONT_PTR_SIZE * (nameSize + 1)), initY + yCount * yFactor, renderer);
     }
 }
 
@@ -485,5 +505,5 @@ vector<pair<int,Player*>> GameClient::sortPlayersByScore() {
 }
 
 bool GameClient::isPlayerAlive() {
-    return playersMap[clientPlayerID]->itsAlive();
+    return playersMap[clientPlayerID]->isAlive();
 }

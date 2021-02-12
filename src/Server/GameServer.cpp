@@ -157,7 +157,7 @@ void GameServer::updatePlayers() {
         currentRaceIndex = 0;
         nextStage();
 
-        if (stage->getLevel() != 0) { //TODO: mejorar esto, tal vez haya una forma mejor
+        if (stage->getLevel() != 0) {
             score->startLevelScore(stage->getLevel());
             sendScore = true;
         }
@@ -255,7 +255,7 @@ void GameServer::updateSendScore() {
 
 bool GameServer::arePlayersAlive() const{
     for(Player* ply: players){
-        if (ply->itsAlive()){
+        if (ply->isAlive()){
             return true;
         }
     }
