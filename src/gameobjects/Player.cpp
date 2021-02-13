@@ -193,10 +193,12 @@ void Player::collideWith(Enemy *enemy) {
         addPoints(enemy->getPoints());
         enemy->die();
     } else {
-        if(isPlayerBig) {
-            isPlayerBig = false;
+        if (this->isPlayerBig) {
+            this->setPlayerBig(false);
+            this->testMode();
             return;
         }
+
         this->die();
     }
 }
@@ -210,11 +212,6 @@ int Player::getLives() const {
 }
 
 int Player::loseLife() {
-    if (this->isPlayerBig) {
-        this->setPlayerBig(false);
-        return this->lives;
-    }
-
     if (!testModeState){
         lives = (0 > lives - 1) ? 0 : lives - 1;
     }

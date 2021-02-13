@@ -109,12 +109,7 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>2</cantidad>
-                    </enemigo>
-                    <enemigo>
-                        <tipo>enemigo_hongo</tipo>
-                        <imagen>Sprites/Enemies/GoombaDark.png</imagen>
-                        <cantidad>20</cantidad>
+                        <cantidad>1</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>

@@ -137,9 +137,7 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         player -> setDirection(playerUpdate.direction);
         player -> setState(playerUpdate.state);
 
-        if (playerUpdate.playerBig){
-            player->setPlayerBig(playerUpdate.playerBig);
-        }
+        player->setPlayerBig(playerUpdate.playerBig);
         if (playerUpdate.testMode){
             player -> testMode();
         }
@@ -327,7 +325,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     for (std::pair<int, Player*> player: playersMap){
         player.second->restartPos(0, 380);
         player.second->setDirection(true);
-        player.second->changeState(new Normal(false));
+        player.second->changeState(new Normal(player.second->getPlayerBig()));
         player.second->changeLevel(); //TODO Dani C que lo mire plis
     }
     levelCompleted = false;
