@@ -16,6 +16,7 @@ void Enemy::walk() {
     xPosition += direction;
     yPosition += (falling) ? GRAVITY_ENEMY : 0;
     flipFlag = direction == enemyVelocity;
+
 }
 
 void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) {
@@ -73,7 +74,9 @@ void Enemy::die() {
 }
 
 void Enemy::dieFalling() {
-    GameObject::die();
+    if (!isAtScene(cam->x)){
+        GameObject::die();
+    }
 }
 
 void Enemy::fall() {

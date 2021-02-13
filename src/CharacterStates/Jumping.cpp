@@ -18,7 +18,10 @@ void Jumping::move(const Uint8 *currentKeyStates, Player* player) {
 
 void Jumping::changeState(const Uint8 *currentKeyStates, Player* player) {
 
-    if (player -> finishJump() && stateType != "FALLING"){
+    if (stateType == "FALLING"){
+        player->dieFalling();
+    }
+    else{
         player -> changeState(new Normal());
     }
 }

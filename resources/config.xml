@@ -28,12 +28,12 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>15</cantidad>
+                        <cantidad>1</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/Goomba.png</imagen>
-                        <cantidad>20</cantidad>
+                        <cantidad>2</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
@@ -254,7 +254,7 @@
         </niveles>
     </escenario>
     <credenciales>
-         <cantidadJugadores>2</cantidadJugadores>
+         <cantidadJugadores>1</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>a</nombre>
