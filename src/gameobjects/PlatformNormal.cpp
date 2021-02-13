@@ -11,7 +11,7 @@ void PlatformNormal::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 }
 
 int PlatformNormal::getHeight() {
-    return NORMAL_BLOCK_HEIGHT;
+    return NORMAL_BLOCK_HEIGHT / 4;
 }
 
 void PlatformNormal::collideWith(GameObject *go) {
@@ -28,4 +28,8 @@ int PlatformNormal::getFloorPosition() {
 
 int PlatformNormal::centerXPos() {
     return - getWidth() / 2;
+}
+
+int PlatformNormal::getWidth() {
+    return NORMAL_BLOCK_WIDTH / 4;
 }

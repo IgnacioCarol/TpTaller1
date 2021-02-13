@@ -31,6 +31,8 @@ void Player::jump(int yMovement) {
         yPosition = yPosition + (!isNotStartingPos || yMovement ? - (yMovement + GRAVITY - 1) : + GRAVITY); //TODO change velocity to go up
     } else if (isNotStartingPos) {
         yPosition += GRAVITY;
+    } else {
+        yPosition--; //Fix a border case
     }
 }
 
@@ -62,6 +64,8 @@ void Player::move(std::vector<int> vector) {
         keyStates[arrows[i]] = vector[i];
     }
     leftOrRightPressed = vector[1] || vector[3];
+    firstY = yPosition;
+    firstX = xPosition;
     completeMovement(keyStates);
 }
 
@@ -231,8 +235,13 @@ void Player::collideWith(Coin *coin) {
 void Player::collideWith(PlatformNormal *nBlock) {
     int yBlock = nBlock->getYPosition() + nBlock->getFloorPosition();
     if(yPosition + getFloorPosition() + 20 < yBlock) {
-        yPosition = yBlock - nBlock->getHeight() / 4 + 10;
+        yPosition = yBlock - nBlock->getHeight() + 10;
         initialJumpingPosition = yPosition;
+    } else {
+        restartPos(firstX, firstY);
+        if (yPosition < floor) {
+            yPosition = yPosition + GRAVITY > floor ? floor: yPosition + GRAVITY;
+        }
     }
 }
 
@@ -244,6 +253,7 @@ void Player::startToJump() {
 void Player::setJumpConfig(bool restart) {
     initialJumpingPosition = restart ? floor : yPosition + GRAVITY;
     maxYPosition = initialJumpingPosition - 100;
+    jumping = false;
 }
 
 void Player::restartPos() {
@@ -251,7 +261,7 @@ void Player::restartPos() {
 }
 
 void Player::dropPlayer() {
-    if (initialJumpingPosition < floor && getState() != "JUMPING") {
+    if (initialJumpingPosition < floor) {
         yPosition += GRAVITY;
         initialJumpingPosition = yPosition > floor ? floor : yPosition;
     }
@@ -260,4 +270,8 @@ void Player::dropPlayer() {
 void Player::finishMovement() {
     firstX = xPosition;
     firstY = yPosition;
+}
+
+int Player::getWidth() {
+    return pWidth / 4;
 }
