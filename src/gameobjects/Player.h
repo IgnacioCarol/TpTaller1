@@ -21,6 +21,7 @@
 
 #define imgPlayer "Sprites/Players/mario.png"
 #define defaultPlayer "Sprites/Default/defaultPlayer.png"
+#define INMUNITY_TIME 50
 
 class CharacterState;
 class Enemy;
@@ -79,6 +80,10 @@ public:
 
     void restartPos();
 
+    bool isInmune();
+
+    void tryUndoInmunity();
+
 private:
     //Image related
     std::string username;
@@ -99,6 +104,7 @@ private:
 
     //Health related attributes
     bool isPlayerBig;
+    int inmune;
     int lives = 3;
 
     //Score related attributes
@@ -109,6 +115,8 @@ private:
     int floor;
 
     bool testModeState = false;
+
+    void activateInmunity();
 };
 
 
