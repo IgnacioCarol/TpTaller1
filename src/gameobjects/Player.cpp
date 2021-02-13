@@ -214,7 +214,7 @@ int Player::getLives() const {
 
 int Player::loseLife() {
     if (!testModeState){
-        lives = (0 > lives - 1) ? 0 : lives - 1;
+        lives = (--lives <= 0) ? 0 : lives;
     }
     return lives;
 }

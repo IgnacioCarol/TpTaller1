@@ -82,6 +82,10 @@ void GameObject::die() {
     GameServer::Instance()->deleteGameObject(this);
 }
 
+void GameObject::dieFalling() {
+
+}
+
 void GameObject::collideWith(GameObject *go) {
     die();
 }
@@ -89,10 +93,14 @@ void GameObject::collideWith(GameObject *go) {
 int GameObject::getFloorPosition() {
     return 0;
 }
-
 void GameObject::collideWith(Enemy *enemy) {
 
 }
+
 size_t GameObject::getPoints() {
     return points;
+}
+
+void GameObject::fall() {
+
 }

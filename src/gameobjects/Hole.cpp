@@ -37,8 +37,8 @@ void Hole::setLevel(int level) {
 }
 
 void Hole::collideWith(GameObject *go) {
-    /*go.fall();
+    go->fall();
     if (!go->isAtScene()){ //Significa que cayo y desaparecio de la pantalla
-        go.dieFalling();
-    }*/
+        go->dieFalling();
+    }
 }

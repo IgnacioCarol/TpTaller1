@@ -74,3 +74,8 @@ void Enemy::die() {
 void Enemy::dieFalling() {
     GameObject::die();
 }
+
+void Enemy::fall() {
+    falling = true;
+    yPosition += GRAVITY_ENEMY;
+}

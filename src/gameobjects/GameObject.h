@@ -54,6 +54,9 @@ public:
     virtual void collideWith(Enemy* enemy);
 
     virtual void die();
+    virtual void dieFalling();
+
+    virtual void fall();
 
     virtual int getFloorPosition();
 
