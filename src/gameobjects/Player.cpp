@@ -123,7 +123,12 @@ void Player::setState(std::string state) {
         }
         else{
             changeState(new Dying(state == "DYING_FALLING"));
-            (!loseLife()) ? MusicManager::Instance()->playSound(GAME_OVER_SOUND) : MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
+            if (!loseLife()){
+                MusicManager::Instance()->playSound(GAME_OVER_SOUND);
+            }
+            else if (state == "DYING"){
+                MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
+            }
         }
     }
 }
@@ -170,13 +175,18 @@ void Player::die() {
         return;
     }
     changeState(new Dying());
-    lives = loseLife();
+    loseLife();
 }
+
+void Player::dieFalling() {
+    changeState(new Dying(true));
+    loseLife();
+}
+
 
 void Player::collideWith(GameObject *go) {
     go->collideWith(this);
 }
-
 
 void Player::collideWith(Enemy *enemy) {
     if (enemy->getState() == "DYING") {
@@ -223,6 +233,11 @@ bool Player::getTestModeState() {
     return testModeState;
 }
 
-void Player::restartPos() {
+void Player::restartPos() { //PREGUNTAR NACHO SI ESTO ES PARA RESTARTEAR CUANDO MUERE
     restartPos(cam->x, floor);
+}
+
+void Player::fall() {
+    falling = true;
+    yPosition += GRAVITY;
 }

@@ -68,6 +68,8 @@ public:
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;
+    void dieFalling();
+    void fall();
 
     int getLives() const;
     int loseLife();
@@ -108,6 +110,7 @@ private:
     int floor;
 
     bool testModeState = false;
+    bool falling = false;
 };
 
 

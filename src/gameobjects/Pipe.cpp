@@ -17,3 +17,10 @@ void Pipe::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 int Pipe::getHeight() {
     return PIPE_HEIGHT;
 }
+
+void Pipe::collideWith(GameObject *go) {
+    /*go.fall();
+    if (!go->isAtScene()){ //Significa que cayo y desaparecio de la pantalla
+        go.dieFalling();
+    }*/
+}
