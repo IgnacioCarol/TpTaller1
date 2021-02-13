@@ -9,7 +9,7 @@ void Camera::update(std::vector<Player *> players) {
     int maxPos = 0;
     int minPos = 20000;
     for (Player* player: players){
-        if (player->getState() != "PAUSED"){
+        if (player->getState() != "PAUSED" && player->getState() != "DYING" && player->getState() != "DYING_FALLING"){
             int playerPos = player -> getXPosition();
             maxPos = (playerPos > maxPos) ? playerPos : maxPos;
             minPos = (playerPos < minPos) ? playerPos : minPos;
