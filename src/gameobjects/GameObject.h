@@ -61,6 +61,8 @@ public:
 
     virtual int getFloorPosition();
 
+    virtual int centerXPos();
+
 protected:
     //To manage the movement
     int xPosition;

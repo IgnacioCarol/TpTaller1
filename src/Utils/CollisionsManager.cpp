@@ -13,12 +13,12 @@ CollisionsManager *CollisionsManager::Instance() {
     return instance;
 }
 
-bool CollisionsManager::isInIntersection(GameObject *first, GameObject *pObject) {
-    int objectXPosition = pObject->getXPosition();
-    int objectYPosition = pObject->getYPosition() + pObject->getFloorPosition();
-    int realYPosition = first->getYPosition() + first->getFloorPosition();
-    int xPosition = first->getXPosition();
-    return (abs(xPosition - objectXPosition) < 80) &&
+bool CollisionsManager::isInIntersection(GameObject *go, GameObject *anotherGo) {
+    int objectXPosition = anotherGo->getXPosition() + anotherGo->centerXPos();
+    int objectYPosition = anotherGo->getYPosition() + anotherGo->getFloorPosition();
+    int realYPosition = go->getYPosition() + go->getFloorPosition();
+    int xPosition = go->getXPosition() + go->centerXPos();
+    return (abs(xPosition - objectXPosition) < std::max(go->getWidth(), anotherGo->getWidth()) / 2) &&
            (abs(realYPosition - objectYPosition) < 60); //ToDo Implement variables
 }
 

@@ -69,6 +69,7 @@ public:
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;
+    int getWidth() override;
 
     int getLives() const;
     int loseLife();

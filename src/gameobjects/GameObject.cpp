@@ -104,3 +104,7 @@ void GameObject::collideWith(Coin *coin) {
 void GameObject::collideWith(PlatformNormal *nBlock) {
 
 }
+
+int GameObject::centerXPos() {
+    return 0;
+}
