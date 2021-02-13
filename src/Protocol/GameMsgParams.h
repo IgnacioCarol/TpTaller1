@@ -74,6 +74,7 @@ struct GamePlayerPlaying {
     std::string state;
     bool direction;
     bool testMode;
+    bool playerBig;
 };
 
 struct GameObjectPlaying {

@@ -38,4 +38,7 @@ std::string CharacterState::getStateType() {
     return stateType;
 }
 
+void CharacterState::setPlayerBig(bool playerBig) {
+    this->isPlayerBig = playerBig;
+}
 

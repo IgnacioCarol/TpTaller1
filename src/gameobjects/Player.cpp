@@ -8,7 +8,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     initialJumpingPosition = yPosition;
     maxYPosition = yPosition - 100;
     cam =  camera;
-    characterState = new Normal();
+    characterState = new Normal(this->isPlayerBig);
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
@@ -114,13 +114,13 @@ void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
-            changeState(new Jumping());
+            changeState(new Jumping(this->isPlayerBig));
         } else if (state == "NORMAL") {
-            changeState(new Normal());
+            changeState(new Normal(this->isPlayerBig));
         } else if (state == "RUNNING") {
-            changeState(new Running());
+            changeState(new Running(this->isPlayerBig));
         } else if (state == "CROUCHED") {
-            changeState(new Crouched());
+            changeState(new Crouched(this->isPlayerBig));
         }
         else if (state == "PAUSED" || state == "FINISH"){
             if (state == "FINISH"){
@@ -210,6 +210,11 @@ int Player::getLives() const {
 }
 
 int Player::loseLife() {
+    if (this->isPlayerBig) {
+        this->setPlayerBig(false);
+        return this->lives;
+    }
+
     if (!testModeState){
         lives = (0 > lives - 1) ? 0 : lives - 1;
     }
@@ -232,4 +237,13 @@ bool Player::getTestModeState() {
 
 void Player::restartPos() {
     restartPos(cam->x, floor);
+}
+
+bool Player::getPlayerBig() {
+    return this->isPlayerBig;
+}
+
+void Player::setPlayerBig(bool playerBig) {
+    this->isPlayerBig = playerBig;
+    this->characterState->setPlayerBig(playerBig);
 }

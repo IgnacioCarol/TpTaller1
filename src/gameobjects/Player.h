@@ -60,7 +60,7 @@ public:
     std::string getState() override;
 
     bool getDirection() override;
-
+    bool getPlayerBig();
     void collideWith(GameObject *go) override;
 
     //Collisions
@@ -68,6 +68,7 @@ public:
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;
+    void setPlayerBig(bool playerBig);
 
     int getLives() const;
     int loseLife();
@@ -86,7 +87,6 @@ private:
     static const int playerVelocity = 4;
     bool xDirection; //True = +x False = -x
     CharacterState* characterState;
-    bool isPlayerBig;
     bool jumping;
     bool canJump() const;
     int initialJumpingPosition;
