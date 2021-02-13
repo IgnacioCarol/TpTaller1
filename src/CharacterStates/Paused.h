@@ -8,7 +8,7 @@
 
 class Paused: public CharacterState {
 public:
-    explicit Paused(bool disconnected = true);
+    explicit Paused(bool disconnected = true, bool isPlayerBig);
     void move(const Uint8* currentKeyStates, Player* player) override;
     void changeState(const Uint8* currentKeyStates, Player* player) override;
     void draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,

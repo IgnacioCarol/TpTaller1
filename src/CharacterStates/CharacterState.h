@@ -39,5 +39,6 @@ protected:
     int currentFrame;
     int framesAmount; //Amount of pictures in the sprite sheet
     int contAux = 0;
+    bool isPlayerBig;
 };
 #endif //TPTALLER1_CHARACTERSTATE_H

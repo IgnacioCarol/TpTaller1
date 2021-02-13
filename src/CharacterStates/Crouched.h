@@ -9,7 +9,7 @@
 
 class Crouched : public CharacterState{
     public:
-        explicit Crouched();
+        explicit Crouched(bool isPlayerBig);
         void move(const Uint8* currentKeyStates, Player* player) override;
         void changeState(const Uint8* currentKeyStates, Player* player) override;
 

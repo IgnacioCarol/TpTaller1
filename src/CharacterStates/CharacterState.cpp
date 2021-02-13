@@ -4,10 +4,11 @@
 CharacterState::CharacterState(int currentFrame, int framesAmount) {
     this -> currentFrame = currentFrame;
     this -> framesAmount = framesAmount;
+    this->isPlayerBig = false;
 }
 
 CharacterState::CharacterState() {
-
+    this->isPlayerBig = false;
 }
 
 void CharacterState::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,

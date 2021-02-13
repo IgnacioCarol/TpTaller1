@@ -7,14 +7,15 @@
 #include "Normal.h"
 #include "Crouched.h"
 
-Crouched::Crouched(){
+Crouched::Crouched(bool isPlayerBig){
     stateType = "CROUCHED";
     currentFrame = CROUCHED_FRAME;
+    this->isPlayerBig = isPlayerBig;
 }
 
 void Crouched::changeState(const Uint8 *currentKeyStates, Player *player) {
     if (!currentKeyStates[SDL_SCANCODE_DOWN]) {
-        player->changeState(new Normal());
+        player->changeState(new Normal(this->isPlayerBig));
     }
 }
 

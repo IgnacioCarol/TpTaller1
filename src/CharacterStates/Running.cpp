@@ -8,9 +8,10 @@
 #include "Normal.h"
 #include "Crouched.h"
 
-Running::Running(){
+Running::Running(bool isPlayerBig){
     stateType = "RUNNING";
     currentFrame = RUNNING_FRAME;
+    this->isPlayerBig = isPlayerBig;
 }
 
 void Running::move(const Uint8 *currentKeyStates, Player* player) {
@@ -19,15 +20,15 @@ void Running::move(const Uint8 *currentKeyStates, Player* player) {
 
 void Running::changeState(const Uint8 *currentKeyStates, Player* player) {
     if (currentKeyStates[SDL_SCANCODE_UP]){
-        player -> changeState(new Jumping());
+        player -> changeState(new Jumping(this->isPlayerBig));
     }
 
     else if (currentKeyStates[SDL_SCANCODE_DOWN]){
-        player -> changeState(new Crouched());
+        player -> changeState(new Crouched(this->isPlayerBig));
     }
 
     else if (!(currentKeyStates[ SDL_SCANCODE_RIGHT ] || currentKeyStates[ SDL_SCANCODE_LEFT ])){
-        player -> changeState(new Normal());
+        player -> changeState(new Normal(this->isPlayerBig));
     }
 }
 
