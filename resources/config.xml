@@ -19,7 +19,7 @@
                     </moneda>
                     <moneda>
                         <imagen>Sprites/Blocks-Coins/coinsSprites.png</imagen>
-                        <coordY>400</coordY>
+                        <coordY>200</coordY>
                         <cantidad>30</cantidad>
                     </moneda>
                 </monedas>
@@ -28,12 +28,12 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>0</cantidad>
+                        <cantidad>15</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/Goomba.png</imagen>
-                        <cantidad>0</cantidad>
+                        <cantidad>20</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
@@ -55,7 +55,7 @@
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
                         <coordX>1900</coordX>
-                        <coordY>400</coordY>
+                        <coordY>150</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
