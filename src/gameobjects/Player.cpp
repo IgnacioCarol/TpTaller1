@@ -39,6 +39,7 @@ bool Player::canJump() const {
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
     this->init(0, 380, textureID, camera, 6);
     this->username = username;
+    this->isPlayerBig = false;
 }
 
 void Player::restartPos(int x, int y) {
@@ -66,7 +67,13 @@ void Player::move(std::vector<int> vector) {
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if (itsAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+        std::string textureID = this->_textureID;
+
+        if (this->isPlayerBig) {
+            textureID += "-big";
+        }
+
+        characterState -> draw(textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
     }
 }
 

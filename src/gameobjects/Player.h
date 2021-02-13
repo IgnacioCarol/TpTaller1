@@ -86,6 +86,7 @@ private:
     static const int playerVelocity = 4;
     bool xDirection; //True = +x False = -x
     CharacterState* characterState;
+    bool isPlayerBig;
     bool jumping;
     bool canJump() const;
     int initialJumpingPosition;
