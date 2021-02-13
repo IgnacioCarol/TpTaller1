@@ -119,6 +119,7 @@ private:
 
     int firstX;
     int firstY;
+    int ticksAfterRespawning;
 };
 
 

@@ -1,5 +1,6 @@
 #include "Player.h"
 static const int GRAVITY = 3;
+static const int MAX_TICKS_TO_BE_KILLED = 60;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
@@ -16,6 +17,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     floor = yPosition;
     firstX = xPosition;
     firstY = yPosition;
+    ticksAfterRespawning = MAX_TICKS_TO_BE_KILLED;
 }
 
 void Player::run(int direction) {
@@ -196,9 +198,9 @@ void Player::collideWith(Enemy *enemy) {
     } else {
         if(isPlayerBig) {
             isPlayerBig = false;
-            return;
+        } else if (ticksAfterRespawning >= MAX_TICKS_TO_BE_KILLED) {
+            this->die();
         }
-        this->die();
     }
 }
 
@@ -257,6 +259,7 @@ void Player::setJumpConfig(bool restart) {
 }
 
 void Player::restartPos() {
+    ticksAfterRespawning = 0;
     restartPos(cam->x, floor);
 }
 
@@ -270,6 +273,7 @@ void Player::dropPlayer() {
 void Player::finishMovement() {
     firstX = xPosition;
     firstY = yPosition;
+    ticksAfterRespawning = ticksAfterRespawning < MAX_TICKS_TO_BE_KILLED ? ticksAfterRespawning + 1 : MAX_TICKS_TO_BE_KILLED;
 }
 
 int Player::getWidth() {
