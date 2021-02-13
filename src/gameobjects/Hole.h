@@ -18,6 +18,7 @@ public:
     int getWidth() override;
     void setDimensions(int width, int height);
     void setLevel(int level);
+    void collideWith(GameObject* go) override;
 private:
     int width;
     int level;

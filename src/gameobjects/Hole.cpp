@@ -35,3 +35,10 @@ void Hole::setDimensions(int width, int height) {
 void Hole::setLevel(int level) {
     this->level = level;
 }
+
+void Hole::collideWith(GameObject *go) {
+    /*go.fall();
+    if (!go->isAtScene()){ //Significa que cayo y desaparecio de la pantalla
+        go.dieFalling();
+    }*/
+}
