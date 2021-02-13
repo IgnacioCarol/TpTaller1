@@ -81,6 +81,8 @@ public:
 
     void restartPos();
 
+    void finishMovement();
+
 private:
     //Image related
     std::string username;
@@ -113,6 +115,9 @@ private:
     bool testModeState = false;
 
     void dropPlayer();
+
+    int firstX;
+    int firstY;
 };
 
 

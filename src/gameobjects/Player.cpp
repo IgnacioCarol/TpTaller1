@@ -14,6 +14,8 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     leftOrRightPressed = false;
     atScene = true;
     floor = yPosition;
+    firstX = xPosition;
+    firstY = yPosition;
 }
 
 void Player::run(int direction) {
@@ -253,4 +255,9 @@ void Player::dropPlayer() {
         yPosition += GRAVITY;
         initialJumpingPosition = yPosition > floor ? floor : yPosition;
     }
+}
+
+void Player::finishMovement() {
+    firstX = xPosition;
+    firstY = yPosition;
 }
