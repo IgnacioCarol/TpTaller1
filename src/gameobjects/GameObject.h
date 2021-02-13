@@ -14,6 +14,8 @@
 #include <string>
 
 class Enemy;
+class Coin;
+class PlatformNormal;
 
 enum GameObjectType {
     GOT_COIN,
@@ -52,6 +54,8 @@ public:
 
     virtual void collideWith(GameObject *go);
     virtual void collideWith(Enemy* enemy);
+    virtual void collideWith(Coin* coin);
+    virtual void collideWith(PlatformNormal* nBlock);
 
     virtual void die();
     virtual void dieFalling();
@@ -59,6 +63,8 @@ public:
     virtual void fall();
 
     virtual int getFloorPosition();
+
+    virtual int centerXPos();
 
 protected:
     //To manage the movement

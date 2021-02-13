@@ -12,13 +12,17 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
-    void collideWith(Player* player);
+    void collideWith(GameObject *go) override;
+    int getFloorPosition() override;
+    std::pair<int, int> getPosition();
 
+    int centerXPos() override;
+    int getWidth() override;
 private:
     //Related to the image
     static const int NORMAL_BLOCK_WIDTH = 256;
-    static const int NORMAL_BLOCK_HEIGHT = 256;
 
+    static const int NORMAL_BLOCK_HEIGHT = 256;
 };
 
 

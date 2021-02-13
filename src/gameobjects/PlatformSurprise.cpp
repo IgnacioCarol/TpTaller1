@@ -22,7 +22,7 @@ int PlatformSurprise::getHeight() {
     return SURPRISE_BLOCK_HEIGHT;
 }
 
-void PlatformSurprise::collideWith(Player *player) {
+/*void PlatformSurprise::collideWith(Player *player) {
     std::pair<int, int> position = player->getPosition();
     int xPlayer = position.first;
     int yPlayer = position.second;
@@ -36,3 +36,4 @@ void PlatformSurprise::collideWith(Player *player) {
         }
     }
 }
+*/

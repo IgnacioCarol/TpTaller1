@@ -104,3 +104,14 @@ size_t GameObject::getPoints() {
 void GameObject::fall() {
 
 }
+void GameObject::collideWith(Coin *coin) {
+
+}
+
+void GameObject::collideWith(PlatformNormal *nBlock) {
+
+}
+
+int GameObject::centerXPos() {
+    return 0;
+}
