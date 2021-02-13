@@ -176,8 +176,11 @@ void Player::die() {
     if (getState() == "DYING") {
         return;
     }
-    changeState(new Dying());
-    lives = loseLife();
+
+    if (!testModeState && !this->isInmune()) {
+        changeState(new Dying());
+        lives = loseLife();
+    }
 }
 
 void Player::collideWith(GameObject *go) {
@@ -195,7 +198,7 @@ void Player::collideWith(Enemy *enemy) {
     } else {
         if (this->isPlayerBig) {
             this->setPlayerBig(false);
-            this->testMode();
+            this->activateInmunity();
             return;
         }
 
@@ -212,9 +215,7 @@ int Player::getLives() const {
 }
 
 int Player::loseLife() {
-    if (!testModeState){
-        lives = (0 > lives - 1) ? 0 : lives - 1;
-    }
+    lives = (0 > lives - 1) ? 0 : lives - 1;
     return lives;
 }
 
@@ -243,4 +244,18 @@ bool Player::getPlayerBig() {
 void Player::setPlayerBig(bool playerBig) {
     this->isPlayerBig = playerBig;
     this->characterState->setPlayerBig(playerBig);
+}
+
+bool Player::isInmune() {
+    return this->inmune > 0;
+}
+
+void Player::tryUndoInmunity() {
+    if (this->inmune > 0) {
+        this->inmune--;
+    }
+}
+
+void Player::activateInmunity() {
+    this->inmune = INMUNITY_TIME;
 }

@@ -139,6 +139,9 @@ std::vector<Player *> GameServer::getPlayers() {
 void GameServer::updatePlayers() {
     for (Player* player: players) {
         player->move();
+        if (player->isInmune()) {
+            player->tryUndoInmunity();
+        }
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
             player->changeState(new Paused(false, player->getPlayerBig()));
             changeLevelFlag = true;

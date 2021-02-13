@@ -300,8 +300,7 @@ bool Server::run() {
                     std::vector<int> positions = {msg["up"].get<int>(), msg["left"].get<int>(), msg["down"].get<int>(), msg["right"].get<int>() };
                     player->move(positions);
                     if (msg["testMode"].get<int>()){
-//                        player->testMode(); // ToDo descomentar, solo lo puse para probar mario grande
-                        player->setPlayerBig(true);
+                        player->testMode();
                     }
                 }
             }
