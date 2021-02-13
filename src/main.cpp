@@ -1,18 +1,18 @@
 #ifdef __APPLE__
 #include "SDL.h"
 #else
+
 #include "SDL2/SDL.h"
+
 #endif
+
 #include <iostream>
-#include <unistd.h>
 #include <arpa/inet.h>
-#include "gtest/gtest.h"
-#include "gmock/gmock.h"
 #include "logger/logger.h"
-#include "Game.h"
 #include "Server/Server.h"
 #include "Client/Client.h"
 #include <json.hpp>
+
 using json = nlohmann::json;
 
 #define FPS 40;
@@ -21,7 +21,7 @@ Uint32 frameStart, frameTime;
 
 #define MAX_ARGS 5 // app_name, xml_path, server/client, ip_address, port
 
-bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * mode, std::string * ipAddr, int * port) {
+bool parseCLI(int argc, char *argv[], std::string *xmlPath, ConnectionType *mode, std::string *ipAddr, int *port) {
     if (argc > MAX_ARGS) {
         return false;
     }
@@ -55,7 +55,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
     *ipAddr = argv[3];
     struct sockaddr_in sa;
     int result = inet_pton(AF_INET, ipAddr->c_str(), &(sa.sin_addr));
-    if(result < 0) {
+    if (result < 0) {
         Logger::getInstance()->error("Invalid IP address format");
         return false;
     }
@@ -64,7 +64,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
     tmp = argv[4];
     std::stringstream intPort(tmp);
     intPort >> *port;
-    if(*port < 1) {
+    if (*port < 1) {
         Logger::getInstance()->error("The PORT must be a postive int");
         return false;
     }
@@ -73,7 +73,7 @@ bool parseCLI(int argc, char * argv[], std::string * xmlPath, ConnectionType * m
 }
 
 
-int main(int argc, char * argv[]) {
+int main(int argc, char *argv[]) {
 
 //#ifdef TEST
 //    testing::InitGoogleTest(&argc, argv);
@@ -84,10 +84,10 @@ int main(int argc, char * argv[]) {
     std::string xmlPath;
     ConnectionType mode;
     std::string ipAddr;
-    int         port;
+    int port;
 
     if (!parseCLI(argc, argv, &xmlPath, &mode, &ipAddr, &port)) {
-        Logger::getInstance() -> error("Error: incorrect the program does not support the amount of CLI params");
+        Logger::getInstance()->error("Error: incorrect the program does not support the amount of CLI params");
         return EXIT_FAILURE;
     }
 
@@ -99,72 +99,29 @@ int main(int argc, char * argv[]) {
     if (mode == SERVER) {
         Logger::getInstance()->info("Initializing in server mode");
         Config::getInstance()->load(xmlPath);
-        Server * server = Server::getInstance();
+        Server *server = Server::getInstance();
         try {
             server->init(ipAddr.c_str(), std::to_string(port).c_str());
             server->run();
             delete server;
-            return 0;
         } catch (std::exception &ex) {
             delete server;
-            return 1;
+            return EXIT_FAILURE;
         }
     } else {
         Logger::getInstance()->info("[Client] Initializing in client mode");
-        auto * client = new Client(ipAddr, to_string(port).c_str());
+        auto *client = new Client(ipAddr, to_string(port));
         try {
             client->init();
             if (client->login()) {
                 client->run();
             }
             delete client;
-            return 0;
         } catch (std::exception &ex) {
             delete client;
             Logger::getInstance()->error("Algo fallo en el client");
             return EXIT_FAILURE;
         }
     }
-
-    Game* game = Game::Instance();
-
-    if (!game->init("Level 1", xmlPath)) { //Aca inicializo el background
-        Logger::getInstance() -> error("Error: the game could not be initialized");
-        return 1;
-    }
-
-    game->createGameObjects(); //ToDo refactorizar y mover al Factory, factory tiene que ser el unico responsable de instanciar gameObjects
-
-    if (!game->loadImages()){
-        Logger::getInstance() -> error("Error: Loading the sprites went wrong");
-        return EXIT_FAILURE;
-    }
-    if (!game-> loadTexts()) {
-        Logger::getInstance()->error("Error: Loading texts went wrong");
-        return 1;
-    }
-
-    //Event handler
-    SDL_Event e;
-
-    while(game->isPlaying()){
-
-        while(SDL_PollEvent(&e) != 0) {
-            if (e.type  == SDL_QUIT ) {
-                Game::Instance()->gameOver();
-            }
-        }
-
-        game->handleEvents();
-       // game->update();
-        game->render();
-        SDL_Delay(4);
-    }
-    Logger::getInstance() -> info("Game over");
-    game->clean();
-    delete game;
-    delete Logger::getInstance();
-
-    SDL_Quit();
     return EXIT_SUCCESS;
 }

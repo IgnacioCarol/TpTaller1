@@ -6,7 +6,6 @@
 #include "../gameobjects/GameObject.h"
 #include "../config/Config.h"
 #include "../Server/PlayerClient.h"
-
 //Images ID
 static const std::string MARIO_ID = "mario";
 static const std::string LUIGI_ID = "luigi";

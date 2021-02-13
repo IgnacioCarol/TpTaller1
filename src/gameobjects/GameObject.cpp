@@ -1,3 +1,4 @@
+#include "../Server/GameServer.h"
 #include "GameObject.h"
 #include "../GameMap.h"
 
@@ -77,6 +78,21 @@ bool GameObject::getDirection() {
     return true; //tmb para safar ya que los bloques y monedas no tienen direction
 }
 
-int GameObject::getPoints() {
+void GameObject::die() {
+    GameServer::Instance()->deleteGameObject(this);
+}
+
+void GameObject::collideWith(GameObject *go) {
+    die();
+}
+
+int GameObject::getFloorPosition() {
+    return 0;
+}
+
+void GameObject::collideWith(Enemy *enemy) {
+
+}
+size_t GameObject::getPoints() {
     return points;
 }

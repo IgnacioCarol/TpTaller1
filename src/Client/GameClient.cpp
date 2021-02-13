@@ -324,10 +324,12 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
         player.second->restartPos(0, 380);
         player.second->setDirection(true);
         player.second->changeState(new Normal());
+        player.second->changeLevel(); //TODO Dani C que lo mire plis
     }
     levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);
     camera->restartPos();
+
     //Deleting the gameObjects of the current level
     for (std::pair<int, GameObject*> gameObject: gameObjectsMap){
         delete gameObject.second;
