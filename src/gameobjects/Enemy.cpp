@@ -14,6 +14,7 @@ void Enemy::move() {
 
 void Enemy::walk() {
     xPosition += direction;
+    yPosition += (falling) ? GRAVITY_ENEMY : 0;
     flipFlag = direction == enemyVelocity;
 }
 
@@ -77,5 +78,4 @@ void Enemy::dieFalling() {
 
 void Enemy::fall() {
     falling = true;
-    yPosition += GRAVITY_ENEMY;
 }

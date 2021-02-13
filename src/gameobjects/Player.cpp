@@ -25,9 +25,9 @@ void Player::run(int direction) {
 
 void Player::jump(int yMovement) {
     bool isNotStartingPos = yPosition < initialJumpingPosition;
-    if ((jumping = canJump() && yMovement)) {
+    if ((jumping = canJump() && yMovement && characterState->getStateType() != "FALLING")) {
         yPosition = yPosition + (!isNotStartingPos || yMovement ? - (yMovement + GRAVITY - 1) : + GRAVITY); //TODO change velocity to go up
-    } else if (isNotStartingPos) {
+    } else if (isNotStartingPos || characterState->getStateType() == "FALLING") {
         yPosition += GRAVITY;
     }
 }
@@ -105,9 +105,11 @@ void Player::setDirection(bool direction) {
 
 void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
-        if (state == "JUMPING") {
-            MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
-            changeState(new Jumping());
+        if (state == "JUMPING" || state == "FALLING") {
+            if (state != "FALLING"){
+                MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
+            }
+            changeState(new Jumping(state == "FALLING"));
         } else if (state == "NORMAL") {
             changeState(new Normal());
         } else if (state == "RUNNING") {
@@ -238,6 +240,7 @@ void Player::restartPos() { //PREGUNTAR NACHO SI ESTO ES PARA RESTARTEAR CUANDO 
 }
 
 void Player::fall() {
-    falling = true;
-    yPosition += GRAVITY;
+    if (characterState->getStateType() != "FALLING"){
+        changeState(new Jumping(true));
+    }
 }
