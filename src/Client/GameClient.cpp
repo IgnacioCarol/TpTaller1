@@ -327,6 +327,7 @@ void GameClient::gameOver(GameMsgShowGameOver params) {
     for (GameMsgPlayersTotalScore player: params.playersTotalScore) {
         playersMap[player.id]->setPoints(player.totalScore);
         playersMap[player.id]->setPointsByLevel(player.levelScores);
+        playersMap[player.id]->setLives(player.lives);
     }
 
     showGameOver = true;

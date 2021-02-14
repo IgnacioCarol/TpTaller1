@@ -125,7 +125,8 @@ json ServerParser::buildGameOverMsg(std::vector<Player*> players) {
         GameMsgPlayersTotalScore playerMsg = {
                 players[i]->getId(),
                 players[i]->getPointsByLevel(),
-                players[i]->getTotalPoints()
+                players[i]->getTotalPoints(),
+                players[i]->getLives()
         };
         playersScore.push_back(playerMsg);
     }

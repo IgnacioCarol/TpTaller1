@@ -175,7 +175,8 @@ json Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver params) {
         json playerTotalScoreJson = {
                 {"id", player.id},
                 {"levelScores", player.levelScores},
-                {"totalScore", player.totalScore}
+                {"totalScore", player.totalScore},
+                {"lives", player.lives}
         };
         playersScore.push_back(playerTotalScoreJson);
     }

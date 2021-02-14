@@ -76,6 +76,7 @@ struct GameMsgPlayersTotalScore {
     int id;
     std::map<int,int> levelScores;
     int totalScore;
+    int lives;
 };
 
 struct GameMsgShowPartialScore {

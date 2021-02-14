@@ -167,7 +167,8 @@ GameMsgShowGameOver ClientParser::parseGameOverParams(json msg) {
         GameMsgPlayersTotalScore player = {
                 playerJson["id"],
                 playerJson["levelScores"],
-                playerJson["totalScore"]
+                playerJson["totalScore"],
+                playerJson["lives"]
         };
         playersTotal.push_back(player);
     }
