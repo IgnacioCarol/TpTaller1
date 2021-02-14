@@ -13,6 +13,9 @@ void Enemy::move() {
 
 void Enemy::walk() {
     xPosition += direction;
+    if (yPosition < floor) {
+        yPosition++;
+    }
     flipFlag = direction == enemyVelocity;
 }
 
@@ -62,9 +65,6 @@ void Enemy::standOrRevertMovement(GameObject *go, int heigth) {
         yPosition = yBlock - heigth - getFloorPosition();
     } else {
         direction = -1 * direction;
-        if (yPosition < floor) {
-            yPosition++;
-        }
     }
 }
 
