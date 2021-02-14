@@ -23,7 +23,7 @@ std::pair<int, int> PlatformNormal::getPosition() {
 }
 
 int PlatformNormal::getFloorPosition() {
-    return -70;
+    return -20;
 }
 
 int PlatformNormal::centerXPos() {
