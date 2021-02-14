@@ -254,6 +254,10 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
     }
 }
 
+void Player::collideWith(Pipe* pipe) {
+    standOrBlockMovement(pipe, pipe->getHeight() / 4 - 95);
+}
+
 void Player::startToJump() {
     initialJumpingPosition = floor;
     maxYPosition = yPosition - 100;
