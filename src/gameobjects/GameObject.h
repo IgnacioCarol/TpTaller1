@@ -16,6 +16,7 @@
 class Enemy;
 class Coin;
 class PlatformNormal;
+class Hole;
 
 enum GameObjectType {
     GOT_COIN,
@@ -56,6 +57,7 @@ public:
     virtual void collideWith(Enemy* enemy);
     virtual void collideWith(Coin* coin);
     virtual void collideWith(PlatformNormal* nBlock);
+    virtual void collideWith(Hole* hole);
 
     virtual void die();
     virtual void dieFalling();

@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "Coin.h"
 #include "PlatformNormal.h"
+#include "Hole.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -68,6 +69,7 @@ public:
     void collideWith(Enemy* enemy) override;
     void collideWith(Coin* coin) override;
     void collideWith(PlatformNormal* nBlock) override;
+    void collideWith(Hole* hole) override;
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;
@@ -76,7 +78,8 @@ public:
     int getWidth() override;
 
     int getLives() const;
-    int loseLife();
+    void setLives(int totalLives);
+    void loseLife();
     bool itsAlive();
     void testMode();
     bool getTestModeState();

@@ -38,6 +38,7 @@ void Hole::setLevel(int level) {
 
 void Hole::collideWith(GameObject *go) {
     go->fall();
+    go->collideWith(this);
     go->dieFalling();
 }
 

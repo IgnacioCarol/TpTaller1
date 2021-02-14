@@ -132,7 +132,7 @@ void Player::setState(std::string state) {
             changeState(new Paused(state == "PAUSED"));
         } else {
             changeState(new Dying(state == "DYING_FALLING"));
-            if (!loseLife()) {
+            if (!lives) {
                 MusicManager::Instance()->playSound(GAME_OVER_SOUND);
             } else if (state == "DYING") {
                 MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
@@ -220,11 +220,10 @@ int Player::getLives() const {
     return lives;
 }
 
-int Player::loseLife() {
-    if (!testModeState){
-        lives = (--lives <= 0) ? 0 : lives;
+void Player::loseLife() {
+    if (lives > 0){
+        lives--;
     }
-    return lives;
 }
 
 bool Player::itsAlive() {
@@ -260,6 +259,18 @@ void Player::collideWith(PlatformNormal *nBlock) {
         restartPos(firstX, firstY);
         if (yPosition < floor) {
             yPosition = yPosition + GRAVITY > floor ? floor: yPosition + GRAVITY;
+        }
+    }
+}
+
+void Player::collideWith(Hole* hole) {
+    if (yPosition > floor){
+        int xPosHole = hole->getXPosition();
+        int leftBorder = xPosHole - 50;
+        int rightBorder = xPosHole + 50;
+
+        if (xPosition < leftBorder || xPosition > rightBorder){
+            restartPos(firstX, yPosition);
         }
     }
 }
@@ -300,4 +311,8 @@ int Player::getWidth() {
 bool Player::isActive() {
     std::string stateType = characterState->getStateType();
     return stateType != "PAUSED" && stateType != "DYING" && stateType != "DYING_FALLING";
+}
+
+void Player::setLives(int totalLives) {
+    lives = totalLives;
 }

@@ -135,9 +135,7 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
-        if (playerUpdate.testMode){
-            player -> testMode();
-        }
+        player->setLives(playerUpdate.lives);
         player -> setState(playerUpdate.state);
     }
 }
