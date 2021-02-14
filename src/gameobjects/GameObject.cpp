@@ -108,3 +108,7 @@ void GameObject::collideWith(PlatformNormal *nBlock) {
 int GameObject::centerXPos() {
     return 0;
 }
+
+void GameObject::collideWith(Pipe *pipe) {
+
+}
