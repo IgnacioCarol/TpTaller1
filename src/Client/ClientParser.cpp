@@ -77,6 +77,8 @@ GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
                 player["yPos"],
                 player["state"],
                 player["direction"],
+                player["points"],
+                player["lives"],
                 player["testMode"]
         };
         gamePlayers.push_back(gamePlayer);
@@ -136,3 +138,44 @@ GameMsgLevelChange ClientParser::parseChangeLevelParams(json msg) {
             { gameObjects }
     };
 }
+
+GameMsgShowPartialScore ClientParser::parsePartialScoreParams(json msg) {
+    Logger::getInstance()->debug("Parsing partial score params");
+    json contentJson = msg[MSG_CONTENT_PROTOCOL];
+
+    std::vector<GameMsgPlayersPartialScore> playersPartialScore;
+    for (auto& playerJson: contentJson["playersScore"]) {
+        GameMsgPlayersPartialScore player = {
+                playerJson["id"],
+                playerJson["score"]
+        };
+        playersPartialScore.push_back(player);
+    }
+
+    return GameMsgShowPartialScore {
+        contentJson["level"],
+        playersPartialScore
+    };
+}
+
+GameMsgShowGameOver ClientParser::parseGameOverParams(json msg) {
+    Logger::getInstance()->debug("Parsing game over params");
+    json contentJson = msg[MSG_CONTENT_PROTOCOL];
+
+    std::vector<GameMsgPlayersTotalScore> playersTotal;
+    for (auto& playerJson: contentJson["playersScore"]) {
+        GameMsgPlayersTotalScore player = {
+                playerJson["id"],
+                playerJson["levelScores"],
+                playerJson["totalScore"],
+                playerJson["lives"]
+        };
+        playersTotal.push_back(player);
+    }
+
+    return GameMsgShowGameOver {
+        playersTotal,
+        contentJson["isTimeOver"]
+    };
+}
+

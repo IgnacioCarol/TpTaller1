@@ -67,13 +67,15 @@ public:
     void collideWith(Coin* coin) override;
     void collideWith(PlatformNormal* nBlock) override;
     void changeLevel();
+    void saveLevelPoints(int currentLevel);
+
     void addPoints(int newPoints);
     void die() override;
     int getWidth() override;
 
     int getLives() const;
     int loseLife();
-    bool itsAlive();
+    bool isAlive();
     void testMode();
     bool getTestModeState();
     void startToJump();
@@ -81,6 +83,13 @@ public:
 
 
     void restartPos();
+
+    void setPoints(int points);
+    std::map<int,int> getPointsByLevel();
+    void setPointsByLevel(std::map<int,int> points);
+    int getTotalPoints();
+    bool operator<(const Player& p) const;
+    void setLives(int lives);
 
     void finishMovement();
 
@@ -108,12 +117,12 @@ private:
 
     //Score related attributes
     int level = 1;
-    int scorePosition;
-    int actualScore;
-    std::map<int, int> levelPoints;
     int floor;
 
     bool testModeState = false;
+    int totalPoints = 0;
+    int partialPoints = 0;
+    std::map<int, int> levelPoints;
 
     void dropPlayer();
 

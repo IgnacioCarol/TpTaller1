@@ -13,10 +13,11 @@ void Timer::start() {
     int time = clock();
     Logger::getInstance()->info("Starting timer with: " + std::to_string(time));
     this->startTime = time;
+    started = true;
 }
 
 int Timer::getTimeSecond() {
-    if (startTime > 0) {
+    if (started && startTime > 0) {
         return this->stopTime - ((clock() - startTime) / CLOCKS_PER_SEC);
     }
     return this->stopTime;
