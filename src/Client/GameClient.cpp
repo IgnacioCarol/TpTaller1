@@ -507,8 +507,8 @@ void GameClient::loadScoreText() {
     }
 }
 
-void GameClient::setPlaying(bool isPlaying) {
-    this->playing = isPlaying;
+void GameClient::stopPlaying() {
+    this->playing = false;
 }
 
 vector<pair<int,Player*>> GameClient::sortPlayersByScore() {

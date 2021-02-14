@@ -322,13 +322,13 @@ void Client::run() {
                 }
                 else{
                     if (SDL_PollEvent(&e) != 0 && e.type == SDL_QUIT){
-                        gameClient->setPlaying(false);
+                        gameClient->stopPlaying();
                     }
                 }
             } else {
                 while( SDL_PollEvent( &e ) != 0 && gameClient->isPlaying()) {
                     if (e.type  == SDL_QUIT ) {
-                        gameClient->setPlaying(false);
+                        gameClient->stopPlaying();
                         break;
                     }
 
@@ -396,7 +396,7 @@ void Client::handleUserEvents() {
     up = down = right = left = false;
     while( SDL_PollEvent( &e ) != 0 ) {
         if (e.type  == SDL_QUIT ) {
-            GameClient::Instance()->setPlaying(false);
+            GameClient::Instance()->stopPlaying();
             return;
         }
         if (!keysAssigned) {

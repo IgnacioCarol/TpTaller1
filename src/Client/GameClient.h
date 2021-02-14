@@ -44,7 +44,7 @@ public:
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
 
-    void setPlaying(bool isPlaying);
+    void stopPlaying();
 
     bool isPlayerAlive();
 private:
