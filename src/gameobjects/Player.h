@@ -7,6 +7,8 @@
 #include "../TextureManager.h"
 #include "GameObject.h"
 #include "Enemy.h"
+#include "Coin.h"
+#include "PlatformNormal.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -18,9 +20,6 @@
 #include "../CharacterStates/Running.h"
 #include "../CharacterStates/Dying.h"
 #include "../config/Constants.h"
-
-#define imgPlayer "Sprites/Players/mario.png"
-#define defaultPlayer "Sprites/Default/defaultPlayer.png"
 
 class CharacterState;
 class Enemy;
@@ -65,18 +64,25 @@ public:
 
     //Collisions
     void collideWith(Enemy* enemy) override;
+    void collideWith(Coin* coin) override;
+    void collideWith(PlatformNormal* nBlock) override;
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;
+    int getWidth() override;
 
     int getLives() const;
     int loseLife();
     bool itsAlive();
     void testMode();
     bool getTestModeState();
-    std::pair<int, int> getPosition();
+    void startToJump();
+    void setJumpConfig();
+
 
     void restartPos();
+
+    void finishMovement();
 
 private:
     //Image related
@@ -108,6 +114,12 @@ private:
     int floor;
 
     bool testModeState = false;
+
+    void dropPlayer();
+
+    int firstX;
+    int firstY;
+    int ticksAfterRespawning;
 };
 
 

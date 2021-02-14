@@ -7,7 +7,7 @@ void Coin::init(int x, int y, std::string textureID) {
     _currentFrame = 0;
     delayCounter = 0;
     type = GOT_COIN;
-    points = 200;
+    points = POINTS_COIN;
 }
 
 void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
@@ -17,8 +17,8 @@ void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     delayCounter++;
 }
 
-void Coin::collideWith(Player *player) {
-   player->addPoints(POINTS_COIN);
+void Coin::collideWith(GameObject *go) {
+    go->collideWith(this);
 }
 
 Coin::~Coin() = default;
