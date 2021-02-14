@@ -56,8 +56,20 @@ void Enemy::collideWith(GameObject *go) {
    go->collideWith(this);
 }
 
-void Enemy::collideWith(Pipe *pipe) {
+void Enemy::standOrRevertMovement(GameObject *go, int heigth) {
+    int yBlock = go->getYPosition() + go->getFloorPosition();
+    if(yPosition + getFloorPosition() + 20 < yBlock) {
+        yPosition = yBlock - heigth - getFloorPosition();
+    } else {
+        direction = -1 * direction;
+        if (yPosition < floor) {
+            yPosition++;
+        }
+    }
+}
 
+void Enemy::collideWith(Pipe *pipe) {
+    standOrRevertMovement(pipe, pipe->getHeight() / 4 - 95);
 }
 
 void Enemy::collideWith(PlatformNormal *nBlock) {

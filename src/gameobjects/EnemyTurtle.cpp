@@ -7,6 +7,7 @@ void EnemyTurtle::init(size_t x, size_t y, std::string textureID, SDL_Rect *came
     Enemy::init(x, y, textureID, camera, state);
     type = GOT_ENEMY_TURTLE;
     pointsToPlayer = POINTS_TURTLE;
+    floor = 435;
 }
 
 

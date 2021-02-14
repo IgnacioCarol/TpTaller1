@@ -9,6 +9,7 @@ EnemyMushroom::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera,
     Enemy::init(x, y, textureID, camera, state);
     type = GOT_ENEMY_MUSHROOM;
     pointsToPlayer = POINTS_MUSHROOM;
+    floor = 425;
 }
 
 void EnemyMushroom::move() {
