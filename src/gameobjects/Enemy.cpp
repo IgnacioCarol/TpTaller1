@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "../CharacterStates/CharacterState.h"
 
 
 void Enemy::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, CharacterState *state) {
@@ -55,6 +54,14 @@ bool Enemy::getDirection() {
 
 void Enemy::collideWith(GameObject *go) {
    go->collideWith(this);
+}
+
+void Enemy::collideWith(Pipe *pipe) {
+
+}
+
+void Enemy::collideWith(PlatformNormal *nBlock) {
+
 }
 
 size_t Enemy::getPoints() {
