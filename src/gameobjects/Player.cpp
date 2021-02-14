@@ -294,6 +294,8 @@ void Player::tryUndoInmunity() {
 
 void Player::activateInmunity() {
     this->inmune = INMUNITY_TIME;
+}
+
 void Player::dropPlayer() {
     if (initialJumpingPosition < floor) {
         yPosition += GRAVITY;
