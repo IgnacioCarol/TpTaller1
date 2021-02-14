@@ -12,7 +12,7 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
-    void collideWith(Player* player);
+    //void collideWith(Player* player);
 
 private:
     //Image related definitions

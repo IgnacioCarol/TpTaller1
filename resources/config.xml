@@ -28,12 +28,12 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>0</cantidad>
+                        <cantidad>15</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/Goomba.png</imagen>
-                        <cantidad>0</cantidad>
+                        <cantidad>20</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
@@ -83,9 +83,9 @@
                 </pozos>
                 <tubos>
                     <tubo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>100</coordX>
-                        <coordY>400</coordY>
+                        <coordY>380</coordY>
                     </tubo>
                 </tubos>
             </nivel>
@@ -164,9 +164,9 @@
                 </pozos>
                 <tubos>
                     <tubo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>100</coordX>
-                        <coordY>450</coordY>
+                        <coordY>380</coordY>
                     </tubo>
                 </tubos>
             </nivel>
@@ -245,9 +245,9 @@
                 </pozos>
                 <tubos>
                     <tubo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>500</coordX>
-                        <coordY>400</coordY>
+                        <coordY>380</coordY>
                     </tubo>
                 </tubos>
             </nivel>
@@ -257,7 +257,7 @@
         </puntuacion>
     </escenario>
     <credenciales>
-         <cantidadJugadores>4</cantidadJugadores>
+         <cantidadJugadores>2</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>a</nombre>

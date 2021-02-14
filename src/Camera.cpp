@@ -14,6 +14,7 @@ void Camera::update(std::vector<Player *> players) {
             int playerPos = player -> getXPosition();
             maxPos = (playerPos > maxPos) ? playerPos : maxPos;
             minPos = (playerPos < minPos) ? playerPos : minPos;
+            player->finishMovement();
         }
     }
     if (maxPos - minPos < camera.w - displacement){

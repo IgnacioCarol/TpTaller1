@@ -19,6 +19,7 @@ void Running::move(const Uint8 *currentKeyStates, Player* player) {
 
 void Running::changeState(const Uint8 *currentKeyStates, Player* player) {
     if (currentKeyStates[SDL_SCANCODE_UP]){
+        player -> startToJump();
         player -> changeState(new Jumping());
     }
 
