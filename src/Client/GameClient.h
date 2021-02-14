@@ -88,6 +88,7 @@ private:
     bool levelCompleted = false;
     bool showScore = false;
     bool showGameOver = false;
+    bool isTimeOver = false;
 
     static const int DIGITS = 6;
 };

@@ -75,6 +75,7 @@ public:
     Score* getScore();
 
     void updateSendScore();
+    bool isTimeOver();
 
 private:
     GameServer(); //Private constructor to prevent instancing.
@@ -110,7 +111,6 @@ private:
     const int levelRacePoints[4] = {2500, 1500, 1000, 500};
 
     std::map<std::string, std::string> soundsPath;
-
 };
 
 

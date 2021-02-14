@@ -128,6 +128,10 @@ bool GameServer::isPlaying() const {
     return this->playing && !this->stage->isTimeOver() && arePlayersAlive();
 }
 
+bool GameServer::isTimeOver() {
+    return this->stage->isTimeOver();
+}
+
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
     return imagePaths;
 }

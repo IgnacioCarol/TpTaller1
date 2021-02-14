@@ -341,6 +341,7 @@ void GameClient::gameOver(GameMsgShowGameOver params) {
         playersMap[player.id]->setLives(player.lives);
     }
 
+    isTimeOver = params.isTimeOver;
     showGameOver = true;
 }
 
@@ -436,12 +437,12 @@ void GameClient::renderGameOver() {
     }
     yCount ++;
 
-    if (isPlayerAlive()) {
+    if (isPlayerAlive() && !isTimeOver) {
         textureManager->printText(TEXT_CONGRATULATIONS_KEY, initX + 180, initY + yCount * yFactor, renderer);
         yCount ++;
     }
 
-    if (winner != nullptr) {
+    if (winner != nullptr && !isTimeOver) {
         int nameSize = winner->getUsername().size();
         int xOffset = 180;
         textureManager->printText(winner->getTextureId() + "_text", initX + xOffset, initY + yCount * yFactor, renderer);

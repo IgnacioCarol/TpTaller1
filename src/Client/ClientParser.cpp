@@ -174,7 +174,8 @@ GameMsgShowGameOver ClientParser::parseGameOverParams(json msg) {
     }
 
     return GameMsgShowGameOver {
-        playersTotal
+        playersTotal,
+        contentJson["isTimeOver"]
     };
 }
 

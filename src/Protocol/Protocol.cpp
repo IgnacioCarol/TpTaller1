@@ -182,7 +182,8 @@ json Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver params) {
     }
 
     json msg = {
-            {"playersScore", playersScore}
+            {"playersScore", playersScore},
+            {"isTimeOver", params.isTimeOver}
     };
 
     return buildContentMsg(0, GAME_OVER_CMD, msg);

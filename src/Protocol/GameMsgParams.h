@@ -86,6 +86,7 @@ struct GameMsgShowPartialScore {
 
 struct GameMsgShowGameOver {
     std::vector<GameMsgPlayersTotalScore> playersTotalScore;
+    bool isTimeOver;
 };
 
 struct GamePlayerPlaying {

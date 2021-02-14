@@ -23,7 +23,7 @@ public:
 
     static json buildChangeLevelMsg(std::vector<GameObject*> gameObjects, BackgroundStage* stage);
 
-    static json buildGameOverMsg(std::vector<Player*> players);
+    static json buildGameOverMsg(std::vector<Player*> players, bool isTimeOver);
 
     static json buildPartialScore(std::vector<Player*> players, BackgroundStage *stage);
 

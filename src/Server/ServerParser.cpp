@@ -118,7 +118,7 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
     return Protocol::gameViewMsgToJson(gameMsgPlaying);
 }
 
-json ServerParser::buildGameOverMsg(std::vector<Player*> players) {
+json ServerParser::buildGameOverMsg(std::vector<Player*> players, bool isTimeOver) {
     std::vector<GameMsgPlayersTotalScore> playersScore;
 
     for (int i = 0; i < players.size(); i++) {
@@ -132,7 +132,8 @@ json ServerParser::buildGameOverMsg(std::vector<Player*> players) {
     }
 
     return Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver{
-            playersScore
+            playersScore,
+            isTimeOver
     });
 }
 

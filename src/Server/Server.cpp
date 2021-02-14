@@ -340,7 +340,7 @@ bool Server::run() {
     Logger::getInstance()->info("Finished run loop");
 
     while (someoneIsConnected() && !game->isPlaying()) {
-        msg = ServerParser::buildGameOverMsg(game->getPlayers());
+        msg = ServerParser::buildGameOverMsg(game->getPlayers(), game->isTimeOver());
         broadcast(msg);
     }
 
