@@ -369,6 +369,17 @@ void Config::setDefaults() {
     coin.coordY = DEFAULT_STAGE_LEVEL_COINS_COORD_Y;
     coin.quantity = DEFAULT_STAGE_LEVEL_COINS_QTY;
 
+    xmlHole hole;
+    hole.coordX = DEFAULT_STAGE_HOLE_COORD_X;
+    hole.coordY = DEFAULT_STAGE_HOLE_COORD_Y;
+    hole.height = DEFAULT_STAGE_HOLE_HEIGHT;
+    hole.width = DEFAULT_STAGE_HOLE_WIDTH;
+
+    xmlPipe pipe;
+    pipe.coordY = DEFAULT_STAGE_PIPE_COORD_Y;
+    pipe.coordX = DEFAULT_STAGE_PIPE_COORD_X;
+    pipe.image = DEFAULT_STAGE_PIPE_IMG;
+
     Window window;
     window.width = DEFAULT_WINDOW_WIDTH;
     window.height = DEFAULT_WINDOW_HEIGHT;
@@ -384,6 +395,8 @@ void Config::setDefaults() {
     level1.enemies.push_back(enemy);
     level1.platforms.push_back(platform);
     level1.coins.push_back(coin);
+    level1.holes.push_back(hole);
+    level1.pipes.push_back(pipe);
 
     Level level2;
     level2.number = DEFAULT_STAGE_SECOND_LEVEL_NUMBER;
@@ -392,6 +405,8 @@ void Config::setDefaults() {
     level2.enemies.push_back(enemy);
     level2.platforms.push_back(platform);
     level2.coins.push_back(coin);
+    level2.holes.push_back(hole);
+    level2.pipes.push_back(pipe);
 
     Level level3;
     level3.number = DEFAULT_STAGE_THIRD_LEVEL_NUMBER;
@@ -400,11 +415,14 @@ void Config::setDefaults() {
     level3.enemies.push_back(enemy);
     level3.platforms.push_back(platform);
     level3.coins.push_back(coin);
+    level3.holes.push_back(hole);
+    level3.pipes.push_back(pipe);
 
     Stage stage;
     stage.levels.push_back(level1);
     stage.levels.push_back(level2);
     stage.levels.push_back(level3);
+    stage.score.time = DEFAULT_STAGE_SCORE_TIME;
 
     User user;
     user.username = DEFAULT_USER_USERNAME;
