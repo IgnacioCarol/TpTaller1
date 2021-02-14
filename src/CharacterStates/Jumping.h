@@ -10,7 +10,7 @@
 
 class Jumping: public CharacterState {
 public:
-    explicit Jumping();
+    explicit Jumping(bool isPlayerBig);
     void move(const Uint8* currentKeyStates, Player* player) override;
     void changeState(const Uint8* currentKeyStates, Player* player) override;
 

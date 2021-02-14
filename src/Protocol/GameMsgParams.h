@@ -98,6 +98,7 @@ struct GamePlayerPlaying {
     int points;
     int lives;
     bool testMode;
+    bool playerBig;
 };
 
 struct GameObjectPlaying {

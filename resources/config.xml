@@ -60,14 +60,14 @@
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
-                        <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
-                        <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
+                        <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>2</cantidad>

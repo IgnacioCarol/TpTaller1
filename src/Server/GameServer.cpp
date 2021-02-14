@@ -116,7 +116,7 @@ void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
     for (auto & player : players) {
         player->restartPos(0, 380);
-        player->changeState(new Normal());
+        player->changeState(new Normal(player->getPlayerBig()));
         player->addPoints(levelRacePoints[currentRaceIndex]);
         player->saveLevelPoints(stage->getLevel());
         currentRaceIndex++;
@@ -147,8 +147,11 @@ std::vector<Player *> GameServer::getPlayers() {
 void GameServer::updatePlayers() {
     for (Player* player: players) {
         player->move();
+        if (player->isInmune()) {
+            player->tryUndoInmunity();
+        }
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
-            player->changeState(new Paused(false));
+            player->changeState(new Paused(false, player->getPlayerBig()));
             changeLevelFlag = true;
         }
     }
@@ -194,7 +197,7 @@ void GameServer::unpausePlayer(PlayerClient *playerClient) {
     for (Player *player: getPlayers()) {
         if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
             Logger::getInstance()->info("Client " +  player->getUsername() + " is connected.");
-            player->changeState(new Normal());
+            player->changeState(new Normal(player->getPlayerBig()));
         }
     }
 }

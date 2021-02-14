@@ -154,12 +154,14 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
-        if (playerUpdate.testMode){
-            player -> testMode();
-        }
         player -> setState(playerUpdate.state);
         player -> setPoints(playerUpdate.points);
         player -> setLives(playerUpdate.lives);
+        player->setPlayerBig(playerUpdate.playerBig);
+        if (playerUpdate.testMode){
+            player -> testMode();
+        }
+        
     }
 }
 
@@ -357,7 +359,7 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     for (std::pair<int, Player*> player: playersMap){
         player.second->restartPos(0, 380);
         player.second->setDirection(true);
-        player.second->changeState(new Normal());
+        player.second->changeState(new Normal(player.second->getPlayerBig()));
     }
     levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);

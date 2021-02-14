@@ -25,7 +25,7 @@ public:
     virtual void move(Enemy* enemy); //For the enemies
 
     virtual void changeState(const Uint8* currentKeyStates, Player* player);
-
+    void setPlayerBig(bool playerBig);
     int getFramesAmount();
 
     std::string getStateType();
@@ -39,5 +39,6 @@ protected:
     int currentFrame;
     int framesAmount; //Amount of pictures in the sprite sheet
     int contAux = 0;
+    bool isPlayerBig;
 };
 #endif //TPTALLER1_CHARACTERSTATE_H

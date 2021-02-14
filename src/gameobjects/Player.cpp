@@ -9,7 +9,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     initialJumpingPosition = yPosition;
     maxYPosition = yPosition - 100;
     cam =  camera;
-    characterState = new Normal();
+    characterState = new Normal(this->isPlayerBig);
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
@@ -45,6 +45,7 @@ bool Player::canJump() const {
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
     this->init(0, 380, textureID, camera, 6);
     this->username = username;
+    this->isPlayerBig = false;
     this->levelPoints[1] = 0;
     this->levelPoints[2] = 0;
     this->levelPoints[3] = 0;
@@ -77,7 +78,13 @@ void Player::move(std::vector<int> vector) {
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if (isAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+        std::string textureID = this->_textureID;
+
+        if (this->isPlayerBig) {
+            textureID += "-big";
+        }
+
+        characterState -> draw(textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
     }
 }
 
@@ -119,13 +126,13 @@ void Player::setState(std::string state) {
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
             startToJump();
-            changeState(new Jumping());
+            changeState(new Jumping(this->isPlayerBig));
         } else if (state == "NORMAL") {
-            changeState(new Normal());
+            changeState(new Normal(this->isPlayerBig));
         } else if (state == "RUNNING") {
-            changeState(new Running());
+            changeState(new Running(this->isPlayerBig));
         } else if (state == "CROUCHED") {
-            changeState(new Crouched());
+            changeState(new Crouched(this->isPlayerBig));
         }
         else if (state == "PAUSED" || state == "FINISH"){
             if (state == "FINISH"){
@@ -194,8 +201,11 @@ void Player::die() {
     if (getState() == "DYING") {
         return;
     }
-    changeState(new Dying());
-    lives = loseLife();
+
+    if (!testModeState && !this->isInmune()) {
+        changeState(new Dying());
+        lives = loseLife();
+    }
 }
 
 void Player::collideWith(GameObject *go) {
@@ -211,8 +221,10 @@ void Player::collideWith(Enemy *enemy) {
         addPoints(enemy->getPoints());
         enemy->die();
     } else {
-        if(isPlayerBig) {
-            isPlayerBig = false;
+        if (this->isPlayerBig) {
+            this->setPlayerBig(false);
+            this->activateInmunity();
+            return;
         } else if (ticksAfterRespawning >= MAX_TICKS_TO_BE_KILLED) {
             this->die();
         }
@@ -224,9 +236,7 @@ int Player::getLives() const {
 }
 
 int Player::loseLife() {
-    if (!testModeState){
-        lives = (0 > lives - 1) ? 0 : lives - 1;
-    }
+    lives = (0 > lives - 1) ? 0 : lives - 1;
     return lives;
 }
 
@@ -276,6 +286,29 @@ void Player::setJumpConfig() {
 void Player::restartPos() {
     ticksAfterRespawning = 0;
     restartPos(cam->x, floor);
+}
+
+bool Player::getPlayerBig() {
+    return this->isPlayerBig;
+}
+
+void Player::setPlayerBig(bool playerBig) {
+    this->isPlayerBig = playerBig;
+    this->characterState->setPlayerBig(playerBig);
+}
+
+bool Player::isInmune() {
+    return this->inmune > 0;
+}
+
+void Player::tryUndoInmunity() {
+    if (this->inmune > 0) {
+        this->inmune--;
+    }
+}
+
+void Player::activateInmunity() {
+    this->inmune = INMUNITY_TIME;
 }
 
 bool Player::operator<(const Player &p) const {

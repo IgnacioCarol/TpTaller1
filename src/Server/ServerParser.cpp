@@ -90,7 +90,8 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
                 player->getDirection(),
                 player->getTotalPoints(),
                 player->getLives(),
-                player->getTestModeState()
+                player->getTestModeState(),
+                player->getPlayerBig()
         };
         gamePlayers.push_back(gamePlayer);
     }

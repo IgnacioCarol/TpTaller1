@@ -92,7 +92,8 @@ json Protocol::gameViewMsgToJson(GameMsgPlaying params) {
                 {"direction", gameObject.direction},
                 {"points", gameObject.points},
                 {"lives", gameObject.lives},
-                {"testMode", gameObject.testMode}
+                {"testMode", gameObject.testMode},
+                {"playerBig", gameObject.playerBig}
         };
         players.push_back(gameObjectJson);
     }

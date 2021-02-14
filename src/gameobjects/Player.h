@@ -21,6 +21,10 @@
 #include "../CharacterStates/Dying.h"
 #include "../config/Constants.h"
 
+#define imgPlayer "Sprites/Players/mario.png"
+#define defaultPlayer "Sprites/Default/defaultPlayer.png"
+#define INMUNITY_TIME 50
+
 class CharacterState;
 class Enemy;
 class PlatformNormal;
@@ -59,7 +63,7 @@ public:
     std::string getState() override;
 
     bool getDirection() override;
-
+    bool getPlayerBig();
     void collideWith(GameObject *go) override;
 
     //Collisions
@@ -71,6 +75,7 @@ public:
 
     void addPoints(int newPoints);
     void die() override;
+    void setPlayerBig(bool playerBig);
     int getWidth() override;
 
     int getLives() const;
@@ -84,6 +89,8 @@ public:
 
     void restartPos();
 
+    bool isInmune();
+    void tryUndoInmunity();
     void setPoints(int points);
     std::map<int,int> getPointsByLevel();
     void setPointsByLevel(std::map<int,int> points);
@@ -113,6 +120,7 @@ private:
 
     //Health related attributes
     bool isPlayerBig;
+    int inmune;
     int lives = 3;
 
     //Score related attributes
@@ -124,6 +132,7 @@ private:
     int partialPoints = 0;
     std::map<int, int> levelPoints;
 
+    void activateInmunity();
     void dropPlayer();
 
     int firstX;
