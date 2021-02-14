@@ -77,7 +77,7 @@ public:
     void testMode();
     bool getTestModeState();
     void startToJump();
-    void setJumpConfig(bool restart);
+    void setJumpConfig();
 
 
     void restartPos();

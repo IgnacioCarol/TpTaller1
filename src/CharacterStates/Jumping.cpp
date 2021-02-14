@@ -20,6 +20,6 @@ void Jumping::changeState(const Uint8 *currentKeyStates, Player* player) {
 
     if (player -> finishJump()) {
         player -> changeState(new Normal());
-        player->setJumpConfig(true);
+        player->setJumpConfig();
     }
 }

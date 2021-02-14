@@ -1,6 +1,6 @@
 #include "Player.h"
 static const int GRAVITY = 3;
-static const int MAX_TICKS_TO_BE_KILLED = 60;
+const int MAX_TICKS_TO_BE_KILLED = 300;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
@@ -252,8 +252,8 @@ void Player::startToJump() {
     maxYPosition = yPosition - 100;
 }
 
-void Player::setJumpConfig(bool restart) {
-    initialJumpingPosition = restart ? floor : yPosition + GRAVITY;
+void Player::setJumpConfig() {
+    initialJumpingPosition = floor;
     maxYPosition = initialJumpingPosition - 100;
     jumping = false;
 }
