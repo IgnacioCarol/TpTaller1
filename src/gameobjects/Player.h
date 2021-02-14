@@ -62,6 +62,8 @@ public:
 
     void collideWith(GameObject *go) override;
 
+    bool isActive();
+
     //Collisions
     void collideWith(Enemy* enemy) override;
     void collideWith(Coin* coin) override;

@@ -114,36 +114,33 @@ void Player::setDirection(bool direction) {
 void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
         if (state == "JUMPING" || state == "FALLING") {
-            if (state != "FALLING"){
+            if (state != "FALLING") {
                 MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
             }
             startToJump();
             changeState(new Jumping(state == "FALLING"));
-        }
         } else if (state == "NORMAL") {
             changeState(new Normal());
         } else if (state == "RUNNING") {
             changeState(new Running());
         } else if (state == "CROUCHED") {
             changeState(new Crouched());
-        }
-        else if (state == "PAUSED" || state == "FINISH"){
-            if (state == "FINISH"){
+        } else if (state == "PAUSED" || state == "FINISH") {
+            if (state == "FINISH") {
                 MusicManager::Instance()->playSound(STAGE_CLEAR_SOUND);
             }
             changeState(new Paused(state == "PAUSED"));
-        }
-        else{
+        } else {
             changeState(new Dying(state == "DYING_FALLING"));
-            if (!loseLife()){
+            if (!loseLife()) {
                 MusicManager::Instance()->playSound(GAME_OVER_SOUND);
-            }
-            else if (state == "DYING"){
+            } else if (state == "DYING") {
                 MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
             }
         }
     }
 }
+
 std::string Player::getState() {
     return characterState->getStateType();
 }
@@ -298,4 +295,9 @@ void Player::finishMovement() {
 
 int Player::getWidth() {
     return pWidth / 4;
+}
+
+bool Player::isActive() {
+    std::string stateType = characterState->getStateType();
+    return stateType != "PAUSED" && stateType != "DYING" && stateType != "DYING_FALLING";
 }

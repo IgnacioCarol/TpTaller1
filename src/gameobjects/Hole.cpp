@@ -40,3 +40,11 @@ void Hole::collideWith(GameObject *go) {
     go->fall();
     go->dieFalling();
 }
+
+int Hole::getFloorPosition() {
+    return -120;
+}
+
+int Hole::centerXPos() {
+    return 50;
+}

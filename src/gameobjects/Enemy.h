@@ -32,7 +32,7 @@ public:
 
 protected:
     static const int enemyVelocity = 1;
-    static const int GRAVITY_ENEMY = 2;
+    static const int GRAVITY_ENEMY = 3;
     CharacterState* enemyState{};
     int direction = -enemyVelocity;
     bool flipFlag = false;

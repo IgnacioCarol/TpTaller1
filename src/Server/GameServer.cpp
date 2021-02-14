@@ -146,7 +146,7 @@ void GameServer::updatePlayers() {
     }
 
     for (Player* player: players){
-        changeLevelFlag &= (player->getState() == "FINISH" || player->getState() == "PAUSED");
+        changeLevelFlag &= (player->getState() == "FINISH" || !player->isActive());
     }
 
     if (changeLevelFlag) nextStage();
