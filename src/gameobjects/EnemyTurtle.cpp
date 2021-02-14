@@ -27,3 +27,7 @@ void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 int EnemyTurtle::getFloorPosition() {
     return -55;
 }
+
+int EnemyTurtle::centerXPos() {
+    return -20;
+}

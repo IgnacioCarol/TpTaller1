@@ -31,3 +31,7 @@ void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 int EnemyMushroom::getFloorPosition() {
     return -45;
 }
+
+int EnemyMushroom::centerXPos() {
+    return -20;
+}
