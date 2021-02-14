@@ -1,11 +1,12 @@
 #ifdef __APPLE__
 #include "../CharacterStates/Normal.h"
+#include "../CharacterStates/Paused.h"
 #else
 #include <src/CharacterStates/Normal.h>
 #include <src/CharacterStates/Paused.h>
-
 #endif
 #include "GameServer.h"
+#include "../Utils/Score.h"
 
 GameServer* GameServer::instance = nullptr;
 
@@ -116,12 +117,19 @@ void GameServer::restartCharacters() {
     for (auto & player : players) {
         player->restartPos(0, 380);
         player->changeState(new Normal(player->getPlayerBig()));
+        player->addPoints(levelRacePoints[currentRaceIndex]);
+        player->saveLevelPoints(stage->getLevel());
+        currentRaceIndex++;
     }
     camera->restartPos();
 }
 
 bool GameServer::isPlaying() const {
     return this->playing && !this->stage->isTimeOver() && arePlayersAlive();
+}
+
+bool GameServer::isTimeOver() {
+    return this->stage->isTimeOver();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
@@ -152,7 +160,16 @@ void GameServer::updatePlayers() {
         changeLevelFlag &= (player->getState() == "FINISH" || player->getState() == "PAUSED");
     }
 
-    if (changeLevelFlag) nextStage();
+    if (changeLevelFlag) {
+        currentRaceIndex = 0;
+        nextStage();
+
+        if (stage->getLevel() != 0) {
+            score->startLevelScore(stage->getLevel());
+            sendScore = true;
+        }
+    }
+
 }
 
 void GameServer::updateGameObjects() {
@@ -231,9 +248,21 @@ void GameServer::addSoundsPaths() {
     soundsPath[WORLD_CLEAR_SOUND] = path + "worldClear" + format;
 }
 
+bool GameServer::shouldSendScore() {
+    return sendScore;
+}
+
+Score* GameServer::getScore() {
+    return score;
+}
+
+void GameServer::updateSendScore() {
+    sendScore = !score->isShowScoreTimeOver();
+}
+
 bool GameServer::arePlayersAlive() const{
     for(Player* ply: players){
-        if (ply->itsAlive()){
+        if (ply->isAlive()){
             return true;
         }
     }

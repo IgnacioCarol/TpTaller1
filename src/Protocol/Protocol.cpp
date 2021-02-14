@@ -90,6 +90,8 @@ json Protocol::gameViewMsgToJson(GameMsgPlaying params) {
                 {"yPos", gameObject.yPos},
                 {"state", gameObject.state},
                 {"direction", gameObject.direction},
+                {"points", gameObject.points},
+                {"lives", gameObject.lives},
                 {"testMode", gameObject.testMode},
                 {"playerBig", gameObject.playerBig}
         };
@@ -147,4 +149,43 @@ json Protocol::gameChangeLevelMsgToJson(GameMsgLevelChange params) {
     };
 
     return buildContentMsg(0, GAME_CHANGE_LEVEL_CMD, msg);
+}
+
+json Protocol::gameShowPartialScoreMsgToJson(GameMsgShowPartialScore params) {
+    json playersScore = json::array();
+    for (auto& player : params.playersPartialScore) {
+        json playerPartialScoreJson = {
+                {"id", player.id},
+                {"score", player.score}
+        };
+        playersScore.push_back(playerPartialScoreJson);
+    }
+
+    json msg = {
+            {"level", params.level},
+            {"playersScore", playersScore}
+    };
+
+    return buildContentMsg(0, GAME_SHOW_PARTIAL_SCORE_CMD, msg);
+}
+
+json Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver params) {
+    json playersScore = json::array();
+
+    for (auto& player : params.playersTotalScore) {
+        json playerTotalScoreJson = {
+                {"id", player.id},
+                {"levelScores", player.levelScores},
+                {"totalScore", player.totalScore},
+                {"lives", player.lives}
+        };
+        playersScore.push_back(playerTotalScoreJson);
+    }
+
+    json msg = {
+            {"playersScore", playersScore},
+            {"isTimeOver", params.isTimeOver}
+    };
+
+    return buildContentMsg(0, GAME_OVER_CMD, msg);
 }

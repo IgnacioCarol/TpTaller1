@@ -44,6 +44,8 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_LOG_TAG "configuracion.log"
 #define XML_WINDOW_TAG "configuracion.ventana"
 #define XML_STAGE_TAG "configuracion.escenario"
+#define XML_STAGE_SCORE_TAG "configuracion.escenario.puntuacion"
+#define XML_STAGE_SCORE_TIME "configuracion.escenario.puntuacion.tiempo"
 #define XML_LOG_LEVEL "configuracion.log.level"
 #define XML_WINDOW_WIDTH "configuracion.ventana.ancho"
 #define XML_WINDOW_HEIGHT "configuracion.ventana.alto"
@@ -145,8 +147,13 @@ struct Level {
     vector<xmlPipe>  pipes;
 };
 
+struct xmlScore {
+    int time;
+};
+
 struct Stage {
     vector<Level> levels;
+    xmlScore score;
 };
 
 struct Window {
@@ -212,7 +219,8 @@ private:
     const vector<string> validConfigTags = {"log", "ventana", "escenario", "credenciales"};
     const vector<string> validLogTags = {"level"};
     const vector<string> validWindowTags = {"ancho", "alto"};
-    const vector<string> validStageTags = {"niveles"};
+    const vector<string> validStageTags = {"niveles","puntuacion"};
+    const vector<string> validScoreTags = {"tiempo"};
     const vector<string> validCredentialTags = {"usuarios", "cantidadJugadores"};
     const vector<string> validUserTags = {"nombre", "contrasenia"};
     const vector<string> validLevelTags = {"numero", "fondo", "monedas", "tiempo", "enemigos", "plataformas", "pozos", "tubos"};

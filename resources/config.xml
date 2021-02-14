@@ -252,6 +252,9 @@
                 </tubos>
             </nivel>
         </niveles>
+        <puntuacion>
+            <tiempo>10</tiempo>
+        </puntuacion>
     </escenario>
     <credenciales>
          <cantidadJugadores>2</cantidadJugadores>

@@ -88,6 +88,8 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
                 player->getYPosition(),
                 player->getState(),
                 player->getDirection(),
+                player->getTotalPoints(),
+                player->getLives(),
                 player->getTestModeState(),
                 player->getPlayerBig()
         };
@@ -117,8 +119,23 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
     return Protocol::gameViewMsgToJson(gameMsgPlaying);
 }
 
-json ServerParser::buildGameOverMsg() {
-    return Protocol::buildContentMsg(0, GAME_OVER_CMD, {});
+json ServerParser::buildGameOverMsg(std::vector<Player*> players, bool isTimeOver) {
+    std::vector<GameMsgPlayersTotalScore> playersScore;
+
+    for (int i = 0; i < players.size(); i++) {
+        GameMsgPlayersTotalScore playerMsg = {
+                players[i]->getId(),
+                players[i]->getPointsByLevel(),
+                players[i]->getTotalPoints(),
+                players[i]->getLives()
+        };
+        playersScore.push_back(playerMsg);
+    }
+
+    return Protocol::gameShowGameOverMsgToJson(GameMsgShowGameOver{
+            playersScore,
+            isTimeOver
+    });
 }
 
 json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, BackgroundStage *stage) {
@@ -151,4 +168,27 @@ json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, Ba
     };
 
     return Protocol::gameChangeLevelMsgToJson(gameMsgLevelChange);
+}
+
+json ServerParser::buildPartialScore(std::vector<Player*> players, BackgroundStage *stage) {
+    std::vector<GameMsgPlayersPartialScore> playersScore;
+
+    for (int i = 0; i < players.size(); i++) {
+        GameMsgPlayersPartialScore playerMsg = {
+                players[i]->getId(),
+                players[i]->getTotalPoints()
+        };
+        playersScore.push_back(playerMsg);
+    }
+
+    GameMsgShowPartialScore gameMsgShowPartialScore = {
+            stage->getLevel(),
+            playersScore
+    };
+
+    return Protocol::gameShowPartialScoreMsgToJson(gameMsgShowPartialScore);
+}
+
+json ServerParser::buildStopPartialScore() {
+    return Protocol::buildContentMsg(0, GAME_STOP_PARTIAL_SCORE_CMD, {});
 }

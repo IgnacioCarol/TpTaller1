@@ -46,6 +46,9 @@ Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : 
     this->init(0, 380, textureID, camera, 6);
     this->username = username;
     this->isPlayerBig = false;
+    this->levelPoints[1] = 0;
+    this->levelPoints[2] = 0;
+    this->levelPoints[3] = 0;
 }
 
 void Player::restartPos(int x, int y) {
@@ -73,7 +76,7 @@ void Player::move(std::vector<int> vector) {
 }
 
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    if (itsAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
+    if (isAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         std::string textureID = this->_textureID;
 
@@ -166,14 +169,26 @@ void Player::move() {
     completeMovement(keyStates);
 }
 
-void Player::addPoints(int newPoints) {
-    points += newPoints;
-    levelPoints[level] += newPoints;
+void Player::saveLevelPoints(int currentLevel) {
+    levelPoints[currentLevel] = partialPoints;
+    partialPoints = 0;
 }
 
-void Player::changeLevel() {
-    level += 1;
-    levelPoints[level] = 0; //TODO que Dani C revise esto que era la que lo estaba haciendo
+void Player::addPoints(int newPoints) {
+    totalPoints += newPoints;
+    partialPoints += newPoints;
+}
+
+void Player::setPoints(int points) {
+    totalPoints = points;
+}
+
+std::map<int,int> Player::getPointsByLevel() {
+    return levelPoints;
+}
+
+int Player::getTotalPoints() {
+    return totalPoints;
 }
 
 void Player::completeMovement(const Uint8 *keyStates) {
@@ -225,7 +240,7 @@ int Player::loseLife() {
     return lives;
 }
 
-bool Player::itsAlive() {
+bool Player::isAlive() {
     return lives != 0;
 }
 
@@ -294,6 +309,18 @@ void Player::tryUndoInmunity() {
 
 void Player::activateInmunity() {
     this->inmune = INMUNITY_TIME;
+}
+
+bool Player::operator<(const Player &p) const {
+    return this->totalPoints > p.totalPoints;
+}
+
+void Player::setPointsByLevel(std::map<int,int> points) {
+    levelPoints = points;
+}
+
+void Player::setLives(int lives) {
+    this->lives = lives;
 }
 
 void Player::dropPlayer() {

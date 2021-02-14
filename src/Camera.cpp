@@ -5,6 +5,7 @@ Camera::Camera(int x, int y, int width, int height) {
 }
 
 void Camera::update(std::vector<Player *> players) {
+    Logger::getInstance()->debug("Updating camera...");
     static const int displacement = 200;
     int maxPos = 0;
     int minPos = 20000;

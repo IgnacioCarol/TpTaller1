@@ -253,9 +253,6 @@ void * Server::broadcastToPlayerClient(void *arg) {
 
         playerClient->popOutcome();
         tolerance = 0;
-        if (msg["command"] == GAME_OVER_CMD) {
-            playerClient->disconnect();
-        }
     }
 
     Logger::getInstance()->info("Finishing broadcast to player client thread");
@@ -308,13 +305,24 @@ bool Server::run() {
 
             this->popCommand();
         }
-        game->updateGameObjects();
-        game->updatePlayers();
-        game->updateGameObjectsOnScreen();
-        CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), getPlayersAsGameObjects(game->getPlayers()));
-        game->getCamera()->update(game->getPlayers());
+
         if (game->isPlaying()) {
-            msg = getPlayersPositionMessage();
+            if (game->shouldSendScore() && !game->getScore()->isShowScoreTimeOver()) {
+                msg = ServerParser::buildPartialScore(game->getPlayers(), game->getBackgroundStage());
+            } else if (game->shouldSendScore() && game->getScore()->isShowScoreTimeOver()) {
+                game->updateSendScore();
+                msg = ServerParser::buildStopPartialScore();
+            } else {
+                game->updateGameObjects();
+                game->updatePlayers();
+                game->updateGameObjectsOnScreen();
+                CollisionsManager::Instance()->checkCollisions(game->getGameObjectsOnScreen(), getPlayersAsGameObjects(game->getPlayers()));
+                game->getCamera()->update(game->getPlayers());
+                if (!game->isPlaying()) {
+                    break;
+                }
+                msg = getPlayersPositionMessage();
+            }
             broadcast(msg);
         }
 
@@ -328,16 +336,14 @@ bool Server::run() {
         Logger::getInstance()->debug(ss.str());
 
     }
-    //ToDo agregar lo que hace falta cuando el juego termina porque todos murieron
+
     Logger::getInstance()->info("Finished run loop");
 
-    if (!game->isPlaying()) {
-        msg = ServerParser::buildGameOverMsg();
+    while (someoneIsConnected() && !game->isPlaying()) {
+        msg = ServerParser::buildGameOverMsg(game->getPlayers(), game->isTimeOver());
         broadcast(msg);
     }
 
-    while (someoneIsConnected()) {
-    }
     // Wait for all threads to finish before ending server run
     for(auto const& thread : incomeThreads) {
         pthread_join(thread.second, nullptr);
