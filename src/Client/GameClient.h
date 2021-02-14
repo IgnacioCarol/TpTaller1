@@ -62,7 +62,7 @@ private:
     void updateGameObjects(std::vector<GameObjectPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
-    void renderPointsAndLives(int yPosition, int points, int lives);
+    void renderPointsAndLives(int yPosition, string userTextureID, int points, int lives);
     void renderPartialScore();
     void loadScoreText();
     void renderGameOver();
