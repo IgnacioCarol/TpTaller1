@@ -133,6 +133,7 @@ void Player::setState(std::string state) {
         } else {
             changeState(new Dying(state == "DYING_FALLING"));
             if (!lives) {
+                MusicManager::Instance()->pauseMusic();
                 MusicManager::Instance()->playSound(GAME_OVER_SOUND);
             } else if (state == "DYING") {
                 MusicManager::Instance()->playSound(MARIO_DIES_SOUND);

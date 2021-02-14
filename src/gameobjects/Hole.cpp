@@ -43,7 +43,7 @@ void Hole::collideWith(GameObject *go) {
 }
 
 int Hole::getFloorPosition() {
-    return -120;
+    return -62;
 }
 
 int Hole::centerXPos() {
