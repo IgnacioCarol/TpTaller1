@@ -73,7 +73,7 @@ void Enemy::collideWith(Pipe *pipe) {
 }
 
 void Enemy::collideWith(PlatformNormal *nBlock) {
-
+    standOrRevertMovement(nBlock, nBlock->getHeight() - 50);
 }
 
 size_t Enemy::getPoints() {
