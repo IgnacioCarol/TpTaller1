@@ -8,7 +8,7 @@
 
 class CollisionsManager {
 public:
-    bool isInIntersection(GameObject *first, GameObject *pObject);
+    bool isInIntersection(GameObject *go, GameObject *anotherGo);
 
     static CollisionsManager *Instance();
     void checkCollisions(std::vector<GameObject *> goOnScreen, std::vector<GameObject *> players);

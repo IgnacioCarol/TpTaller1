@@ -19,7 +19,8 @@ void Jumping::move(const Uint8 *currentKeyStates, Player* player) {
 
 void Jumping::changeState(const Uint8 *currentKeyStates, Player* player) {
 
-    if (player -> finishJump()){
-        player -> changeState(new Normal(this->isPlayerBig));
+    if (player -> finishJump()) {
+        player -> changeState(new Normal());
+        player->setJumpConfig();
     }
 }

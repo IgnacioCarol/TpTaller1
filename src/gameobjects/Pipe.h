@@ -18,8 +18,8 @@ public:
 
 private:
     //Related to the image
-    static const int PIPE_WIDTH = 256; // ToDo DB preguntar licha !
-    static const int PIPE_HEIGHT = 256;
+    static const int PIPE_WIDTH = 600;
+    static const int PIPE_HEIGHT = 600;
 };
 
 

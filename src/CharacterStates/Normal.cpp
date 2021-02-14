@@ -22,6 +22,7 @@ void Normal::changeState(const Uint8 *currentKeyStates, Player* player) {
     }
 
     else if (currentKeyStates[SDL_SCANCODE_UP]){
+        player->startToJump();
         player -> changeState(new Jumping(this->isPlayerBig));
     }
 

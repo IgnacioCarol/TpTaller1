@@ -1,5 +1,6 @@
 #include "Player.h"
 static const int GRAVITY = 3;
+const int MAX_TICKS_TO_BE_KILLED = 300;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
@@ -14,6 +15,9 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     leftOrRightPressed = false;
     atScene = true;
     floor = yPosition;
+    firstX = xPosition;
+    firstY = yPosition;
+    ticksAfterRespawning = MAX_TICKS_TO_BE_KILLED;
 }
 
 void Player::run(int direction) {
@@ -29,11 +33,13 @@ void Player::jump(int yMovement) {
         yPosition = yPosition + (!isNotStartingPos || yMovement ? - (yMovement + GRAVITY - 1) : + GRAVITY); //TODO change velocity to go up
     } else if (isNotStartingPos) {
         yPosition += GRAVITY;
+    } else {
+        yPosition--; //Fix a border case
     }
 }
 
 bool Player::canJump() const {
-    return ((jumping && yPosition > maxYPosition) || (!jumping && yPosition == initialJumpingPosition));
+    return ((jumping && yPosition > maxYPosition) || (!jumping && (yPosition == initialJumpingPosition || yPosition == maxYPosition + 100)));
 }
 
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
@@ -61,6 +67,8 @@ void Player::move(std::vector<int> vector) {
         keyStates[arrows[i]] = vector[i];
     }
     leftOrRightPressed = vector[1] || vector[3];
+    firstY = yPosition;
+    firstX = xPosition;
     completeMovement(keyStates);
 }
 
@@ -114,6 +122,7 @@ void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
         if (state == "JUMPING") {
             MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
+            startToJump();
             changeState(new Jumping(this->isPlayerBig));
         } else if (state == "NORMAL") {
             changeState(new Normal(this->isPlayerBig));
@@ -145,7 +154,7 @@ bool Player::getDirection() {
 void Player::move() {
     Uint8 keyStates[83];
     if (ticks < 50) {
-        keyStates[SDL_SCANCODE_UP] = isJumping();
+        keyStates[SDL_SCANCODE_UP] = isJumping() && (abs(yPosition - initialJumpingPosition) > GRAVITY || ticks < 5);
         bool isMoving = leftOrRightPressed && (characterState->getStateType() == "JUMPING" || characterState->getStateType() == "RUNNING");
         keyStates[SDL_SCANCODE_LEFT] =  isMoving && !xDirection;
         keyStates[SDL_SCANCODE_RIGHT] = isMoving && xDirection;
@@ -170,6 +179,7 @@ void Player::changeLevel() {
 void Player::completeMovement(const Uint8 *keyStates) {
     characterState->changeState(keyStates, this);
     characterState->move(keyStates, this);
+    dropPlayer();
 }
 
 void Player::die() {
@@ -200,14 +210,10 @@ void Player::collideWith(Enemy *enemy) {
             this->setPlayerBig(false);
             this->activateInmunity();
             return;
+        } else if (ticksAfterRespawning >= MAX_TICKS_TO_BE_KILLED) {
+            this->die();
         }
-
-        this->die();
     }
-}
-
-std::pair<int, int> Player::getPosition() {
-    return std::make_pair(xPosition, yPosition);
 }
 
 int Player::getLives() const {
@@ -233,7 +239,37 @@ bool Player::getTestModeState() {
     return testModeState;
 }
 
+void Player::collideWith(Coin *coin) {
+    this->addPoints(coin->getPoints());
+    coin->die();
+}
+
+void Player::collideWith(PlatformNormal *nBlock) {
+    int yBlock = nBlock->getYPosition() + nBlock->getFloorPosition();
+    if(yPosition + getFloorPosition() + 20 < yBlock) {
+        yPosition = yBlock - nBlock->getHeight() + 10;
+        initialJumpingPosition = yPosition;
+    } else {
+        restartPos(firstX, firstY);
+        if (yPosition < floor) {
+            yPosition = yPosition + GRAVITY > floor ? floor: yPosition + GRAVITY;
+        }
+    }
+}
+
+void Player::startToJump() {
+    initialJumpingPosition = floor;
+    maxYPosition = yPosition - 100;
+}
+
+void Player::setJumpConfig() {
+    initialJumpingPosition = floor;
+    maxYPosition = initialJumpingPosition - 100;
+    jumping = false;
+}
+
 void Player::restartPos() {
+    ticksAfterRespawning = 0;
     restartPos(cam->x, floor);
 }
 
@@ -258,4 +294,19 @@ void Player::tryUndoInmunity() {
 
 void Player::activateInmunity() {
     this->inmune = INMUNITY_TIME;
+void Player::dropPlayer() {
+    if (initialJumpingPosition < floor) {
+        yPosition += GRAVITY;
+        initialJumpingPosition = yPosition > floor ? floor : yPosition;
+    }
+}
+
+void Player::finishMovement() {
+    firstX = xPosition;
+    firstY = yPosition;
+    ticksAfterRespawning = ticksAfterRespawning < MAX_TICKS_TO_BE_KILLED ? ticksAfterRespawning + 1 : MAX_TICKS_TO_BE_KILLED;
+}
+
+int Player::getWidth() {
+    return pWidth / 4;
 }

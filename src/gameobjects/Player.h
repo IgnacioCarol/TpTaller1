@@ -7,6 +7,8 @@
 #include "../TextureManager.h"
 #include "GameObject.h"
 #include "Enemy.h"
+#include "Coin.h"
+#include "PlatformNormal.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -66,23 +68,28 @@ public:
 
     //Collisions
     void collideWith(Enemy* enemy) override;
+    void collideWith(Coin* coin) override;
+    void collideWith(PlatformNormal* nBlock) override;
     void changeLevel();
     void addPoints(int newPoints);
     void die() override;
     void setPlayerBig(bool playerBig);
+    int getWidth() override;
 
     int getLives() const;
     int loseLife();
     bool itsAlive();
     void testMode();
     bool getTestModeState();
-    std::pair<int, int> getPosition();
+    void startToJump();
+    void setJumpConfig();
+
 
     void restartPos();
 
     bool isInmune();
-
     void tryUndoInmunity();
+    void finishMovement();
 
 private:
     //Image related
@@ -117,6 +124,11 @@ private:
     bool testModeState = false;
 
     void activateInmunity();
+    void dropPlayer();
+
+    int firstX;
+    int firstY;
+    int ticksAfterRespawning;
 };
 
 
