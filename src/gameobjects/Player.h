@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "PlatformNormal.h"
 #include "Hole.h"
+#include "Pipe.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -149,6 +150,10 @@ private:
     int firstY;
     int ticksAfterRespawning;
     int divider; //For drawing bir or normal Mario. divider = 5 --> Small Mario, divider = 4 --> Big Mario
+
+    void collideWith(Pipe *pipe) override;
+
+    void standOrBlockMovement(GameObject *go, int heigth);
 };
 
 

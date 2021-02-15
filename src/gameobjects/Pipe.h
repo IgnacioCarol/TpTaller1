@@ -21,6 +21,14 @@ private:
     //Related to the image
     static const int PIPE_WIDTH = 600;
     static const int PIPE_HEIGHT = 600;
+
+    int getWidth() override;
+
+    void collideWith(GameObject *go) override;
+
+    int getFloorPosition() override;
+
+    int centerXPos() override;
 };
 
 

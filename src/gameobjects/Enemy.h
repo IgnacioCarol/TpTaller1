@@ -3,6 +3,8 @@
 
 #include "GameObject.h"
 #include "Player.h"
+#include "Pipe.h"
+#include "PlatformNormal.h"
 #include "../CharacterStates/Dying.h"
 
 
@@ -43,6 +45,12 @@ protected:
     void collideWith(GameObject *go) override;
 
     bool falling = false;
+    void collideWith(Pipe *pipe) override;
+
+    void collideWith(PlatformNormal *nBlock) override;
+
+    void standOrRevertMovement(GameObject *go, int heigth);
+    int floor;
 };
 
 

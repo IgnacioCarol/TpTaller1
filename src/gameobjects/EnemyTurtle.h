@@ -18,6 +18,8 @@ private:
     static const int ENEMY_WIDTH = 360;
 
     static const int ENEMY_HEIGHT = 360;
+
+    int centerXPos() override;
 };
 
 

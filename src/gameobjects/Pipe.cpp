@@ -1,7 +1,3 @@
-//
-// Created by Daniel Bizari on 06/02/2021.
-//
-
 #include "Pipe.h"
 
 void Pipe::init(int x, int y, std::string textureID) {
@@ -16,4 +12,20 @@ void Pipe::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 
 int Pipe::getHeight() {
     return PIPE_HEIGHT;
+}
+
+int Pipe::getFloorPosition() {
+    return -35;
+}
+
+int Pipe::getWidth() {
+    return PIPE_WIDTH / 4;
+}
+
+void Pipe::collideWith(GameObject *go) {
+    go->collideWith(this);
+}
+
+int Pipe::centerXPos() {
+    return 10;
 }

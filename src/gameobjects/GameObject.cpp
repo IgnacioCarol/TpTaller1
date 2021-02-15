@@ -66,7 +66,7 @@ GameObject::GameObject() {
 }
 
 bool GameObject::isAtScene(int camXPos) {
-    atScene = (xPosition >= (camXPos - 250) && xPosition <= camXPos + 800) && (yPosition >= 0 && yPosition <= 600);
+    atScene = (xPosition >= (camXPos - 250) && xPosition <= camXPos + 800) && (yPosition >= 0 && yPosition < 600);
     return atScene;
 }
 
@@ -117,5 +117,8 @@ int GameObject::centerXPos() {
 }
 
 void GameObject::collideWith(Hole *hole) {
+}
+
+void GameObject::collideWith(Pipe *pipe) {
 
 }

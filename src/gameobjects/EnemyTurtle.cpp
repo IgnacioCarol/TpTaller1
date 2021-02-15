@@ -7,6 +7,7 @@ void EnemyTurtle::init(size_t x, size_t y, std::string textureID, SDL_Rect *came
     Enemy::init(x, y, textureID, camera, state);
     type = GOT_ENEMY_TURTLE;
     pointsToPlayer = POINTS_TURTLE;
+    floor = 435;
 }
 
 
@@ -25,4 +26,8 @@ void EnemyTurtle::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 
 int EnemyTurtle::getFloorPosition() {
     return -55;
+}
+
+int EnemyTurtle::centerXPos() {
+    return -20;
 }

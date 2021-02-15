@@ -9,6 +9,7 @@ EnemyMushroom::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera,
     Enemy::init(x, y, textureID, camera, state);
     type = GOT_ENEMY_MUSHROOM;
     pointsToPlayer = POINTS_MUSHROOM;
+    floor = 425;
 }
 
 void EnemyMushroom::move() {
@@ -29,4 +30,8 @@ void EnemyMushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 
 int EnemyMushroom::getFloorPosition() {
     return -45;
+}
+
+int EnemyMushroom::centerXPos() {
+    return -20;
 }

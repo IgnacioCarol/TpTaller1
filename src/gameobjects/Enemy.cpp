@@ -1,5 +1,4 @@
 #include "Enemy.h"
-#include "../CharacterStates/CharacterState.h"
 
 
 void Enemy::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, CharacterState *state) {
@@ -57,6 +56,23 @@ bool Enemy::getDirection() {
 
 void Enemy::collideWith(GameObject *go) {
    go->collideWith(this);
+}
+
+void Enemy::standOrRevertMovement(GameObject *go, int heigth) {
+    int yBlock = go->getYPosition() + go->getFloorPosition();
+    if(yPosition + getFloorPosition() + 20 < yBlock) {
+        yPosition = yBlock - heigth - getFloorPosition();
+    } else {
+        direction = -1 * direction;
+    }
+}
+
+void Enemy::collideWith(Pipe *pipe) {
+    standOrRevertMovement(pipe, pipe->getHeight() / 4 - 95);
+}
+
+void Enemy::collideWith(PlatformNormal *nBlock) {
+    standOrRevertMovement(nBlock, nBlock->getHeight() - 50);
 }
 
 size_t Enemy::getPoints() {
