@@ -14,6 +14,9 @@ public:
     static GameMsgParams parseInitParams(json json);
     static GameMsgPlaying parseUpdateParams(json json);
     static GameMsgLevelChange parseChangeLevelParams(json json);
+
+    static GameMsgShowPartialScore parsePartialScoreParams(json json);
+    static GameMsgShowGameOver parseGameOverParams(json json);
 };
 
 

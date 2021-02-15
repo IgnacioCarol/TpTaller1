@@ -67,13 +67,38 @@ struct GameMsgLevelChange {
     GameObjectsInit gameObjectsInit;
 };
 
+struct GameMsgPlayersPartialScore {
+    int id;
+    int score;
+};
+
+struct GameMsgPlayersTotalScore {
+    int id;
+    std::map<int,int> levelScores;
+    int totalScore;
+    int lives;
+};
+
+struct GameMsgShowPartialScore {
+    int level;
+    std::vector<GameMsgPlayersPartialScore> playersPartialScore;
+};
+
+struct GameMsgShowGameOver {
+    std::vector<GameMsgPlayersTotalScore> playersTotalScore;
+    bool isTimeOver;
+};
+
 struct GamePlayerPlaying {
     int id;
     int xPos;
     int yPos;
     std::string state;
     bool direction;
+    int points;
+    int lives;
     bool testMode;
+    bool playerBig;
 };
 
 struct GameObjectPlaying {
@@ -82,6 +107,8 @@ struct GameObjectPlaying {
     int yPos;
     std::string state;
     bool direction;
+    int points;
+    int lives;
 };
 
 struct CameraDuringGame {

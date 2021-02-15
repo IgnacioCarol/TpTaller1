@@ -23,6 +23,10 @@
 #include "../CharacterStates/Normal.h"
 #include "../Utils/MusicManager.h"
 
+static bool cmp(pair<int,Player*>& a, pair<int,Player*> b) {
+    return *a.second < *b.second;
+}
+
 class GameClient {
 public:
     static GameClient* Instance();
@@ -32,11 +36,16 @@ public:
     void update(GameMsgPlaying initialize);
     bool createGameObjects(GameObjectsInit gameObjectsInit, int level);
     bool isPlaying();
-    void gameOver();
+    void gameOver(GameMsgShowGameOver params);
     void changeLevel(GameMsgLevelChange nextLevelConfig);
+    void stopShowPartialScore();
+    void showPartialScore(GameMsgShowPartialScore params);
     void clean();
     void setServerDown();
     void pauseSoundEffects(int music, int sounds);
+
+    void stopPlaying();
+
     bool isPlayerAlive();
 private:
     //functions
@@ -53,8 +62,11 @@ private:
     void updateGameObjects(std::vector<GameObjectPlaying>);
     void changeLevelBackground(StageInit nextLevelConfig);
     void renderPlayers();
-    void renderPointsAndLives(int yPosition, int points, int lives);
-
+    void renderPointsAndLives(int yPosition, string userTextureID, int points, int lives);
+    void renderPartialScore();
+    void loadScoreText();
+    void renderGameOver();
+    vector<pair<int,Player*>> sortPlayersByScore();
 
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -74,6 +86,9 @@ private:
     std::vector<int> idsToRender;
     int levelLimit;
     bool levelCompleted = false;
+    bool showScore = false;
+    bool showGameOver = false;
+    bool isTimeOver = false;
 
     static const int DIGITS = 6;
 };
