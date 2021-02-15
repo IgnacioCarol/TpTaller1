@@ -260,16 +260,27 @@ void Player::collideWith(Coin *coin) {
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
-    int yBlock = nBlock->getYPosition() + nBlock->getFloorPosition();
-    if(yPosition + getFloorPosition() + 20 < yBlock) {
-        yPosition = yBlock - nBlock->getHeight() + 10;
+    standOrBlockMovement(nBlock, nBlock->getHeight() - 50);
+}
+
+void Player::standOrBlockMovement(GameObject *go, int heigth) {
+    int yBlock = go->getYPosition() + go->getFloorPosition();
+    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition = cam->x))) {
+        yPosition = yBlock - heigth;
         initialJumpingPosition = yPosition;
     } else {
         restartPos(firstX, firstY);
         if (yPosition < floor) {
-            yPosition = yPosition + GRAVITY > floor ? floor: yPosition + GRAVITY;
+            yPosition = yPosition + GRAVITY > floor ? floor : yPosition + GRAVITY;
+        }
+        if (yPosition > yBlock) {
+            jumping = false;
         }
     }
+}
+
+void Player::collideWith(Pipe* pipe) {
+    standOrBlockMovement(pipe, pipe->getHeight() / 4 - 95);
 }
 
 void Player::startToJump() {

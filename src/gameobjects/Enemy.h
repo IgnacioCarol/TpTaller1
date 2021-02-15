@@ -3,6 +3,8 @@
 
 #include "GameObject.h"
 #include "Player.h"
+#include "Pipe.h"
+#include "PlatformNormal.h"
 #include "../CharacterStates/Dying.h"
 
 
@@ -39,6 +41,13 @@ protected:
     size_t pointsToPlayer;
 
     void collideWith(GameObject *go) override;
+
+    void collideWith(Pipe *pipe) override;
+
+    void collideWith(PlatformNormal *nBlock) override;
+
+    void standOrRevertMovement(GameObject *go, int heigth);
+    int floor;
 };
 
 

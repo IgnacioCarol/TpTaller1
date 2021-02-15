@@ -9,6 +9,7 @@
 #include "Enemy.h"
 #include "Coin.h"
 #include "PlatformNormal.h"
+#include "Pipe.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -138,6 +139,10 @@ private:
     int firstX;
     int firstY;
     int ticksAfterRespawning;
+
+    void collideWith(Pipe *pipe) override;
+
+    void standOrBlockMovement(GameObject *go, int heigth);
 };
 
 
