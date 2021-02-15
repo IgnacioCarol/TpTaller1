@@ -275,6 +275,8 @@ void Client::run() {
                 GameMsgParams initParams;
                 GameMsgPlaying updateParams;
                 GameMsgLevelChange updateLevel;
+                GameMsgShowPartialScore partialScoreParams;
+                GameMsgShowGameOver gameOverParams;
 
                 switch(protocol) {
                     case GAME_INITIALIZE_CMD:
@@ -290,7 +292,15 @@ void Client::run() {
                         gameClient->update(updateParams);
                         break;
                     case GAME_OVER_CMD:
-                        gameClient->gameOver();
+                        gameOverParams = ClientParser::parseGameOverParams(receivedMessage);
+                        gameClient->gameOver(gameOverParams);
+                        break;
+                    case GAME_SHOW_PARTIAL_SCORE_CMD:
+                        partialScoreParams = ClientParser::parsePartialScoreParams(receivedMessage);
+                        gameClient -> showPartialScore(partialScoreParams);
+                        break;
+                    case GAME_STOP_PARTIAL_SCORE_CMD:
+                        gameClient -> stopShowPartialScore();
                         break;
                     case GAME_CHANGE_LEVEL_CMD:
                         updateLevel = ClientParser::parseChangeLevelParams(receivedMessage);
@@ -312,13 +322,13 @@ void Client::run() {
                 }
                 else{
                     if (SDL_PollEvent(&e) != 0 && e.type == SDL_QUIT){
-                        gameClient->gameOver();
+                        gameClient->stopPlaying();
                     }
                 }
             } else {
                 while( SDL_PollEvent( &e ) != 0 && gameClient->isPlaying()) {
                     if (e.type  == SDL_QUIT ) {
-                        gameClient->gameOver();
+                        gameClient->stopPlaying();
                         break;
                     }
 
@@ -386,7 +396,7 @@ void Client::handleUserEvents() {
     up = down = right = left = false;
     while( SDL_PollEvent( &e ) != 0 ) {
         if (e.type  == SDL_QUIT ) {
-            GameClient::Instance()->gameOver();
+            GameClient::Instance()->stopPlaying();
             return;
         }
         if (!keysAssigned) {

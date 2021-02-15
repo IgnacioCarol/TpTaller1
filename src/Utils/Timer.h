@@ -17,6 +17,8 @@ public:
 private:
     clock_t startTime = 0;
     int stopTime;
+
+    bool started = false;
 };
 
 

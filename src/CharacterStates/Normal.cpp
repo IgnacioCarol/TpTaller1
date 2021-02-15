@@ -8,7 +8,7 @@
 #include "Jumping.h"
 #include "Crouched.h"
 
-Normal::Normal(){
+Normal::Normal() {
     stateType = "NORMAL";
     currentFrame = NORMAL_FRAME;
 }

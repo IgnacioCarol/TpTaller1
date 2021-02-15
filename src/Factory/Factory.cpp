@@ -138,6 +138,7 @@ std::vector<Player*>  Factory::createPlayers(std::vector<PlayerClient*> clients)
     for(int i = 0; i < clients.size() && it != imgPaths.end(); i++, it++) {
         players.push_back(new Player(GameServer::Instance()->getCamera()->getCamera(), clients[i]->username, it->first));
         GameServer::Instance() ->addPath(it->first, it->second, DEFAULT_PLAYER_PATH);
+        GameServer::Instance() ->addPath(it->first + "-big", "Sprites/Players/waluigi.png", "Sprites/Players/waluigi.png"); // ToDo Path for big character
         Logger::getInstance()->debug("Player " + clients[i]->username + " created correctly");
     }
 

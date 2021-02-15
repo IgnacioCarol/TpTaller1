@@ -1,6 +1,6 @@
 #include "Player.h"
 static const int GRAVITY = 3;
-static const int MAX_TICKS_TO_BE_KILLED = 60;
+const int MAX_TICKS_TO_BE_KILLED = 300;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
@@ -45,6 +45,10 @@ bool Player::canJump() const {
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
     this->init(0, 380, textureID, camera, 6);
     this->username = username;
+    this->isPlayerBig = false;
+    this->levelPoints[1] = 0;
+    this->levelPoints[2] = 0;
+    this->levelPoints[3] = 0;
 }
 
 void Player::restartPos(int x, int y) {
@@ -74,7 +78,13 @@ void Player::move(std::vector<int> vector) {
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if (isAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        characterState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+        std::string textureID = this->_textureID;
+
+        if (this->isPlayerBig) {
+            textureID += "-big";
+        }
+
+        characterState -> draw(textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
     }
 }
 
@@ -165,14 +175,26 @@ void Player::move() {
     completeMovement(keyStates);
 }
 
-void Player::addPoints(int newPoints) {
-    points += newPoints;
-    levelPoints[level] += newPoints;
+void Player::saveLevelPoints(int currentLevel) {
+    levelPoints[currentLevel] = partialPoints;
+    partialPoints = 0;
 }
 
-void Player::changeLevel() {
-    level += 1;
-    levelPoints[level] = 0; //TODO que Dani C revise esto que era la que lo estaba haciendo
+void Player::addPoints(int newPoints) {
+    totalPoints += newPoints;
+    partialPoints += newPoints;
+}
+
+void Player::setPoints(int points) {
+    totalPoints = points;
+}
+
+std::map<int,int> Player::getPointsByLevel() {
+    return levelPoints;
+}
+
+int Player::getTotalPoints() {
+    return totalPoints;
 }
 
 void Player::completeMovement(const Uint8 *keyStates) {
@@ -185,8 +207,11 @@ void Player::die() {
     if (getState() == "DYING") {
         return;
     }
-    changeState(new Dying());
-    loseLife();
+
+    if (!testModeState && !this->isInmune()) {
+        changeState(new Dying());
+        loseLife();
+    }
 }
 
 void Player::dieFalling() {
@@ -209,8 +234,10 @@ void Player::collideWith(Enemy *enemy) {
         addPoints(enemy->getPoints());
         enemy->die();
     } else {
-        if(isPlayerBig) {
-            isPlayerBig = false;
+        if (this->isPlayerBig) {
+            this->setPlayerBig(false);
+            this->activateInmunity();
+            return;
         } else if (ticksAfterRespawning >= MAX_TICKS_TO_BE_KILLED) {
             this->die();
         }
@@ -284,8 +311,8 @@ void Player::startToJump() {
     maxYPosition = yPosition - 100;
 }
 
-void Player::setJumpConfig(bool restart) {
-    initialJumpingPosition = restart ? floor : yPosition + GRAVITY;
+void Player::setJumpConfig() {
+    initialJumpingPosition = floor;
     maxYPosition = initialJumpingPosition - 100;
     jumping = false;
 }
@@ -293,6 +320,36 @@ void Player::setJumpConfig(bool restart) {
 void Player::restartPos() {
     ticksAfterRespawning = 0;
     restartPos(cam->x, floor);
+}
+
+bool Player::getPlayerBig() {
+    return this->isPlayerBig;
+}
+
+void Player::setPlayerBig(bool playerBig) {
+    this->isPlayerBig = playerBig;
+}
+
+bool Player::isInmune() {
+    return this->inmune > 0;
+}
+
+void Player::tryUndoInmunity() {
+    if (this->inmune > 0) {
+        this->inmune--;
+    }
+}
+
+void Player::activateInmunity() {
+    this->inmune = INMUNITY_TIME;
+}
+
+bool Player::operator<(const Player &p) const {
+    return this->totalPoints > p.totalPoints;
+}
+
+void Player::setPointsByLevel(std::map<int,int> points) {
+    levelPoints = points;
 }
 
 void Player::dropPlayer() {

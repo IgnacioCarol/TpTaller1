@@ -26,6 +26,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_LEVEL_COINS_QTY 30
 #define DEFAULT_STAGE_LEVEL_COINS_COORD_Y 150
 #define DEFAULT_STAGE_LEVEL_TIME 300
+#define DEFAULT_STAGE_SCORE_TIME 10
 #define DEFAULT_STAGE_LEVEL_ENEMY_QTY 20
 #define DEFAULT_STAGE_LEVEL_ENEMY_TYPE ENEMY_MUSHROOM
 #define DEFAULT_STAGE_LEVEL_ENEMY_IMG "Sprites/Goomba.png"
@@ -33,6 +34,13 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define DEFAULT_STAGE_LEVEL_PLATFORM_COORD_X 100
 #define DEFAULT_STAGE_LEVEL_PLATFORM_COORD_Y 200
 #define DEFAULT_STAGE_LEVEL_PLATFORM_QTY 5
+#define DEFAULT_STAGE_HOLE_COORD_X 400
+#define DEFAULT_STAGE_HOLE_COORD_Y 500
+#define DEFAULT_STAGE_HOLE_WIDTH 200
+#define DEFAULT_STAGE_HOLE_HEIGHT 100
+#define DEFAULT_STAGE_PIPE_COORD_X 100
+#define DEFAULT_STAGE_PIPE_COORD_Y 380
+#define DEFAULT_STAGE_PIPE_IMG "Sprites/Blocks-Coins/pipes.png"
 
 #define DEFAULT_STAGE_LEVEL_PLATFORM_IMG "Sprites/normalBlock.png"
 #define DEFAULT_STAGE_LEVEL_COIN_IMG "Sprites/coinsSprites.png"
@@ -44,6 +52,8 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_LOG_TAG "configuracion.log"
 #define XML_WINDOW_TAG "configuracion.ventana"
 #define XML_STAGE_TAG "configuracion.escenario"
+#define XML_STAGE_SCORE_TAG "configuracion.escenario.puntuacion"
+#define XML_STAGE_SCORE_TIME "configuracion.escenario.puntuacion.tiempo"
 #define XML_LOG_LEVEL "configuracion.log.level"
 #define XML_WINDOW_WIDTH "configuracion.ventana.ancho"
 #define XML_WINDOW_HEIGHT "configuracion.ventana.alto"
@@ -145,8 +155,13 @@ struct Level {
     vector<xmlPipe>  pipes;
 };
 
+struct xmlScore {
+    int time;
+};
+
 struct Stage {
     vector<Level> levels;
+    xmlScore score;
 };
 
 struct Window {
@@ -212,7 +227,8 @@ private:
     const vector<string> validConfigTags = {"log", "ventana", "escenario", "credenciales"};
     const vector<string> validLogTags = {"level"};
     const vector<string> validWindowTags = {"ancho", "alto"};
-    const vector<string> validStageTags = {"niveles"};
+    const vector<string> validStageTags = {"niveles","puntuacion"};
+    const vector<string> validScoreTags = {"tiempo"};
     const vector<string> validCredentialTags = {"usuarios", "cantidadJugadores"};
     const vector<string> validUserTags = {"nombre", "contrasenia"};
     const vector<string> validLevelTags = {"numero", "fondo", "monedas", "tiempo", "enemigos", "plataformas", "pozos", "tubos"};

@@ -7,7 +7,6 @@ CharacterState::CharacterState(int currentFrame, int framesAmount) {
 }
 
 CharacterState::CharacterState() {
-
 }
 
 void CharacterState::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
@@ -36,5 +35,4 @@ int CharacterState::getFramesAmount() {
 std::string CharacterState::getStateType() {
     return stateType;
 }
-
 

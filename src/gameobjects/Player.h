@@ -22,6 +22,10 @@
 #include "../CharacterStates/Dying.h"
 #include "../config/Constants.h"
 
+#define imgPlayer "Sprites/Players/mario.png"
+#define defaultPlayer "Sprites/Default/defaultPlayer.png"
+#define INMUNITY_TIME 50
+
 class CharacterState;
 class Enemy;
 class PlatformNormal;
@@ -60,7 +64,7 @@ public:
     std::string getState() override;
 
     bool getDirection() override;
-
+    bool getPlayerBig();
     void collideWith(GameObject *go) override;
 
     bool isActive();
@@ -70,24 +74,34 @@ public:
     void collideWith(Coin* coin) override;
     void collideWith(PlatformNormal* nBlock) override;
     void collideWith(Hole* hole) override;
-    void changeLevel();
+    void saveLevelPoints(int currentLevel);
+
     void addPoints(int newPoints);
     void die() override;
     void dieFalling() override;
     void fall();
     int getWidth() override;
-
     int getLives() const;
     void setLives(int totalLives);
     void loseLife();
+    void setPlayerBig(bool playerBig);
+
     bool isAlive();
     void testMode();
     bool getTestModeState();
     void startToJump();
-    void setJumpConfig(bool restart);
+    void setJumpConfig();
 
 
     void restartPos();
+
+    bool isInmune();
+    void tryUndoInmunity();
+    void setPoints(int points);
+    std::map<int,int> getPointsByLevel();
+    void setPointsByLevel(std::map<int,int> points);
+    int getTotalPoints();
+    bool operator<(const Player& p) const;
 
     void finishMovement();
 
@@ -111,17 +125,19 @@ private:
 
     //Health related attributes
     bool isPlayerBig;
+    int inmune;
     int lives = 3;
 
     //Score related attributes
     int level = 1;
-    int scorePosition;
-    int actualScore;
-    std::map<int, int> levelPoints;
     int floor;
 
     bool testModeState = false;
+    int totalPoints = 0;
+    int partialPoints = 0;
+    std::map<int, int> levelPoints;
 
+    void activateInmunity();
     void dropPlayer();
 
     int firstX;

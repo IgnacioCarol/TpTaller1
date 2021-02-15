@@ -24,6 +24,8 @@ typedef enum {
     GAME_INITIALIZE_CMD,
     GAME_VIEW_CMD,
     GAME_OVER_CMD,
+    GAME_SHOW_PARTIAL_SCORE_CMD,
+    GAME_STOP_PARTIAL_SCORE_CMD,
     GAME_CHANGE_LEVEL_CMD
 } ProtocolCommand;
 
@@ -32,6 +34,8 @@ NLOHMANN_JSON_SERIALIZE_ENUM(ProtocolCommand, {
     { GAME_INITIALIZE_CMD, "game_initialize" },
     { GAME_VIEW_CMD, "game_view" },
     { GAME_OVER_CMD, "game_over" },
+    { GAME_SHOW_PARTIAL_SCORE_CMD, "show_score" },
+    { GAME_STOP_PARTIAL_SCORE_CMD, "stop_score" },
     { GAME_CHANGE_LEVEL_CMD, "change_level"}
 })
 
@@ -43,7 +47,9 @@ public:
 
     static json gameInitMsgToJson(GameMsgParams params);
     static json gameViewMsgToJson(GameMsgPlaying params);
+    static json gameShowPartialScoreMsgToJson(GameMsgShowPartialScore params);
     static json gameChangeLevelMsgToJson(GameMsgLevelChange changeLevelMsg);
+    static json gameShowGameOverMsgToJson(GameMsgShowGameOver params);
 private:
     Protocol() = default;
     ~Protocol() = default;

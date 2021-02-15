@@ -80,41 +80,60 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
 
 void GameClient::render() {
     SDL_RenderClear(renderer);
-    background -> renderBackground(camera -> getCamera());
-    for (int objectID: idsToRender){
-        gameObjectsMap[objectID] -> draw(renderer, camera->getXpos(), 0);
-    }
 
-    renderPlayers();
-    if (serverIsDown) {
-        textureManager->printText(TEXT_SERVER_DISCONNECTED_KEY, 200, 520, renderer);
-    }
+    if (showScore) {
+        renderPartialScore();
+    } else if(showGameOver) {
+        renderGameOver();
+    } else {
+        background -> renderBackground(camera -> getCamera());
+        for (int objectID: idsToRender){
+            gameObjectsMap[objectID] -> draw(renderer, camera->getXpos(), 0);
+        }
 
-    if (levelCompleted){
-        textureManager->printText(TEXT_LEVEL_COMPLETED, 300, 300, renderer);
+        renderPlayers();
+        if (serverIsDown) {
+            textureManager->printText(TEXT_SERVER_DISCONNECTED_KEY, 200, 520, renderer);
+        }
+
+        if (levelCompleted){
+            textureManager->printText(TEXT_LEVEL_COMPLETED, 300, 300, renderer);
+        }
     }
 
     SDL_RenderPresent(renderer);
 }
 
 void GameClient::renderPlayers() {
-    int playerUsernameYPos = 40;
+    int xPlayerPos = 450;
     Player* clientPlayer;
+    int playerCount = 1;
     for (std::pair<int, Player*> element: playersMap){
         if (clientUsername == element.second->getUsername()){
             clientPlayer = element.second;
             continue;
         }
+
+        switch(playerCount) {
+            case 1:
+                break;
+            case 2:
+                xPlayerPos = (playersMap.size() == 3) ? 250 : 150;
+                break;
+            case 3:
+                xPlayerPos = 300;
+                break;
+        }
+
         element.second -> draw(renderer, camera->getXpos(), 0);
-        TextureManager::Instance()->printText(element.second->getTextureId() + "_text", 20, playerUsernameYPos, renderer);
-        renderPointsAndLives(playerUsernameYPos, element.second->getPoints(), element.second->getLives());
-        playerUsernameYPos += 20;
+        renderPointsAndLives(xPlayerPos, element.second->getTextureId(), element.second->getTotalPoints(), element.second->getLives());
+
+        playerCount++;
     }
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
-    TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
-    renderPointsAndLives(20, clientPlayer->getPoints(), clientPlayer->getLives());
+    renderPointsAndLives(20, clientPlayer->getTextureId(), clientPlayer->getTotalPoints(), clientPlayer->getLives());
     if (!clientPlayer->isAlive()){
-        textureManager->printText(TEXT_GAME_OVER, 300, 300, renderer);
+        textureManager->printText(TEXT_GAME_OVER_KEY, 300, 300, renderer);
     }
 }
 
@@ -137,8 +156,15 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
-        player->setLives(playerUpdate.lives);
+        player -> setLives(playerUpdate.lives);
         player -> setState(playerUpdate.state);
+        player -> setPoints(playerUpdate.points);
+        player -> setPlayerBig(playerUpdate.playerBig);
+        /*if (playerUpdate.testMode){
+            player -> testMode();
+        }*/
+        //TODO HACER UN SET TEST MODE CON EL FIN DE QUE EL CLIENT PUEDA IMPRIMIR UNA T
+        
     }
 }
 
@@ -207,7 +233,13 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     }
     success = success && textureManager->loadText(TEXT_SERVER_DISCONNECTED_KEY, TEXT_SERVER_DISCONNECTED_VALUE, BLACK_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_LEVEL_COMPLETED, TEXT_LEVEL_COMPLETED_VALUE, WHITE_COLOR, renderer);
-    success = success && textureManager->loadText(TEXT_GAME_OVER, TEXT_GAME_OVER_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_SCORE_TITLE_KEY, TEXT_SCORE_TITLE_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_GAME_OVER_KEY, TEXT_GAME_OVER_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LVL1_KEY, TEXT_LVL1_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LVL2_KEY, TEXT_LVL2_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_LVL3_KEY, TEXT_LVL3_VALUE, GRAY_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_CONGRATULATIONS_KEY, TEXT_CONGRATULATIONS_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_WINNER_KEY, TEXT_WINNER_VALUE, WHITE_COLOR, renderer);
 
     return success;
 }
@@ -307,8 +339,15 @@ bool GameClient::isPlaying() {
     return playing;
 }
 
-void GameClient::gameOver() {
-    playing = false;
+void GameClient::gameOver(GameMsgShowGameOver params) {
+    for (GameMsgPlayersTotalScore player: params.playersTotalScore) {
+        playersMap[player.id]->setPoints(player.totalScore);
+        playersMap[player.id]->setPointsByLevel(player.levelScores);
+        playersMap[player.id]->setLives(player.lives);
+    }
+
+    isTimeOver = params.isTimeOver;
+    showGameOver = true;
 }
 
 void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
@@ -325,7 +364,6 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
             player.second->restartPos(0, 380);
             player.second->setDirection(true);
             player.second->changeState(new Normal());
-            player.second->changeLevel(); //TODO Dani C que lo mire plis
         }
     }
     levelCompleted = false;
@@ -339,6 +377,84 @@ void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     gameObjectsMap.clear();
     idsToRender.clear();
     createGameObjects(nextLevelConfig.gameObjectsInit, nextLevelConfig.stage.level);
+}
+
+void GameClient::stopShowPartialScore() {
+    showScore = false;
+}
+
+void GameClient::showPartialScore(GameMsgShowPartialScore params) {
+    for (GameMsgPlayersPartialScore player: params.playersPartialScore) {
+        playersMap[player.id]->setPoints(player.score);
+    }
+
+    showScore = true;
+}
+
+void GameClient::renderPartialScore() {
+    loadScoreText();
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+    int yCount = 3;
+    textureManager->printText(TEXT_SCORE_TITLE_KEY, 480, 50 * yCount, renderer);
+    for (std::pair<int, Player*> player: sortPlayersByScore()) {
+        yCount++;
+        textureManager->printText(player.second->getTextureId() + "_text", 280, 50 * yCount, renderer);
+        textureManager->printText(player.second->getTextureId() + "_score", 480, 50 * yCount, renderer);
+    }
+}
+
+void GameClient::renderGameOver() {
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    int yCount = 1;
+    int xCount = 0;
+    const int initX = 130;
+    const int xFactor = 110;
+    const int initY = 100;
+    const int yFactor = 50;
+    Player* winner;
+
+    textureManager->printText(TEXT_GAME_OVER_KEY, initX + 210, 50, renderer);
+    textureManager->printText(TEXT_LVL1_KEY, initX + 1 * xFactor, initY, renderer);
+    textureManager->printText(TEXT_LVL2_KEY, initX + 2 * xFactor, initY, renderer);
+    textureManager->printText(TEXT_LVL3_KEY, initX + 3 * xFactor, initY, renderer);
+    textureManager->printText(TEXT_SCORE_TITLE_KEY, initX + 4 * xFactor, initY, renderer);
+
+    for (std::pair<int, Player*> player: sortPlayersByScore()) {
+        textureManager->printText(player.second->getTextureId() + "_text", initX - 50 + xCount * xFactor, initY + yCount * yFactor, renderer);
+        xCount++;
+
+        std::map<int,int> levelScores = player.second->getPointsByLevel();
+
+        if (winner == nullptr && player.second->isAlive()) {
+            winner = player.second;
+        }
+
+        for (int i = 1; i <= 3; i++) {
+            string textID = player.second->getTextureId() + "_lvl" + std::to_string(i);
+            textureManager->loadText(textID, std::to_string(levelScores.at(i)), WHITE_COLOR, renderer);
+            textureManager->printText(textID, initX + xCount * xFactor, initY + yCount * yFactor, renderer);
+            xCount++;
+        }
+
+        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getTotalPoints()), WHITE_COLOR, renderer);
+        textureManager->printText(player.second->getTextureId() + "_score", initX + xCount * xFactor, initY + yCount * yFactor, renderer);
+        yCount++;
+        xCount = 0;
+    }
+    yCount ++;
+
+    if (isPlayerAlive() && !isTimeOver) {
+        textureManager->printText(TEXT_CONGRATULATIONS_KEY, initX + 180, initY + yCount * yFactor, renderer);
+        yCount ++;
+    }
+
+    if (winner != nullptr && !isTimeOver) {
+        int nameSize = winner->getUsername().size();
+        int xOffset = 180;
+        textureManager->printText(winner->getTextureId() + "_text", initX + xOffset, initY + yCount * yFactor, renderer);
+        textureManager->printText(TEXT_WINNER_KEY, initX + xOffset + (FONT_PTR_SIZE * (nameSize + 1)), initY + yCount * yFactor, renderer);
+    }
 }
 
 void GameClient::setServerDown() {
@@ -369,8 +485,13 @@ void GameClient::pauseSoundEffects(int music, int sounds) {
     }
 }
 
-void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
-    int xPosition = 50;
+void GameClient::renderPointsAndLives(int xPosition, string userTextureID, int points, int lives) {
+    // USERNAME
+    int yPosition = 10;
+    textureManager->printText(userTextureID + "_text", xPosition, yPosition, renderer);
+    yPosition += 20;
+
+    //POINTS
     std::string pointsStr = std::to_string(points);
     pointsStr = std::string(DIGITS - pointsStr.length(), '0') + pointsStr;
     bool success = textureManager->loadText(TEXT_POINTS_KEY, pointsStr, WHITE_COLOR, renderer);
@@ -378,12 +499,34 @@ void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
         logger->error("Error loading points");
     }
     textureManager->printText(TEXT_POINTS_KEY, xPosition, yPosition, renderer);
+    yPosition += 20;
 
-    xPosition += 60;
+    // LIVES
     for (int i = 0; i < lives; i++){
-        TextureManager::Instance()->drawFrame("HEART",xPosition, yPosition - 30,300,300,0, renderer, SDL_FLIP_NONE);
+        TextureManager::Instance()->drawFrame("HEART",xPosition - 30, yPosition - 30,300,300,0, renderer, SDL_FLIP_NONE);
         xPosition += 20;
     }
+}
+
+void GameClient::loadScoreText() {
+    for (std::pair<int, Player*> player: playersMap) {
+        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getTotalPoints()), WHITE_COLOR, renderer);
+    }
+}
+
+void GameClient::stopPlaying() {
+    this->playing = false;
+}
+
+vector<pair<int,Player*>> GameClient::sortPlayersByScore() {
+    vector<pair<int, Player*>> playersVector;
+
+    for (auto& it : playersMap) {
+        playersVector.emplace_back(it);
+    }
+
+    sort(playersVector.begin(), playersVector.end(), cmp);
+    return playersVector;
 }
 
 bool GameClient::isPlayerAlive() {
