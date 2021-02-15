@@ -125,7 +125,7 @@ void TextureManager::drawBackgroundWithCamera(int width, int height, std::string
 
 void
 TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
-                          SDL_RendererFlip flip) {
+                          SDL_RendererFlip flip, int divider) {
 
     if (ID.find("hole") != std::string::npos) {
         if(ID == "hole-black") {
@@ -153,8 +153,8 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
 
     destRect.x = x;
     destRect.y = y;
-    destRect.w = width / 4;
-    destRect.h = height / 4;
+    destRect.w = width / divider;
+    destRect.h = height / divider;
     SDL_RenderCopyEx(renderer, textureMap[ID], &srcRect, &destRect, 0, 0, flip);
 }
 

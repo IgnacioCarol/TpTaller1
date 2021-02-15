@@ -108,6 +108,8 @@ public:
 
     void finishMovement();
 
+    int getFloorPosition() override;
+
 private:
     //Image related
     std::string username;
@@ -127,7 +129,7 @@ private:
     void completeMovement(const Uint8 *keyStates);
 
     //Health related attributes
-    bool isPlayerBig;
+    bool isPlayerBig = false;
     int inmune;
     int lives = 3;
 
@@ -146,6 +148,7 @@ private:
     int firstX;
     int firstY;
     int ticksAfterRespawning;
+    int divider; //For drawing bir or normal Mario. divider = 5 --> Small Mario, divider = 4 --> Big Mario
 };
 
 

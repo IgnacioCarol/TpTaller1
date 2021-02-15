@@ -10,10 +10,10 @@ CharacterState::CharacterState() {
 }
 
 void CharacterState::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
-                          SDL_Renderer *renderer, SDL_RendererFlip flip) {
+                          SDL_Renderer *renderer, SDL_RendererFlip flip, int divider) {
 
     TextureManager::Instance()->drawFrame(ID, xPosition, yPosition, imageWidth, imageHeigth,
-                                          imageWidth * currentFrame, renderer, flip);
+                                          imageWidth * currentFrame, renderer, flip, divider);
 }
 
 void CharacterState::move(const Uint8 *currentKeyStates, Player *player) {

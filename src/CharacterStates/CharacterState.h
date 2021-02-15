@@ -18,7 +18,7 @@ public:
     explicit CharacterState();
 
     virtual void draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
-                      SDL_Renderer* renderer, SDL_RendererFlip flip);
+                      SDL_Renderer* renderer, SDL_RendererFlip flip, int divider);
 
     virtual void move(const Uint8* currentKeyStates, Player* player); //For the players
 

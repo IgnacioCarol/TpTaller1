@@ -79,12 +79,10 @@ void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if (isAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         std::string textureID = (characterState->getStateType() == "PAUSED") ? "paused" : this->_textureID;
+        divider = (isPlayerBig) ? 4 : 5;
+        int auxY = (isPlayerBig) ? 0 : 25;
 
-        if (this->isPlayerBig) {
-            textureID += "-big";
-        }
-
-        characterState -> draw(textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+        characterState -> draw(textureID, xPosition - cameraX, yPosition + auxY - cameraY, pWidth, pHeight, renderer, flip,divider);
     }
 }
 
@@ -259,6 +257,7 @@ bool Player::isAlive() {
 }
 
 void Player::testMode() {
+    isPlayerBig = !isPlayerBig;
     testModeState = !testModeState;
     std::string msg = (testModeState) ? "ACTIVATED" : "DEACTIVATED";
     Logger::getInstance()->info("TEST MODE " + msg);
@@ -380,4 +379,8 @@ void Player::setLives(int totalLives) {
 
 void Player::setTestMode(bool testModeState) {
     this->testModeState = testModeState;
+}
+
+int Player::getFloorPosition() {
+    return (isPlayerBig) ? 0 : 25;
 }

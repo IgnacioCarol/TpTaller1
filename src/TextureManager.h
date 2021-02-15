@@ -34,7 +34,7 @@ public:
     void draw(std::string ID, int x, int y, int width, int height, SDL_Renderer* renderer,
               SDL_RendererFlip flip = SDL_FLIP_NONE);
     void drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
-                   SDL_RendererFlip flip);
+                   SDL_RendererFlip flip, int divider = 4);
 
     std::map<std::string, SDL_Texture*> getTextureMap() { return textureMap; }
 
