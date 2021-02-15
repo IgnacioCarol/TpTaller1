@@ -242,7 +242,7 @@ bool Player::getTestModeState() {
 }
 
 void Player::fall() {
-    if (characterState->getStateType() != "FALLING"){
+    if (characterState->getStateType() != "FALLING" && characterState->getStateType() != "PAUSED" && ticksAfterRespawning){
         changeState(new Jumping(true));
     }
 }
@@ -265,7 +265,10 @@ void Player::collideWith(PlatformNormal *nBlock) {
 }
 
 void Player::collideWith(Hole* hole) {
-    if (yPosition > floor){
+    if (!ticksAfterRespawning){
+        restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 50, yPosition);
+        xDirection = true;
+    } else if (yPosition > floor){
         int xPosHole = hole->getXPosition();
         int leftBorder = xPosHole - 50;
         int rightBorder = xPosHole + 50;
