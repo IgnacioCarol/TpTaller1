@@ -112,7 +112,7 @@ void GameClient::renderPlayers() {
     clientPlayer -> draw(renderer, camera -> getXpos(), 0);
     TextureManager::Instance()->printText(clientPlayer->getTextureId() + "_text", 20, 20, renderer);
     renderPointsAndLives(20, clientPlayer->getPoints(), clientPlayer->getLives());
-    if (!clientPlayer->itsAlive()){
+    if (!clientPlayer->isAlive()){
         textureManager->printText(TEXT_GAME_OVER, 300, 300, renderer);
     }
 }
@@ -319,10 +319,12 @@ void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
 
 void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     for (std::pair<int, Player*> player: playersMap){
-        player.second->restartPos(0, 380);
-        player.second->setDirection(true);
-        player.second->changeState(new Normal());
-        player.second->changeLevel(); //TODO Dani C que lo mire plis
+        if (player.second->isAlive()){
+            player.second->restartPos(0, 380);
+            player.second->setDirection(true);
+            player.second->changeState(new Normal());
+            player.second->changeLevel(); //TODO Dani C que lo mire plis
+        }
     }
     levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);
@@ -383,5 +385,5 @@ void GameClient::renderPointsAndLives(int yPosition, int points, int lives){
 }
 
 bool GameClient::isPlayerAlive() {
-    return playersMap[clientPlayerID]->itsAlive();
+    return playersMap[clientPlayerID]->isAlive();
 }

@@ -114,8 +114,10 @@ void GameServer::nextStage() {
 void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
     for (auto & player : players) {
-        player->restartPos(0, 380);
-        player->changeState(new Normal());
+        if (player->isAlive()){
+            player->restartPos(0, 380);
+            player->changeState(new Normal());
+        }
     }
     camera->restartPos();
 }
@@ -230,7 +232,7 @@ void GameServer::addSoundsPaths() {
 
 bool GameServer::arePlayersAlive() const{
     for(Player* ply: players){
-        if (ply->itsAlive()){
+        if (ply->isAlive()){
             return true;
         }
     }

@@ -80,7 +80,7 @@ public:
     int getLives() const;
     void setLives(int totalLives);
     void loseLife();
-    bool itsAlive();
+    bool isAlive();
     void testMode();
     bool getTestModeState();
     void startToJump();

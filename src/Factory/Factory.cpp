@@ -46,7 +46,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmp = new PlatformNormal();
                 if (tmp != nullptr){
                     textureID = NORMAL_BLOCK_ID;
-                    platformHeight = tmp->getHeight() / 4;
+                    platformHeight = tmp->getHeight();
                     Logger::getInstance()->debug("Normal platform created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Normal Platform");
