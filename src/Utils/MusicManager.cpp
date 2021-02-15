@@ -48,7 +48,7 @@ void MusicManager::loadSounds() {
 
 void MusicManager::playSound(std::string ID, int loop) {
     //Plays the sound loop + 1 times
-    if(soundsMap.count(ID) and !mutedSounds){
+    if(owner == client && soundsMap.count(ID) and !mutedSounds){
         Mix_VolumeChunk(soundsMap[ID], MIX_MAX_VOLUME / 2);
         Mix_PlayChannel(-1, soundsMap[ID], loop);
     }
@@ -105,4 +105,12 @@ void MusicManager::clearSoundEffectsMaps() {
 }
 
 MusicManager::~MusicManager() {
+}
+
+void MusicManager::setOwner(std::string owner) {
+    this->owner = owner;
+}
+
+void MusicManager::playSoundsFor(std::string client) {
+    this->client = client;
 }

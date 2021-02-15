@@ -34,6 +34,9 @@ public:
     ~MusicManager();
     void clearSoundEffectsMaps();
 
+    void setOwner(std::string owner);
+    void playSoundsFor(std::string client);
+
 private:
     static MusicManager* instance;
 
@@ -47,6 +50,9 @@ private:
 
     bool musicPaused = false;
     bool mutedSounds = false;
+
+    std::string owner; //This strings are use to avoid hearing the sounds of other clients
+    std::string client;
 
     MusicManager();
 };

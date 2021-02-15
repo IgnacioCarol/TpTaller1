@@ -70,6 +70,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
     }
 
     this -> loadSounds(initialize.soundPaths);
+    musicManager->setOwner(clientUsername);
     musicManager->playMusic(MUSIC);
 
     initBackground(renderer, initialize.stage);
@@ -132,6 +133,7 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
     for (GamePlayerPlaying playerUpdate: players){
         Player* player = playersMap[playerUpdate.id];
+        musicManager->playSoundsFor(player->getUsername());
         levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
