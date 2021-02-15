@@ -160,10 +160,7 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
         player -> setState(playerUpdate.state);
         player -> setPoints(playerUpdate.points);
         player -> setPlayerBig(playerUpdate.playerBig);
-        /*if (playerUpdate.testMode){
-            player -> testMode();
-        }*/
-        //TODO HACER UN SET TEST MODE CON EL FIN DE QUE EL CLIENT PUEDA IMPRIMIR UNA T
+        player->setTestMode(playerUpdate.testMode);
         
     }
 }

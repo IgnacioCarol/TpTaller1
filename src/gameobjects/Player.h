@@ -21,9 +21,6 @@
 #include "../CharacterStates/Running.h"
 #include "../CharacterStates/Dying.h"
 #include "../config/Constants.h"
-
-#define imgPlayer "Sprites/Players/mario.png"
-#define defaultPlayer "Sprites/Default/defaultPlayer.png"
 #define INMUNITY_TIME 50
 
 class CharacterState;
@@ -76,19 +73,28 @@ public:
     void collideWith(Hole* hole) override;
     void saveLevelPoints(int currentLevel);
 
+    //Lives
+    int getLives() const;
+    void setLives(int totalLives);
+    void loseLife();
+    bool isAlive();
+
+    //Points
+    void setPoints(int points);
+    std::map<int,int> getPointsByLevel();
+    void setPointsByLevel(std::map<int,int> points);
+    int getTotalPoints();
     void addPoints(int newPoints);
+
     void die() override;
     void dieFalling() override;
     void fall();
     int getWidth() override;
-    int getLives() const;
-    void setLives(int totalLives);
-    void loseLife();
-    void setPlayerBig(bool playerBig);
 
-    bool isAlive();
+    void setPlayerBig(bool playerBig);
     void testMode();
     bool getTestModeState();
+    void setTestMode(bool testModeState);
     void startToJump();
     void setJumpConfig();
 
@@ -97,10 +103,7 @@ public:
 
     bool isInmune();
     void tryUndoInmunity();
-    void setPoints(int points);
-    std::map<int,int> getPointsByLevel();
-    void setPointsByLevel(std::map<int,int> points);
-    int getTotalPoints();
+
     bool operator<(const Player& p) const;
 
     void finishMovement();

@@ -211,7 +211,7 @@ void GameServer::pausePlayer(PlayerClient *playerClient) {
         if (player->getUsername() == playerClient->username) {
             if (player->getState() != "PAUSED") {
                 Logger::getInstance()->info("Client " + player->getUsername() + " is disconnected.");
-                player->changeState(new Paused(false));
+                player->changeState(new Paused());
             }
         }
     }
