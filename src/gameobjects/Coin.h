@@ -23,6 +23,8 @@ private:
     static const int COIN_FRAMES = 4;
 
     size_t delayCounter;
+
+    int getFloorPosition() override;
 };
 
 

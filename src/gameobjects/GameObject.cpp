@@ -148,5 +148,8 @@ bool GameObject::isHidden() {
 }
 
 void GameObject::collideWith(PlatformSurprise* sBlock) {
+}
 
+int GameObject::getMinHeightToIntersect() {
+    return 60;
 }

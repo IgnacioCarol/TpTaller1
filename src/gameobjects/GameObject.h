@@ -80,6 +80,7 @@ public:
     virtual void popItem();
     void setHidden(bool hidden);
     bool isHidden();
+    virtual int getMinHeightToIntersect();
 
 protected:
     //To manage the movement

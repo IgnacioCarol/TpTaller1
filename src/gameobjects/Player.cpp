@@ -281,7 +281,7 @@ void Player::collideWith(Coin *coin) {
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
-    standOrBlockMovement(nBlock, nBlock->getHeight()/4 - 50);
+    standOrBlockMovement(nBlock, 60);
 }
 
 void Player::standOrBlockMovement(GameObject *go, int heigth) {
@@ -330,7 +330,7 @@ void Player::collideWith(Mushroom* mushroom) {
 }
 
 void Player::collideWith(PlatformSurprise *sBlock) {
-    standOrBlockMovement(sBlock, sBlock->getHeight() - 50);
+    standOrBlockMovement(sBlock, 60);
 }
 
 void Player::startToJump() {
@@ -407,8 +407,4 @@ void Player::setLives(int totalLives) {
 
 void Player::setTestMode(bool testModeState) {
     this->testModeState = testModeState;
-}
-
-int Player::getFloorPosition() {
-    return (isPlayerBig) ? 0 : 25;
 }

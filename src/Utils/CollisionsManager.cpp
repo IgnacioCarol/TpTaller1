@@ -23,7 +23,7 @@ bool CollisionsManager::isInIntersection(GameObject *go1, GameObject *go2) {
         yPosition1 -= 10;
     }
     return (abs(xPosition1 - xPosition2) < std::max(go1->getWidth(), go2->getWidth()) / 2) &&
-           (abs(yPosition1 - yPosition2) < 60); //ToDo Implement variables
+           (abs(yPosition1 - yPosition2) < std::max(go1->getMinHeightToIntersect(), go2->getMinHeightToIntersect()));
 }
 
 void CollisionsManager::checkCollisions(std::vector<GameObject *> goOnScreen, std::vector<GameObject *> players) {

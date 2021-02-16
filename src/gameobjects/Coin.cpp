@@ -31,4 +31,8 @@ void Coin::unhide() {
     hidden = false;
 }
 
+int Coin::getFloorPosition() {
+    return - (COIN_HEIGHT / 4  + 30);
+}
+
 Coin::~Coin() = default;

@@ -113,8 +113,6 @@ public:
 
     void finishMovement();
 
-    int getFloorPosition() override;
-
 private:
     //Image related
     std::string username;
