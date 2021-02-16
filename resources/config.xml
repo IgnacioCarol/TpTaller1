@@ -66,14 +66,14 @@
                         <cantidad>1</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
-                    `<plataforma>
+                    <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
                         <coordX>20</coordX>
                         <coordY>250</coordY>
                         <cantidad>2</cantidad>
                         <hongo>1</hongo>
-                    </plataforma>`
+                    </plataforma>
                 </plataformas>
                 <pozos>
                     <pozo>
