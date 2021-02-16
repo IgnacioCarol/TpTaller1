@@ -12,12 +12,10 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
-    GameObject* generateItem();
+    GameObject* generateItem(int xPos, int yPos);
     void popItem() override;
     void setMushroom(bool hasMushroom);
-    bool containsMushroom();
     void collideWith(GameObject* go) override;
-    //void collideWith(Player* player);
 
 private:
     //Image related definitions

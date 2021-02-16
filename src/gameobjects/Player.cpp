@@ -324,7 +324,7 @@ void Player::collideWith(Pipe* pipe) {
 }
 
 void Player::collideWith(Mushroom* mushroom) {
-    if (!mushroom->isHidden()){
+    if (!mushroom->isHidden() && yPosition <= mushroom->getYPosition()){
         setPlayerBig(true);
         mushroom -> die();
     }

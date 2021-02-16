@@ -21,7 +21,7 @@ int PlatformSurprise::getHeight() {
     return SURPRISE_BLOCK_HEIGHT;
 }
 
-GameObject *PlatformSurprise::generateItem() {
+GameObject *PlatformSurprise::generateItem(int xPos, int yPos) {
     GameObject* tmp;
     std::string itemID;
     if (hasMushroom){
@@ -32,8 +32,7 @@ GameObject *PlatformSurprise::generateItem() {
         tmp = new Coin();
         itemID = COIN_ID;
     }
-    int xPos = (hasMushroom) ? 300 : 400;
-    tmp->init(xPos, xPos, itemID); //ToDo cuando funcione chquear las posiciones a pasar aca
+    tmp->init(xPos, yPos - 35, itemID);
     tmp->hide();
     innerItem = tmp;
     return innerItem;
@@ -49,9 +48,6 @@ void PlatformSurprise::setMushroom(bool hasMushroom) {
     this->hasMushroom = hasMushroom;
 }
 
-bool PlatformSurprise::containsMushroom() {
-    return this->hasMushroom;
-}
 
 void PlatformSurprise::collideWith(GameObject *go) {
     go->collideWith(this);
