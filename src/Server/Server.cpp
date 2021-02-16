@@ -148,6 +148,7 @@ void *Server::authenticatePlayerClient(void *arg) {
             //TODO: ver si podemos tener reintentos acá
         }
         if (authenticated && GameServer::Instance()->isPlaying()) {
+            Logger::getInstance()->info("Player " + playerClient->username + " is authenticating, put game is playing");
             json startGame = {{"startGame", true}};
             if (!playerClient->send(&startGame)) {
                 Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
@@ -551,6 +552,7 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
 }
 
 json Server::getPlayersPositionMessage() {
+    Logger::getInstance()->info("Getting players position message");
     GameServer* game = GameServer::Instance();
     if (game->changeLevel()){
         game->setChangeLevelFlag(false);

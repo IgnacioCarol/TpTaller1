@@ -1,6 +1,6 @@
 <configuracion>
     <log>
-        <level>DEBUG</level>
+        <level>INFO</level>
     </log>
     <ventana>
         <ancho>800</ancho>
@@ -14,12 +14,12 @@
                 <monedas>
                     <moneda>
                         <imagen>Sprites/Blocks-Coins/coinsSprites.png</imagen>
-                        <coordY>100</coordY>
+                        <coordY>200</coordY>
                         <cantidad>13</cantidad>
                     </moneda>
                     <moneda>
                         <imagen>Sprites/Blocks-Coins/coinsSprites.png</imagen>
-                        <coordY>200</coordY>
+                        <coordY>300</coordY>
                         <cantidad>30</cantidad>
                     </moneda>
                 </monedas>
@@ -28,41 +28,41 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>15</cantidad>
+                        <cantidad>10</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/Goomba.png</imagen>
-                        <cantidad>20</cantidad>
+                        <cantidad>5</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>100</coordX>
-                        <coordY>200</coordY>
+                        <coordX>500</coordX>
+                        <coordY>300</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
                         <coordX>900</coordX>
-                        <coordY>200</coordY>
+                        <coordY>350</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
                         <coordX>1900</coordX>
-                        <coordY>150</coordY>
+                        <coordY>250</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
                         <coordX>2000</coordX>
-                        <coordY>150</coordY>
+                        <coordY>250</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
@@ -84,7 +84,7 @@
                 <tubos>
                     <tubo>
                         <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
-                        <coordX>100</coordX>
+                        <coordX>200</coordX>
                         <coordY>380</coordY>
                     </tubo>
                 </tubos>
@@ -95,12 +95,12 @@
                 <monedas>
                     <moneda>
                         <imagen>Sprites/Blocks-Coins/coinsSprites.png</imagen>
-                        <coordY>100</coordY>
+                        <coordY>200</coordY>
                         <cantidad>13</cantidad>
                     </moneda>
                     <moneda>
                         <imagen>Sprites/Blocks-Coins/coinsSprites.png</imagen>
-                        <coordY>200</coordY>
+                        <coordY>300</coordY>
                         <cantidad>30</cantidad>
                     </moneda>
                 </monedas>
@@ -257,7 +257,7 @@
         </puntuacion>
     </escenario>
     <credenciales>
-         <cantidadJugadores>2</cantidadJugadores>
+         <cantidadJugadores>1</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>a</nombre>

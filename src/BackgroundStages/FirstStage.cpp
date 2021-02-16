@@ -10,12 +10,12 @@
 #include "FirstStage.h"
 
 FirstStage::FirstStage() {
-    Logger::getInstance()->debug("Initializing first stage...");
+    Logger::getInstance()->info("Initializing first stage...");
     this->level = 1;
     this->backgroundPath = this->getLevelBackground().empty() ? DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND : this->getLevelBackground();
     this->timer = new Timer(this->getLevelTime());
     this->timer->start();
-    Logger::getInstance()->debug("First stage initialized");
+    Logger::getInstance()->info("First stage initialized");
 }
 
 FirstStage::FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer) : BackgroundStage(pManager, pRenderer) {
