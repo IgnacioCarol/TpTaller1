@@ -122,3 +122,7 @@ void GameObject::collideWith(Hole *hole) {
 void GameObject::collideWith(Pipe *pipe) {
 
 }
+
+int GameObject::getMinHeightToIntersect() {
+    return 60;
+}

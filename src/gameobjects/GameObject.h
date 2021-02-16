@@ -70,6 +70,8 @@ public:
 
     virtual int centerXPos();
 
+    virtual int getMinHeightToIntersect();
+
 protected:
     //To manage the movement
     int xPosition;

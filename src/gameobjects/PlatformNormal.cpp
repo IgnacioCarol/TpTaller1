@@ -18,9 +18,6 @@ void PlatformNormal::collideWith(GameObject *go) {
     go->collideWith(this);
 }
 
-std::pair<int, int> PlatformNormal::getPosition() {
-    return std::make_pair(xPosition, yPosition);
-}
 
 int PlatformNormal::getFloorPosition() {
     return -20;
@@ -32,4 +29,8 @@ int PlatformNormal::centerXPos() {
 
 int PlatformNormal::getWidth() {
     return NORMAL_BLOCK_WIDTH / 4;
+}
+
+int PlatformNormal::getMinHeightToIntersect() {
+    return 65;
 }
