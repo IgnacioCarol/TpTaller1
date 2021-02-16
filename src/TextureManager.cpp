@@ -72,7 +72,7 @@ void TextureManager::draw(std::string ID, int x, int y, int width, int height, S
 
     if (ID == "hole") {
         SDL_SetRenderDrawColor(renderer, 107, 140, 255, 255); // Sky blue
-//        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
+        //SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255); // the rect color (solid red)
         SDL_Rect rect; // the rectangle
         rect.h = height;
         rect.w = width;
@@ -125,7 +125,7 @@ void TextureManager::drawBackgroundWithCamera(int width, int height, std::string
 
 void
 TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, int currentFrame, SDL_Renderer *renderer,
-                          SDL_RendererFlip flip) {
+                          SDL_RendererFlip flip, int divider) {
 
     if (ID.find("hole") != std::string::npos) {
         if(ID == "hole-black") {
@@ -153,8 +153,8 @@ TextureManager::drawFrame(std::string ID, int x, int y, int width, int height, i
 
     destRect.x = x;
     destRect.y = y;
-    destRect.w = width / 4;
-    destRect.h = height / 4;
+    destRect.w = width / divider;
+    destRect.h = height / divider;
     SDL_RenderCopyEx(renderer, textureMap[ID], &srcRect, &destRect, 0, 0, flip);
 }
 

@@ -16,6 +16,7 @@ public:
     void move() override {};
     int getHeight() override;
 
+
 private:
     //Related to the image
     static const int PIPE_WIDTH = 600;

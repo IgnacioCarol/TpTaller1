@@ -70,6 +70,7 @@ bool GameClient::init(GameMsgParams initialize, const char* username) {
     }
 
     this -> loadSounds(initialize.soundPaths);
+    musicManager->setOwner(clientUsername);
     musicManager->playMusic(MUSIC);
 
     initBackground(renderer, initialize.stage);
@@ -134,6 +135,9 @@ void GameClient::renderPlayers() {
     if (!clientPlayer->isAlive()){
         textureManager->printText(TEXT_GAME_OVER_KEY, 300, 300, renderer);
     }
+    if (clientPlayer->getTestModeState()){
+        textureManager->printText(TEXT_TEST_MODE, TEXT_TEST_MODE_X_POS, TEXT_TEST_MODE_Y_POS, renderer);
+    }
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -151,16 +155,15 @@ void GameClient::update(GameMsgPlaying updateObjects) {
 void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
     for (GamePlayerPlaying playerUpdate: players){
         Player* player = playersMap[playerUpdate.id];
+        musicManager->playSoundsFor(player->getUsername());
         levelCompleted |= (clientUsername == player->getUsername() && playerUpdate.xPos >= levelLimit);
         player -> setPosition(playerUpdate.xPos, playerUpdate.yPos);
         player -> setDirection(playerUpdate.direction);
+        player -> setLives(playerUpdate.lives);
         player -> setState(playerUpdate.state);
         player -> setPoints(playerUpdate.points);
-        player -> setLives(playerUpdate.lives);
-        player->setPlayerBig(playerUpdate.playerBig);
-        if (playerUpdate.testMode){
-            player -> testMode();
-        }
+        player -> setPlayerBig(playerUpdate.playerBig);
+        player->setTestMode(playerUpdate.testMode);
         
     }
 }
@@ -173,6 +176,7 @@ void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
         gameObject->setPosition(gameObjectUpdate.xPos, gameObjectUpdate.yPos);
         gameObject->setState(gameObjectUpdate.state);
         gameObject->setDirection(gameObjectUpdate.direction);
+        gameObject->setHidden(gameObjectUpdate.hidden);
     }
 }
 
@@ -237,6 +241,10 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     success = success && textureManager->loadText(TEXT_LVL3_KEY, TEXT_LVL3_VALUE, GRAY_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_CONGRATULATIONS_KEY, TEXT_CONGRATULATIONS_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_WINNER_KEY, TEXT_WINNER_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_SOUND, TEXT_SOUND, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_MUSIC, TEXT_MUSIC, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_OFF, TEXT_OFF, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_TEST_MODE, TEXT_TEST_MODE, WHITE_COLOR, renderer);
 
     return success;
 }
@@ -269,6 +277,7 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     GameObject* tmp;
     if (objectType == GOT_COIN){
         tmp = new Coin();
+        tmp->setHidden(gameObject.hidden);
     }
     else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
@@ -280,8 +289,11 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
         h->setDimensions(gameObject.width, gameObject.height);
         h->setLevel(level);
         tmp = h;
-    } else {
+    } else if (objectType == GOT_PIPE){
         tmp = new Pipe();
+    } else{
+        tmp = new Mushroom();
+        tmp->setHidden(gameObject.hidden);
     }
 
     if (tmp != nullptr){
@@ -357,9 +369,11 @@ void GameClient::changeLevelBackground(StageInit nextLevelConfig) {
 
 void GameClient::changeLevel(GameMsgLevelChange nextLevelConfig) {
     for (std::pair<int, Player*> player: playersMap){
-        player.second->restartPos(0, 380);
-        player.second->setDirection(true);
-        player.second->changeState(new Normal(player.second->getPlayerBig()));
+        if (player.second->isAlive()){
+            player.second->restartPos(0, 380);
+            player.second->setDirection(true);
+            player.second->changeState(new Normal());
+        }
     }
     levelCompleted = false;
     changeLevelBackground(nextLevelConfig.stage);

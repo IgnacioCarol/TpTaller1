@@ -51,6 +51,7 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     addPath("BG3", DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND, DEFAULT_STAGE_THIRD_LEVEL_BACKGROUND);
     addPath("paused", "Sprites/Players/pausedPlayer.png","Sprites/Players/pausedPlayer.png");
     addPath("HEART","Sprites/heart.png", "Sprites/heart.png");
+    addPath("magicMushroom", "Sprites/Mushroom.png","Sprites/Mushroom.png");
 
     addSoundsPaths();
     initializeAllElementsOfGameServer(clients);
@@ -116,9 +117,9 @@ void GameServer::nextStage() {
 void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
     for (auto & player : players) {
-        if (player->getState() != "PAUSED") {
+        if (player->isActive()) {
             player->addPoints(levelRacePoints[currentRaceIndex]);
-            player->changeState(new Normal(player->getPlayerBig()));
+            player->changeState(new Normal());
         }
         player->restartPos(0, 380);
         player->saveLevelPoints(stage->getLevel());
@@ -154,13 +155,13 @@ void GameServer::updatePlayers() {
             player->tryUndoInmunity();
         }
         if (player->getXPosition() >= stage->getLevelLimit() && player->getState() != "JUMPING"){
-            player->changeState(new Paused(false, player->getPlayerBig()));
+            player->changeState(new Paused(false));
             changeLevelFlag = true;
         }
     }
 
     for (Player* player: players){
-        changeLevelFlag &= (player->getState() == "FINISH" || player->getState() == "PAUSED");
+        changeLevelFlag &= (player->getState() == "FINISH" || !player->isActive());
     }
 
     if (changeLevelFlag) {
@@ -200,7 +201,7 @@ void GameServer::unpausePlayer(PlayerClient *playerClient) {
     for (Player *player: getPlayers()) {
         if (player->getUsername() == playerClient->username && player->getState() == "PAUSED") {
             Logger::getInstance()->info("Client " +  player->getUsername() + " is connected.");
-            player->changeState(new Normal(player->getPlayerBig()));
+            player->changeState(new Normal());
         }
     }
 }

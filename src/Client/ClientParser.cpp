@@ -45,7 +45,8 @@ GameMsgParams ClientParser::parseInitParams(json msg) {
                 gameObjectJson["yPos"],
                 gameObjectJson["frameAmount"],
                 gameObjectJson["height"],
-                gameObjectJson["width"]
+                gameObjectJson["width"],
+                gameObjectJson["hidden"]
         };
         gameObjects.push_back(gameObjectInit);
     }
@@ -92,7 +93,10 @@ GameMsgPlaying ClientParser::parseUpdateParams(json msg) {
                 go["xPos"],
                 go["yPos"],
                 go["state"],
-                go["direction"]
+                go["direction"],
+                go["points"],
+                go["lives"],
+                go["hidden"]
         };
         gameObjects.push_back(gameObject);
     }
@@ -128,7 +132,8 @@ GameMsgLevelChange ClientParser::parseChangeLevelParams(json msg) {
                 gameObjectJson["yPos"],
                 gameObjectJson["frameAmount"],
                 gameObjectJson["height"],
-                gameObjectJson["width"]
+                gameObjectJson["width"],
+                gameObjectJson["hidden"]
 
         };
         gameObjects.push_back(gameObjectInit);

@@ -9,7 +9,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     initialJumpingPosition = yPosition;
     maxYPosition = yPosition - 100;
     cam =  camera;
-    characterState = new Normal(this->isPlayerBig);
+    characterState = new Normal();
     type = GOT_PLAYER;
     ticks = 0;
     leftOrRightPressed = false;
@@ -29,9 +29,9 @@ void Player::run(int direction) {
 
 void Player::jump(int yMovement) {
     bool isNotStartingPos = yPosition < initialJumpingPosition;
-    if ((jumping = canJump() && yMovement)) {
+    if ((jumping = canJump() && yMovement && characterState->getStateType() != "FALLING")) {
         yPosition = yPosition + (!isNotStartingPos || yMovement ? - (yMovement + GRAVITY - 1) : + GRAVITY); //TODO change velocity to go up
-    } else if (isNotStartingPos) {
+    } else if (isNotStartingPos || characterState->getStateType() == "FALLING") {
         yPosition += GRAVITY;
     } else {
         yPosition--; //Fix a border case
@@ -78,13 +78,11 @@ void Player::move(std::vector<int> vector) {
 void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if (isAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
-        std::string textureID = this->_textureID;
+        std::string textureID = (characterState->getStateType() == "PAUSED") ? "paused" : this->_textureID;
+        divider = (isPlayerBig) ? 4 : 5;
+        int auxY = (isPlayerBig) ? 0 : 25; //ToDo ver despues si con esta variable aca ya alcanza o si hay que hacer otros arreglos
 
-        if (this->isPlayerBig) {
-            textureID += "-big";
-        }
-
-        characterState -> draw(textureID, xPosition - cameraX, yPosition - cameraY, pWidth, pHeight, renderer, flip);
+        characterState -> draw(textureID, xPosition - cameraX, yPosition + auxY - cameraY, pWidth, pHeight, renderer, flip,divider);
     }
 }
 
@@ -123,29 +121,35 @@ void Player::setDirection(bool direction) {
 
 void Player::setState(std::string state) {
     if (state != characterState->getStateType()) {
-        if (state == "JUMPING") {
-            MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
+        if (state == "JUMPING" || state == "FALLING") {
+            if (state != "FALLING") {
+                MusicManager::Instance()->playSound(JUMP_SMALL_SOUND);
+            }
             startToJump();
-            changeState(new Jumping(this->isPlayerBig));
+            changeState(new Jumping(state == "FALLING"));
         } else if (state == "NORMAL") {
-            changeState(new Normal(this->isPlayerBig));
+            changeState(new Normal());
         } else if (state == "RUNNING") {
-            changeState(new Running(this->isPlayerBig));
+            changeState(new Running());
         } else if (state == "CROUCHED") {
-            changeState(new Crouched(this->isPlayerBig));
-        }
-        else if (state == "PAUSED" || state == "FINISH"){
-            if (state == "FINISH"){
+            changeState(new Crouched());
+        } else if (state == "PAUSED" || state == "FINISH") {
+            if (state == "FINISH") {
                 MusicManager::Instance()->playSound(STAGE_CLEAR_SOUND);
             }
             changeState(new Paused(state == "PAUSED"));
-        }
-        else{
+        } else {
             changeState(new Dying(state == "DYING_FALLING"));
-            (!loseLife()) ? MusicManager::Instance()->playSound(GAME_OVER_SOUND) : MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
+            if (!lives) {
+                MusicManager::Instance()->pauseMusic();
+                MusicManager::Instance()->playSound(GAME_OVER_SOUND);
+            } else if (state == "DYING") {
+                MusicManager::Instance()->playSound(MARIO_DIES_SOUND);
+            }
         }
     }
 }
+
 std::string Player::getState() {
     return characterState->getStateType();
 }
@@ -204,14 +208,24 @@ void Player::die() {
 
     if (!testModeState && !this->isInmune()) {
         changeState(new Dying());
-        lives = loseLife();
+        loseLife();
     }
 }
+
+void Player::dieFalling() {
+    if (!isAtScene(cam->x)){
+        changeState(new Dying(true));
+        this->setPlayerBig(false);
+        if (!testModeState){
+            loseLife();
+        }
+    }
+}
+
 
 void Player::collideWith(GameObject *go) {
     go->collideWith(this);
 }
-
 
 void Player::collideWith(Enemy *enemy) {
     if (enemy->getState() == "DYING") {
@@ -235,9 +249,10 @@ int Player::getLives() const {
     return lives;
 }
 
-int Player::loseLife() {
-    lives = (0 > lives - 1) ? 0 : lives - 1;
-    return lives;
+void Player::loseLife() {
+    if (lives > 0){
+        lives--;
+    }
 }
 
 bool Player::isAlive() {
@@ -254,18 +269,25 @@ bool Player::getTestModeState() {
     return testModeState;
 }
 
+void Player::fall() {
+    if (characterState->getStateType() != "FALLING" && characterState->getStateType() != "PAUSED" && ticksAfterRespawning){
+        changeState(new Jumping(true));
+    }
+}
 void Player::collideWith(Coin *coin) {
-    this->addPoints(coin->getPoints());
-    coin->die();
+    if (!coin->isHidden()){
+        this->addPoints(coin->getPoints());
+        coin->die();
+    }
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
-    standOrBlockMovement(nBlock, nBlock->getHeight() - 50);
+    standOrBlockMovement(nBlock, 60);
 }
 
 void Player::standOrBlockMovement(GameObject *go, int heigth) {
     int yBlock = go->getYPosition() + go->getFloorPosition();
-    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition = cam->x))) {
+    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x) && !ticksAfterRespawning)) {
         yPosition = yBlock - heigth;
         initialJumpingPosition = yPosition;
     } else {
@@ -275,12 +297,41 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
         }
         if (yPosition > yBlock) {
             jumping = false;
+            if(go->getType() == GOT_PLATFORM_SURPRISE) {
+                go->popItem();
+            }
+        }
+    }
+}
+
+void Player::collideWith(Hole* hole) {
+    if (!ticksAfterRespawning){
+        restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 50, yPosition);
+        xDirection = true;
+    } else if (yPosition > floor){
+        int xPosHole = hole->getXPosition();
+        int leftBorder = xPosHole - 50;
+        int rightBorder = xPosHole + 50;
+
+        if (xPosition < leftBorder || xPosition > rightBorder){
+            restartPos(firstX, yPosition);
         }
     }
 }
 
 void Player::collideWith(Pipe* pipe) {
     standOrBlockMovement(pipe, pipe->getHeight() / 4 - 95);
+}
+
+void Player::collideWith(Mushroom* mushroom) {
+    if (!mushroom->isHidden()){
+        setPlayerBig(true);
+        mushroom -> die();
+    }
+}
+
+void Player::collideWith(PlatformSurprise *sBlock) {
+    standOrBlockMovement(sBlock, 60);
 }
 
 void Player::startToJump() {
@@ -305,7 +356,6 @@ bool Player::getPlayerBig() {
 
 void Player::setPlayerBig(bool playerBig) {
     this->isPlayerBig = playerBig;
-    this->characterState->setPlayerBig(playerBig);
 }
 
 bool Player::isInmune() {
@@ -330,10 +380,6 @@ void Player::setPointsByLevel(std::map<int,int> points) {
     levelPoints = points;
 }
 
-void Player::setLives(int lives) {
-    this->lives = lives;
-}
-
 void Player::dropPlayer() {
     if (initialJumpingPosition < floor) {
         yPosition += GRAVITY;
@@ -349,4 +395,17 @@ void Player::finishMovement() {
 
 int Player::getWidth() {
     return pWidth / 4;
+}
+
+bool Player::isActive() {
+    std::string stateType = characterState->getStateType();
+    return stateType != "PAUSED" && stateType != "DYING" && stateType != "DYING_FALLING";
+}
+
+void Player::setLives(int totalLives) {
+    lives = totalLives;
+}
+
+void Player::setTestMode(bool testModeState) {
+    this->testModeState = testModeState;
 }

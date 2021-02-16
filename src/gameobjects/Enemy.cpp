@@ -13,15 +13,14 @@ void Enemy::move() {
 
 void Enemy::walk() {
     xPosition += direction;
-    if (yPosition < floor) {
-        yPosition++;
-    }
+    yPosition += (falling) ? GRAVITY_ENEMY : 0;
     flipFlag = direction == enemyVelocity;
+
 }
 
 void Enemy::draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) {
     SDL_RendererFlip flip = (!flipFlag) ? SDL_FLIP_HORIZONTAL : SDL_FLIP_NONE;
-    enemyState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, width, height, renderer, flip);
+    enemyState -> draw(_textureID, xPosition - cameraX, yPosition - cameraY, width, height, renderer, flip,4);
 }
 
 Enemy::~Enemy() {
@@ -91,5 +90,11 @@ void Enemy::die() {
 }
 
 void Enemy::dieFalling() {
-    GameObject::die();
+    if (!isAtScene(cam->x)){
+        GameObject::die();
+    }
+}
+
+void Enemy::fall() {
+    falling = true;
 }

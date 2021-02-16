@@ -35,3 +35,18 @@ void Hole::setDimensions(int width, int height) {
 void Hole::setLevel(int level) {
     this->level = level;
 }
+
+void Hole::collideWith(GameObject *go) {
+    go->fall();
+    go->collideWith(this);
+    go->dieFalling();
+}
+
+int Hole::getFloorPosition() {
+    return -62;
+    //return -50; //Lo dejo asi para debugguear otras cosas
+}
+
+int Hole::centerXPos() {
+    return 50;
+}

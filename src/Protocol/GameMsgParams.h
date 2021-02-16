@@ -16,6 +16,7 @@ NLOHMANN_JSON_SERIALIZE_ENUM(GameObjectType, {
     { GOT_PLAYER, "player" },
     { GOT_HOLE, "hole" },
     { GOT_PIPE, "pipe" },
+    {GOT_MUSHROOM, "magicMushroom"}
 })
 
 struct WindowInit {
@@ -47,6 +48,7 @@ struct GameObjectInit {
     int frameAmount;
     int height;
     int width;
+    bool hidden;
 };
 
 struct GameObjectsInit {
@@ -109,6 +111,7 @@ struct GameObjectPlaying {
     bool direction;
     int points;
     int lives;
+    bool hidden;
 };
 
 struct CameraDuringGame {

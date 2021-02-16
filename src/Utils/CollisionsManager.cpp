@@ -13,13 +13,17 @@ CollisionsManager *CollisionsManager::Instance() {
     return instance;
 }
 
-bool CollisionsManager::isInIntersection(GameObject *go, GameObject *anotherGo) {
-    int objectXPosition = anotherGo->getXPosition() + anotherGo->centerXPos();
-    int objectYPosition = anotherGo->getYPosition() + anotherGo->getFloorPosition();
-    int realYPosition = go->getYPosition() + go->getFloorPosition();
-    int xPosition = go->getXPosition() + go->centerXPos();
-    return (abs(xPosition - objectXPosition) < std::max(go->getWidth(), anotherGo->getWidth()) / 2) &&
-           (abs(realYPosition - objectYPosition) < 60); //ToDo Implement variables
+bool CollisionsManager::isInIntersection(GameObject *go1, GameObject *go2) {
+    int yPosition1 = go1->getYPosition() + go1->getFloorPosition();
+    int xPosition1 = go1->getXPosition() + go1->centerXPos();
+    int xPosition2 = go2->getXPosition() + go2->centerXPos();
+    int yPosition2 = go2->getYPosition() + go2->getFloorPosition();
+
+    if (go1->getType() == GOT_PLAYER && go2->getType() == GOT_HOLE && go1->getState() == "JUMPING") {
+        yPosition1 -= 10;
+    }
+    return (abs(xPosition1 - xPosition2) < std::max(go1->getWidth(), go2->getWidth()) / 2) &&
+           (abs(yPosition1 - yPosition2) < std::max(go1->getMinHeightToIntersect(), go2->getMinHeightToIntersect()));
 }
 
 void CollisionsManager::checkCollisions(std::vector<GameObject *> goOnScreen, std::vector<GameObject *> players) {

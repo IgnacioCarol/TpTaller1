@@ -2,8 +2,7 @@
 #include "EnemyMushroom.h"
 #include "../GameMap.h"
 
-void
-EnemyMushroom::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, CharacterState *state) {
+void EnemyMushroom::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, CharacterState *state) {
 
     x = GameMap::getInstance()->getRandomX(y);
     Enemy::init(x, y, textureID, camera, state);

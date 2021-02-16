@@ -14,7 +14,6 @@ public:
     int getHeight() override;
     void collideWith(GameObject *go) override;
     int getFloorPosition() override;
-    std::pair<int, int> getPosition();
 
     int centerXPos() override;
     int getWidth() override;
@@ -23,6 +22,8 @@ private:
     static const int NORMAL_BLOCK_WIDTH = 256;
 
     static const int NORMAL_BLOCK_HEIGHT = 256;
+
+    int getMinHeightToIntersect() override;
 };
 
 

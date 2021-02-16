@@ -18,14 +18,14 @@ public:
     explicit CharacterState();
 
     virtual void draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
-                      SDL_Renderer* renderer, SDL_RendererFlip flip);
+                      SDL_Renderer* renderer, SDL_RendererFlip flip, int divider);
 
     virtual void move(const Uint8* currentKeyStates, Player* player); //For the players
 
     virtual void move(Enemy* enemy); //For the enemies
 
     virtual void changeState(const Uint8* currentKeyStates, Player* player);
-    void setPlayerBig(bool playerBig);
+
     int getFramesAmount();
 
     std::string getStateType();
@@ -39,6 +39,5 @@ protected:
     int currentFrame;
     int framesAmount; //Amount of pictures in the sprite sheet
     int contAux = 0;
-    bool isPlayerBig;
 };
 #endif //TPTALLER1_CHARACTERSTATE_H

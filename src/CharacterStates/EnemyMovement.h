@@ -13,7 +13,7 @@ public:
     explicit EnemyMovement(int currentFrame = 0, int framesAmount = 1);
     void move(Enemy* enemy) override;
     void draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
-              SDL_Renderer* renderer, SDL_RendererFlip flip) override;
+              SDL_Renderer* renderer, SDL_RendererFlip flip, int divider) override;
 };
 
 
