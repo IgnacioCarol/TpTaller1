@@ -120,8 +120,10 @@ void GameServer::restartCharacters() {
         if (player->isActive()) {
             player->addPoints(levelRacePoints[currentRaceIndex]);
             player->changeState(new Normal());
+            player->restartPos(0, 380);
+        } else if (player->getState() == "PAUSED") {
+            player->restartPos(0, 380);
         }
-        player->restartPos(0, 380);
         player->saveLevelPoints(stage->getLevel());
         currentRaceIndex++;
     }
