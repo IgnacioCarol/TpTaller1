@@ -287,7 +287,7 @@ void Player::collideWith(PlatformNormal *nBlock) {
 
 void Player::standOrBlockMovement(GameObject *go, int heigth) {
     int yBlock = go->getYPosition() + go->getFloorPosition();
-    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x))) {
+    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x) && !ticksAfterRespawning)) {
         yPosition = yBlock - heigth;
         initialJumpingPosition = yPosition;
     } else {
