@@ -18,13 +18,12 @@ void PlatformNormal::collideWith(GameObject *go) {
     go->collideWith(this);
 }
 
-
 int PlatformNormal::getFloorPosition() {
-    return -20;
+    return - (getHeight() - 1);
 }
 
 int PlatformNormal::centerXPos() {
-    return - getWidth() / 2;
+    return - getWidth() / 4;
 }
 
 int PlatformNormal::getWidth() {

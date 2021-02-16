@@ -278,7 +278,7 @@ void Player::collideWith(Coin *coin) {
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
-    standOrBlockMovement(nBlock, nBlock->getHeight() - 50);
+    standOrBlockMovement(nBlock, 60);
 }
 
 void Player::standOrBlockMovement(GameObject *go, int heigth) {
