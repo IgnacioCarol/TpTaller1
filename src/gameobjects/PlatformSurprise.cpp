@@ -2,7 +2,6 @@
 
 void PlatformSurprise::init(int x, int y, std::string textureID) {
     GameObject::init(x, y, textureID);
-    _currentFrame = 0;
     type = GOT_PLATFORM_SURPRISE;
 }
 
@@ -20,6 +19,30 @@ void PlatformSurprise::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
 
 int PlatformSurprise::getHeight() {
     return SURPRISE_BLOCK_HEIGHT;
+}
+
+GameObject *PlatformSurprise::generateItem(int itemToGenerate) {
+    GameObject* tmp;
+    std::string itemID;
+    if (itemToGenerate){
+        tmp = new Coin();
+        tmp -> hide();
+        itemID = COIN_ID;
+    }
+    else {
+        tmp = new Mushroom();
+        itemID = MUSHROOM_ID;
+    }
+    tmp->init(xPosition, yPosition, itemID); //ToDo cuando funcione chquear las posiciones a pasar aca
+    innerItem = tmp;
+    return innerItem;
+}
+
+void PlatformSurprise::popItem() {
+    if (containsItem){
+        containsItem = false;
+        innerItem->unhide();
+    }
 }
 
 /*void PlatformSurprise::collideWith(Player *player) {

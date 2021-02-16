@@ -12,6 +12,8 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
+    GameObject* generateItem(int itemToGenerate);
+    void popItem() override;
     //void collideWith(Player* player);
 
 private:
@@ -21,8 +23,12 @@ private:
     //Animation related definitions
     static const int SURPRISE_BLOCK_DELAY = 10;
     static const int SURPRISE_BLOCK_FRAMES = 5;
+    const std::string COIN_ID = "coinsSprites";
+    const std::string MUSHROOM_ID = "mushroom";
+
     size_t delayCounter;
     bool containsItem = true;
+    GameObject* innerItem;
 };
 
 

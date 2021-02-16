@@ -126,3 +126,15 @@ void GameObject::collideWith(Pipe *pipe) {
 void GameObject::collideWith(Mushroom *mushroom) {
 
 }
+
+void GameObject::hide() {
+
+}
+
+void GameObject::unhide() {
+
+}
+
+void GameObject::popItem() {
+
+}

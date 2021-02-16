@@ -73,6 +73,10 @@ public:
 
     virtual int centerXPos();
 
+    virtual void hide();
+    virtual void unhide();
+    virtual void popItem();
+
 protected:
     //To manage the movement
     int xPosition;

@@ -12,6 +12,8 @@ class Coin : public GameObject {
         void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
         void move() override {};
         void collideWith(GameObject *go) override;
+        void hide() override;
+        void unhide() override;
 
 private:
     //Related to the image
@@ -19,6 +21,7 @@ private:
     static const int COIN_HEIGHT = 164;
     static const int COIN_DELAY = 4;
     static const int COIN_FRAMES = 4;
+    bool isHidden = false;
 
     size_t delayCounter;
 };

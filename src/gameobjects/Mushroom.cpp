@@ -15,15 +15,16 @@ void Mushroom::collideWith(GameObject *go) {
 }
 
 void Mushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    //ToDo una vez que ande esto agregar condicion de que sea visible
-    if (delayCounter == DELAY_MUSHROOM && _currentFrame < MUSHROOM_FRAMES_AMOUNT) {
-        _currentFrame += 1;
-        delayCounter = 0;
-    }
-    else delayCounter++;
+    if (!isHidden){
+        if (delayCounter == DELAY_MUSHROOM && _currentFrame < MUSHROOM_FRAMES_AMOUNT) {
+            _currentFrame += 1;
+            delayCounter = 0;
+        }
+        else delayCounter++;
 
-    TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, MUSHROOM_WIDTH, MUSHROOM_HEIGHT,
-                                          MUSHROOM_WIDTH * _currentFrame, renderer, SDL_FLIP_NONE);
+        TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, MUSHROOM_WIDTH, MUSHROOM_HEIGHT,
+                                              MUSHROOM_WIDTH * _currentFrame, renderer, SDL_FLIP_NONE);
+    }
 }
 
 int Mushroom::getHeight() {
@@ -32,4 +33,8 @@ int Mushroom::getHeight() {
 
 int Mushroom::getWidth() {
     return MUSHROOM_WIDTH;
+}
+
+void Mushroom::unhide() {
+    isHidden = false;
 }
