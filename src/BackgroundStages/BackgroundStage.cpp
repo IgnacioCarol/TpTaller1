@@ -41,7 +41,7 @@ void BackgroundStage::renderDefaultBackground() {
 }
 
 bool BackgroundStage::isTimeOver() {
-    return this->timer->isTimeOver();
+    return this->timer != nullptr && this->timer->isTimeOver();
 }
 
 int BackgroundStage::getLevelTime() {

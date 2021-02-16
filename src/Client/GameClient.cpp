@@ -427,12 +427,16 @@ void GameClient::renderGameOver() {
 
         for (int i = 1; i <= 3; i++) {
             string textID = player.second->getTextureId() + "_lvl" + std::to_string(i);
-            textureManager->loadText(textID, std::to_string(levelScores.at(i)), WHITE_COLOR, renderer);
+            std::string pointsStr = std::to_string(levelScores.at(i));
+            pointsStr = std::string(DIGITS - pointsStr.length(), '0') + pointsStr;
+            textureManager->loadText(textID, pointsStr, WHITE_COLOR, renderer);
             textureManager->printText(textID, initX + xCount * xFactor, initY + yCount * yFactor, renderer);
             xCount++;
         }
 
-        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getTotalPoints()), WHITE_COLOR, renderer);
+        std::string pointsStr = std::to_string(player.second->getTotalPoints());
+        pointsStr = std::string(DIGITS - pointsStr.length(), '0') + pointsStr;
+        textureManager->loadText(player.second->getTextureId() + "_score", pointsStr, WHITE_COLOR, renderer);
         textureManager->printText(player.second->getTextureId() + "_score", initX + xCount * xFactor, initY + yCount * yFactor, renderer);
         yCount++;
         xCount = 0;
@@ -505,7 +509,9 @@ void GameClient::renderPointsAndLives(int xPosition, string userTextureID, int p
 
 void GameClient::loadScoreText() {
     for (std::pair<int, Player*> player: playersMap) {
-        textureManager->loadText(player.second->getTextureId() + "_score", std::to_string(player.second->getTotalPoints()), WHITE_COLOR, renderer);
+        std::string pointsStr = std::to_string(player.second->getTotalPoints());
+        pointsStr = std::string(DIGITS - pointsStr.length(), '0') + pointsStr;
+        textureManager->loadText(player.second->getTextureId() + "_score", pointsStr, WHITE_COLOR, renderer);
     }
 }
 
