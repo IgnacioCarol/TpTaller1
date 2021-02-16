@@ -89,7 +89,7 @@ public:
 
     void die() override;
     void dieFalling() override;
-    void fall();
+    void fall() override;
     int getWidth() override;
 
     void setPlayerBig(bool playerBig);
@@ -108,8 +108,6 @@ public:
     bool operator<(const Player& p) const;
 
     void finishMovement();
-
-    int getFloorPosition() override;
 
 private:
     //Image related

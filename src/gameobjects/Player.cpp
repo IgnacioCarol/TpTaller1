@@ -283,7 +283,7 @@ void Player::collideWith(PlatformNormal *nBlock) {
 
 void Player::standOrBlockMovement(GameObject *go, int heigth) {
     int yBlock = go->getYPosition() + go->getFloorPosition();
-    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition = cam->x))) {
+    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x))) {
         yPosition = yBlock - heigth;
         initialJumpingPosition = yPosition;
     } else {
@@ -390,8 +390,4 @@ void Player::setLives(int totalLives) {
 
 void Player::setTestMode(bool testModeState) {
     this->testModeState = testModeState;
-}
-
-int Player::getFloorPosition() {
-    return (isPlayerBig) ? 0 : 25;
 }
