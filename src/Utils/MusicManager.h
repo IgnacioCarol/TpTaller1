@@ -25,6 +25,7 @@ public:
     void playMusic(std::string ID, int loop = -1);
     bool isMusicPaused();
     bool areSoundsMuted();
+    bool areSoundEffectsOff();
 
     void pauseMusic();
     void unpauseMusic();

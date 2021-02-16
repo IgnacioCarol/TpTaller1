@@ -135,6 +135,9 @@ void GameClient::renderPlayers() {
     if (!clientPlayer->isAlive()){
         textureManager->printText(TEXT_GAME_OVER_KEY, 300, 300, renderer);
     }
+    if (clientPlayer->getTestModeState()){
+        textureManager->printText(TEXT_TEST_MODE, TEXT_TEST_MODE_X_POS, TEXT_TEST_MODE_Y_POS, renderer);
+    }
 }
 
 void GameClient::update(GameMsgPlaying updateObjects) {
@@ -237,6 +240,10 @@ bool GameClient::loadTexts(bool isDefault, std::vector<GameObjectInit> players) 
     success = success && textureManager->loadText(TEXT_LVL3_KEY, TEXT_LVL3_VALUE, GRAY_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_CONGRATULATIONS_KEY, TEXT_CONGRATULATIONS_VALUE, WHITE_COLOR, renderer);
     success = success && textureManager->loadText(TEXT_WINNER_KEY, TEXT_WINNER_VALUE, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_SOUND, TEXT_SOUND, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_MUSIC, TEXT_MUSIC, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_OFF, TEXT_OFF, WHITE_COLOR, renderer);
+    success = success && textureManager->loadText(TEXT_TEST_MODE, TEXT_TEST_MODE, WHITE_COLOR, renderer);
 
     return success;
 }

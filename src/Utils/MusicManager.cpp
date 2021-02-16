@@ -114,3 +114,7 @@ void MusicManager::setOwner(std::string owner) {
 void MusicManager::playSoundsFor(std::string client) {
     this->client = client;
 }
+
+bool MusicManager::areSoundEffectsOff() {
+    return mutedSounds && musicPaused;
+}
