@@ -281,12 +281,12 @@ void Player::collideWith(Coin *coin) {
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
-    standOrBlockMovement(nBlock, nBlock->getHeight() - 50);
+    standOrBlockMovement(nBlock, nBlock->getHeight()/4 - 50);
 }
 
 void Player::standOrBlockMovement(GameObject *go, int heigth) {
     int yBlock = go->getYPosition() + go->getFloorPosition();
-    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition = cam->x))) {
+    if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x))) {
         yPosition = yBlock - heigth;
         initialJumpingPosition = yPosition;
     } else {
@@ -327,6 +327,10 @@ void Player::collideWith(Mushroom* mushroom) {
         setPlayerBig(true);
         mushroom -> die();
     }
+}
+
+void Player::collideWith(PlatformSurprise *sBlock) {
+    standOrBlockMovement(sBlock, sBlock->getHeight() - 50);
 }
 
 void Player::startToJump() {

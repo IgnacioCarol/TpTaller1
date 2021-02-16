@@ -16,6 +16,7 @@ public:
     void popItem() override;
     void setMushroom(bool hasMushroom);
     bool containsMushroom();
+    void collideWith(GameObject* go) override;
     //void collideWith(Player* player);
 
 private:

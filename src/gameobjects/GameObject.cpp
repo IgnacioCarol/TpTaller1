@@ -146,3 +146,7 @@ void GameObject::setHidden(bool hidden) {
 bool GameObject::isHidden() {
     return hidden;
 }
+
+void GameObject::collideWith(PlatformSurprise* sBlock) {
+
+}

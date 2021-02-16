@@ -19,6 +19,7 @@ class PlatformNormal;
 class Hole;
 class Pipe;
 class Mushroom;
+class PlatformSurprise;
 
 enum GameObjectType {
     GOT_COIN,
@@ -63,6 +64,7 @@ public:
     virtual void collideWith(Hole* hole);
     virtual void collideWith(Pipe* pipe);
     virtual void collideWith(Mushroom* mushroom);
+    virtual void collideWith(PlatformSurprise* sBlock);
 
     virtual void die();
     virtual void dieFalling();

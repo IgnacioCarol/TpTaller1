@@ -12,6 +12,7 @@
 #include "Hole.h"
 #include "Pipe.h"
 #include "Mushroom.h"
+#include "PlatformSurprise.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -74,6 +75,7 @@ public:
     void collideWith(PlatformNormal* nBlock) override;
     void collideWith(Hole* hole) override;
     void collideWith(Mushroom* mushroom) override;
+    void collideWith(PlatformSurprise* sBlock) override;
     void saveLevelPoints(int currentLevel);
 
     //Lives

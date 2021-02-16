@@ -53,6 +53,10 @@ bool PlatformSurprise::containsMushroom() {
     return this->hasMushroom;
 }
 
+void PlatformSurprise::collideWith(GameObject *go) {
+    go->collideWith(this);
+}
+
 /*void PlatformSurprise::collideWith(Player *player) {
     std::pair<int, int> position = player->getPosition();
     int xPlayer = position.first;
