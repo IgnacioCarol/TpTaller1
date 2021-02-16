@@ -246,7 +246,12 @@
                 <tubos>
                     <tubo>
                         <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
-                        <coordX>500</coordX>
+                        <coordX>260</coordX>
+                        <coordY>380</coordY>
+                    </tubo>
+                    <tubo>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
+                        <coordX>600</coordX>
                         <coordY>380</coordY>
                     </tubo>
                 </tubos>
