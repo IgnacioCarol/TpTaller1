@@ -43,6 +43,12 @@ void PlatformSurprise::popItem() {
         containsItem = false;
         innerItem->unhide();
     }
+void PlatformSurprise::setMushroom(bool hasMushroom) {
+    this->hasMushroom = hasMushroom;
+}
+
+bool PlatformSurprise::containsMushroom() {
+    return this->hasMushroom;
 }
 
 /*void PlatformSurprise::collideWith(Player *player) {

@@ -183,13 +183,21 @@ void Config::parsePlatforms(Level *level, ptree pt) {
             throw ConfigException("Invalid platform tag, found: " + platform_name);
         }
 
-        validateTags(XML_STAGE_LEVEL_PLATFORM_NAME, validPlatformTags, platform_pt);
 
         string type = platform_pt.get<string>(XML_STAGE_LEVEL_PLATFORM_TYPE);
         if (type == XML_STAGE_LEVEL_PLATFORM_NORMAL) {
+            validateTags(XML_STAGE_LEVEL_PLATFORM_NAME, validPlatformTags, platform_pt);
             platform.type = PLATFORM_NORMAL;
+            platform.mushroomQuantity = false;
         } else if (type == XML_STAGE_LEVEL_PLATFORM_SURPRISE) {
+            validateTags(XML_STAGE_LEVEL_PLATFORM_NAME, validPlatformSurpriseTags, platform_pt);
             platform.type = PLATFORM_SURPRISE;
+            platform.mushroomQuantity = platform_pt.get<int>(XML_STAGE_LEVEL_PLATFORM_MUSHROOM);
+            if (platform.mushroomQuantity < 0) {
+                Logger::getInstance()->error("Invalid platform mushroomQuantity " + to_string(platform.mushroomQuantity) +
+                                             + ". Expected greater than 0, setting default to 0");
+                platform.coordX = 0;
+            }
         } else {
             throw ConfigException("Unknown platform type " + type);
         }

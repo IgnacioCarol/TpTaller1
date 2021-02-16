@@ -14,6 +14,8 @@ public:
     int getHeight() override;
     GameObject* generateItem(int itemToGenerate);
     void popItem() override;
+    void setMushroom(bool hasMushroom);
+    bool containsMushroom();
     //void collideWith(Player* player);
 
 private:
@@ -29,6 +31,7 @@ private:
     size_t delayCounter;
     bool containsItem = true;
     GameObject* innerItem;
+    bool hasMushroom;
 };
 
 

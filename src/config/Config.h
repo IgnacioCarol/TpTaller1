@@ -83,6 +83,7 @@ typedef enum{PLATFORM_NORMAL, PLATFORM_SURPRISE} platformType;
 #define XML_STAGE_LEVEL_PLATFORM_NAME "plataforma"
 #define XML_STAGE_LEVEL_PLATFORM_TYPE "tipo"
 #define XML_STAGE_LEVEL_PLATFORM_COORDX "coordX"
+#define XML_STAGE_LEVEL_PLATFORM_MUSHROOM "hongo"
 #define XML_STAGE_LEVEL_PLATFORM_COORDY "coordY"
 #define XML_STAGE_LEVEL_PLATFORM_QTY "cantidad"
 // Pipes
@@ -123,6 +124,7 @@ struct Platform {
     int coordX;
     int coordY;
     int quantity;
+    int mushroomQuantity;
 };
 
 struct xmlHole {
@@ -235,6 +237,7 @@ private:
     const vector<string> validCoinTags = {"imagen", "coordY", "cantidad"};
     const vector<string> validEnemyTags = {"tipo", "imagen", "cantidad"};
     const vector<string> validPlatformTags = {"tipo", "imagen", "coordX", "coordY", "cantidad"};
+    const vector<string> validPlatformSurpriseTags = {"tipo", "imagen", "coordX", "coordY", "cantidad", "hongo"};
     const vector<string> validHoleTags = {"coordX", "coordY", "ancho", "alto"};
     const vector<string> validPipeTags = {"coordX", "coordY", "imagen"};
     const vector<string> validLogLevels = {"ERROR", "DEBUG", "INFO"};

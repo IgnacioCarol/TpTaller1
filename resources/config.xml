@@ -64,14 +64,16 @@
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
                         <cantidad>1</cantidad>
+                        <hongo>1</hongo>
                     </plataforma>
-                    <plataforma>
+                    `<plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>2</cantidad>
-                    </plataforma>
+                        <hongo>1</hongo>
+                    </plataforma>`
                 </plataformas>
                 <pozos>
                     <pozo>
@@ -145,6 +147,7 @@
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
                         <cantidad>5</cantidad>
+                        <hongo>0</hongo>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
@@ -152,6 +155,7 @@
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>6</cantidad>
+                        <hongo>1</hongo>
                     </plataforma>
                 </plataformas>
                 <pozos>
@@ -226,6 +230,7 @@
                         <coordX>2000</coordX>
                         <coordY>150</coordY>
                         <cantidad>5</cantidad>
+                        <hongo>0</hongo>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
@@ -233,6 +238,7 @@
                         <coordX>200</coordX>
                         <coordY>300</coordY>
                         <cantidad>6</cantidad>
+                        <hongo>1</hongo>
                     </plataforma>
                 </plataformas>
                 <pozos>
