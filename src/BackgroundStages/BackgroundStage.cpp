@@ -105,6 +105,7 @@ void BackgroundStage::renderBackground(SDL_Rect* camera) {
     textureManager -> drawBackgroundWithCamera(800, 600, bgID, renderer, camera);
     renderTime();
     renderLevel();
+    renderSoundMusicState();
     if (defaultBackground){
         renderDefaultBackground();
     }
@@ -116,4 +117,22 @@ void BackgroundStage::isDefaultBackground(bool defaultBackground) {
 
 int BackgroundStage::getLevelLimit() {
     return LEVEL_LIMIT;
+}
+
+void BackgroundStage::renderSoundMusicState() {
+    if (MusicManager::Instance()->areSoundEffectsOff()){
+        textureManager->printText(TEXT_MUSIC, TEXT_MUSIC_X_POS, TEXT_MUSIC_Y_POS,renderer);
+        textureManager->printText(TEXT_OFF, TEXT_MUSIC_X_POS + 100, TEXT_MUSIC_Y_POS,renderer);
+
+        textureManager->printText(TEXT_SOUND, TEXT_SOUND_X_POS, TEXT_SOUND_Y_POS,renderer);
+        textureManager->printText(TEXT_OFF, TEXT_SOUND_X_POS + 100, TEXT_SOUND_Y_POS,renderer);
+    }
+    else if (MusicManager::Instance()->isMusicPaused()){
+        textureManager->printText(TEXT_MUSIC, TEXT_MUSIC_X_POS, TEXT_MUSIC_Y_POS,renderer);
+        textureManager->printText(TEXT_OFF, TEXT_MUSIC_X_POS + 100, TEXT_MUSIC_Y_POS,renderer);
+    }
+    else if (MusicManager::Instance()->areSoundsMuted()){
+        textureManager->printText(TEXT_SOUND, TEXT_SOUND_X_POS, TEXT_MUSIC_Y_POS,renderer);
+        textureManager->printText(TEXT_OFF, TEXT_SOUND_X_POS + 100, TEXT_MUSIC_Y_POS,renderer);
+    }
 }

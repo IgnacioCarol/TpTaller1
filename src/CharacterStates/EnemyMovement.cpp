@@ -13,7 +13,7 @@ void EnemyMovement::move(Enemy *enemy) {
 }
 
 void EnemyMovement::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth,
-                         SDL_Renderer *renderer, SDL_RendererFlip flip) {
+                         SDL_Renderer *renderer, SDL_RendererFlip flip, int divider) {
     if (contAux == ITER_TIMES) {
         currentFrame = (currentFrame + 1) % (framesAmount - 1);
         contAux = 0;
@@ -21,7 +21,7 @@ void EnemyMovement::draw(std::string ID, int xPosition, int yPosition, int image
     else contAux ++;
 
     TextureManager::Instance()->drawFrame(ID, xPosition, yPosition, imageWidth, imageHeigth,
-                                          imageWidth * currentFrame, renderer, flip);
+                                          imageWidth * currentFrame, renderer, flip, divider);
 }
 
 

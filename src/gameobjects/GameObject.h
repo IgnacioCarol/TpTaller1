@@ -16,7 +16,10 @@
 class Enemy;
 class Coin;
 class PlatformNormal;
+class Hole;
 class Pipe;
+class Mushroom;
+class PlatformSurprise;
 
 enum GameObjectType {
     GOT_COIN,
@@ -26,7 +29,8 @@ enum GameObjectType {
     GOT_PLATFORM_SURPRISE,
     GOT_PLAYER,
     GOT_HOLE,
-    GOT_PIPE
+    GOT_PIPE,
+    GOT_MUSHROOM
 };
 
 class GameObject {
@@ -57,13 +61,26 @@ public:
     virtual void collideWith(Enemy* enemy);
     virtual void collideWith(Coin* coin);
     virtual void collideWith(PlatformNormal* nBlock);
+    virtual void collideWith(Hole* hole);
     virtual void collideWith(Pipe* pipe);
+    virtual void collideWith(Mushroom* mushroom);
+    virtual void collideWith(PlatformSurprise* sBlock);
 
     virtual void die();
+    virtual void dieFalling();
+
+    virtual void fall();
 
     virtual int getFloorPosition();
 
     virtual int centerXPos();
+
+    virtual void hide();
+    virtual void unhide();
+    virtual void popItem();
+    void setHidden(bool hidden);
+    bool isHidden();
+    virtual int getMinHeightToIntersect();
 
 protected:
     //To manage the movement
@@ -80,6 +97,7 @@ protected:
 
     int id;
     GameObjectType type;
+    bool hidden = false;
 };
 
 #endif //TPTALLER1_GAMEOBJECT_H

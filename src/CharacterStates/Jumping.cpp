@@ -6,10 +6,9 @@
 #include "Jumping.h"
 #include "Normal.h"
 
-Jumping::Jumping(bool isPlayerBig){
-    stateType = "JUMPING";
+Jumping::Jumping(bool falling){
+    stateType = (falling) ? "FALLING" : "JUMPING";
     currentFrame = JUMPING_FRAME;
-    this->isPlayerBig = isPlayerBig;
 }
 
 void Jumping::move(const Uint8 *currentKeyStates, Player* player) {
@@ -18,9 +17,11 @@ void Jumping::move(const Uint8 *currentKeyStates, Player* player) {
 }
 
 void Jumping::changeState(const Uint8 *currentKeyStates, Player* player) {
-
-    if (player -> finishJump()) {
-        player -> changeState(new Normal(player->getPlayerBig()));
+    if (stateType == "FALLING"){
+        player->dieFalling();
+    }
+    else if (player -> finishJump()){
+        player -> changeState(new Normal());
         player->setJumpConfig();
     }
 }

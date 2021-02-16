@@ -32,11 +32,16 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
     // Init Platforms
     for(auto platform : levelConfig.platforms) {
+        int mushroomCreated = 0;
         for(long i = 0; i < platform.quantity; i++) {
             if (platform.type == PLATFORM_SURPRISE) {
-                tmp = new PlatformSurprise();
+                PlatformSurprise * ps = new PlatformSurprise();
+                tmp = ps;
                 if (tmp != nullptr){
                     textureID = SURPRISE_BLOCK_ID;
+                    ps->setMushroom(mushroomCreated < platform.mushroomQuantity);
+                    mushroomCreated++;
+                    actors.push_back(ps->generateItem());
                     platformHeight = tmp -> getHeight() / 4;
                     Logger::getInstance()->debug("Platform surprise created correctly");
                 }
@@ -46,7 +51,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmp = new PlatformNormal();
                 if (tmp != nullptr){
                     textureID = NORMAL_BLOCK_ID;
-                    platformHeight = tmp->getHeight() / 4;
+                    platformHeight = tmp->getHeight();
                     Logger::getInstance()->debug("Normal platform created correctly");
                 }
                 else Logger::getInstance()->error("Error: couldn't create a Normal Platform");

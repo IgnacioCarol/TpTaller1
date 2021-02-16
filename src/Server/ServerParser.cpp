@@ -45,7 +45,8 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
                 gameObject->getYPosition(),
                 gameObject->getFrameAmount(),
                 gameObject->getHeight(),
-                gameObject->getWidth()
+                gameObject->getWidth(),
+                gameObject->isHidden()
         };
         gameObjectsInit.push_back(gameObjectInit);
     }
@@ -105,7 +106,10 @@ json ServerParser::buildPlayingGameMessage(std::vector<Player *> players, std::v
                 go->getXPosition(),
                 go->getYPosition(),
                 go->getState(),
-                go->getDirection()
+                go->getDirection(),
+                0,
+                0,
+                go->isHidden()
         };
         gameObjects.push_back(object);
     }
@@ -158,7 +162,8 @@ json ServerParser::buildChangeLevelMsg(std::vector<GameObject *> gameObjects, Ba
                 gameObject->getYPosition(),
                 gameObject->getFrameAmount(),
                 gameObject->getHeight(),
-                gameObject->getWidth()
+                gameObject->getWidth(),
+                gameObject->isHidden()
         };
         gameObjectsInit.push_back(gameObjectInit);
     }

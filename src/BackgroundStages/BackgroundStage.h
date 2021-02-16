@@ -8,6 +8,7 @@
 #include "../Utils/Timer.h"
 #include "../config/Config.h"
 #include <string.h>
+#include "../Utils/MusicManager.h"
 
 class BackgroundStage {
 public:
@@ -19,6 +20,7 @@ public:
     int getLevelLimit();
     bool renderLevel();
     bool renderTime();
+    void renderSoundMusicState();
     void renderDefaultBackground();
     bool isTimeOver();
     int getLevel();

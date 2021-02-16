@@ -9,7 +9,10 @@
 #include "Enemy.h"
 #include "Coin.h"
 #include "PlatformNormal.h"
+#include "Hole.h"
 #include "Pipe.h"
+#include "Mushroom.h"
+#include "PlatformSurprise.h"
 #include "../Utils/CollisionsManager.h"
 #include "../Utils/MusicManager.h"
 #include <cstdio>
@@ -21,9 +24,6 @@
 #include "../CharacterStates/Running.h"
 #include "../CharacterStates/Dying.h"
 #include "../config/Constants.h"
-
-#define imgPlayer "Sprites/Players/mario.png"
-#define defaultPlayer "Sprites/Default/defaultPlayer.png"
 #define INMUNITY_TIME 50
 
 class CharacterState;
@@ -67,23 +67,39 @@ public:
     bool getPlayerBig();
     void collideWith(GameObject *go) override;
 
+    bool isActive();
+
     //Collisions
     void collideWith(Enemy* enemy) override;
     void collideWith(Coin* coin) override;
     void collideWith(PlatformNormal* nBlock) override;
-    void changeLevel();
+    void collideWith(Hole* hole) override;
+    void collideWith(Mushroom* mushroom) override;
+    void collideWith(PlatformSurprise* sBlock) override;
     void saveLevelPoints(int currentLevel);
 
+    //Lives
+    int getLives() const;
+    void setLives(int totalLives);
+    void loseLife();
+    bool isAlive();
+
+    //Points
+    void setPoints(int points);
+    std::map<int,int> getPointsByLevel();
+    void setPointsByLevel(std::map<int,int> points);
+    int getTotalPoints();
     void addPoints(int newPoints);
+
     void die() override;
-    void setPlayerBig(bool playerBig);
+    void dieFalling() override;
+    void fall() override;
     int getWidth() override;
 
-    int getLives() const;
-    int loseLife();
-    bool isAlive();
+    void setPlayerBig(bool playerBig);
     void testMode();
     bool getTestModeState();
+    void setTestMode(bool testModeState);
     void startToJump();
     void setJumpConfig();
 
@@ -92,12 +108,8 @@ public:
 
     bool isInmune();
     void tryUndoInmunity();
-    void setPoints(int points);
-    std::map<int,int> getPointsByLevel();
-    void setPointsByLevel(std::map<int,int> points);
-    int getTotalPoints();
+
     bool operator<(const Player& p) const;
-    void setLives(int lives);
 
     void finishMovement();
 
@@ -120,7 +132,7 @@ private:
     void completeMovement(const Uint8 *keyStates);
 
     //Health related attributes
-    bool isPlayerBig;
+    bool isPlayerBig = false;
     int inmune;
     int lives = 3;
 
@@ -139,6 +151,7 @@ private:
     int firstX;
     int firstY;
     int ticksAfterRespawning;
+    int divider; //For drawing bir or normal Mario. divider = 5 --> Small Mario, divider = 4 --> Big Mario
 
     void collideWith(Pipe *pipe) override;
 

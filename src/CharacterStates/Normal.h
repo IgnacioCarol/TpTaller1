@@ -9,7 +9,7 @@
 #include "CharacterState.h"
 class Normal: public CharacterState{
 public:
-    explicit Normal(bool isPlayerBig);
+    explicit Normal();
     void move(const Uint8* currentKeyStates, Player* player) override;
     void changeState(const Uint8* currentKeyStates, Player* player) override;
 

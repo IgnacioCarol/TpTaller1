@@ -7,11 +7,10 @@
 #include "../Server/GameServer.h"
 
 
-Paused::Paused(bool disconnected, bool isPlayerBig){
+Paused::Paused(bool disconnected) {
     stateType = disconnected ? "PAUSED" : "FINISH";
     this -> disconnected = disconnected;
     currentFrame = PAUSED_FRAME;
-    this->isPlayerBig = isPlayerBig;
 }
 
 void Paused::move(const Uint8 *currentKeyStates, Player *player) {
@@ -24,13 +23,4 @@ void Paused::move(const Uint8 *currentKeyStates, Player *player) {
 
 void Paused::changeState(const Uint8 *currentKeyStates, Player *player) {
     CharacterState::changeState(currentKeyStates, player);
-}
-
-void Paused::draw(std::string ID, int xPosition, int yPosition, int imageWidth, int imageHeigth, SDL_Renderer *renderer,
-                  SDL_RendererFlip flip) {
-    if (stateType == "PAUSED") {
-       ID = this->isPlayerBig ? "paused-big" : "paused";
-    }
-
-    CharacterState::draw(ID, xPosition, yPosition, imageWidth, imageHeigth, renderer, flip);
 }

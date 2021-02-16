@@ -339,6 +339,10 @@ bool Server::run() {
     }
 
     Logger::getInstance()->info("Finished run loop");
+    if (game->isTimeOver() || !game->arePlayersAlive()) {
+        Logger::getInstance()->info("updating score players");
+        game->updatePlayersScore();
+    }
 
     while (someoneIsConnected() && !game->isPlaying()) {
         msg = ServerParser::buildGameOverMsg(game->getPlayers(), game->isTimeOver());
@@ -552,7 +556,6 @@ bool Server::validClientsMaximum(PlayerClient *playerClient) {
 }
 
 json Server::getPlayersPositionMessage() {
-    Logger::getInstance()->info("Getting players position message");
     GameServer* game = GameServer::Instance();
     if (game->changeLevel()){
         game->setChangeLevelFlag(false);

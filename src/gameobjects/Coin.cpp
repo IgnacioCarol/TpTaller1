@@ -11,14 +11,28 @@ void Coin::init(int x, int y, std::string textureID) {
 }
 
 void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    _currentFrame = (delayCounter % COIN_DELAY) ? _currentFrame : (_currentFrame + 1) % COIN_FRAMES;
-    TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, COIN_WIDTH, COIN_HEIGHT,
-                                          COIN_WIDTH * _currentFrame, renderer, SDL_FLIP_NONE);
-    delayCounter++;
+    if (!hidden){
+        _currentFrame = (delayCounter % COIN_DELAY) ? _currentFrame : (_currentFrame + 1) % COIN_FRAMES;
+        TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, COIN_WIDTH, COIN_HEIGHT,
+                                              COIN_WIDTH * _currentFrame, renderer, SDL_FLIP_NONE);
+        delayCounter++;
+    }
 }
 
 void Coin::collideWith(GameObject *go) {
     go->collideWith(this);
+}
+
+void Coin::hide() {
+    hidden = true;
+}
+
+void Coin::unhide() {
+    hidden = false;
+}
+
+int Coin::getFloorPosition() {
+    return - (COIN_HEIGHT / 4  + 30);
 }
 
 Coin::~Coin() = default;
