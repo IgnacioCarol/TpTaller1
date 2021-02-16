@@ -64,7 +64,7 @@ add_executable(TpTaller1
         src/Utils/CollisionsManager.cpp src/Utils/CollisionsManager.h
         src/gameobjects/Hole.cpp src/gameobjects/Hole.h
         src/gameobjects/Pipe.cpp src/gameobjects/Pipe.h
-        src/Utils/Score.cpp src/Utils/Score.h)
+        src/Utils/Score.cpp src/Utils/Score.h src/gameobjects/Mushroom.cpp src/gameobjects/Mushroom.h)
 
 if (APPLE)
     set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${TpTaller1_SOURCE_DIR}/cmake")

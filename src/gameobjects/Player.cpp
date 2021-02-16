@@ -259,7 +259,6 @@ bool Player::isAlive() {
 }
 
 void Player::testMode() {
-    isPlayerBig = !isPlayerBig;
     testModeState = !testModeState;
     std::string msg = (testModeState) ? "ACTIVATED" : "DEACTIVATED";
     Logger::getInstance()->info("TEST MODE " + msg);
@@ -316,6 +315,11 @@ void Player::collideWith(Hole* hole) {
 
 void Player::collideWith(Pipe* pipe) {
     standOrBlockMovement(pipe, pipe->getHeight() / 4 - 95);
+}
+
+void Player::collideWith(Mushroom* mushroom) {
+    setPlayerBig(true);
+    mushroom -> die();
 }
 
 void Player::startToJump() {
