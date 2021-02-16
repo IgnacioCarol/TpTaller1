@@ -22,6 +22,14 @@ int PlatformSurprise::getHeight() {
     return SURPRISE_BLOCK_HEIGHT;
 }
 
+void PlatformSurprise::setMushroom(bool hasMushroom) {
+    this->hasMushroom = hasMushroom;
+}
+
+bool PlatformSurprise::containsMushroom() {
+    return this->hasMushroom;
+}
+
 /*void PlatformSurprise::collideWith(Player *player) {
     std::pair<int, int> position = player->getPosition();
     int xPlayer = position.first;

@@ -32,11 +32,15 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
     // Init Platforms
     for(auto platform : levelConfig.platforms) {
+        int mushroomCreated = 0;
         for(long i = 0; i < platform.quantity; i++) {
             if (platform.type == PLATFORM_SURPRISE) {
-                tmp = new PlatformSurprise();
+                PlatformSurprise * ps = new PlatformSurprise();
+                tmp = ps;
                 if (tmp != nullptr){
                     textureID = SURPRISE_BLOCK_ID;
+                    ps->setMushroom(mushroomCreated < platform.mushroomQuantity);
+                    mushroomCreated++;
                     platformHeight = tmp -> getHeight() / 4;
                     Logger::getInstance()->debug("Platform surprise created correctly");
                 }

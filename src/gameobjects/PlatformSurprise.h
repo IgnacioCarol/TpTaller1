@@ -12,6 +12,8 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
+    void setMushroom(bool hasMushroom);
+    bool containsMushroom();
     //void collideWith(Player* player);
 
 private:
@@ -23,6 +25,7 @@ private:
     static const int SURPRISE_BLOCK_FRAMES = 5;
     size_t delayCounter;
     bool containsItem = true;
+    bool hasMushroom;
 };
 
 
