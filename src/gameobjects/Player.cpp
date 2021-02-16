@@ -391,7 +391,3 @@ void Player::setLives(int totalLives) {
 void Player::setTestMode(bool testModeState) {
     this->testModeState = testModeState;
 }
-
-int Player::getFloorPosition() {
-    return (isPlayerBig) ? 0 : 25;
-}
