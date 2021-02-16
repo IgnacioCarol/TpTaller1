@@ -213,9 +213,11 @@ void Player::die() {
 }
 
 void Player::dieFalling() {
-    if (!testModeState && !isAtScene(cam->x)){
+    if (!isAtScene(cam->x)){
         changeState(new Dying(true));
-        loseLife();
+        if (!testModeState){
+            loseLife();
+        }
     }
 }
 
