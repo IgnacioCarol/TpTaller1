@@ -47,6 +47,7 @@ struct GameObjectInit {
     int frameAmount;
     int height;
     int width;
+    bool hidden;
 };
 
 struct GameObjectsInit {
@@ -109,6 +110,7 @@ struct GameObjectPlaying {
     bool direction;
     int points;
     int lives;
+    bool hidden;
 };
 
 struct CameraDuringGame {

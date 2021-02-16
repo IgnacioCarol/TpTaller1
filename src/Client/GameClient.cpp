@@ -176,6 +176,7 @@ void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
         gameObject->setPosition(gameObjectUpdate.xPos, gameObjectUpdate.yPos);
         gameObject->setState(gameObjectUpdate.state);
         gameObject->setDirection(gameObjectUpdate.direction);
+        gameObject->setHidden(gameObjectUpdate.hidden);
     }
 }
 
@@ -276,6 +277,7 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
     GameObject* tmp;
     if (objectType == GOT_COIN){
         tmp = new Coin();
+        tmp->setHidden(gameObject.hidden);
     }
     else if (objectType == GOT_PLATFORM_NORMAL){
         tmp = new PlatformNormal();
@@ -287,8 +289,11 @@ void GameClient::createStaticObject(GameObjectInit gameObject, GameObjectType ob
         h->setDimensions(gameObject.width, gameObject.height);
         h->setLevel(level);
         tmp = h;
-    } else {
+    } else if (objectType == GOT_PIPE){
         tmp = new Pipe();
+    } else{
+        tmp = new Mushroom();
+        tmp->setHidden(gameObject.hidden);
     }
 
     if (tmp != nullptr){

@@ -60,7 +60,8 @@ json Protocol::gameInitMsgToJson(GameMsgParams params) {
                 {"yPos", gameObject.yPos},
                 {"frameAmount", gameObject.frameAmount},
                 {"height", gameObject.height},
-                {"width", gameObject.width}
+                {"width", gameObject.width},
+                {"hidden", gameObject.hidden}
         };
         gameObjects.push_back(gameObjectJson);
     }
@@ -105,7 +106,10 @@ json Protocol::gameViewMsgToJson(GameMsgPlaying params) {
                 {"xPos", gameObject.xPos},
                 {"yPos", gameObject.yPos},
                 {"state", gameObject.state},
-                {"direction", gameObject.direction}
+                {"direction", gameObject.direction},
+                {"points", gameObject.points},
+                {"lives", gameObject.lives},
+                {"hidden", gameObject.hidden}
         };
         gameObjects.push_back(gameObjectJson);
     }
@@ -138,7 +142,8 @@ json Protocol::gameChangeLevelMsgToJson(GameMsgLevelChange params) {
                 {"yPos", gameObject.yPos},
                 {"frameAmount", gameObject.frameAmount},
                 {"height", gameObject.height},
-                {"width", gameObject.width}
+                {"width", gameObject.width},
+                {"hidden", gameObject.hidden}
         };
         gameObjects.push_back(gameObjectJson);
     }
