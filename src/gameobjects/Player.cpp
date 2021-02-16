@@ -215,6 +215,7 @@ void Player::die() {
 void Player::dieFalling() {
     if (!isAtScene(cam->x)){
         changeState(new Dying(true));
+        this->setPlayerBig(false);
         if (!testModeState){
             loseLife();
         }

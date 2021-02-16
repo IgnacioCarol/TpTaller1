@@ -61,7 +61,7 @@
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
-                        <coordX>250</coordX>
+                        <coordX>600</coordX>
                         <coordY>250</coordY>
                         <cantidad>1</cantidad>
                         <hongo>1</hongo>
