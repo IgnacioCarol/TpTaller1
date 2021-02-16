@@ -33,6 +33,8 @@ private:
     bool containsItem = true;
     GameObject* innerItem;
     bool hasMushroom;
+
+    int getFloorPosition() override;
 };
 
 

@@ -57,18 +57,6 @@ void PlatformSurprise::collideWith(GameObject *go) {
     go->collideWith(this);
 }
 
-/*void PlatformSurprise::collideWith(Player *player) {
-    std::pair<int, int> position = player->getPosition();
-    int xPlayer = position.first;
-    int yPlayer = position.second;
-    if(xPlayer > xPosition && xPlayer < (xPosition + SURPRISE_BLOCK_WIDTH)){
-        if(yPlayer >= (yPosition + SURPRISE_BLOCK_HEIGHT)){
-            player->setPosition(xPlayer, yPosition + SURPRISE_BLOCK_HEIGHT);
-        }
-        if(yPlayer == yPosition && containsItem){ //TODO refactor esto segun desde donde midamos el y (pies o cabeza)
-            //TODO implementar hongo
-            containsItem = false;
-        }
-    }
+int PlatformSurprise::getFloorPosition() {
+    return - (getHeight() / 4 - 1);
 }
-*/
