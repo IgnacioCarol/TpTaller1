@@ -294,6 +294,9 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
         }
         if (yPosition > yBlock) {
             jumping = false;
+            if(go->getType() == GOT_PLATFORM_SURPRISE) {
+                go->popItem();
+            }
         }
     }
 }

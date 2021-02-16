@@ -76,6 +76,8 @@ public:
     virtual void hide();
     virtual void unhide();
     virtual void popItem();
+    void setHidden(bool hidden);
+    bool isHidden();
 
 protected:
     //To manage the movement
@@ -92,6 +94,7 @@ protected:
 
     int id;
     GameObjectType type;
+    bool hidden = false;
 };
 
 #endif //TPTALLER1_GAMEOBJECT_H

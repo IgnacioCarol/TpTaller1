@@ -15,7 +15,7 @@ void Mushroom::collideWith(GameObject *go) {
 }
 
 void Mushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    if (!isHidden){
+    if (!hidden){
         if (delayCounter == DELAY_MUSHROOM && _currentFrame < MUSHROOM_FRAMES_AMOUNT) {
             _currentFrame += 1;
             delayCounter = 0;
@@ -36,5 +36,5 @@ int Mushroom::getWidth() {
 }
 
 void Mushroom::unhide() {
-    isHidden = false;
+    hidden = false;
 }

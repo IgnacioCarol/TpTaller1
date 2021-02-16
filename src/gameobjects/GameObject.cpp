@@ -138,3 +138,11 @@ void GameObject::unhide() {
 void GameObject::popItem() {
 
 }
+
+void GameObject::setHidden(bool hidden) {
+    this->hidden = hidden;
+}
+
+bool GameObject::isHidden() {
+    return hidden;
+}

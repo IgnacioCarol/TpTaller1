@@ -21,7 +21,6 @@ private:
     static const int COIN_HEIGHT = 164;
     static const int COIN_DELAY = 4;
     static const int COIN_FRAMES = 4;
-    bool isHidden = false;
 
     size_t delayCounter;
 };

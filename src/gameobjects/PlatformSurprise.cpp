@@ -21,28 +21,29 @@ int PlatformSurprise::getHeight() {
     return SURPRISE_BLOCK_HEIGHT;
 }
 
-GameObject *PlatformSurprise::generateItem(int itemToGenerate) {
+GameObject *PlatformSurprise::generateItem() {
     GameObject* tmp;
     std::string itemID;
-    if (itemToGenerate){
-        tmp = new Coin();
-        tmp -> hide();
-        itemID = COIN_ID;
-    }
-    else {
+    if (hasMushroom){
         tmp = new Mushroom();
         itemID = MUSHROOM_ID;
     }
+    else {
+        tmp = new Coin();
+        itemID = COIN_ID;
+    }
     tmp->init(xPosition, yPosition, itemID); //ToDo cuando funcione chquear las posiciones a pasar aca
+    tmp->hide();
     innerItem = tmp;
     return innerItem;
 }
 
 void PlatformSurprise::popItem() {
-    if (containsItem){
+    if (containsItem) {
         containsItem = false;
         innerItem->unhide();
     }
+}
 void PlatformSurprise::setMushroom(bool hasMushroom) {
     this->hasMushroom = hasMushroom;
 }

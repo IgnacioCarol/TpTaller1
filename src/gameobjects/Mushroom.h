@@ -24,7 +24,6 @@ private:
     static const int MUSHROOM_FRAMES_AMOUNT = 4;
     static const int DELAY_MUSHROOM = 8;
     int delayCounter = 0;
-    bool isHidden = true;
 
 };
 
