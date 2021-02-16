@@ -22,6 +22,7 @@ ThirdStage::ThirdStage(TextureManager *pManager, SDL_Renderer *pRenderer) : Back
 }
 
 BackgroundStage *ThirdStage::nextStage() {
+    GameServer::Instance()->restartCharacters();
     GameServer::Instance()->gameOver();
     level = 0;
     delete timer;

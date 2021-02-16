@@ -20,5 +20,5 @@ void Score::startLevelScore(int level) {
 }
 
 bool Score::isShowScoreTimeOver() {
-    return this->timer->isTimeOver();
+    return this->timer != nullptr && this->timer->isTimeOver();
 }

@@ -100,6 +100,8 @@ GameServer::~GameServer() {
     Logger::getInstance()->info("The parser(config) was deleted");
     delete this->factory;
     Logger::getInstance()->info("The Factory was deleted");
+    delete this->stage;
+    Logger::getInstance()->info("The stage was deleted");
 }
 
 void GameServer::nextStage() {
@@ -110,19 +112,16 @@ void GameServer::nextStage() {
         cleanGameObjects();
         initializeGameObjects(stage->getLevel());
     }
-    delete currentStage;
 }
 
 void GameServer::restartCharacters() {
     Logger::getInstance()->info("Restarting Player and Camera position");
     for (auto & player : players) {
-        if (player->isAlive()){
-            player->restartPos(0, 380);
+        if (player->isActive()) {
+            player->addPoints(levelRacePoints[currentRaceIndex]);
             player->changeState(new Normal());
         }
         player->restartPos(0, 380);
-        player->changeState(new Normal());
-        player->addPoints(levelRacePoints[currentRaceIndex]);
         player->saveLevelPoints(stage->getLevel());
         currentRaceIndex++;
     }
@@ -134,7 +133,7 @@ bool GameServer::isPlaying() const {
 }
 
 bool GameServer::isTimeOver() {
-    return this->stage->isTimeOver();
+    return this-> stage && this->stage->isTimeOver();
 }
 
 std::map<std::string, std::vector<std::string>> GameServer::getImagePaths() {
