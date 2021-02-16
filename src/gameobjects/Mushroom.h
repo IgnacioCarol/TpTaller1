@@ -15,6 +15,7 @@ public:
     void draw(SDL_Renderer* renderer, int cameraX, int cameraY) override;
     int getHeight() override;
     int getWidth() override;
+    void hide() override;
     void unhide();
 
 

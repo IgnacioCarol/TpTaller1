@@ -38,3 +38,7 @@ int Mushroom::getWidth() {
 void Mushroom::unhide() {
     hidden = false;
 }
+
+void Mushroom::hide() {
+    hidden = true;
+}

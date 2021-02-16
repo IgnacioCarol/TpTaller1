@@ -26,7 +26,7 @@ private:
     static const int SURPRISE_BLOCK_DELAY = 10;
     static const int SURPRISE_BLOCK_FRAMES = 5;
     const std::string COIN_ID = "coinsSprites";
-    const std::string MUSHROOM_ID = "mushroom";
+    const std::string MUSHROOM_ID = "magicMushroom";
 
     size_t delayCounter;
     bool containsItem = true;

@@ -32,7 +32,8 @@ GameObject *PlatformSurprise::generateItem() {
         tmp = new Coin();
         itemID = COIN_ID;
     }
-    tmp->init(xPosition, yPosition, itemID); //ToDo cuando funcione chquear las posiciones a pasar aca
+    int xPos = (hasMushroom) ? 300 : 400;
+    tmp->init(xPos, xPos, itemID); //ToDo cuando funcione chquear las posiciones a pasar aca
     tmp->hide();
     innerItem = tmp;
     return innerItem;

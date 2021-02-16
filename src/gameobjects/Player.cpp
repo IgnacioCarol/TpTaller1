@@ -274,8 +274,10 @@ void Player::fall() {
     }
 }
 void Player::collideWith(Coin *coin) {
-    this->addPoints(coin->getPoints());
-    coin->die();
+    if (!coin->isHidden()){
+        this->addPoints(coin->getPoints());
+        coin->die();
+    }
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
@@ -321,8 +323,10 @@ void Player::collideWith(Pipe* pipe) {
 }
 
 void Player::collideWith(Mushroom* mushroom) {
-    setPlayerBig(true);
-    mushroom -> die();
+    if (!mushroom->isHidden()){
+        setPlayerBig(true);
+        mushroom -> die();
+    }
 }
 
 void Player::startToJump() {
