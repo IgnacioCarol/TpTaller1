@@ -297,7 +297,7 @@
         </puntuacion>
     </escenario>
     <credenciales>
-         <cantidadJugadores>1</cantidadJugadores>
+         <cantidadJugadores>2</cantidadJugadores>
          <usuarios>
              <usuario>
                  <nombre>a</nombre>
