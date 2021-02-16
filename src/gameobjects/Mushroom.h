@@ -16,7 +16,7 @@ public:
     int getHeight() override;
     int getWidth() override;
     void hide() override;
-    void unhide();
+    void unhide() override;
 
 
 private:

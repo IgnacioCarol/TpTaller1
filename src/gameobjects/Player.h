@@ -91,7 +91,7 @@ public:
 
     void die() override;
     void dieFalling() override;
-    void fall();
+    void fall() override;
     int getWidth() override;
 
     void setPlayerBig(bool playerBig);
