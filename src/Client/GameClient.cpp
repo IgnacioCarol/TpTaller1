@@ -169,6 +169,7 @@ void GameClient::updatePlayers(std::vector<GamePlayerPlaying> players) {
 }
 
 void GameClient::updateGameObjects(std::vector<GameObjectPlaying> gameObjects) {
+    musicManager->playSoundsFor(clientUsername);
     idsToRender.clear();
     for (GameObjectPlaying gameObjectUpdate: gameObjects){
         idsToRender.push_back(gameObjectUpdate.id);
