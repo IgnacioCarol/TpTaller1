@@ -6,7 +6,7 @@ void PlatformSurprise::init(int x, int y, std::string textureID) {
 }
 
 void PlatformSurprise::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    if(containsItem){
+    if(stateType != "EMPTY"){
         _currentFrame = (delayCounter % SURPRISE_BLOCK_DELAY) ? _currentFrame : ((_currentFrame + 1) % (SURPRISE_BLOCK_FRAMES - 1));
     } else {
         _currentFrame = SURPRISE_BLOCK_FRAMES - 1;
