@@ -14,6 +14,7 @@ json ServerParser::buildGameInitMsg(std::map<std::string, std::vector<std::strin
                                     std::map<std::string, std::string> soundPaths, Camera *camera,
                                     BackgroundStage *stage,
                                     std::vector<GameObject *> gameObjects, std::vector<Player *> players) {
+    Logger::getInstance()->info("Building game init msg...");
     CameraInit cameraInit = {
             camera->getCamera()->x,
             camera->getCamera()->y,

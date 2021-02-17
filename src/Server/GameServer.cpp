@@ -45,6 +45,7 @@ bool GameServer::init(std::vector<PlayerClient*> clients) {
     window = config->getWindow();
     camera = new Camera(0, 0, window.width, window.height);
     stage = new FirstStage();
+    Logger::getInstance()->info("Stage initialized with First Stage");
 
     addPath("BG1", DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND, DEFAULT_STAGE_FIRST_LEVEL_BACKGROUND);
     addPath("BG2", DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND, DEFAULT_STAGE_SECOND_LEVEL_BACKGROUND);
@@ -69,7 +70,7 @@ json GameServer::getInitializationMsg() {
 }
 
 int GameServer::getTimer() {
-    return stage ? stage->getTimer()->getTimeSecond(): 0;
+    return (stage && stage->getTimer()) ? stage->getTimer()->getTimeSecond(): 0;
 }
 
 std::map<std::string, std::string> GameServer::getPlayerPaths() {
@@ -273,4 +274,11 @@ bool GameServer::arePlayersAlive() const{
         }
     }
     return false;
+}
+
+void GameServer::updatePlayersScore() {
+    Logger::getInstance()->info("Players saving level " + std::to_string(stage->getLevel()) + " and players size: " + std::to_string(players.size()));
+    for (auto & player : players) {
+        player->saveLevelPoints(stage->getLevel());
+    }
 }
