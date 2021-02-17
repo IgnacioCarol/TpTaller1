@@ -5,6 +5,8 @@ void Enemy::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, Ch
     GameObject::init(x, y, std::move(textureID));
     enemyState = state;
     cam = camera;
+    changeContinuosDirection = 0;
+    lastX = xPosition;
 }
 
 void Enemy::move() {
@@ -15,6 +17,10 @@ void Enemy::walk() {
     xPosition += direction;
     yPosition += (falling) ? GRAVITY_ENEMY : 0;
     flipFlag = direction == enemyVelocity;
+    if (abs(xPosition - lastX) > 5) {
+        lastX = xPosition;
+        changeContinuosDirection = 0;
+    }
 
 }
 
@@ -65,6 +71,9 @@ void Enemy::standOrRevertMovement(GameObject *go, int heigth) {
         yPosition = yBlock - heigth - getFloorPosition();
     } else {
         direction = -1 * direction;
+        if (++changeContinuosDirection > 10) {
+            GameObject::die();
+        }
     }
 }
 
