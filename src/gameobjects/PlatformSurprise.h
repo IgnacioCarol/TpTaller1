@@ -16,6 +16,9 @@ public:
     void popItem() override;
     void setMushroom(bool hasMushroom);
     void collideWith(GameObject* go) override;
+    void setState(std::string newState) override;
+    std::string getState() override;
+
 
 private:
     //Image related definitions
@@ -26,6 +29,7 @@ private:
     static const int SURPRISE_BLOCK_FRAMES = 5;
     const std::string COIN_ID = "coinsSprites";
     const std::string MUSHROOM_ID = "magicMushroom";
+    std::string stateType = "FULL";
 
     size_t delayCounter;
     bool containsItem = true;

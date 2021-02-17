@@ -9,7 +9,7 @@ void PlatformSurprise::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if(containsItem){
         _currentFrame = (delayCounter % SURPRISE_BLOCK_DELAY) ? _currentFrame : ((_currentFrame + 1) % (SURPRISE_BLOCK_FRAMES - 1));
     } else {
-        _currentFrame = SURPRISE_BLOCK_FRAMES;
+        _currentFrame = SURPRISE_BLOCK_FRAMES - 1;
     }
 
     TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, SURPRISE_BLOCK_WIDTH, SURPRISE_BLOCK_HEIGHT,
@@ -42,17 +42,30 @@ void PlatformSurprise::popItem() {
     if (containsItem) {
         containsItem = false;
         innerItem->unhide();
+        stateType = "EMPTY";
     }
 }
+
 void PlatformSurprise::setMushroom(bool hasMushroom) {
     this->hasMushroom = hasMushroom;
 }
-
 
 void PlatformSurprise::collideWith(GameObject *go) {
     go->collideWith(this);
 }
 
+
 int PlatformSurprise::getFloorPosition() {
     return - (getHeight() / 4 - 1);
+}
+
+std::string PlatformSurprise::getState() {
+    return stateType;
+}
+
+void PlatformSurprise::setState(std::string newState) {
+    if (newState != stateType){
+        MusicManager::Instance()->playSound(BUMP_SOUND);
+        stateType = newState;
+    }
 }
