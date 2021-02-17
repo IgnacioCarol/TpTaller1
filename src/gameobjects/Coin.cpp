@@ -19,6 +19,12 @@ void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     }
 }
 
+void Coin::move() {
+    if (stateType == "CATCHED"){
+        GameObject::die();
+    }
+}
+
 void Coin::collideWith(GameObject *go) {
     go->collideWith(this);
 }

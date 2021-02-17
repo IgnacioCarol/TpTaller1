@@ -279,10 +279,6 @@ void Player::collideWith(Coin *coin) {
         this->addPoints(coin->getPoints());
         coin->changeState("CATCHED");
     }
-
-    else if (coin->getState() == "CATCHED"){
-        coin->die();
-    }
 }
 
 void Player::collideWith(PlatformNormal *nBlock) {
