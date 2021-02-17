@@ -148,6 +148,7 @@ void *Server::authenticatePlayerClient(void *arg) {
             //TODO: ver si podemos tener reintentos acá
         }
         if (authenticated && GameServer::Instance()->isPlaying()) {
+            Logger::getInstance()->info("Player " + playerClient->username + " is authenticating, put game is playing");
             json startGame = {{"startGame", true}};
             if (!playerClient->send(&startGame)) {
                 Logger::getInstance()->error(MSG_ERROR_BROADCASTING_SERVER);
@@ -338,6 +339,10 @@ bool Server::run() {
     }
 
     Logger::getInstance()->info("Finished run loop");
+    if (game->isTimeOver() || !game->arePlayersAlive()) {
+        Logger::getInstance()->info("updating score players");
+        game->updatePlayersScore();
+    }
 
     while (someoneIsConnected() && !game->isPlaying()) {
         msg = ServerParser::buildGameOverMsg(game->getPlayers(), game->isTimeOver());
