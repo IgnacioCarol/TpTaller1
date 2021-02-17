@@ -17,6 +17,7 @@ class Coin : public GameObject {
         std::string getState() override;
         void setState(std::string newState) override;
         void changeState(std::string newState);
+        void initInPosition(int x, int y, std::string textureID);
 
 private:
     //Related to the image
