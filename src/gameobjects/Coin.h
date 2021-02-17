@@ -10,10 +10,13 @@ class Coin : public GameObject {
         ~Coin() override;
         void init(int x, int y, std::string textureID) override;
         void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
-        void move() override {};
+        void move() override;
         void collideWith(GameObject *go) override;
         void hide() override;
         void unhide() override;
+        std::string getState() override;
+        void setState(std::string newState) override;
+        void changeState(std::string newState);
 
 private:
     //Related to the image
@@ -21,7 +24,7 @@ private:
     static const int COIN_HEIGHT = 164;
     static const int COIN_DELAY = 4;
     static const int COIN_FRAMES = 4;
-
+    std::string stateType = "UNCATCHED";
     size_t delayCounter;
 
     int getFloorPosition() override;

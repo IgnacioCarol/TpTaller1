@@ -19,6 +19,12 @@ void Coin::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     }
 }
 
+void Coin::move() {
+    if (stateType == "CATCHED"){
+        GameObject::die();
+    }
+}
+
 void Coin::collideWith(GameObject *go) {
     go->collideWith(this);
 }
@@ -33,6 +39,21 @@ void Coin::unhide() {
 
 int Coin::getFloorPosition() {
     return - (COIN_HEIGHT / 4  + 30);
+}
+
+std::string Coin::getState() {
+    return stateType;
+}
+
+void Coin::setState(std::string newState) {
+    if (stateType != newState){
+        MusicManager::Instance()->playSound(COIN_SOUND);
+        stateType = newState;
+    }
+}
+
+void Coin::changeState(std::string newState) {
+    stateType = newState;
 }
 
 Coin::~Coin() = default;

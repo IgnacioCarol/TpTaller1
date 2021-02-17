@@ -7,6 +7,8 @@
 
 
 #include "GameObject.h"
+#include "../Utils/MusicManager.h"
+#include "../config/Constants.h"
 
 class Mushroom: public GameObject{
 public:
@@ -17,6 +19,11 @@ public:
     int getWidth() override;
     void hide() override;
     void unhide() override;
+    std::string getState() override;
+    void setState(std::string newState) override;
+    void changeState(std::string newState);
+    void move() override;
+
 
 
 private:
@@ -25,6 +32,7 @@ private:
     static const int MUSHROOM_FRAMES_AMOUNT = 4;
     static const int DELAY_MUSHROOM = 8;
     int delayCounter = 0;
+    std::string stateType = "HIDE";
 
 };
 

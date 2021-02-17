@@ -42,6 +42,7 @@ void Enemy::setDirection(bool direction) {
 
 void Enemy::setState(std::string state) {
     if (state != enemyState->getStateType() && state == "DYING"){
+        MusicManager::Instance()->playSound(STOMP_SOUND);
         this->die();
     }
 }
