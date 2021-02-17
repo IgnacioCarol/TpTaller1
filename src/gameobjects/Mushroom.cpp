@@ -37,8 +37,34 @@ int Mushroom::getWidth() {
 
 void Mushroom::unhide() {
     hidden = false;
+    stateType = "UNCATCHED";
 }
 
 void Mushroom::hide() {
     hidden = true;
+}
+
+std::string Mushroom::getState() {
+    return stateType;
+}
+
+void Mushroom::setState(std::string newState) {
+    if (!hidden && newState != stateType && newState == "UNCATCHED"){
+        stateType = newState;
+        MusicManager::Instance()->playSound(POWER_UP_APPEARS_SOUND);
+    }
+    else if (!hidden && newState != stateType && newState == "CATCHED"){
+        stateType = newState;
+        MusicManager::Instance()->playSound(POWER_UP_SOUND);
+    }
+}
+
+void Mushroom::changeState(std::string newState) {
+    stateType = newState;
+}
+
+void Mushroom::move() {
+    if (stateType == "CATCHED"){
+        GameObject::die();
+    }
 }
