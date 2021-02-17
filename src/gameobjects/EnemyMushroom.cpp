@@ -34,3 +34,7 @@ int EnemyMushroom::getFloorPosition() {
 int EnemyMushroom::centerXPos() {
     return -20;
 }
+
+int EnemyMushroom::getHeight() {
+    return ENEMY_HEIGHT;
+}

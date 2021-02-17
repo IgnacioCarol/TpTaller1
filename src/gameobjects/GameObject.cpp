@@ -6,7 +6,10 @@ void GameObject::init(int x, int y, std::string textureID) {
     xPosition = x;
     yPosition = y;
 
-    GameMap::getInstance()->insertTo(x,y, this);
+    for(size_t i = 0; true; i+=5) {
+        if (GameMap::getInstance()->insertTo(x + i,y, this))
+            break;
+    }
 
     _textureID = textureID;
     _currentFrame = 0;

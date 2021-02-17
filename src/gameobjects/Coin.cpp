@@ -35,4 +35,8 @@ int Coin::getFloorPosition() {
     return - (COIN_HEIGHT / 4  + 30);
 }
 
+int Coin::getHeight() {
+    return COIN_HEIGHT;
+}
+
 Coin::~Coin() = default;

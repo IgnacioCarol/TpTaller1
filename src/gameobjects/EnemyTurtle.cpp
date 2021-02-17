@@ -31,3 +31,7 @@ int EnemyTurtle::getFloorPosition() {
 int EnemyTurtle::centerXPos() {
     return -20;
 }
+
+int EnemyTurtle::getHeight() {
+    return ENEMY_HEIGHT;
+}

@@ -21,13 +21,19 @@ GameMap * GameMap::getInstance() {
 bool GameMap::insertTo(size_t x, size_t y, GameObject * actor) {
     std::string key;
 
-    key = buildKey(x, y);
+    for(int height = actor->getHeight(); height >= 0; height--) {
+        key = buildKey(x + height, y);
 
-    if (this->gameMap.find(key) != this->gameMap.end()) {
-        return false;
+        if (this->gameMap.find(key) != this->gameMap.end()) {
+            return false;
+        }
     }
 
-    this->gameMap[key] = actor;
+    for(int height = actor->getHeight(); height >= 0; height--) {
+        key = buildKey(x + height, y);
+        this->gameMap[key] = actor;
+    }
+
     return true;
 }
 
