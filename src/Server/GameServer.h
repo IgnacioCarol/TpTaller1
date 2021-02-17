@@ -77,6 +77,8 @@ public:
     void updateSendScore();
     bool isTimeOver();
 
+    void updatePlayersScore();
+
 private:
     GameServer(); //Private constructor to prevent instancing.
     static GameServer* instance; //Here will be the instance stored.
