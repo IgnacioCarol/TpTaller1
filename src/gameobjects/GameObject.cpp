@@ -72,6 +72,7 @@ bool GameObject::isAtScene(int camXPos) {
 
 std::string GameObject::getState() {
     return "StaticObject";  //Lo hago para safar ya que las monedas y esas cosas no tienen estado por ahora (quizas nunca tengan)
+                            //Licha del pasado casi tuviste razon, pero esto te salvo en el futuro muchas gracias
 }
 
 bool GameObject::getDirection() {
