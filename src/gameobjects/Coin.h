@@ -14,6 +14,9 @@ class Coin : public GameObject {
         void collideWith(GameObject *go) override;
         void hide() override;
         void unhide() override;
+        std::string getState() override;
+        void setState(std::string newState) override;
+        void changeState(std::string newState);
 
 private:
     //Related to the image
@@ -21,7 +24,7 @@ private:
     static const int COIN_HEIGHT = 164;
     static const int COIN_DELAY = 4;
     static const int COIN_FRAMES = 4;
-
+    std::string stateType = "UNCATCHED";
     size_t delayCounter;
 
     int getFloorPosition() override;

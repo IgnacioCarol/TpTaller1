@@ -275,8 +275,12 @@ void Player::fall() {
     }
 }
 void Player::collideWith(Coin *coin) {
-    if (!coin->isHidden()){
+    if (!coin->isHidden() && coin->getState() != "CATCHED"){
         this->addPoints(coin->getPoints());
+        coin->changeState("CATCHED");
+    }
+
+    else if (coin->getState() == "CATCHED"){
         coin->die();
     }
 }

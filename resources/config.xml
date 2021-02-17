@@ -14,7 +14,7 @@
                 <monedas>
                     <moneda>
                         <imagen>Sprites/Blocks-Coins/coinsSprites.png</imagen>
-                        <coordY>100</coordY>
+                        <coordY>350</coordY>
                         <cantidad>13</cantidad>
                     </moneda>
                     <moneda>
