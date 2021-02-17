@@ -37,6 +37,8 @@ private:
     bool hasMushroom;
 
     int getFloorPosition() override;
+
+    int centerXPos() override;
 };
 
 

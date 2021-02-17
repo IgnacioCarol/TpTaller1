@@ -69,3 +69,7 @@ void PlatformSurprise::setState(std::string newState) {
         stateType = newState;
     }
 }
+
+int PlatformSurprise::centerXPos() {
+    return - SURPRISE_BLOCK_WIDTH / 8;
+}
