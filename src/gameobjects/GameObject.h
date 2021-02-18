@@ -81,6 +81,7 @@ public:
     void setHidden(bool hidden);
     bool isHidden();
     virtual int getMinHeightToIntersect();
+    virtual int getSize();
 
 protected:
     //To manage the movement

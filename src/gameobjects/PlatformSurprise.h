@@ -18,12 +18,14 @@ public:
     void collideWith(GameObject* go) override;
     void setState(std::string newState) override;
     std::string getState() override;
+    int getSize() override;
 
 
 private:
     //Image related definitions
     static const int SURPRISE_BLOCK_WIDTH = 256;
     static const int SURPRISE_BLOCK_HEIGHT = 256;
+    static const int BLOCK_SURPRISE_SIZE_IN_GAME = 6;
     //Animation related definitions
     static const int SURPRISE_BLOCK_DELAY = 10;
     static const int SURPRISE_BLOCK_FRAMES = 5;
@@ -32,7 +34,6 @@ private:
     std::string stateType = "FULL";
 
     size_t delayCounter;
-    bool containsItem = true;
     GameObject* innerItem;
     bool hasMushroom;
 

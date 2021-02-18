@@ -39,8 +39,7 @@ GameObject *PlatformSurprise::generateItem(int xPos, int yPos) {
 }
 
 void PlatformSurprise::popItem() {
-    if (containsItem) {
-        containsItem = false;
+    if (stateType == "FULL") {
         innerItem->unhide();
         stateType = "EMPTY";
     }
@@ -72,4 +71,8 @@ void PlatformSurprise::setState(std::string newState) {
 
 int PlatformSurprise::centerXPos() {
     return - SURPRISE_BLOCK_WIDTH / 8;
+}
+
+int PlatformSurprise::getSize() {
+    return BLOCK_SURPRISE_SIZE_IN_GAME;
 }
