@@ -84,7 +84,7 @@
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
                         <coordX>2800</coordX>
-                        <coordY>400</coordY>
+                        <coordY>300</coordY>
                         <cantidad>2</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
@@ -204,8 +204,8 @@
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
-                        <coordX>3000</coordX>
-                        <coordY>350</coordY>
+                        <coordX>3200</coordX>
+                        <coordY>320</coordY>
                         <cantidad>4</cantidad>
                         <hongo>1</hongo>
                     </plataforma>

@@ -3,7 +3,11 @@
 
 void Coin::init(int x, int y, std::string textureID) {
     int new_x = (int) GameMap::getInstance()->getRandomX(y);
-    GameObject::init(new_x, y, textureID);
+    initInPosition(new_x, y, textureID);
+}
+
+void Coin::initInPosition(int x, int y, std::string textureID) {
+    GameObject::init(x, y, textureID);
     _currentFrame = 0;
     delayCounter = 0;
     type = GOT_COIN;

@@ -27,12 +27,15 @@ GameObject *PlatformSurprise::generateItem(int xPos, int yPos) {
     if (hasMushroom){
         tmp = new Mushroom();
         itemID = MUSHROOM_ID;
+        tmp->init(xPos, yPos - 35, itemID);
     }
     else {
-        tmp = new Coin();
+        Coin* coin = new Coin();
         itemID = COIN_ID;
+        coin->initInPosition(xPos + 15, yPos - 35, itemID);
+        tmp = coin;
     }
-    tmp->init(xPos, yPos - 35, itemID);
+
     tmp->hide();
     innerItem = tmp;
     return innerItem;
