@@ -35,3 +35,7 @@ int EnemyTurtle::centerXPos() {
 int EnemyTurtle::getHeight() {
     return ENEMY_HEIGHT;
 }
+
+int EnemyTurtle::getWidth() {
+    return ENEMY_WIDTH;
+}

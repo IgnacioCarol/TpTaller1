@@ -39,4 +39,8 @@ int Coin::getHeight() {
     return COIN_HEIGHT;
 }
 
+int Coin::getWidth() {
+    return COIN_WIDTH;
+}
+
 Coin::~Coin() = default;

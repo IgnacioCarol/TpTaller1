@@ -38,3 +38,7 @@ int EnemyMushroom::centerXPos() {
 int EnemyMushroom::getHeight() {
     return ENEMY_HEIGHT;
 }
+
+int EnemyMushroom::getWidth() {
+    return ENEMY_WIDTH;
+}
