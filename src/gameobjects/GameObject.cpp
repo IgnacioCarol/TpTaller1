@@ -7,7 +7,8 @@ void GameObject::init(int x, int y, std::string textureID) {
     yPosition = y;
 
     for(size_t i = 0; true; i+=5) {
-        if (GameMap::getInstance()->insertTo(x + i,y, this))
+        xPosition += i;
+        if (GameMap::getInstance()->insertTo(xPosition,y, this))
             break;
     }
 
