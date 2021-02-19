@@ -54,10 +54,6 @@ std::string GameMap::buildKey(size_t x, size_t y) {
     return stream.str();
 }
 
-size_t GameMap::getRandomX() {
-    return rand() % MAP_WIDTH;
-}
-
 
 GameMap::GameMap() = default;
 
