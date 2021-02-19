@@ -116,7 +116,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
     for(auto enemies : levelConfig.enemies) {
         for(long i = 0; i < enemies.quantity; i++) {
-            if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
+            if (enemies.type == ENEMY_TURTLE) {
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
                     GameServer::Instance() ->addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
