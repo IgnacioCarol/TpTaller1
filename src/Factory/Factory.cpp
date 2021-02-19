@@ -24,6 +24,11 @@ Factory::Factory() = default;
 
 std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
     std::vector<GameObject*> actors;
+    std::vector<GameObject*> goPlatforms;
+    std::vector<GameObject*> goCoins;
+    std::vector<GameObject*> goEnemies;
+    std::vector<GameObject*> goPipes;
+
     GameObject * tmp;
     Enemy* tmpEnemy;
     int platformHeight;
@@ -62,6 +67,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmp->init(platform.coordX + i * platformHeight, platform.coordY, textureID);
 
                 actors.push_back(tmp);
+                goPlatforms.push_back(tmp);
             }
         }
     }
@@ -75,7 +81,12 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
                 tmp->init(0, coin.coordY, COIN_ID);
 
+                while(!checkCollision(goPlatforms, tmp)) {
+                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
+                }
+
                 actors.push_back(tmp);
+                goCoins.push_back(tmp);
                 Logger::getInstance()->debug("Coin created correctly");
             }
             else Logger::getInstance()->error("Error: couldn't create a Coin");
@@ -148,6 +159,17 @@ std::vector<Player*>  Factory::createPlayers(std::vector<PlayerClient*> clients)
     }
 
     return players;
+}
+
+// Returns true if it's all clear, otherwise the goToInsert is colliding with some go in the vector
+bool Factory::checkCollision(std::vector<GameObject *> gos, GameObject *goToInsert) {
+    for(GameObject * go : gos) {
+        if (CollisionsManager::Instance()->isInIntersection(go, goToInsert)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 Factory::~Factory() = default;

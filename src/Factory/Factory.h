@@ -47,6 +47,7 @@ public:
 
 private:
     static Factory * instance;
+    bool checkCollision(std::vector<GameObject *> gos, GameObject * goToInsert);
 
     Factory();
 };
