@@ -110,6 +110,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         tmp = p;
         GameServer::Instance() ->addPath(PIPE_ID, xmlPipe.image, DEFAULT_PIPE_PATH);
         actors.push_back(tmp);
+        goPipes.push_back(tmp);
         Logger::getInstance()->debug("Pipe created correctly");
     }
 
@@ -138,6 +139,11 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             }
             if (tmpEnemy != nullptr){
                 tmp = tmpEnemy;
+
+                while(!checkCollision(goPipes, tmp)) {
+                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
+                }
+
                 actors.push_back(tmp);
             }
         }
