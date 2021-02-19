@@ -25,8 +25,6 @@ Factory::Factory() = default;
 std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
     std::vector<GameObject*> actors;
     std::vector<GameObject*> goPlatforms;
-    std::vector<GameObject*> goCoins;
-    std::vector<GameObject*> goEnemies;
     std::vector<GameObject*> goPipes;
 
     GameObject * tmp;
@@ -86,7 +84,6 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 }
 
                 actors.push_back(tmp);
-                goCoins.push_back(tmp);
                 Logger::getInstance()->debug("Coin created correctly");
             }
             else Logger::getInstance()->error("Error: couldn't create a Coin");
