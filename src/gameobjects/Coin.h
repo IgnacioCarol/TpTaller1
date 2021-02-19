@@ -9,8 +9,6 @@ class Coin : public GameObject {
     public:
         ~Coin() override;
         void init(int x, int y, std::string textureID) override;
-        int getHeight() override;
-        int getWidth() override;
         void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
         void move() override;
         void collideWith(GameObject *go) override;

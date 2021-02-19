@@ -45,14 +45,6 @@ int Coin::getFloorPosition() {
     return - (COIN_HEIGHT / 4  + 30);
 }
 
-int Coin::getHeight() {
-    return COIN_HEIGHT;
-}
-
-int Coin::getWidth() {
-    return COIN_WIDTH;
-}
-
 std::string Coin::getState() {
     return stateType;
 }
