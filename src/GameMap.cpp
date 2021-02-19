@@ -21,30 +21,13 @@ GameMap * GameMap::getInstance() {
 bool GameMap::insertTo(size_t x, size_t y, GameObject * actor) {
     std::string key;
 
-    for(int height = 0; height < actor->getHeight(); height++) {
-        for(int width = 0; width < actor->getWidth(); width++) {
-            key = buildKey(x + height, y + width);
+    key = buildKey(x, y);
 
-            if (this->gameMap.find(key) != this->gameMap.end()) { // ToDo agregar reglas, ej solo devolver false en caso de enemigos con pipes
-                GameObject * go = this->gameMap[key];
-                if ((actor->getType() == GOT_ENEMY_MUSHROOM || actor->getType() == GOT_ENEMY_TURTLE) && go->getType() == GOT_PIPE) {
-                    std::stringstream ss;
-                    ss << "[event:InsertGameObjectToMap][error:squareAlreadyOccupied] x: " << x + height << " y: " <<  y + width <<" occupied by id: " << go->getId() << " type: " << go->getType();
-                    std::string sst = ss.str();
-                    Logger::getInstance()->debug(ss.str());
-                    return false;
-                }
-            }
-        }
+    if (this->gameMap.find(key) != this->gameMap.end()) {
+        return false;
     }
 
-    for(int height = 0; height < actor->getHeight(); height++) {
-        for(int width = 0; width < actor->getWidth(); width++) {
-            key = buildKey(x + height, y + width);
-            this->gameMap[key] = actor;
-        }
-    }
-
+    this->gameMap[key] = actor;
     return true;
 }
 
