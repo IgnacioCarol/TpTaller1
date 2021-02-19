@@ -79,9 +79,9 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
 
                 tmp->init(0, coin.coordY, COIN_ID);
 
-//                while(!checkCollision(goPlatforms, tmp)) {
-//                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
-//                }
+                while(!checkCollision(goPlatforms, tmp)) {
+                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
+                }
 
                 actors.push_back(tmp);
                 Logger::getInstance()->debug("Coin created correctly");
@@ -137,9 +137,9 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             if (tmpEnemy != nullptr){
                 tmp = tmpEnemy;
 
-//                while(!checkCollision(goPipes, tmp)) {
-//                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
-//                }
+                while(!checkCollision(goPipes, tmp)) {
+                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
+                }
 
                 actors.push_back(tmp);
             }
