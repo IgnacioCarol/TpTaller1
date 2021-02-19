@@ -12,12 +12,13 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
-    GameObject* generateItem();
+    GameObject* generateItem(int xPos, int yPos);
     void popItem() override;
     void setMushroom(bool hasMushroom);
-    bool containsMushroom();
     void collideWith(GameObject* go) override;
-    //void collideWith(Player* player);
+    void setState(std::string newState) override;
+    std::string getState() override;
+
 
 private:
     //Image related definitions
@@ -28,6 +29,7 @@ private:
     static const int SURPRISE_BLOCK_FRAMES = 5;
     const std::string COIN_ID = "coinsSprites";
     const std::string MUSHROOM_ID = "magicMushroom";
+    std::string stateType = "FULL";
 
     size_t delayCounter;
     bool containsItem = true;
@@ -35,6 +37,8 @@ private:
     bool hasMushroom;
 
     int getFloorPosition() override;
+
+    int centerXPos() override;
 };
 
 

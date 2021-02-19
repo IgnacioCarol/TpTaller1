@@ -51,6 +51,8 @@ protected:
 
     void standOrRevertMovement(GameObject *go, int heigth);
     int floor;
+    int changeContinuosDirection;
+    int lastX;
 };
 
 

@@ -6,10 +6,10 @@ void PlatformSurprise::init(int x, int y, std::string textureID) {
 }
 
 void PlatformSurprise::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
-    if(containsItem){
+    if(stateType != "EMPTY"){
         _currentFrame = (delayCounter % SURPRISE_BLOCK_DELAY) ? _currentFrame : ((_currentFrame + 1) % (SURPRISE_BLOCK_FRAMES - 1));
     } else {
-        _currentFrame = SURPRISE_BLOCK_FRAMES;
+        _currentFrame = SURPRISE_BLOCK_FRAMES - 1;
     }
 
     TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, SURPRISE_BLOCK_WIDTH, SURPRISE_BLOCK_HEIGHT,
@@ -21,19 +21,21 @@ int PlatformSurprise::getHeight() {
     return SURPRISE_BLOCK_HEIGHT;
 }
 
-GameObject *PlatformSurprise::generateItem() {
+GameObject *PlatformSurprise::generateItem(int xPos, int yPos) {
     GameObject* tmp;
     std::string itemID;
     if (hasMushroom){
         tmp = new Mushroom();
         itemID = MUSHROOM_ID;
+        tmp->init(xPos, yPos - 35, itemID);
     }
     else {
-        tmp = new Coin();
+        Coin* coin = new Coin();
         itemID = COIN_ID;
+        coin->initInPosition(xPos + 15, yPos - 35, itemID);
+        tmp = coin;
     }
-    int xPos = (hasMushroom) ? 300 : 400;
-    tmp->init(xPos, xPos, itemID); //ToDo cuando funcione chquear las posiciones a pasar aca
+
     tmp->hide();
     innerItem = tmp;
     return innerItem;
@@ -43,20 +45,34 @@ void PlatformSurprise::popItem() {
     if (containsItem) {
         containsItem = false;
         innerItem->unhide();
+        stateType = "EMPTY";
     }
 }
+
 void PlatformSurprise::setMushroom(bool hasMushroom) {
     this->hasMushroom = hasMushroom;
-}
-
-bool PlatformSurprise::containsMushroom() {
-    return this->hasMushroom;
 }
 
 void PlatformSurprise::collideWith(GameObject *go) {
     go->collideWith(this);
 }
 
+
 int PlatformSurprise::getFloorPosition() {
     return - (getHeight() / 4 - 1);
+}
+
+std::string PlatformSurprise::getState() {
+    return stateType;
+}
+
+void PlatformSurprise::setState(std::string newState) {
+    if (newState != stateType){
+        MusicManager::Instance()->playSound(BUMP_SOUND);
+        stateType = newState;
+    }
+}
+
+int PlatformSurprise::centerXPos() {
+    return - SURPRISE_BLOCK_WIDTH / 8;
 }

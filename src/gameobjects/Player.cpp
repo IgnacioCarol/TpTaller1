@@ -275,9 +275,9 @@ void Player::fall() {
     }
 }
 void Player::collideWith(Coin *coin) {
-    if (!coin->isHidden()){
+    if (!coin->isHidden() && coin->getState() != "CATCHED"){
         this->addPoints(coin->getPoints());
-        coin->die();
+        coin->changeState("CATCHED");
     }
 }
 
@@ -324,9 +324,9 @@ void Player::collideWith(Pipe* pipe) {
 }
 
 void Player::collideWith(Mushroom* mushroom) {
-    if (!mushroom->isHidden()){
+    if (!mushroom->isHidden() && yPosition <= mushroom->getYPosition()){
         setPlayerBig(true);
-        mushroom -> die();
+        mushroom->changeState("CATCHED");
     }
 }
 
