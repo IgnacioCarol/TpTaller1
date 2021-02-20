@@ -18,7 +18,6 @@ public:
     void collideWith(GameObject* go) override;
     void setState(std::string newState) override;
     std::string getState() override;
-    int getSize() override;
     int getFloorPosition() override;
     int centerXPos() override;
     int getWidth() override;
@@ -28,7 +27,6 @@ private:
     //Image related definitions
     static const int SURPRISE_BLOCK_WIDTH = 256;
     static const int SURPRISE_BLOCK_HEIGHT = 256;
-    static const int BLOCK_SURPRISE_SIZE_IN_GAME = 6;
     //Animation related definitions
     static const int SURPRISE_BLOCK_DELAY = 10;
     static const int SURPRISE_BLOCK_FRAMES = 5;

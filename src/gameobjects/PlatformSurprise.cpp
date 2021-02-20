@@ -76,10 +76,6 @@ int PlatformSurprise::centerXPos() {
     return - SURPRISE_BLOCK_WIDTH / 8;
 }
 
-int PlatformSurprise::getSize() {
-    return BLOCK_SURPRISE_SIZE_IN_GAME;
-}
-
 int PlatformSurprise::getWidth() {
     return SURPRISE_BLOCK_WIDTH / 4;
 }
