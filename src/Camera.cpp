@@ -26,6 +26,9 @@ void Camera::update(std::vector<Player *> players) {
     {
         camera.x = lastValue;
     }
+    if (camera.x + 800 >= 3840){
+        camera.x = 3040;
+    }
 }
 
 SDL_Rect *Camera::getCamera() {
