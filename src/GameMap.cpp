@@ -4,9 +4,8 @@
 
 #include "GameMap.h"
 #include <sstream>
-#include <stdio.h>      /* printf, scanf, puts, NULL */
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+#include <random>
+#include <iostream>
 
 GameMap* GameMap::instance = nullptr;
 
@@ -35,9 +34,16 @@ size_t GameMap::getRandomX(size_t y) {
     std::string key;
     size_t result = 0;
     bool found = false;
+    std::random_device rd;
+    std::mt19937 mt(rd());
+    std::uniform_real_distribution<double> dist(300.0, 3420.0);
+
+    for (int i=0; i<16; ++i)
+        std::cout << dist(mt) << "\n";
 
     while (!found) {
-        result = 300 + (rand() % 3440 + 1); //TODO averiguar rango de x del mapa, quiza esto depende del mapa asi que habria que ver si es necesario pasarle por parametro rango max
+//        result = 300 + (dist(mt) % 3440 + 1); //TODO averiguar rango de x del mapa, quiza esto depende del mapa asi que habria que ver si es necesario pasarle por parametro rango max
+        result = dist(mt);
         key = buildKey(result, y);
         if (this->gameMap.find(key) == this->gameMap.end()) {
             found = true;
