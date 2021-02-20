@@ -53,7 +53,7 @@ Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : 
 
 void Player::restartPos(int x, int y) {
     xPosition = x;
-    yPosition = y;
+    yPosition = (y == 380) ? floor : y;
 }
 
 void Player::changeState(CharacterState *newState) {

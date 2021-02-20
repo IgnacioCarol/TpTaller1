@@ -37,9 +37,11 @@ void Hole::setLevel(int level) {
 }
 
 void Hole::collideWith(GameObject *go) {
-    go->fall();
-    go->collideWith(this);
-    go->dieFalling();
+    if(go->getXPosition() >= xPosition - 20 && go->getXPosition() <= xPosition + 155){
+        go->fall();
+        go->collideWith(this);
+        go->dieFalling();
+    }
 }
 
 int Hole::getFloorPosition() {
