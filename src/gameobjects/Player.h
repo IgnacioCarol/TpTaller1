@@ -155,7 +155,7 @@ private:
 
     void collideWith(Pipe *pipe) override;
 
-    void standOrBlockMovement(GameObject *go, int heigth);
+    void standOrBlockMovement(GameObject *go, int height);
 };
 
 
