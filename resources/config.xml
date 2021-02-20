@@ -28,22 +28,49 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>0</cantidad>
+                        <cantidad>10</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/Goomba.png</imagen>
-                        <cantidad>0</cantidad>
+                        <cantidad>5</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
                     <plataforma>
-                        <tipo>plataforma_sorpresa</tipo>
-                        <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
-                        <coordX>400</coordX>
+                        <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <coordX>500</coordX>
                         <coordY>300</coordY>
-                        <cantidad>2</cantidad>
-                        <hongo>1</hongo>
+                        <cantidad>5</cantidad>
+                    </plataforma>
+                    <plataforma>
+                        <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <coordX>900</coordX>
+                        <coordY>350</coordY>
+                        <cantidad>5</cantidad>
+                    </plataforma>
+                    <plataforma>
+                        <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <coordX>1700</coordX>
+                        <coordY>350</coordY>
+                        <cantidad>1</cantidad>
+                    </plataforma>
+                    <plataforma>
+                        <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <coordX>1800</coordX>
+                        <coordY>300</coordY>
+                        <cantidad>1</cantidad>
+                    </plataforma>
+                    <plataforma>
+                        <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <coordX>1900</coordX>
+                        <coordY>250</coordY>
+                        <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
@@ -55,22 +82,27 @@
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
-                        <coordX>600</coordX>
-                        <coordY>350</coordY>
+                        <coordX>20</coordX>
+                        <coordY>250</coordY>
                         <cantidad>2</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
-                        <coordX>280</coordX>
-                        <coordY>400</coordY>
-
+                        <coordX>2800</coordX>
+                        <coordY>300</coordY>
                         <cantidad>2</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
                 </plataformas>
                 <pozos>
+                    <pozo>
+                        <coordX>400</coordX>
+                        <coordY>500</coordY>
+                        <ancho>200</ancho>
+                        <alto>100</alto>
+                    </pozo>
                     <pozo>
                         <coordX>2950</coordX>
                         <coordY>500</coordY>
@@ -79,6 +111,11 @@
                     </pozo>
                 </pozos>
                 <tubos>
+                    <tubo>
+                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
+                        <coordX>200</coordX>
+                        <coordY>380</coordY>
+                    </tubo>
                     <tubo>
                         <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>1600</coordX>
@@ -341,24 +378,24 @@
         </puntuacion>
     </escenario>
     <credenciales>
-         <cantidadJugadores>1</cantidadJugadores>
-         <usuarios>
-             <usuario>
-                 <nombre>a</nombre>
-                 <contrasenia>a</contrasenia>
-             </usuario>
-             <usuario>
-                 <nombre>b</nombre>
-                 <contrasenia>b</contrasenia>
-             </usuario>
-             <usuario>
-                 <nombre>c</nombre>
-                 <contrasenia>c</contrasenia>
-             </usuario>
-             <usuario>
-                 <nombre>d</nombre>
-                 <contrasenia>d</contrasenia>
-             </usuario>
-         </usuarios>
-     </credenciales>
- </configuracion>
+        <cantidadJugadores>1</cantidadJugadores>
+        <usuarios>
+            <usuario>
+                <nombre>a</nombre>
+                <contrasenia>a</contrasenia>
+            </usuario>
+            <usuario>
+                <nombre>b</nombre>
+                <contrasenia>b</contrasenia>
+            </usuario>
+            <usuario>
+                <nombre>c</nombre>
+                <contrasenia>c</contrasenia>
+            </usuario>
+            <usuario>
+                <nombre>d</nombre>
+                <contrasenia>d</contrasenia>
+            </usuario>
+        </usuarios>
+    </credenciales>
+</configuracion>
