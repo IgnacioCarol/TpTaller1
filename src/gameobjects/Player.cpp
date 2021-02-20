@@ -409,3 +409,11 @@ void Player::setLives(int totalLives) {
 void Player::setTestMode(bool testModeState) {
     this->testModeState = testModeState;
 }
+
+int Player::getMinHeightToIntersect() {
+    return isPlayerBig ? 35 : 60;
+}
+
+int Player::centerXPos() {
+    return isPlayerBig ? 10 : 0;
+}

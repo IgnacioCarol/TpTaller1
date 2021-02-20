@@ -19,6 +19,9 @@ public:
     void setState(std::string newState) override;
     std::string getState() override;
     int getSize() override;
+    int getFloorPosition() override;
+    int centerXPos() override;
+    int getWidth() override;
 
 
 private:
@@ -36,10 +39,6 @@ private:
     size_t delayCounter;
     GameObject* innerItem;
     bool hasMushroom;
-
-    int getFloorPosition() override;
-
-    int centerXPos() override;
 };
 
 
