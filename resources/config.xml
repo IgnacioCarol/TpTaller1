@@ -206,7 +206,7 @@
                         <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
                         <coordX>230</coordX>
                         <coordY>310</coordY>
-                        <cantidad>6</cantidad>
+                        <cantidad>3</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
                     <plataforma>
