@@ -76,3 +76,7 @@ void PlatformSurprise::setState(std::string newState) {
 int PlatformSurprise::centerXPos() {
     return - SURPRISE_BLOCK_WIDTH / 8;
 }
+
+int PlatformSurprise::getWidth() {
+    return SURPRISE_BLOCK_WIDTH / 4;
+}
