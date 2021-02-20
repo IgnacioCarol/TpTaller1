@@ -117,7 +117,7 @@ private:
     //Image related
     std::string username;
     static const int pWidth = 600;
-    static const int pHeight = 600;
+    static const int pHeight = 741;
     static const int playerVelocity = 4;
     bool xDirection; //True = +x False = -x
     CharacterState* characterState;
@@ -156,6 +156,8 @@ private:
     void collideWith(Pipe *pipe) override;
 
     void standOrBlockMovement(GameObject *go, int heigth);
+
+    int getFloorPosition() override;
 };
 
 

@@ -43,7 +43,7 @@ bool Player::canJump() const {
 }
 
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
-    this->init(0, 380, textureID, camera, 6);
+    this->init(0, 405, textureID, camera, 6);
     this->username = username;
     this->isPlayerBig = false;
     this->levelPoints[1] = 0;
@@ -79,10 +79,10 @@ void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if (isAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         std::string textureID = (characterState->getStateType() == "PAUSED") ? "paused" : this->_textureID;
-        divider = (isPlayerBig) ? 4 : 5;
+        divider = (isPlayerBig) ? 8 : 9;
         int auxY = (isPlayerBig) ? 0 : 25; //ToDo ver despues si con esta variable aca ya alcanza o si hay que hacer otros arreglos
 
-        characterState -> draw(textureID, xPosition - cameraX, yPosition + auxY - cameraY, pWidth, pHeight, renderer, flip,divider);
+        characterState -> draw(textureID, xPosition - cameraX, yPosition + auxY - cameraY, pWidth, pHeight, renderer, flip, divider);
     }
 }
 
@@ -288,7 +288,7 @@ void Player::collideWith(PlatformNormal *nBlock) {
 void Player::standOrBlockMovement(GameObject *go, int heigth) {
     int yBlock = go->getYPosition() + go->getFloorPosition();
     if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x) && !ticksAfterRespawning)) {
-        yPosition = yBlock - heigth;
+        yPosition = yBlock - heigth - getFloorPosition();
         initialJumpingPosition = yPosition;
     } else {
         restartPos(firstX, firstY);
@@ -408,4 +408,8 @@ void Player::setLives(int totalLives) {
 
 void Player::setTestMode(bool testModeState) {
     this->testModeState = testModeState;
+}
+
+int Player::getFloorPosition() {
+    return 380 - floor;
 }
