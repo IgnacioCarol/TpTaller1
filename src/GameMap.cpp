@@ -38,9 +38,6 @@ size_t GameMap::getRandomX(size_t y) {
     std::mt19937 mt(rd());
     std::uniform_real_distribution<double> dist(300.0, 3420.0);
 
-    for (int i=0; i<16; ++i)
-        std::cout << dist(mt) << "\n";
-
     while (!found) {
 //        result = 300 + (dist(mt) % 3440 + 1); //TODO averiguar rango de x del mapa, quiza esto depende del mapa asi que habria que ver si es necesario pasarle por parametro rango max
         result = dist(mt);
