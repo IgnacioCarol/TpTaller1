@@ -18,6 +18,9 @@ public:
     void collideWith(GameObject* go) override;
     void setState(std::string newState) override;
     std::string getState() override;
+    int getFloorPosition() override;
+    int centerXPos() override;
+    int getWidth() override;
 
 
 private:
@@ -35,10 +38,6 @@ private:
     bool containsItem = true;
     GameObject* innerItem;
     bool hasMushroom;
-
-    int getFloorPosition() override;
-
-    int centerXPos() override;
 };
 
 

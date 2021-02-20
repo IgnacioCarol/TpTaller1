@@ -23,7 +23,7 @@ int PlatformNormal::getFloorPosition() {
 }
 
 int PlatformNormal::centerXPos() {
-    return - getWidth() / 4;
+    return - 30;
 }
 
 int PlatformNormal::getWidth() {
