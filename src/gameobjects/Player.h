@@ -158,6 +158,8 @@ private:
     void standOrBlockMovement(GameObject *go, int heigth);
 
     int getFloorPosition() override;
+
+    int centerXPos() override;
 };
 
 

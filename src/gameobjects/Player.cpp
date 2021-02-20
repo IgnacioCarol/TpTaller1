@@ -295,7 +295,10 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
         if (yPosition < floor) {
             yPosition = yPosition + GRAVITY > floor ? floor : yPosition + GRAVITY;
         }
-        if (yPosition > yBlock) {
+        if (yPosition > 600) {
+            xPosition = cam->x;
+            yPosition = yBlock - heigth - getFloorPosition();
+        } else if (yPosition > yBlock) {
             jumping = false;
             if(go->getType() == GOT_PLATFORM_SURPRISE) {
                 go->popItem();
@@ -412,4 +415,8 @@ void Player::setTestMode(bool testModeState) {
 
 int Player::getFloorPosition() {
     return 380 - floor;
+}
+
+int Player::centerXPos() {
+    return -35;
 }
