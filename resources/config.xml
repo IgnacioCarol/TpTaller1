@@ -1,6 +1,6 @@
 <configuracion>
     <log>
-        <level>DEBUG</level>
+        <level>INFO</level>
     </log>
     <ventana>
         <ancho>800</ancho>
@@ -40,8 +40,8 @@
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>400</coordX>
-                        <coordY>310</coordY>
+                        <coordX>450</coordX>
+                        <coordY>330</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
