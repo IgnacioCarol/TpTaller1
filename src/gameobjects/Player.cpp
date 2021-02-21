@@ -324,7 +324,12 @@ void Player::collideWith(Pipe* pipe) {
 }
 
 void Player::collideWith(Mushroom* mushroom) {
-    if (!mushroom->isHidden() && yPosition <= mushroom->getYPosition()){
+    int divid = (isPlayerBig) ? 4 : 5;
+    auto* bottomLeftPlayer = new Vector(xPosition + 50, yPosition + (pHeight / divid));
+    auto* bottomRightPlayer = new Vector(xPosition + (pWidth / divid) - 50, yPosition + (pHeight / divid));
+
+    if (!mushroom->isHidden() && (bottomLeftPlayer->isIn(mushroom->getTopLeftBorder(), mushroom->getBottomRightBorder()) ||
+    bottomRightPlayer->isIn(mushroom->getTopLeftBorder(), mushroom->getBottomRightBorder()))){
         setPlayerBig(true);
         mushroom->changeState("CATCHED");
     }
