@@ -23,7 +23,7 @@ bool CollisionsManager::isInIntersection(GameObject *go1, GameObject *go2) {
     if (go1->getType() == GOT_PLAYER && go2->getType() == GOT_HOLE && go1->getState() == "JUMPING") {
         yPosition1 -= 10;
     }
-    if ((go1->getType() == GOT_PLAYER && go2->getType() == GOT_PLATFORM_NORMAL) ||
+    if ((go1->getType() == GOT_PLAYER && go2->getType() == GOT_PLATFORM_NORMAL || go2->getType() == GOT_PLATFORM_SURPRISE) ||
             (go2->getType() == GOT_PLAYER && go1->getType() == GOT_PLATFORM_NORMAL)) {
         divFactor = 2.5;
     }
