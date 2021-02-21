@@ -4,7 +4,6 @@
 
 
 #include "CollisionsManager.h"
-#include "../gameobjects/Player.h"
 
 CollisionsManager* CollisionsManager::instance = nullptr;
 
