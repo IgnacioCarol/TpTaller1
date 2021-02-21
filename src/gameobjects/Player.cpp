@@ -18,6 +18,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     firstX = xPosition;
     firstY = yPosition;
     ticksAfterRespawning = MAX_TICKS_TO_BE_KILLED;
+    this->inmune = 0;
 }
 
 void Player::run(int direction) {
