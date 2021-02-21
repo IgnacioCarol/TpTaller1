@@ -18,6 +18,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     firstX = xPosition;
     firstY = yPosition;
     ticksAfterRespawning = MAX_TICKS_TO_BE_KILLED;
+    standingAbove = false;
 }
 
 void Player::run(int direction) {
@@ -290,9 +291,10 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
     if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x) && !ticksAfterRespawning)) {
         yPosition = yBlock - heigth;
         initialJumpingPosition = yPosition;
+        standingAbove = true;
     } else {
         restartPos(firstX, firstY);
-        if (yPosition < floor) {
+        if (yPosition < floor && !standingAbove) {
             yPosition = yPosition + GRAVITY > floor ? floor : yPosition + GRAVITY;
         }
         if (yPosition > yBlock) {
@@ -391,6 +393,7 @@ void Player::finishMovement() {
     firstX = xPosition;
     firstY = yPosition;
     ticksAfterRespawning = ticksAfterRespawning < MAX_TICKS_TO_BE_KILLED ? ticksAfterRespawning + 1 : MAX_TICKS_TO_BE_KILLED;
+    standingAbove = false;
 }
 
 int Player::getWidth() {
