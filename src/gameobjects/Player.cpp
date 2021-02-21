@@ -298,6 +298,15 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
         if (yPosition < floor && !standingAbove) {
             yPosition = yPosition + GRAVITY > floor ? floor : yPosition + GRAVITY;
         }
+        if (isInsideObject(go)) {
+            int center = go->getXPosition() + go->centerXPos();
+            int objectWidth = go->getWidth() / 8;
+            if (xPosition - cam->x < 400) { //Half of the screen (is 800x600)
+                restartPos(center + objectWidth, yPosition);
+            } else {
+                restartPos(center - objectWidth, yPosition);
+            }
+        }
         if (yPosition > yBlock) {
             jumping = false;
             if(go->getType() == GOT_PLATFORM_SURPRISE  && abs(xPosition - go->getXPosition()) < go->getWidth() - 5) {
