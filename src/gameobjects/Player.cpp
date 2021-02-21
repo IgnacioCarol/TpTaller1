@@ -234,8 +234,7 @@ void Player::collideWith(Enemy *enemy) {
     if(enemy->getType() == GOT_ENEMY_TURTLE && (pWidth/4 < abs(xPosition - enemy->getXPosition()) + 100)){
         return;
     }
-    int enemyPosYCorrection = (enemy->getType() == GOT_ENEMY_TURTLE) ? 0 : -80;
-    if (yPosition + getFloorPosition() + 5 < enemy->getYPosition() + enemy->getFloorPosition() + enemyPosYCorrection) {
+    if (yPosition + getFloorPosition() + 5 < enemy->getYPosition() + enemy->getFloorPosition()) {
         addPoints(enemy->getPoints());
         enemy->die();
     } else {
