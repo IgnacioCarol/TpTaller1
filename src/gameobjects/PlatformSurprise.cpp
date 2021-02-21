@@ -42,8 +42,7 @@ GameObject *PlatformSurprise::generateItem(int xPos, int yPos) {
 }
 
 void PlatformSurprise::popItem() {
-    if (containsItem) {
-        containsItem = false;
+    if (stateType == "FULL") {
         innerItem->unhide();
         stateType = "EMPTY";
     }

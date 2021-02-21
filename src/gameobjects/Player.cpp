@@ -299,7 +299,7 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
         }
         if (yPosition > yBlock) {
             jumping = false;
-            if(go->getType() == GOT_PLATFORM_SURPRISE) {
+            if(go->getType() == GOT_PLATFORM_SURPRISE  && abs(xPosition - go->getXPosition()) < go->getWidth() - 5) {
                 go->popItem();
             }
         }

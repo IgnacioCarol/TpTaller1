@@ -24,6 +24,9 @@ Factory::Factory() = default;
 
 std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelConfig) {
     std::vector<GameObject*> actors;
+    std::vector<GameObject*> goPlatforms;
+    std::vector<GameObject*> goPipes;
+
     GameObject * tmp;
     Enemy* tmpEnemy;
     int platformHeight;
@@ -62,6 +65,7 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 tmp->init(platform.coordX + i * platformHeight, platform.coordY, textureID);
 
                 actors.push_back(tmp);
+                goPlatforms.push_back(tmp);
             }
         }
     }
@@ -74,6 +78,10 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
                 GameServer::Instance() ->addPath(COIN_ID, coin.image, DEFAULT_COIN_PATH);
 
                 tmp->init(0, coin.coordY, COIN_ID);
+
+                while(!checkCollision(goPlatforms, tmp)) {
+                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
+                }
 
                 actors.push_back(tmp);
                 Logger::getInstance()->debug("Coin created correctly");
@@ -99,12 +107,13 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
         tmp = p;
         GameServer::Instance() ->addPath(PIPE_ID, xmlPipe.image, DEFAULT_PIPE_PATH);
         actors.push_back(tmp);
+        goPipes.push_back(tmp);
         Logger::getInstance()->debug("Pipe created correctly");
     }
 
     for(auto enemies : levelConfig.enemies) {
         for(long i = 0; i < enemies.quantity; i++) {
-            if (enemies.type == ENEMY_TURTLE) { //TodO we need more types for the different enemies like koopaGreen, koopaRed, etc
+            if (enemies.type == ENEMY_TURTLE) {
                 tmpEnemy = new EnemyTurtle();
                 if (tmpEnemy != nullptr){
                     GameServer::Instance() ->addPath(KOOPA_GREEN_ID, enemies.image, DEFAULT_TURTLE_PATH);
@@ -127,6 +136,11 @@ std::vector<GameObject*> Factory::createGameObjectsFromLevelConfig(Level levelCo
             }
             if (tmpEnemy != nullptr){
                 tmp = tmpEnemy;
+
+                while(!checkCollision(goPipes, tmp)) {
+                    tmp->setPosition(tmp->getXPosition() + 2, tmp->getYPosition());
+                }
+
                 actors.push_back(tmp);
             }
         }
@@ -148,6 +162,17 @@ std::vector<Player*>  Factory::createPlayers(std::vector<PlayerClient*> clients)
     }
 
     return players;
+}
+
+// Returns true if it's all clear, otherwise the goToInsert is colliding with some go in the vector
+bool Factory::checkCollision(std::vector<GameObject *> gos, GameObject *goToInsert) {
+    for(GameObject * go : gos) {
+        if (CollisionsManager::Instance()->isInIntersection(go, goToInsert)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 Factory::~Factory() = default;

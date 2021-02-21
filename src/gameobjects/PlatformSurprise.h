@@ -35,7 +35,6 @@ private:
     std::string stateType = "FULL";
 
     size_t delayCounter;
-    bool containsItem = true;
     GameObject* innerItem;
     bool hasMushroom;
 };
