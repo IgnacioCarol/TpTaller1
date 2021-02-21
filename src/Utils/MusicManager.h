@@ -15,6 +15,7 @@
 #include "SDL2/SDL_mixer.h"
 #endif
 #include "../logger/logger.h"
+#include "../config/Constants.h"
 
 class MusicManager {
 public:

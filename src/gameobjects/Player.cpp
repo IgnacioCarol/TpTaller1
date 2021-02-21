@@ -53,7 +53,7 @@ Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : 
 
 void Player::restartPos(int x, int y) {
     xPosition = x;
-    yPosition = y;
+    yPosition = (y == 380) ? floor : y;;
 }
 
 void Player::changeState(CharacterState *newState) {
@@ -295,7 +295,10 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
         if (yPosition < floor) {
             yPosition = yPosition + GRAVITY > floor ? floor : yPosition + GRAVITY;
         }
-        if (yPosition > yBlock) {
+        if (yPosition >= 595) {
+            xPosition = go->getXPosition();
+            yPosition = yBlock - heigth - getFloorPosition();
+        } else if (yPosition > yBlock) {
             jumping = false;
             if(go->getType() == GOT_PLATFORM_SURPRISE) {
                 go->popItem();
@@ -309,11 +312,7 @@ void Player::collideWith(Hole* hole) {
         restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 50, yPosition);
         xDirection = true;
     } else if (yPosition > floor){
-        int xPosHole = hole->getXPosition();
-        int leftBorder = xPosHole - 50;
-        int rightBorder = xPosHole + 50;
-
-        if (xPosition < leftBorder || xPosition > rightBorder){
+        if (xPosition < hole->getLeftEdgePosition() || xPosition > hole->getRightEdgePosition()){
             restartPos(firstX, yPosition);
         }
     }
@@ -324,14 +323,15 @@ void Player::collideWith(Pipe* pipe) {
 }
 
 void Player::collideWith(Mushroom* mushroom) {
-    if (!mushroom->isHidden() && yPosition <= mushroom->getYPosition()){
+    if (!mushroom->isHidden() && yPosition <= mushroom->getYPosition() - 57){
         setPlayerBig(true);
         mushroom->changeState("CATCHED");
     }
 }
 
 void Player::collideWith(PlatformSurprise *sBlock) {
-    standOrBlockMovement(sBlock, 60);
+    int height = (sBlock->getState() == "EMPTY") ? 57 : 60;
+    standOrBlockMovement(sBlock, height);
 }
 
 void Player::startToJump() {
