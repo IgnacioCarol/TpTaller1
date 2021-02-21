@@ -12,7 +12,7 @@
 class ThirdStage : public BackgroundStage {
 public:
     ThirdStage();
-
+    Timer* getTimer() override;
     ThirdStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 
     BackgroundStage *nextStage() override;

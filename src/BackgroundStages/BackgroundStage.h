@@ -29,7 +29,7 @@ public:
     void setBackgroundID(std::string bgID);
     void isDefaultBackground(bool defaultBackground);
     void renderBackground(SDL_Rect *camera);
-    Timer* getTimer();
+    virtual Timer* getTimer();
     std::string getLevelBackground();
 
 protected:

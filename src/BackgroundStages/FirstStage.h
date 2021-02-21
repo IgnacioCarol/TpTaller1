@@ -11,7 +11,7 @@
 class FirstStage: public BackgroundStage {
 public:
     FirstStage();
-
+    Timer* getTimer() override;
     FirstStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 
     BackgroundStage *nextStage() override;

@@ -64,10 +64,6 @@ std::string BackgroundStage::getLevelBackground() {
     return background;
 }
 
-Timer* BackgroundStage::getTimer() {
-    return timer;
-}
-
 bool BackgroundStage::setBackground() {
     bool success =  textureManager-> load(backgroundPath, BACKGROUND, renderer);
     if (!success) {
@@ -135,4 +131,8 @@ void BackgroundStage::renderSoundMusicState() {
         textureManager->printText(TEXT_SOUND, TEXT_SOUND_X_POS, TEXT_MUSIC_Y_POS,renderer);
         textureManager->printText(TEXT_OFF, TEXT_SOUND_X_POS + 100, TEXT_MUSIC_Y_POS,renderer);
     }
+}
+
+Timer *BackgroundStage::getTimer() {
+    return nullptr;
 }
