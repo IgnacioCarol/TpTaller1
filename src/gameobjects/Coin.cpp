@@ -61,3 +61,7 @@ void Coin::changeState(std::string newState) {
 }
 
 Coin::~Coin() = default;
+
+int Coin::centerXPos() {
+    return -40;
+}

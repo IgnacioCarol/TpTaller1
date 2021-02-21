@@ -17,13 +17,13 @@ public:
 
     int centerXPos() override;
     int getWidth() override;
+    int getMinHeightToIntersect() override;
+
 private:
     //Related to the image
     static const int NORMAL_BLOCK_WIDTH = 256;
 
     static const int NORMAL_BLOCK_HEIGHT = 256;
-
-    int getMinHeightToIntersect() override;
 };
 
 
