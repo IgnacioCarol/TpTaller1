@@ -159,6 +159,8 @@ private:
     void standOrBlockMovement(GameObject *go, int heigth);
 
     bool standingAbove;
+
+    bool isInsideObject(GameObject *go);
 };
 
 

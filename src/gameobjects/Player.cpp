@@ -420,3 +420,11 @@ int Player::getMinHeightToIntersect() {
 int Player::centerXPos() {
     return isPlayerBig ? 10 : 0;
 }
+
+bool Player::isInsideObject(GameObject *go) {
+    int xPos = go->getXPosition() + go->centerXPos();
+    int yPos = go->getYPosition() + go->getFloorPosition();
+    int width = go->getWidth() / 2;
+    int delta = 10;
+    return abs(xPosition + centerXPos() - xPos) < width - delta && yPos - yPosition < 0;
+}
