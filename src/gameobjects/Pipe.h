@@ -15,18 +15,16 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY) override;
     void move() override {};
     int getHeight() override;
-
-
+    int getFloorPosition() override;
 private:
     //Related to the image
     static const int PIPE_WIDTH = 600;
+
     static const int PIPE_HEIGHT = 600;
 
     int getWidth() override;
 
     void collideWith(GameObject *go) override;
-
-    int getFloorPosition() override;
 
     int centerXPos() override;
 };
