@@ -1,13 +1,14 @@
 #include "Player.h"
 static const int GRAVITY = 3;
 const int MAX_TICKS_TO_BE_KILLED = 300;
+const int MAX_JUMP_HEIGHT = 150;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
     xDirection = true;
     jumping = false;
     initialJumpingPosition = yPosition;
-    maxYPosition = yPosition - 100;
+    maxYPosition = yPosition - MAX_JUMP_HEIGHT;
     cam =  camera;
     characterState = new Normal();
     type = GOT_PLAYER;
@@ -40,7 +41,7 @@ void Player::jump(int yMovement) {
 }
 
 bool Player::canJump() const {
-    return ((jumping && yPosition > maxYPosition) || (!jumping && (yPosition == initialJumpingPosition || yPosition == maxYPosition + 100)));
+    return ((jumping && yPosition > maxYPosition) || (!jumping && (yPosition == initialJumpingPosition || yPosition == maxYPosition + MAX_JUMP_HEIGHT)));
 }
 
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
@@ -314,7 +315,6 @@ void Player::collideWith(Hole* hole) {
         int xPosHole = hole->getXPosition();
         int leftBorder = xPosHole - 50;
         int rightBorder = xPosHole + 50;
-
         if (xPosition < leftBorder || xPosition > rightBorder){
             restartPos(firstX, yPosition);
         }
@@ -338,12 +338,12 @@ void Player::collideWith(PlatformSurprise *sBlock) {
 
 void Player::startToJump() {
     initialJumpingPosition = floor;
-    maxYPosition = yPosition - 100;
+    maxYPosition = yPosition - MAX_JUMP_HEIGHT;
 }
 
 void Player::setJumpConfig() {
     initialJumpingPosition = floor;
-    maxYPosition = initialJumpingPosition - 100;
+    maxYPosition = initialJumpingPosition - MAX_JUMP_HEIGHT;
     jumping = false;
 }
 
