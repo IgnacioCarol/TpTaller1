@@ -29,6 +29,15 @@ private:
     size_t delayCounter;
 
     int getFloorPosition() override;
+
+    void collideWith(Pipe *pipe) override;
+
+    void setYPosition(GameObject *go, int height);
+
+    void collideWith(PlatformNormal *pNormal) override;
+
+    void collideWith(PlatformSurprise *pSurprise) override;
+
 };
 
 

@@ -61,3 +61,20 @@ void Coin::changeState(std::string newState) {
 }
 
 Coin::~Coin() = default;
+
+void Coin::setYPosition(GameObject* go, int height) {
+    yPosition = go->getHeight() + go->getFloorPosition() - height - getFloorPosition();
+}
+
+void Coin::collideWith(Pipe *pipe) {
+    setYPosition(pipe, pipe->getHeight() / 4 - 95);
+}
+
+void Coin::collideWith(PlatformNormal *pNormal) {
+    setYPosition(pNormal, 100);
+}
+
+
+void Coin::collideWith(PlatformSurprise *pSurprise) {
+    setYPosition(pSurprise, 60);
+}
