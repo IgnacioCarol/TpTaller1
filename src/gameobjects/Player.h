@@ -112,6 +112,9 @@ public:
     bool operator<(const Player& p) const;
 
     void finishMovement();
+    int getMinHeightToIntersect() override;
+    int centerXPos() override;
+    void collideWith(Pipe *pipe) override;
 
 private:
     //Image related
@@ -153,9 +156,9 @@ private:
     int ticksAfterRespawning;
     int divider; //For drawing bir or normal Mario. divider = 5 --> Small Mario, divider = 4 --> Big Mario
 
-    void collideWith(Pipe *pipe) override;
 
-    void standOrBlockMovement(GameObject *go, int height);
+    void standOrBlockMovement(GameObject *go, int heigth);
+
 };
 
 

@@ -27,20 +27,22 @@ GameObject *PlatformSurprise::generateItem(int xPos, int yPos) {
     if (hasMushroom){
         tmp = new Mushroom();
         itemID = MUSHROOM_ID;
+        tmp->init(xPos, yPos - 35, itemID);
     }
     else {
-        tmp = new Coin();
+        Coin* coin = new Coin();
         itemID = COIN_ID;
+        coin->initInPosition(xPos + 15, yPos - 35, itemID);
+        tmp = coin;
     }
-    tmp->init(xPos, yPos - 35, itemID);
+
     tmp->hide();
     innerItem = tmp;
     return innerItem;
 }
 
 void PlatformSurprise::popItem() {
-    if (containsItem) {
-        containsItem = false;
+    if (stateType == "FULL") {
         innerItem->unhide();
         stateType = "EMPTY";
     }
@@ -72,4 +74,8 @@ void PlatformSurprise::setState(std::string newState) {
 
 int PlatformSurprise::centerXPos() {
     return - SURPRISE_BLOCK_WIDTH / 8;
+}
+
+int PlatformSurprise::getWidth() {
+    return SURPRISE_BLOCK_WIDTH / 4;
 }

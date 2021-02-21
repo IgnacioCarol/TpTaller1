@@ -300,7 +300,7 @@ void Player::standOrBlockMovement(GameObject *go, int height) {
         }
         if (yPosition > yBlock) {
             jumping = false;
-            if(go->getType() == GOT_PLATFORM_SURPRISE) {
+            if(go->getType() == GOT_PLATFORM_SURPRISE  && abs(xPosition - go->getXPosition()) < go->getWidth() - 5) {
                 go->popItem();
             }
         }
@@ -411,4 +411,12 @@ void Player::setLives(int totalLives) {
 
 void Player::setTestMode(bool testModeState) {
     this->testModeState = testModeState;
+}
+
+int Player::getMinHeightToIntersect() {
+    return isPlayerBig ? 35 : 60;
+}
+
+int Player::centerXPos() {
+    return isPlayerBig ? 10 : 0;
 }
