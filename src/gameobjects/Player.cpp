@@ -231,7 +231,7 @@ void Player::collideWith(Enemy *enemy) {
     if (enemy->getState() == "DYING") {
         return;
     }
-    if(enemy->getType() == GOT_ENEMY_TURTLE && (pWidth/4 < abs(xPosition - enemy->getXPosition()) + 100)){
+    if(pWidth/4 < abs(xPosition - enemy->getXPosition()) + 100){
         return;
     }
     if (yPosition + getFloorPosition() + 5 < enemy->getYPosition() + enemy->getFloorPosition()) {
