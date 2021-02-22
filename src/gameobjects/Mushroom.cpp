@@ -23,16 +23,16 @@ void Mushroom::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
         else delayCounter++;
 
         TextureManager::Instance()->drawFrame(_textureID, xPosition - cameraX, yPosition, MUSHROOM_WIDTH, MUSHROOM_HEIGHT,
-                                              MUSHROOM_WIDTH * _currentFrame, renderer, SDL_FLIP_NONE);
+                                              MUSHROOM_WIDTH * _currentFrame, renderer, SDL_FLIP_NONE, 5);
     }
 }
 
 int Mushroom::getHeight() {
-    return MUSHROOM_HEIGHT;
+    return MUSHROOM_HEIGHT / 5;
 }
 
 int Mushroom::getWidth() {
-    return MUSHROOM_WIDTH;
+    return MUSHROOM_WIDTH / 5;
 }
 
 void Mushroom::unhide() {
@@ -67,4 +67,20 @@ void Mushroom::move() {
     if (stateType == "CATCHED"){
         GameObject::die();
     }
+}
+
+Vector* Mushroom::getBottomRightBorder() {
+    return new Vector(xPosition + (MUSHROOM_WIDTH / 5), yPosition + (MUSHROOM_HEIGHT / 5));
+}
+
+Vector *Mushroom::getTopLeftBorder() {
+    return new Vector(xPosition, yPosition);
+}
+
+int Mushroom::getFloorPosition() {
+    return -60;
+}
+
+int Mushroom::centerXPos() {
+    return 0;
 }
