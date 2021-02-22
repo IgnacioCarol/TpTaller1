@@ -16,13 +16,12 @@ public:
     void draw(SDL_Renderer *renderer, int cameraX, int cameraY, size_t width, size_t height) override;
 
     int getFloorPosition() override;
+    int centerXPos() override;
 private:
     //Related to the image
     static const int ENEMY_WIDTH = 400;
 
     static const int ENEMY_HEIGHT = 400;
-
-    int centerXPos() override;
 };
 
 

@@ -78,3 +78,7 @@ void Coin::collideWith(PlatformNormal *pNormal) {
 void Coin::collideWith(PlatformSurprise *pSurprise) {
     setYPosition(pSurprise, 60);
 }
+
+int Coin::centerXPos() {
+    return -40;
+}

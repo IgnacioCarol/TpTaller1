@@ -18,6 +18,8 @@ class Coin : public GameObject {
         void setState(std::string newState) override;
         void changeState(std::string newState);
         void initInPosition(int x, int y, std::string textureID);
+        int getFloorPosition() override;
+        int centerXPos() override;
 
 private:
     //Related to the image
@@ -27,17 +29,11 @@ private:
     static const int COIN_FRAMES = 4;
     std::string stateType = "UNCATCHED";
     size_t delayCounter;
-
     int getFloorPosition() override;
-
     void collideWith(Pipe *pipe) override;
-
     void setYPosition(GameObject *go, int height);
-
     void collideWith(PlatformNormal *pNormal) override;
-
     void collideWith(PlatformSurprise *pSurprise) override;
-
 };
 
 
