@@ -269,7 +269,7 @@ void GameServer::updateSendScore() {
 
 bool GameServer::arePlayersAlive() const{
     for(Player* ply: players){
-        if (ply->isAlive()){
+        if (ply->isActive()){
             return true;
         }
     }

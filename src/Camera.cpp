@@ -26,6 +26,10 @@ void Camera::update(std::vector<Player *> players) {
     {
         camera.x = lastValue;
     }
+
+    if (camera.x + camera.w >= LEVEL_IMAGE_WIDTH){
+        camera.x = 3040;
+    }
 }
 
 SDL_Rect *Camera::getCamera() {
