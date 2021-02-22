@@ -24,6 +24,7 @@
 #include "../CharacterStates/Running.h"
 #include "../CharacterStates/Dying.h"
 #include "../config/Constants.h"
+#include "../Utils/Vector.h"
 #define INMUNITY_TIME 50
 
 class CharacterState;

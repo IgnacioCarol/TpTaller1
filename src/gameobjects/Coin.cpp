@@ -71,7 +71,7 @@ void Coin::collideWith(Pipe *pipe) {
 }
 
 void Coin::collideWith(PlatformNormal *pNormal) {
-    setYPosition(pNormal, 100);
+    setYPosition(pNormal, 60);
 }
 
 

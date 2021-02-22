@@ -4,6 +4,11 @@
 
 #include "Vector.h"
 
+Vector::Vector(int x, int y) {
+    xPosition = x;
+    yPosition = y;
+}
+
 int Vector::getX() { return xPosition;}
 
 int Vector::getY() { return yPosition;}
@@ -41,3 +46,9 @@ Vector operator-=(Vector &v1, Vector &v2) {
     v1.yPosition -= v2.yPosition;
     return v1;
 }
+
+bool Vector::isIn(Vector* topLeft, Vector* bottomRight) {
+    return (xPosition >= topLeft->getX() && xPosition <= bottomRight->getX()) &&
+    (yPosition >= topLeft->getY() && yPosition <= bottomRight->getY());
+}
+

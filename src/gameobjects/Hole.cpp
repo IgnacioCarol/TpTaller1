@@ -32,14 +32,16 @@ void Hole::setDimensions(int width, int height) {
     this->height = height;
 }
 
-void Hole::setLevel(int level) {
-    this->level = level;
+void Hole::collideWith(GameObject *go) {
+    if(go->getXPosition() >= xPosition - LEFT_EDGE && go->getXPosition() <= xPosition + RIGHT_EDGE) {
+        go->fall();
+        go->collideWith(this);
+        go->dieFalling();
+    }
 }
 
-void Hole::collideWith(GameObject *go) {
-    go->fall();
-    go->collideWith(this);
-    go->dieFalling();
+void Hole::setLevel(int level) {
+    this->level = level;
 }
 
 int Hole::getFloorPosition() {
@@ -49,4 +51,12 @@ int Hole::getFloorPosition() {
 
 int Hole::centerXPos() {
     return 50;
+}
+
+int Hole::getLeftEdgePosition() {
+    return xPosition - LEFT_EDGE;
+}
+
+int Hole::getRightEdgePosition() {
+    return xPosition + RIGHT_EDGE;
 }

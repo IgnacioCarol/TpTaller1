@@ -38,7 +38,7 @@ protected:
     SDL_Renderer* renderer;
     Logger* logger = Logger::getInstance();
     int imageWidth;
-    static const int LEVEL_LIMIT = 3575;
+    static const int LEVEL_LIMIT = 3580;
     const char* BACKGROUND = "BG";
     Timer* timer;
     int level;
