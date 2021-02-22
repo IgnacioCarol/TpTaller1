@@ -18,7 +18,7 @@ void Timer::start() {
 
 int Timer::getTimeSecond() {
     if (started && startTime > 0) {
-        return this->stopTime - ((clock() - startTime) / CLOCKS_PER_SEC);
+        return this->stopTime - ((float)(clock() - startTime) / CLOCKS_PER_SEC);
     }
     return this->stopTime;
 }
