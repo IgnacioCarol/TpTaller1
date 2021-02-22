@@ -28,6 +28,7 @@ public:
 
 private:
     SDL_Rect camera{};
+    static const int LEVEL_IMAGE_WIDTH = 3840;
 };
 
 

@@ -53,7 +53,9 @@ void PlatformSurprise::setMushroom(bool hasMushroom) {
 }
 
 void PlatformSurprise::collideWith(GameObject *go) {
-    go->collideWith(this);
+    if (go != innerItem) {
+        go->collideWith(this);
+    }
 }
 
 
@@ -73,7 +75,7 @@ void PlatformSurprise::setState(std::string newState) {
 }
 
 int PlatformSurprise::centerXPos() {
-    return - SURPRISE_BLOCK_WIDTH / 8;
+    return - 30;
 }
 
 int PlatformSurprise::getWidth() {

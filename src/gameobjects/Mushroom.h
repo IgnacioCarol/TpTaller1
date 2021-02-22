@@ -9,6 +9,7 @@
 #include "GameObject.h"
 #include "../Utils/MusicManager.h"
 #include "../config/Constants.h"
+#include "../Utils/Vector.h"
 
 class Mushroom: public GameObject{
 public:
@@ -23,12 +24,16 @@ public:
     void setState(std::string newState) override;
     void changeState(std::string newState);
     void move() override;
+    Vector* getBottomRightBorder();
+    Vector* getTopLeftBorder();
+    int getFloorPosition() override;
+    int centerXPos() override;
 
 
 
 private:
     static const int MUSHROOM_WIDTH = 256;
-    static const int MUSHROOM_HEIGHT = 256;
+    static const int MUSHROOM_HEIGHT = 241;
     static const int MUSHROOM_FRAMES_AMOUNT = 4;
     static const int DELAY_MUSHROOM = 8;
     int delayCounter = 0;

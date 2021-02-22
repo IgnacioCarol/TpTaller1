@@ -11,6 +11,8 @@ public:
 
 private:
     static CollisionsManager* instance;
+
+    float calculateCollisionDivFactor(GameObject *go1, GameObject *go2);
 };
 
 
