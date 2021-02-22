@@ -158,6 +158,10 @@ private:
     int divider; //For drawing bir or normal Mario. divider = 5 --> Small Mario, divider = 4 --> Big Mario
 
     void standOrBlockMovement(GameObject *go, int heigth);
+
+    bool standingAbove;
+
+    bool isInsideObject(GameObject *go);
 };
 
 

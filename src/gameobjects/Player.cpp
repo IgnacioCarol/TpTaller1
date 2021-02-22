@@ -1,13 +1,14 @@
 #include "Player.h"
 static const int GRAVITY = 3;
 const int MAX_TICKS_TO_BE_KILLED = 300;
+const int MAX_JUMP_HEIGHT = 150;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
     GameObject::init(x, y, std::move(textureID));
     xDirection = true;
     jumping = false;
     initialJumpingPosition = yPosition;
-    maxYPosition = yPosition - 100;
+    maxYPosition = yPosition - MAX_JUMP_HEIGHT;
     cam =  camera;
     characterState = new Normal();
     type = GOT_PLAYER;
@@ -18,6 +19,7 @@ void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, i
     firstX = xPosition;
     firstY = yPosition;
     ticksAfterRespawning = MAX_TICKS_TO_BE_KILLED;
+    standingAbove = false;
 }
 
 void Player::run(int direction) {
@@ -39,7 +41,7 @@ void Player::jump(int yMovement) {
 }
 
 bool Player::canJump() const {
-    return ((jumping && yPosition > maxYPosition) || (!jumping && (yPosition == initialJumpingPosition || yPosition == maxYPosition + 100)));
+    return ((jumping && yPosition > maxYPosition) || (!jumping && (yPosition == initialJumpingPosition || yPosition == maxYPosition + MAX_JUMP_HEIGHT)));
 }
 
 Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : GameObject() {
@@ -53,7 +55,7 @@ Player::Player(SDL_Rect *camera, std::string username, std::string textureID) : 
 
 void Player::restartPos(int x, int y) {
     xPosition = x;
-    yPosition = (y == 380) ? floor : y;;
+    yPosition = (y == 380) ? floor : y;
 }
 
 void Player::changeState(CharacterState *newState) {
@@ -290,10 +292,20 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
     if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x) && !ticksAfterRespawning)) {
         yPosition = yBlock - heigth;
         initialJumpingPosition = yPosition;
+        standingAbove = true;
     } else {
         restartPos(firstX, firstY);
-        if (yPosition < floor) {
+        if (yPosition < floor && !standingAbove) {
             yPosition = yPosition + GRAVITY > floor ? floor : yPosition + GRAVITY;
+        }
+        if (isInsideObject(go)) {
+            int center = go->getXPosition() + go->centerXPos();
+            int objectWidth = go->getWidth() / 8;
+            if (xPosition - cam->x < 400) { //Half of the screen (is 800x600)
+                restartPos(center + objectWidth, yPosition);
+            } else {
+                restartPos(center - objectWidth, yPosition);
+            }
         }
         if (yPosition >= 595) {
             xPosition = go->getXPosition();
@@ -308,11 +320,11 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
 }
 
 void Player::collideWith(Hole* hole) {
-    if (!ticksAfterRespawning){
+    if (!ticksAfterRespawning) {
         restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 60, yPosition);
         xDirection = true;
-    } else if (yPosition > floor){
-        if (xPosition < hole->getLeftEdgePosition() || xPosition > hole->getRightEdgePosition()){
+    } else if (yPosition > floor) {
+        if (xPosition < hole->getLeftEdgePosition() || xPosition > hole->getRightEdgePosition()) {
             restartPos(firstX, yPosition);
         }
     }
@@ -323,7 +335,7 @@ void Player::collideWith(Pipe* pipe) {
 }
 
 void Player::collideWith(Mushroom* mushroom) {
-    int divid = (isPlayerBig) ? 4 : 5;
+    int divid = 5;
     auto* bottomLeftPlayer = new Vector(xPosition + 50, yPosition + (pHeight / divid));
     auto* bottomRightPlayer = new Vector(xPosition + (pWidth / divid) - 50, yPosition + (pHeight / divid));
 
@@ -341,12 +353,12 @@ void Player::collideWith(PlatformSurprise *sBlock) {
 
 void Player::startToJump() {
     initialJumpingPosition = floor;
-    maxYPosition = yPosition - 100;
+    maxYPosition = yPosition - MAX_JUMP_HEIGHT;
 }
 
 void Player::setJumpConfig() {
     initialJumpingPosition = floor;
-    maxYPosition = initialJumpingPosition - 100;
+    maxYPosition = initialJumpingPosition - MAX_JUMP_HEIGHT;
     jumping = false;
 }
 
@@ -396,6 +408,7 @@ void Player::finishMovement() {
     firstX = xPosition;
     firstY = yPosition;
     ticksAfterRespawning = ticksAfterRespawning < MAX_TICKS_TO_BE_KILLED ? ticksAfterRespawning + 1 : MAX_TICKS_TO_BE_KILLED;
+    standingAbove = false;
 }
 
 int Player::getWidth() {
@@ -421,4 +434,12 @@ int Player::getMinHeightToIntersect() {
 
 int Player::centerXPos() {
     return isPlayerBig ? 10 : 0;
+}
+
+bool Player::isInsideObject(GameObject *go) {
+    int xPos = go->getXPosition() + go->centerXPos();
+    int yPos = go->getYPosition() + go->getFloorPosition();
+    int width = go->getWidth() / 2;
+    int delta = 10;
+    return abs(xPosition + centerXPos() - xPos) < width - delta && yPos - yPosition < 0;
 }
