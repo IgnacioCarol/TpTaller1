@@ -27,7 +27,9 @@ bool CollisionsManager::isInIntersection(GameObject *go1, GameObject *go2) {
             (go2->getType() == GOT_PLAYER && go1->getType() == GOT_PLATFORM_NORMAL)) {
         divFactor = 2.5;
     }
-
+    if (go2->getType() == GOT_COIN && (go1->getType() == GOT_PLATFORM_NORMAL || go1->getType() == GOT_PLATFORM_SURPRISE)) {
+        divFactor = 1;
+    }
     return (abs(xPosition1 - xPosition2) <= std::max(go1->getWidth(), go2->getWidth()) / divFactor) &&
            (abs(yPosition1 - yPosition2) <= std::max(go1->getMinHeightToIntersect(), go2->getMinHeightToIntersect()));
 }
