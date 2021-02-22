@@ -28,7 +28,7 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>10</cantidad>
+                        <cantidad>5</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
@@ -42,13 +42,6 @@
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
                         <coordX>450</coordX>
                         <coordY>330</coordY>
-                        <cantidad>5</cantidad>
-                    </plataforma>
-                    <plataforma>
-                        <tipo>plataforma_normal</tipo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>900</coordX>
-                        <coordY>350</coordY>
                         <cantidad>5</cantidad>
                     </plataforma>
                     <plataforma>
@@ -97,12 +90,6 @@
                     </plataforma>
                 </plataformas>
                 <pozos>
-                    <pozo>
-                        <coordX>400</coordX>
-                        <coordY>500</coordY>
-                        <ancho>200</ancho>
-                        <alto>100</alto>
-                    </pozo>
                     <pozo>
                         <coordX>2950</coordX>
                         <coordY>500</coordY>
@@ -153,7 +140,7 @@
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/GoombaDark.png</imagen>
-                        <cantidad>5</cantidad>
+                        <cantidad>0</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
@@ -220,12 +207,6 @@
                 </plataformas>
                 <pozos>
                     <pozo>
-                        <coordX>400</coordX>
-                        <coordY>500</coordY>
-                        <ancho>200</ancho>
-                        <alto>100</alto>
-                    </pozo>
-                    <pozo>
                         <coordX>2600</coordX>
                         <coordY>500</coordY>
                         <ancho>200</ancho>
@@ -233,11 +214,6 @@
                     </pozo>
                 </pozos>
                 <tubos>
-                    <tubo>
-                        <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
-                        <coordX>100</coordX>
-                        <coordY>380</coordY>
-                    </tubo>
                     <tubo>
                         <imagen>Sprites/Blocks-Coins/pipes.png</imagen>
                         <coordX>1250</coordX>

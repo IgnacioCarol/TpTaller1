@@ -233,6 +233,9 @@ void Player::collideWith(Enemy *enemy) {
     if (enemy->getState() == "DYING") {
         return;
     }
+    if(pWidth/4 < abs(xPosition - enemy->getXPosition()) + 100){
+        return;
+    }
     if (yPosition + getFloorPosition() + 5 < enemy->getYPosition() + enemy->getFloorPosition()) {
         addPoints(enemy->getPoints());
         enemy->die();
@@ -287,10 +290,10 @@ void Player::collideWith(PlatformNormal *nBlock) {
     standOrBlockMovement(nBlock, 60);
 }
 
-void Player::standOrBlockMovement(GameObject *go, int heigth) {
+void Player::standOrBlockMovement(GameObject *go, int height) {
     int yBlock = go->getYPosition() + go->getFloorPosition();
     if(yPosition + getFloorPosition() + 20 < yBlock || (isAtScene(cam->x) && (xPosition == cam->x) && !ticksAfterRespawning)) {
-        yPosition = yBlock - heigth;
+        yPosition = yBlock - height;
         initialJumpingPosition = yPosition;
         standingAbove = true;
     } else {
