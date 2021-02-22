@@ -32,7 +32,7 @@ void Dying::move(const Uint8 *currentKeyStates, Player *player) {
             countAux++;
         }
     }
-    if (player->getYPosition() > 600 && player->getLives() > 0) {
+    if (player->getYPosition() >= 600 && player->getLives() > 0) {
         player->restartPos();
         player->changeState(new Normal());
     }

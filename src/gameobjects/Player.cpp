@@ -306,7 +306,7 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
 
 void Player::collideWith(Hole* hole) {
     if (!ticksAfterRespawning){
-        restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 50, yPosition);
+        restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 60, yPosition);
         xDirection = true;
     } else if (yPosition > floor){
         int xPosHole = hole->getXPosition();
