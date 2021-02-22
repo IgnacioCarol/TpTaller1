@@ -309,7 +309,7 @@ void Player::standOrBlockMovement(GameObject *go, int heigth) {
 
 void Player::collideWith(Hole* hole) {
     if (!ticksAfterRespawning){
-        restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 50, yPosition);
+        restartPos(hole->getXPosition() + 2 * hole->centerXPos() + 60, yPosition);
         xDirection = true;
     } else if (yPosition > floor){
         if (xPosition < hole->getLeftEdgePosition() || xPosition > hole->getRightEdgePosition()){
@@ -323,7 +323,12 @@ void Player::collideWith(Pipe* pipe) {
 }
 
 void Player::collideWith(Mushroom* mushroom) {
-    if (!mushroom->isHidden() && yPosition <= mushroom->getYPosition() - 57){
+    int divid = (isPlayerBig) ? 4 : 5;
+    auto* bottomLeftPlayer = new Vector(xPosition + 50, yPosition + (pHeight / divid));
+    auto* bottomRightPlayer = new Vector(xPosition + (pWidth / divid) - 50, yPosition + (pHeight / divid));
+
+    if (!mushroom->isHidden() && (bottomLeftPlayer->isIn(mushroom->getTopLeftBorder(), mushroom->getBottomRightBorder()) ||
+    bottomRightPlayer->isIn(mushroom->getTopLeftBorder(), mushroom->getBottomRightBorder()))) {
         setPlayerBig(true);
         mushroom->changeState("CATCHED");
     }
