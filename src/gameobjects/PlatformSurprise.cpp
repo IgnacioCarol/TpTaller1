@@ -53,7 +53,9 @@ void PlatformSurprise::setMushroom(bool hasMushroom) {
 }
 
 void PlatformSurprise::collideWith(GameObject *go) {
-    go->collideWith(this);
+    if (go != innerItem) {
+        go->collideWith(this);
+    }
 }
 
 

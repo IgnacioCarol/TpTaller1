@@ -143,7 +143,7 @@
                         <cantidad>30</cantidad>
                     </moneda>
                 </monedas>
-                <tiempo>300</tiempo>
+                <tiempo>305</tiempo>
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
@@ -270,7 +270,7 @@
                         <cantidad>30</cantidad>
                     </moneda>
                 </monedas>
-                <tiempo>300</tiempo>
+                <tiempo>305</tiempo>
                 <enemigos>
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>

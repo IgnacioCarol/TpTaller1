@@ -48,8 +48,9 @@ void MusicManager::loadSounds() {
 
 void MusicManager::playSound(std::string ID, int loop) {
     //Plays the sound loop + 1 times
+    int soundDivider = (ID == HURRY_UP_SOUND) ? 3 : 2;
     if(owner == client && soundsMap.count(ID) and !mutedSounds){
-        Mix_VolumeChunk(soundsMap[ID], MIX_MAX_VOLUME / 2);
+        Mix_VolumeChunk(soundsMap[ID], MIX_MAX_VOLUME / soundDivider);
         Mix_PlayChannel(-1, soundsMap[ID], loop);
     }
 }

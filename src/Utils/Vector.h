@@ -8,12 +8,13 @@
 
 class Vector {
 public:
-    Vector(int x, int y): xPosition(x), yPosition(y){}
+    explicit Vector(int x, int y);
 
     int getX();
     int getY();
     void setX(int x);
     void setY(int y);
+    bool isIn(Vector* topLeft, Vector* bottomRight);
 
     Vector operator+(const Vector& v2) const;
 

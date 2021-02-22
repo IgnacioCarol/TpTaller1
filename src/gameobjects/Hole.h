@@ -21,10 +21,14 @@ public:
     void collideWith(GameObject* go) override;
     int getFloorPosition() override;
     int centerXPos() override;
+    int getLeftEdgePosition();
+    int getRightEdgePosition();
 private:
     int width;
     int level;
     int height;
+    static const int LEFT_EDGE = 38; //The distance from the xPos to the left edge
+    static const int RIGHT_EDGE = 126;
 };
 
 
