@@ -154,6 +154,13 @@
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <coordX>180</coordX>
+                        <coordY>370</coordY>
+                        <cantidad>1</cantidad>
+                    </plataforma>
+                    <plataforma>
+                        <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
                         <coordX>500</coordX>
                         <coordY>220</coordY>
                         <cantidad>5</cantidad>
@@ -168,13 +175,6 @@
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>1750</coordX>
-                        <coordY>250</coordY>
-                        <cantidad>2</cantidad>
-                    </plataforma>
-                    <plataforma>
-                        <tipo>plataforma_normal</tipo>
-                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
                         <coordX>2900</coordX>
                         <coordY>400</coordY>
                         <cantidad>2</cantidad>
@@ -182,8 +182,8 @@
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
-                        <coordX>1900</coordX>
-                        <coordY>150</coordY>
+                        <coordX>1700</coordX>
+                        <coordY>200</coordY>
                         <cantidad>5</cantidad>
                         <hongo>0</hongo>
                     </plataforma>
@@ -208,7 +208,7 @@
                         <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
                         <coordX>3150</coordX>
                         <coordY>320</coordY>
-                        <cantidad>4</cantidad>
+                        <cantidad>2</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
                 </plataformas>
@@ -361,7 +361,7 @@
         </puntuacion>
     </escenario>
     <credenciales>
-        <cantidadJugadores>1</cantidadJugadores>
+        <cantidadJugadores>2</cantidadJugadores>
         <usuarios>
             <usuario>
                 <nombre>a</nombre>

@@ -1,6 +1,6 @@
 #include "Player.h"
 static const int GRAVITY = 3;
-const int MAX_TICKS_TO_BE_KILLED = 300;
+const int MAX_TICKS_TO_BE_KILLED = 100;
 const int MAX_JUMP_HEIGHT = 150;
 
 void Player::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, int framesAmount) {
