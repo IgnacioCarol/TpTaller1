@@ -29,3 +29,11 @@ BackgroundStage *ThirdStage::nextStage() {
     timer = nullptr;
     return this;
 }
+
+Timer *ThirdStage::getTimer() {
+    if (timer == nullptr) {
+        Logger::getInstance()->error("error, timer is null pointer");
+        throw ConfigException("error, timer is null pointer");
+    }
+    return timer;
+}

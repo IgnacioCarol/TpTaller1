@@ -28,3 +28,11 @@ BackgroundStage * SecondStage::nextStage() {
     Logger::getInstance()->debug("Stage changed into third stage");
     return new ThirdStage();
 }
+
+Timer *SecondStage::getTimer() {
+    if (timer == nullptr) {
+        Logger::getInstance()->error("error, timer is null pointer");
+        throw ConfigException("error, timer is null pointer");
+    }
+    return timer;
+}

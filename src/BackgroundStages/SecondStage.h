@@ -13,7 +13,7 @@
 class SecondStage: public BackgroundStage {
 public:
     SecondStage();
-
+    Timer* getTimer() override;
     SecondStage(TextureManager *pManager, SDL_Renderer *pRenderer);
 
     BackgroundStage *nextStage() override;

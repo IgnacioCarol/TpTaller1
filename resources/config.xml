@@ -47,21 +47,28 @@
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>1700</coordX>
+                        <coordX>900</coordX>
+                        <coordY>350</coordY>
+                        <cantidad>5</cantidad>
+                    </plataforma>
+                    <plataforma>
+                        <tipo>plataforma_normal</tipo>
+                        <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
+                        <coordX>1800</coordX>
                         <coordY>350</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>1800</coordX>
+                        <coordX>1950</coordX>
                         <coordY>300</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>1900</coordX>
+                        <coordX>2100</coordX>
                         <coordY>250</coordY>
                         <cantidad>1</cantidad>
                     </plataforma>
@@ -191,9 +198,9 @@
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
-                        <coordX>230</coordX>
+                        <coordX>310</coordX>
                         <coordY>310</coordY>
-                        <cantidad>3</cantidad>
+                        <cantidad>1</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
                     <plataforma>
