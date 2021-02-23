@@ -70,15 +70,6 @@ void Coin::collideWith(Pipe *pipe) {
     setYPosition(pipe, pipe->getHeight() / 4 - 95);
 }
 
-void Coin::collideWith(PlatformNormal *pNormal) {
-    setYPosition(pNormal, 60);
-}
-
-
-void Coin::collideWith(PlatformSurprise *pSurprise) {
-    setYPosition(pSurprise, 60);
-}
-
 int Coin::centerXPos() {
     return -40;
 }
