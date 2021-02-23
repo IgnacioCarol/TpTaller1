@@ -21,8 +21,6 @@ class Coin : public GameObject {
         int getFloorPosition() override;
         int centerXPos() override;
         void collideWith(Pipe *pipe) override;
-        void collideWith(PlatformNormal *pNormal) override;
-        void collideWith(PlatformSurprise *pSurprise) override;
     private:
         //Related to the image
         static const int COIN_WIDTH = 161;

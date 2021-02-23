@@ -417,7 +417,7 @@ int Player::getWidth() {
 
 bool Player::isActive() {
     std::string stateType = characterState->getStateType();
-    return stateType != "PAUSED" && stateType != "DYING" && stateType != "DYING_FALLING";
+    return stateType != "PAUSED" && ((stateType != "DYING" && stateType != "DYING_FALLING") || lives > 0);
 }
 
 void Player::setLives(int totalLives) {
@@ -440,6 +440,6 @@ bool Player::isInsideObject(GameObject *go) {
     int xPos = go->getXPosition() + go->centerXPos();
     int yPos = go->getYPosition() + go->getFloorPosition();
     int width = go->getWidth() / 2;
-    int delta = 10;
-    return abs(xPosition + centerXPos() - xPos) < width - delta && yPos - yPosition < 0;
+    int delta = 15;
+    return abs(xPosition + centerXPos() - xPos) < width - delta && yPosition - yPos < 0;
 }
