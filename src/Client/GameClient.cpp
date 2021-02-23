@@ -436,7 +436,7 @@ void GameClient::renderGameOver() {
 
         std::map<int,int> levelScores = player.second->getPointsByLevel();
 
-        if (winner == nullptr && player.second->isActive()) {
+        if (winner == nullptr && player.second->isAlive() && player.second->getState() != "PAUSED") {
             winner = player.second;
         }
 
