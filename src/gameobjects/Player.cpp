@@ -82,8 +82,8 @@ void Player::draw(SDL_Renderer *renderer, int cameraX, int cameraY) {
     if (isAlive() || isAtScene(cameraX)){ //The second condition is just for finish the animation when mario dies
         SDL_RendererFlip flip = (xDirection) ? SDL_FLIP_NONE : SDL_FLIP_HORIZONTAL;
         std::string textureID = (characterState->getStateType() == "PAUSED") ? "paused" : this->_textureID;
-        divider = (isPlayerBig) ? 4 : 5;
-        int auxY = (isPlayerBig) ? 0 : 25; //ToDo ver despues si con esta variable aca ya alcanza o si hay que hacer otros arreglos
+        divider = (isPlayerBig) ? 4 : 6;
+        int auxY = (isPlayerBig) ? 0 : 45; //ToDo ver despues si con esta variable aca ya alcanza o si hay que hacer otros arreglos
 
         characterState -> draw(textureID, xPosition - cameraX, yPosition + auxY - cameraY, pWidth, pHeight, renderer, flip,divider);
     }
