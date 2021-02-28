@@ -33,7 +33,7 @@ void CollisionsManager::checkCollisions(std::vector<GameObject *> goOnScreen, st
             continue;
         }
         for (auto secondGo : goOnScreen) {
-            if (go == secondGo) {
+            if (type == secondGo->getType()) {
                 continue;
             }
             if (this->isInIntersection(go, secondGo)) {

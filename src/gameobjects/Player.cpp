@@ -437,7 +437,7 @@ int Player::getMinHeightToIntersect() {
 }
 
 int Player::centerXPos() {
-    return isPlayerBig ? 10 : 0;
+    return isPlayerBig ? 10 : - 20;
 }
 
 bool Player::isInsideObject(GameObject *go) {
