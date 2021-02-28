@@ -28,12 +28,12 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>5</cantidad>
+                        <cantidad>6</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/Goomba.png</imagen>
-                        <cantidad>5</cantidad>
+                        <cantidad>7</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
@@ -83,7 +83,7 @@
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlock.png</imagen>
                         <coordX>20</coordX>
-                        <coordY>250</coordY>
+                        <coordY>300</coordY>
                         <cantidad>2</cantidad>
                         <hongo>1</hongo>
                     </plataforma>
@@ -147,7 +147,7 @@
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/GoombaDark.png</imagen>
-                        <cantidad>0</cantidad>
+                        <cantidad>8</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
@@ -258,19 +258,19 @@
                     <enemigo>
                         <tipo>enemigo_tortuga</tipo>
                         <imagen>Sprites/Enemies/koopaGreen.png</imagen>
-                        <cantidad>2</cantidad>
+                        <cantidad>8</cantidad>
                     </enemigo>
                     <enemigo>
                         <tipo>enemigo_hongo</tipo>
                         <imagen>Sprites/Enemies/Goomba.png</imagen>
-                        <cantidad>2</cantidad>
+                        <cantidad>10</cantidad>
                     </enemigo>
                 </enemigos>
                 <plataformas>
                     <plataforma>
                         <tipo>plataforma_normal</tipo>
                         <imagen>Sprites/Blocks-Coins/normalBlock.png</imagen>
-                        <coordX>1200</coordX>
+                        <coordX>1500</coordX>
                         <coordY>350</coordY>
                         <cantidad>3</cantidad>
                     </plataforma>
@@ -292,13 +292,10 @@
                     <plataforma>
                         <tipo>plataforma_sorpresa</tipo>
                         <imagen>Sprites/Blocks-Coins/surpriseBlockSprite.png</imagen>
-                        <coordX>700</coordX>
+                        <coordX>800</coordX>
                         <coordY>300</coordY>
                         <cantidad>6</cantidad>
                         <hongo>1</hongo>
-                        <coordX>1300</coordX>
-                        <coordY>275</coordY>
-                        <cantidad>15</cantidad>
                     </plataforma>
                 </plataformas>
                 <pozos>
