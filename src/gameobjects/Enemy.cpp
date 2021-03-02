@@ -10,6 +10,9 @@ void Enemy::init(size_t x, size_t y, std::string textureID, SDL_Rect *camera, Ch
 }
 
 void Enemy::move() {
+    if (xPosition < 0  || xPosition > 4000) {
+        direction *= -1;
+    }
     enemyState -> move(this);
 }
 
